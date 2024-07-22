@@ -1,0 +1,103 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {
+      colors: {
+        bggrey: "var(--bggrey)",
+        bgmodal: "var(--bgmodal)",
+        bgorange: "var(--bgorange)",
+        "greyscaleblack-100": "var(--greyscaleblack-100)",
+        "greyscaleblack-20": "var(--greyscaleblack-20)",
+        "greyscaleblack-40": "var(--greyscaleblack-40)",
+        "greyscaleblack-60": "var(--greyscaleblack-60)",
+        "greyscaleblack-80": "var(--greyscaleblack-80)",
+        greyscalewhite: "var(--greyscalewhite)",
+        mainerror: "var(--mainerror)",
+        mainprimary: "var(--mainprimary)",
+        "mainprimary-text": "var(--mainprimary-text)",
+        mainsecondary: "var(--mainsecondary)",
+        "variable-collection-primary": "var(--variable-collection-primary)",
+      },
+      fontFamily: {
+        "eng-h-h2": "var(--eng-h-h2-font-family)",
+        "eng-h-h3": "var(--eng-h-h3-font-family)",
+        "eng-p-p1": "var(--eng-p-p1-font-family)",
+        "eng-p-p2": "var(--eng-p-p2-font-family)",
+        "eng-subtitle-subtitle3": "var(--eng-subtitle-subtitle3-font-family)",
+        "kor-body-body1": "var(--kor-body-body1-font-family)",
+        "kor-body-body2": "var(--kor-body-body2-font-family)",
+        "kor-h-h1": "var(--kor-h-h1-font-family)",
+        "kor-h-h2": "var(--kor-h-h2-font-family)",
+        "kor-h-h3": "var(--kor-h-h3-font-family)",
+        "kor-p-p1": "var(--kor-p-p1-font-family)",
+        "kor-p-p2": "var(--kor-p-p2-font-family)",
+        "kor-p-p3": "var(--kor-p-p3-font-family)",
+        "kor-p-p4": "var(--kor-p-p4-font-family)",
+        "kor-subtitle-subtitle1": "var(--kor-subtitle-subtitle1-font-family)",
+        "kor-subtitle-subtitle2": "var(--kor-subtitle-subtitle2-font-family)",
+        "kor-subtitle-subtitle3": "var(--kor-subtitle-subtitle3-font-family)",
+      },
+      boxShadow: {
+        error: "var(--error)",
+        focus: "var(--focus)",
+        large: "var(--large)",
+        small: "var(--small)",
+      },
+    },
+    // fontFamily: {
+    //   body: ["Noto Sans KR"],
+    //   Kyobo: ["KyoboHand"],
+    // },
+    // fontSize: {
+    //   xs: [
+    //     "12px",
+    //     {
+    //       lineHeight: "18px",
+    //       letterSpacing: "0",
+    //       fontWeight: "400",
+    //     },
+    //   ],
+    //   sm: [
+    //     "14px",
+    //     {
+    //       lineHeight: "21px",
+    //       letterSpacing: "0",
+    //       fontWeight: "400",
+    //     },
+    //   ],
+    //   base: [
+    //     "16px",
+    //     {
+    //       lineHeight: "24px",
+    //       letterSpacing: "0",
+    //       fontWeight: "400",
+    //     },
+    //   ],
+    //   xl: ["20px", "30px"],
+    //   "2xl": [
+    //     "24px",
+    //     {
+    //       lineHeight: "36",
+    //       letterSpacing: "0",
+    //       fontWeight: "700",
+    //     },
+    //   ],
+    // },
+    // colors: {
+    //   primary: "#FF9078",
+    //   primaryText: "F28C76",
+    //   black: "#1F2329",
+    //   error: "#FE2929",
+    //   gray80: "#FE2929",
+    //   gray60: "#8D939D",
+    //   gray40: "#DBE5EC",
+    //   gray20: "#F0F2F6",
+    //   white: "#FFFFFF",
+    //   bgGray: "#F3F6FB",
+    //   bgOrange: "#FDEDE8",
+    //   modal: "#FDEDE8",
+    //   blank: "#F0F2F6",
+    // },
+  },
+};
