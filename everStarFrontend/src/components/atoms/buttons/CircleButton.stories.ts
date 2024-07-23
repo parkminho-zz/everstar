@@ -3,7 +3,7 @@ import { fn } from "@storybook/test";
 import CircleButton from "./CircleButton";
 
 const meta = {
-  title: "Buttons/CircleButton",
+  title: "Atoms/Buttons/CircleButton",
   component: CircleButton,
   parameters: {
     layout: "centered",
