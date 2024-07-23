@@ -1,7 +1,6 @@
 package com.everstarbackauth.domain.user.service;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +29,7 @@ class SmsServiceTest {
 	@DisplayName("문자인증 성공 테스트")
 	void sendSms() {
 		// Given
-		SmsRequestDto.SmsCertificationRequest requestDto = new SmsRequestDto.SmsCertificationRequest();
+		SmsRequestDto requestDto = new SmsRequestDto();
 		requestDto.setPhone("01020007052");
 		requestDto.setCertificationNumber("12345");
 
@@ -49,7 +48,7 @@ class SmsServiceTest {
 	@DisplayName("문자인증 실패 테스트")
 	void verifySms() {
 		// Given
-		SmsRequestDto.SmsCertificationRequest requestDto = new SmsRequestDto.SmsCertificationRequest();
+		SmsRequestDto requestDto = new SmsRequestDto();
 		requestDto.setPhone("01020007052");
 		requestDto.setCertificationNumber("54321");
 
@@ -69,7 +68,7 @@ class SmsServiceTest {
 	@DisplayName("유효하지 않은 전화번호 테스트")
 	void isVerify() {
 		// Given
-		SmsRequestDto.SmsCertificationRequest requestDto = new SmsRequestDto.SmsCertificationRequest();
+		SmsRequestDto requestDto = new SmsRequestDto();
 		requestDto.setPhone(null);
 
 		// When, Then

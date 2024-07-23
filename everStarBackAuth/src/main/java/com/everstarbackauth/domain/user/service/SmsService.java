@@ -19,7 +19,7 @@ public class SmsService {
 	private final SmsCertificationRepository smsCertificationRepository;
 
 	@Transactional
-	public void sendSms(SmsRequestDto.SmsCertificationRequest requestDto) {
+	public void sendSms(SmsRequestDto requestDto) {
 		String to = validatePhoneNumber(requestDto.getPhone());
 		String certificationNumber = generateCertificationNumber();
 
@@ -30,7 +30,7 @@ public class SmsService {
 	}
 
 	@Transactional
-	public void verifySms(SmsRequestDto.SmsCertificationRequest requestDto) {
+	public void verifySms(SmsRequestDto requestDto) {
 		String phone = validatePhoneNumber(requestDto.getPhone());
 
 		if (!isVerify(requestDto)) {
@@ -41,7 +41,7 @@ public class SmsService {
 		log.info("SMS verification successful for {}", phone);
 	}
 
-	public boolean isVerify(SmsRequestDto.SmsCertificationRequest requestDto) {
+	public boolean isVerify(SmsRequestDto requestDto) {
 		String phone = validatePhoneNumber(requestDto.getPhone());
 		String storedCertificationNumber = smsCertificationRepository.getSmsCertification(phone);
 

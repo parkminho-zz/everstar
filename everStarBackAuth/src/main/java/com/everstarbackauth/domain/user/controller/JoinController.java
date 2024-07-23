@@ -26,8 +26,8 @@ public class JoinController {
 	private final HttpResponseUtil responseUtil;
 	private final SmsService smsService;
 
-	@PostMapping("/users/send-code")
-	public ResponseEntity<?> sendCode(@RequestBody @Valid SmsRequestDto.SmsCertificationRequest requestDto) {
+	@PostMapping("/send-code")
+	public ResponseEntity<?> sendCode(@RequestBody @Valid SmsRequestDto requestDto) {
 
 		smsService.sendSms(requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(SmsResponseMessage.SUCCESS_SEND);
@@ -35,8 +35,8 @@ public class JoinController {
 		return response;
 	}
 
-	@PostMapping("/users/check-code")
-	public ResponseEntity<?> SmsVerification(@RequestBody @Valid SmsRequestDto.SmsCertificationRequest requestDto) {
+	@PostMapping("/check-code")
+	public ResponseEntity<?> SmsVerification(@RequestBody @Valid SmsRequestDto requestDto) {
 
 		smsService.verifySms(requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(SmsResponseMessage.SUCCESS_VERIFY);
