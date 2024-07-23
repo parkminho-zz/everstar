@@ -1,4 +1,5 @@
 import React from 'react';
+import { ReactComponent as LetterboxIcon } from '../../../../assets/symbols/letterbox.svg';
 
 interface LetterboxIconsProps {
   variant: 'letterbox' | 'letterbox-alert' | 'letterbox-text';
@@ -6,8 +7,6 @@ interface LetterboxIconsProps {
 }
 
 const LetterboxIcons: React.FC<LetterboxIconsProps> = ({ variant, number }) => {
-  const iconSrc = require('../../../../assets/symbols/letterbox.png');
-
   return (
     <div style={{ position: 'relative', display: 'inline-block', textAlign: 'center' }}>
       {variant === 'letterbox-text' ? (
@@ -26,11 +25,11 @@ const LetterboxIcons: React.FC<LetterboxIconsProps> = ({ variant, number }) => {
           textAlign: 'center',
           whiteSpace: 'nowrap'
         }}>
-          편지쓰기
+          편지
         </div>
       ) : (
         <>
-          <img src={iconSrc} alt={variant} style={{ width: '24px', height: '24px' }} />
+          <LetterboxIcon className="w-6 h-6" />
           {variant === 'letterbox-alert' && number !== undefined && (
             <svg
               width="16"

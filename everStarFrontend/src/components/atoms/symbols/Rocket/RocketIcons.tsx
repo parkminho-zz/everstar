@@ -1,16 +1,17 @@
 import React from 'react';
-import { ReactComponent as Postit } from '../../../../assets/symbols/postit.svg';
+import { ReactComponent as Rocket } from '../../../../assets/symbols/rocket.svg';
 
-interface PostitIconsProps {
-  variant: 'postit' | 'postit-text';
+
+interface RocketIconsProps {
+  variant: 'rocket' | 'rocket-text';
   text?: string;
 }
 
-const PostitIcons: React.FC<PostitIconsProps> = ({ variant, text }) => {
+const RocketIcons: React.FC<RocketIconsProps> = ({ variant, text }) => {
 
   return (
     <div style={{ position: 'relative', display: 'inline-block', textAlign: 'center' }}>
-      {variant === 'postit-text' ? (
+      {variant === 'rocket-text' ? (
         <div style={{
           position: 'relative',
           width: '24px',
@@ -26,14 +27,14 @@ const PostitIcons: React.FC<PostitIconsProps> = ({ variant, text }) => {
           textAlign: 'center',
           whiteSpace: 'nowrap'
         }}>
-          {text || '텍스트'}
+          {text || '영원별탐사'}
         </div>
       ) : (
-        <Postit className='w-6 h-6' />
-      )}
+        <Rocket className='w-6 h-6'/> 
+  )}
     </div>
   );
 };
 
-export default PostitIcons;
-export type { PostitIconsProps };
+export default RocketIcons;
+export type { RocketIconsProps };

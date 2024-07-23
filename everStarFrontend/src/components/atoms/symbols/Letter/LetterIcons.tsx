@@ -1,16 +1,15 @@
 import React from 'react';
-import { ReactComponent as Postit } from '../../../../assets/symbols/postit.svg';
+import { ReactComponent as LetterIcon } from '../../../../assets/symbols/letter.svg';
 
-interface PostitIconsProps {
-  variant: 'postit' | 'postit-text';
+interface LetterIconsProps {
+  variant: 'letter' | 'letter-text';
   text?: string;
 }
 
-const PostitIcons: React.FC<PostitIconsProps> = ({ variant, text }) => {
-
+const LetterIcons: React.FC<LetterIconsProps> = ({ variant, text }) => {
   return (
     <div style={{ position: 'relative', display: 'inline-block', textAlign: 'center' }}>
-      {variant === 'postit-text' ? (
+      {variant === 'letter-text' ? (
         <div style={{
           position: 'relative',
           width: '24px',
@@ -26,14 +25,14 @@ const PostitIcons: React.FC<PostitIconsProps> = ({ variant, text }) => {
           textAlign: 'center',
           whiteSpace: 'nowrap'
         }}>
-          {text || '텍스트'}
+          {text || '편지쓰기'}
         </div>
       ) : (
-        <Postit className='w-6 h-6' />
+        <LetterIcon className="w-6 h-6" />
       )}
     </div>
   );
 };
 
-export default PostitIcons;
-export type { PostitIconsProps };
+export default LetterIcons;
+export type { LetterIconsProps };
