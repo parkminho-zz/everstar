@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
 
-import PrimaryButton from "./../components/atoms/PrimaryButton";
+import PrimaryButton from "./PrimaryButton";
 const meta = {
   title: "Buttons/PrimaryButton",
   component: PrimaryButton,
@@ -20,7 +20,7 @@ const meta = {
     theme: {
       control: {
         type: "select",
-        options: ["primary", "light", "white"],
+        options: ["focus", "hover", "white"],
       },
       description: "버튼 테마",
       defaultValue: "white",
@@ -38,17 +38,11 @@ const meta = {
       description: "버튼 text",
       defaultValue: "텍스트 버튼",
     },
-    alt: {
-      control: "text",
-      description: "아이콘 alt",
-      defaultValue: "icon",
-    },
     disabled: {
       control: "boolean",
       description: "버튼 비활성화 여부",
       defaultValue: true,
     },
-
     onClick: { action: "clicked", description: "버튼 클릭 이벤트" },
   },
   args: {
@@ -59,23 +53,21 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Primary: Story = {
+export const Focus: Story = {
   args: {
     size: "large",
     children: "Button",
-    theme: "primary",
+    theme: "focus",
     disabled: false,
-    alt: "icon",
   },
 };
 
-export const Light: Story = {
+export const Hover: Story = {
   args: {
     size: "large",
     children: "Button",
-    theme: "light",
+    theme: "hover",
     disabled: false,
-    alt: "icon",
   },
 };
 
@@ -85,7 +77,6 @@ export const White: Story = {
     children: "Button",
     theme: "white",
     disabled: false,
-    alt: "icon",
   },
 };
 
@@ -95,6 +86,5 @@ export const Disabled: Story = {
     children: "Button",
     theme: "white",
     disabled: true,
-    alt: "icon",
   },
 };
