@@ -1,4 +1,4 @@
-package com.everstarbackauth.domain.user.responseDto;
+package com.everstarbackauth.domain.sms.responseDto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

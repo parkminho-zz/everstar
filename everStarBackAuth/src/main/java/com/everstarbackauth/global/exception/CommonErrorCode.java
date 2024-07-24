@@ -8,4 +8,3 @@ import lombok.RequiredArgsConstructor;
 public enum CommonErrorCode implements ErrorCode {
 
 }
-
