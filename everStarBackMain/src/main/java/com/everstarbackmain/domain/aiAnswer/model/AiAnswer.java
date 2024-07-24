@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,10 +26,12 @@ public class AiAnswer extends BaseTimeEntity {
 	@EmbeddedId
 	private AiAnswerId id;
 
+	@MapsId("petId")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pet_id")
 	private Pet pet;
 
+	@MapsId("questId")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "quest_id")
 	private Quest quest;

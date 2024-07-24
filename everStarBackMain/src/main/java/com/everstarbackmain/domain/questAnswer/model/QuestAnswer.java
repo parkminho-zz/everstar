@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -26,10 +27,12 @@ public class QuestAnswer extends BaseTimeEntity {
 	@EmbeddedId
 	private QuestAnswerId id;
 
+	@MapsId("petId")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pet_id")
 	private Pet pet;
 
+	@MapsId("questId")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "quest_id")
 	private Quest quest;
@@ -51,5 +54,6 @@ public class QuestAnswer extends BaseTimeEntity {
 		this.content = content;
 		this.imageUrl = imageUrl;
 		this.type = type;
+		isDeleted = false;
 	}
 }
