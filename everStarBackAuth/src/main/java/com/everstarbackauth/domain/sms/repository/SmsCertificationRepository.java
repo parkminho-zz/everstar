@@ -1,4 +1,4 @@
-package com.everstarbackauth.domain.user.repository;
+package com.everstarbackauth.domain.sms.repository;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
