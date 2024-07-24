@@ -2,8 +2,6 @@ package com.everstarbackmain.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,8 +12,6 @@ import com.everstarbackmain.domain.user.repository.UserRepository;
 import com.everstarbackmain.global.security.exceptionHandler.CustomExceptionHandler;
 import com.everstarbackmain.global.security.jwt.JwtAuthorizationFilter;
 import com.everstarbackmain.global.security.jwt.JwtUtil;
-import com.everstarbackmain.global.util.HttpResponseUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,7 +39,7 @@ public class SecurityConfig {
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		);
 		http.authorizeHttpRequests((auth) -> auth
-			.requestMatchers("/").permitAll()
+			.requestMatchers("/api/main").hasRole("USER")
 			.anyRequest().authenticated()
 		);
 		http.exceptionHandling((handle) -> handle.authenticationEntryPoint(customExceptionHandler));

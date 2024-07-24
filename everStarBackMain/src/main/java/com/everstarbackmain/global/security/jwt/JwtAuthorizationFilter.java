@@ -44,6 +44,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		);
 
 		generateAuthentication(user);
+		log.info("Authentication set for user: {}", userEmail);
 		filterChain.doFilter(request, response);
 	}
 
@@ -71,6 +72,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 	private void generateAuthentication(User user) {
 		PrincipalDetails userPrincipalDetails = new PrincipalDetails(user);
 		Authentication authentication = new UsernamePasswordAuthenticationToken(userPrincipalDetails,
+			null,
 			userPrincipalDetails.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}

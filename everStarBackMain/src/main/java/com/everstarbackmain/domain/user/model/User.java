@@ -2,7 +2,12 @@ package com.everstarbackmain.domain.user.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
+
 import com.everstarbackmain.global.entity.BaseTimeEntity;
+import com.everstarbackmain.global.exception.CustomException;
+import com.everstarbackmain.global.exception.ExceptionResponse;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -53,4 +58,11 @@ public class User extends BaseTimeEntity {
 
 	@Column(name = "is_deleted" , nullable = false)
 	private boolean isDeleted;
+
+	public List<Role> getMemberRoles() {
+		if (this.role != null) {
+			return Arrays.asList(this.role);
+		}
+		throw new ExceptionResponse(CustomException.NOT_EMPTY_ROLE_EXCEPTION);
+	}
 }

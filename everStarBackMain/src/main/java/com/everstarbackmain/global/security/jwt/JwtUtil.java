@@ -27,7 +27,7 @@ public class JwtUtil {
 	}
 
 	public Boolean isExpired(String token) {
-		return Jwts.parser()
+		return !Jwts.parser()
 			.verifyWith(config.getKey())
 			.build()
 			.parseSignedClaims(token)
