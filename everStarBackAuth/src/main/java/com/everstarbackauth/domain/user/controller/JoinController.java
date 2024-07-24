@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.eternitystar.domain.user.requestDto.JoinRequestDto;
-import com.eternitystar.domain.user.responseDto.JoinResponseMessage;
-import com.eternitystar.domain.user.service.JoinService;
-import com.eternitystar.global.util.HttpResponseUtil;
+import com.everstarbackauth.domain.user.requestDto.JoinRequestDto;
+import com.everstarbackauth.domain.user.responseDto.JoinResponseMessage;
+import com.everstarbackauth.domain.user.service.JoinService;
+import com.everstarbackauth.global.util.HttpResponseUtil;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

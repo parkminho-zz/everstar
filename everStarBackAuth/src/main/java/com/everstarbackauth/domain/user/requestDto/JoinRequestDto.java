@@ -3,8 +3,8 @@ package com.everstarbackauth.domain.user.requestDto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import com.eternitystar.domain.user.model.Gender;
-import com.eternitystar.domain.user.model.Role;
+import com.everstarbackauth.domain.user.model.Gender;
+import com.everstarbackauth.domain.user.model.Role;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
