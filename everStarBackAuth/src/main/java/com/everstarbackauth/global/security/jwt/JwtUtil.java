@@ -3,10 +3,8 @@ package com.everstarbackauth.global.security.jwt;
 import java.util.Date;
 
 import org.springframework.stereotype.Component;
-
-import com.eternitystar.domain.user.model.User;
-import com.eternitystar.global.config.JwtValueConfig;
-
+import com.everstarbackauth.domain.user.model.User;
+import com.everstarbackauth.global.config.JwtValueConfig;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 

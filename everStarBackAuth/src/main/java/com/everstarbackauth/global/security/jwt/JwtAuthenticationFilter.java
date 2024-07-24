@@ -6,14 +6,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import com.eternitystar.domain.user.model.User;
-import com.eternitystar.global.exception.CustomException;
-import com.eternitystar.global.exception.ExceptionResponse;
-import com.eternitystar.global.security.auth.PrincipalDetails;
-import com.eternitystar.global.util.HttpResponseUtil;
+import com.everstarbackauth.domain.user.model.User;
+import com.everstarbackauth.global.exception.CustomException;
+import com.everstarbackauth.global.exception.ExceptionResponse;
+import com.everstarbackauth.global.security.auth.PrincipalDetails;
+import com.everstarbackauth.global.util.HttpResponseUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

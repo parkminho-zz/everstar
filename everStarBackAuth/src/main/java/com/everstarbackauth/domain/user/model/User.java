@@ -3,7 +3,7 @@ package com.everstarbackauth.domain.user.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import com.eternitystar.domain.user.requestDto.JoinRequestDto;
+import com.everstarbackauth.domain.user.requestDto.JoinRequestDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

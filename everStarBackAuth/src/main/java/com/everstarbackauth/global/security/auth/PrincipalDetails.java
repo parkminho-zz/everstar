@@ -2,12 +2,9 @@ package com.everstarbackauth.global.security.auth;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.eternitystar.domain.user.model.User;
-
+import com.everstarbackauth.domain.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

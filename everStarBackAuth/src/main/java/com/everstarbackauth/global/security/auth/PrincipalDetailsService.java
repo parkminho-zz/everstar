@@ -5,11 +5,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.eternitystar.domain.user.model.User;
-import com.eternitystar.domain.user.repository.UserRepository;
-import com.eternitystar.global.exception.CustomException;
-import com.eternitystar.global.exception.ExceptionResponse;
+import com.everstarbackauth.domain.user.model.User;
+import com.everstarbackauth.domain.user.repository.UserRepository;
+import com.everstarbackauth.global.exception.CustomException;
+import com.everstarbackauth.global.exception.ExceptionResponse;
 
 import lombok.RequiredArgsConstructor;
 
