@@ -9,5 +9,5 @@ import com.everstarbackmain.domain.user.model.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
 	Optional<User> findUserByEmail(String email);
-	boolean existsUserByEmailAndDeletedIs(String email, boolean isDeleted);
+	Optional<User> existsUserByEmailAndDeletedIs(String email, boolean isDeleted);
 }

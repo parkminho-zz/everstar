@@ -26,15 +26,6 @@ public class JwtUtil {
 			.get("userEmail", String.class);
 	}
 
-	public String getAccessToken(User user, Long expiredMs) {
-		return Jwts.builder()
-			.claim("userEmail", user.getEmail())
-			.issuedAt(new Date(System.currentTimeMillis()))
-			.expiration(new Date(System.currentTimeMillis() + expiredMs))
-			.signWith(config.getKey())
-			.compact();
-	}
-
 	public Boolean isExpired(String token) {
 		return Jwts.parser()
 			.verifyWith(config.getKey())

@@ -8,10 +8,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
+import com.everstarbackmain.global.security.auth.PrincipalDetails;
 import com.everstarbackmain.global.util.HttpResponseUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,7 +39,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		FilterChain filterChain) throws ServletException, IOException {
 		String accessToken = extractAccessToken(request);
 		String userEmail = extractUserEmail(accessToken);
+		User user = userRepository.existsUserByEmailAndDeletedIs(userEmail, true).orElseThrow(() ->
+			new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION)
+		);
 
+		generateAuthentication(user);
+		filterChain.doFilter(request,response);
 	}
 
 	private String extractAccessToken(HttpServletRequest request) {
@@ -58,4 +67,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		return jwtUtil.getUserEmail(accessToken);
 	}
 
+	private void generateAuthentication(User user){
+		PrincipalDetails userPrincipalDetails = new PrincipalDetails(user);
+		Authentication authentication = new UsernamePasswordAuthenticationToken(userPrincipalDetails, userPrincipalDetails.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+	}
 }
