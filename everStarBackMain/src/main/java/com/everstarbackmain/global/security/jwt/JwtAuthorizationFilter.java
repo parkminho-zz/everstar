@@ -1,0 +1,46 @@
+package com.everstarbackmain.global.security.jwt;
+
+import com.everstarbackmain.domain.user.repository.UserRepository;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.everstarbackmain.global.exception.CustomException;
+import com.everstarbackmain.global.exception.ExceptionResponse;
+import com.everstarbackmain.global.util.HttpResponseUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.util.StringUtils;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+
+@RequiredArgsConstructor
+@Slf4j
+public class JwtAuthorizationFilter extends OncePerRequestFilter {
+
+	private final JwtUtil jwtUtil;
+	private final UserRepository userRepository;
+
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+		String accessToken = extractAccessToken(request);
+
+	}
+
+	private String extractAccessToken(HttpServletRequest request) {
+		String bearerToken = request.getHeader("Authorization");
+		log.info("mainServer bearerToken : {}", bearerToken);
+
+		if(!StringUtils.hasText(bearerToken) || !bearerToken.startsWith("Bearer ")){
+			throw new ExceptionResponse(CustomException.ACCESS_DENIEND_EXCEPTION);
+		}
+
+		return bearerToken.substring(7);
+	}
+}

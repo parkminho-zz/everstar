@@ -11,7 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.everstarbackmain.global.security.exceptionHandler.CustomExceptionHandler;
-import com.everstarbackmain.global.security.jwt.JwtAuthenticationFilter;
+import com.everstarbackmain.global.security.jwt.JwtAuthorizationFilter;
 import com.everstarbackmain.global.security.jwt.JwtUtil;
 import com.everstarbackmain.global.util.HttpResponseUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,8 +35,8 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception{
-		JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, objectMapper, responseUtil);
+	public JwtAuthorizationFilter jwtAuthenticationFilter() throws Exception{
+		JwtAuthorizationFilter filter = new JwtAuthorizationFilter(jwtUtil, objectMapper, responseUtil);
 		filter.setFilterProcessesUrl("/api/auth/login");
 		filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
 		return filter;
