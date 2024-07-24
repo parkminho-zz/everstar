@@ -29,22 +29,22 @@ public class SecurityConfig {
 	private final UserRepository userRepository;
 
 	@Bean
-	public JwtAuthorizationFilter jwtAuthorizationFilter() throws Exception{
+	public JwtAuthorizationFilter jwtAuthorizationFilter() throws Exception {
 		JwtAuthorizationFilter filter = new JwtAuthorizationFilter(jwtUtil, userRepository);
 		return filter;
 	}
-	
+
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf((auth) -> auth.disable());
 		http.formLogin((auth) -> auth.disable());
 		http.httpBasic((auth) -> auth.disable());
 		http.sessionManagement((session) -> session
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		);
 		http.authorizeHttpRequests((auth) -> auth
-				.requestMatchers("/").permitAll()
-				.anyRequest().authenticated()
+			.requestMatchers("/").permitAll()
+			.anyRequest().authenticated()
 		);
 		http.exceptionHandling((handle) -> handle.authenticationEntryPoint(customExceptionHandler));
 		http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

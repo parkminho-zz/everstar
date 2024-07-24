@@ -2,9 +2,6 @@ package com.everstarbackmain.domain.user.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
-
-import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
 
 import jakarta.persistence.Column;
@@ -14,9 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,9 +24,6 @@ public class User extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id", nullable = false)
 	private int id;
-
-	@OneToMany(mappedBy = "user")
-	private List<Pet> pet;
 
 	@Column(name = "email", nullable = false, unique = true)
 	private String email;

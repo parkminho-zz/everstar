@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ExceptionResponse.class)
-    public ResponseEntity<?> handlerException(ExceptionResponse e){
-        Map<String, String> errorDetails = new HashMap<>();
-        errorDetails.put("errorCode", e.getCustomException().getErrorCode());
-        errorDetails.put("errorMessage", e.getCustomException().getErrorMessage());
-        return ResponseEntity.status(HttpStatus.valueOf(e.getCustomException().getStatusNum())).body(errorDetails);
-    }
+	@ExceptionHandler(ExceptionResponse.class)
+	public ResponseEntity<?> handlerException(ExceptionResponse e) {
+		Map<String, String> errorDetails = new HashMap<>();
+		errorDetails.put("errorCode", e.getCustomException().getErrorCode());
+		errorDetails.put("errorMessage", e.getCustomException().getErrorMessage());
+		return ResponseEntity.status(HttpStatus.valueOf(e.getCustomException().getStatusNum())).body(errorDetails);
+	}
 }

@@ -39,12 +39,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		FilterChain filterChain) throws ServletException, IOException {
 		String accessToken = extractAccessToken(request);
 		String userEmail = extractUserEmail(accessToken);
-		User user = userRepository.existsUserByEmailAndDeletedIs(userEmail, true).orElseThrow(() ->
+		User user = userRepository.findUserByEmailAndIsDeleted(userEmail, true).orElseThrow(() ->
 			new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION)
 		);
 
 		generateAuthentication(user);
-		filterChain.doFilter(request,response);
+		filterChain.doFilter(request, response);
 	}
 
 	private String extractAccessToken(HttpServletRequest request) {
@@ -52,6 +52,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		log.info("mainServer bearerToken : {}", bearerToken);
 
 		if (!StringUtils.hasText(bearerToken) || !bearerToken.startsWith("Bearer ")) {
+			log.error("mainServer error: {}", CustomException.ACCESS_DENIEND_EXCEPTION);
 			throw new ExceptionResponse(CustomException.ACCESS_DENIEND_EXCEPTION);
 		}
 
@@ -67,9 +68,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		return jwtUtil.getUserEmail(accessToken);
 	}
 
-	private void generateAuthentication(User user){
+	private void generateAuthentication(User user) {
 		PrincipalDetails userPrincipalDetails = new PrincipalDetails(user);
-		Authentication authentication = new UsernamePasswordAuthenticationToken(userPrincipalDetails, userPrincipalDetails.getAuthorities());
+		Authentication authentication = new UsernamePasswordAuthenticationToken(userPrincipalDetails,
+			userPrincipalDetails.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 }
