@@ -29,7 +29,6 @@ public class MemorialBook {
 	@JoinColumn(name = "pet_id")
 	private Pet pet;
 
-	@Column(nullable = false)
 	private String psychologicalTestResult;
 
 	@Column(nullable = false)
@@ -46,6 +45,10 @@ public class MemorialBook {
 		isOpen = false;
 		isActive = false;
 		isDeleted = false;
+	}
+
+	public static MemorialBook createMemorialBook(Pet pet) {
+		return new MemorialBook(pet);
 	}
 
 	public void addPsychologicalTestResult(String psychologicalTestResult) {

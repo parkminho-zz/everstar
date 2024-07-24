@@ -72,7 +72,7 @@ public class User extends BaseTimeEntity {
 		this.role = role;
 	}
 
-	public static User signUpUser(JoinRequestDto joinRequestDto){
+	public static User signUpUser(JoinRequestDto joinRequestDto) {
 		return User.builder()
 				.email(joinRequestDto.getEmail())
 				.password(joinRequestDto.getPassword())

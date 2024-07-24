@@ -63,7 +63,7 @@ public class Pet extends BaseTimeEntity {
 	private String relationship;
 
 	@Column(nullable = false)
-	private String profileImage;
+	private String profileImageUrl;
 
 	@Column(nullable = false)
 	private String introduction;
@@ -79,7 +79,7 @@ public class Pet extends BaseTimeEntity {
 
 	@Builder
 	public Pet(User user, String name, Integer age, LocalDate memorialDate, String species, Gender gender,
-		String relationship, String profileImage, String introduction) {
+		String relationship, String profileImageUrl, String introduction) {
 		this.user = user;
 		this.name = name;
 		this.age = age;
@@ -87,7 +87,7 @@ public class Pet extends BaseTimeEntity {
 		this.species = species;
 		this.gender = gender;
 		this.relationship = relationship;
-		this.profileImage = profileImage;
+		this.profileImageUrl = profileImageUrl;
 		this.introduction = introduction;
 		personalities = new ArrayList<>();
 		questIndex = 0;

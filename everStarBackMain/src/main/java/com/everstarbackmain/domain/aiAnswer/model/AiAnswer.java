@@ -2,11 +2,14 @@ package com.everstarbackmain.domain.aiAnswer.model;
 
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.quest.model.Quest;
+import com.everstarbackmain.domain.quest.model.QuestType;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -41,10 +44,11 @@ public class AiAnswer extends BaseTimeEntity {
 	private String imageUrl;
 
 	@Column(nullable = false)
-	private String type;
+	@Enumerated(EnumType.STRING)
+	private QuestType type;
 
 	@Builder
-	public AiAnswer(Pet pet, Quest quest, String content, String imageUrl, String type) {
+	public AiAnswer(Pet pet, Quest quest, String content, String imageUrl, QuestType type) {
 		this.pet = pet;
 		this.quest = quest;
 		this.content = content;
