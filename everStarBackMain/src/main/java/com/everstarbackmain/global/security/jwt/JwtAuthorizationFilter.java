@@ -1,10 +1,13 @@
 package com.everstarbackmain.global.security.jwt;
 
+import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.user.repository.UserRepository;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.everstarbackmain.global.exception.CustomException;
@@ -28,8 +31,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 	private final UserRepository userRepository;
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+		FilterChain filterChain) throws ServletException, IOException {
 		String accessToken = extractAccessToken(request);
+		String userEmail = extractUserEmail(accessToken);
 
 	}
 
@@ -37,10 +42,20 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		String bearerToken = request.getHeader("Authorization");
 		log.info("mainServer bearerToken : {}", bearerToken);
 
-		if(!StringUtils.hasText(bearerToken) || !bearerToken.startsWith("Bearer ")){
+		if (!StringUtils.hasText(bearerToken) || !bearerToken.startsWith("Bearer ")) {
 			throw new ExceptionResponse(CustomException.ACCESS_DENIEND_EXCEPTION);
 		}
 
 		return bearerToken.substring(7);
 	}
+
+	private String extractUserEmail(String accessToken) {
+		if (!jwtUtil.isExpired(accessToken)) {
+			log.error("mainServer notValidToken: {}", CustomException.NOT_VALID_JWT_EXCEPTION);
+			throw new ExceptionResponse(CustomException.NOT_VALID_JWT_EXCEPTION);
+		}
+
+		return jwtUtil.getUserEmail(accessToken);
+	}
+
 }

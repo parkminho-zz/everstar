@@ -5,7 +5,6 @@ import java.time.LocalTime;
 import java.util.List;
 
 import com.everstarbackmain.domain.pet.model.Pet;
-import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
 
 import jakarta.persistence.Column;
