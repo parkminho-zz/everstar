@@ -1,45 +1,37 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
-import CircleButton from "./CircleButton";
+import type { Meta, StoryObj } from '@storybook/react';
+import { fn } from '@storybook/test';
+import CircleButton from './CircleButton';
 
 const meta = {
-  title: "Atoms/Buttons/CircleButton",
+  title: 'Atoms/Buttons/CircleButton',
   component: CircleButton,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     theme: {
       control: {
-        type: "select",
-        options: ["focus", "hover", "white"],
+        type: 'select',
+        options: ['focus', 'hover', 'white'],
       },
-      description: "버튼 테마",
-      defaultValue: "white",
+      description: '버튼 테마',
+      defaultValue: 'white',
     },
     icon: {
       control: {
-        type: "select",
-        options: [
-          "mic",
-          "phone",
-          "phoneStrop",
-          "video",
-          "settings",
-          "chat",
-          "share",
-        ],
+        type: 'select',
+        options: ['mic', 'phone', 'phoneStrop', 'video', 'settings', 'chat', 'share'],
       },
-      description: "아이콘",
-      defaultValue: "mic",
+      description: '아이콘',
+      defaultValue: 'mic',
     },
     disabled: {
-      control: "boolean",
-      description: "버튼 비활성화 여부",
+      control: 'boolean',
+      description: '버튼 비활성화 여부',
       defaultValue: true,
     },
-    onClick: { action: "clicked", description: "버튼 클릭 이벤트" },
+    onClick: { action: 'clicked', description: '버튼 클릭 이벤트' },
   },
   args: {
     onClick: fn(),
@@ -51,32 +43,32 @@ type Story = StoryObj<typeof meta>;
 
 export const Focus: Story = {
   args: {
-    theme: "focus",
+    theme: 'focus',
     disabled: false,
-    icon: "mic",
+    icon: 'mic',
   },
 };
 
 export const Hover: Story = {
   args: {
-    theme: "hover",
+    theme: 'hover',
     disabled: false,
-    icon: "mic",
+    icon: 'mic',
   },
 };
 
 export const White: Story = {
   args: {
-    theme: "white",
+    theme: 'white',
     disabled: false,
-    icon: "mic",
+    icon: 'mic',
   },
 };
 
 export const Disabled: Story = {
   args: {
-    theme: "white",
+    theme: 'white',
     disabled: true,
-    icon: "mic",
+    icon: 'mic',
   },
 };

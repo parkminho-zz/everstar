@@ -1,4 +1,4 @@
-import PencilIcon from '../../../atoms/icons/Pencil/PencilIcon';
+import PencilIcon from 'components/atoms/icons/Pencil/PencilIcon';
 import { AvatarSquare } from 'components/atoms/symbols/Avatar/AvatarSquare';
 import { Tag } from '../../Tag';
 

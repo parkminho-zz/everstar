@@ -1,6 +1,6 @@
-import Arrow from "../../atoms/icons/Arrow/ArrowIcon";
+import Arrow from '../../atoms/icons/Arrow/ArrowIcon';
 
-type TextButtonSize = "large" | "medium" | "small";
+type TextButtonSize = 'large' | 'medium' | 'small';
 
 interface ITextButtonProps {
   size: TextButtonSize;
@@ -9,20 +9,15 @@ interface ITextButtonProps {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const disabledStyle = "disabled:text-greyscaleblack-60";
+const disabledStyle = 'disabled:text-greyscaleblack-60';
 
 const fontStyle = {
-  large: "kor-h-h3",
-  medium: "kor-subtitle-subtitle2",
-  small: "kor-p-p4",
+  large: 'kor-h-h3',
+  medium: 'kor-subtitle-subtitle2',
+  small: 'kor-p-p4',
 };
 
-export default function PrimaryButton({
-  size,
-  children,
-  onClick,
-  disabled,
-}: ITextButtonProps) {
+export default function PrimaryButton({ size, children, onClick, disabled }: ITextButtonProps) {
   return (
     <button
       className={`
@@ -34,13 +29,11 @@ export default function PrimaryButton({
       disabled={disabled}
       onClick={onClick}
     >
-      <span className={`flex-grow pr-4 mx-auto text-center ${fontStyle[size]}`}>
-        {children}
-      </span>
+      <span className={`flex-grow pr-4 mx-auto text-center ${fontStyle[size]}`}>{children}</span>
       <div className="ml-auto">
         <Arrow
-          color={disabled ? "gray" : "black"}
-          size={size === "small" ? 16 : 24}
+          color={disabled ? 'gray' : 'black'}
+          size={size === 'small' ? 16 : 24}
           direction="right"
         />
       </div>

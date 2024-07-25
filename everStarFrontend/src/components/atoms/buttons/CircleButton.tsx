@@ -1,27 +1,27 @@
-import React from "react";
-import CircleWhite from "../../../assets/images/circle-white.svg";
-import CircleDisabled from "../../../assets/images/circle-disabled.svg";
-import CircleHover from "../../../assets/images/circle-hover.svg";
-import CircleFocus from "../../../assets/images/circle-focus.svg";
-import PlusIcon from "../icons/Plus/PlusIcon";
-import MicrophoneIcon from "../icons/Microphone/MicrophoneIcon";
-import PhoneStopIcon from "../icons/PhoneStop/PhoneStopIcon";
-import PhoneIcon from "../icons/Phone/PhoneIcon";
-import VideoIcon from "../icons/Video/VideoIcon";
-import SettingsIcon from "../icons/Settings/SettingsIcon";
-import ChatIcon from "../icons/Chat/ChatIcon";
-import ShareIcon from "../icons/Share/ShareIcon";
+import React from 'react';
+import CircleWhite from 'assets/images/circle-white.svg';
+import CircleDisabled from 'assets/images/circle-disabled.svg';
+import CircleHover from 'assets/images/circle-hover.svg';
+import CircleFocus from 'assets/images/circle-focus.svg';
+import PlusIcon from 'components/atoms/icons/Plus/PlusIcon';
+import MicrophoneIcon from 'components/atoms/icons/Microphone/MicrophoneIcon';
+import PhoneStopIcon from 'components/atoms/icons/PhoneStop/PhoneStopIcon';
+import PhoneIcon from 'components/atoms/icons/Phone/PhoneIcon';
+import VideoIcon from 'components/atoms/icons/Video/VideoIcon';
+import SettingsIcon from 'components/atoms/icons/Settings/SettingsIcon';
+import ChatIcon from 'components/atoms/icons/Chat/ChatIcon';
+import ShareIcon from 'components/atoms/icons/Share/ShareIcon';
 
-type CircleButtonTheme = "focus" | "hover" | "white";
+type CircleButtonTheme = 'focus' | 'hover' | 'white';
 type RtcIconTheme =
-  | "plus"
-  | "mic"
-  | "phone"
-  | "phoneStop"
-  | "video"
-  | "settings"
-  | "chat"
-  | "share";
+  | 'plus'
+  | 'mic'
+  | 'phone'
+  | 'phoneStop'
+  | 'video'
+  | 'settings'
+  | 'chat'
+  | 'share';
 
 interface ICircleButtonProps {
   theme: CircleButtonTheme;
@@ -42,29 +42,24 @@ const iconMap: Record<RtcIconTheme, React.ComponentType<any>> = {
   share: ShareIcon,
 };
 
-export default function CircleButton({
-  theme,
-  icon,
-  onClick,
-  disabled,
-}: ICircleButtonProps) {
+export default function CircleButton({ theme, icon, onClick, disabled }: ICircleButtonProps) {
   const getBgPath = () => {
     if (disabled) return CircleDisabled;
     switch (theme) {
-      case "focus":
+      case 'focus':
         return CircleFocus;
-      case "hover":
+      case 'hover':
         return CircleHover;
-      case "white":
+      case 'white':
       default:
         return CircleWhite;
     }
   };
 
   const getColor = () => {
-    if (disabled) return "gray";
-    if (theme === "focus") return "white";
-    return "black";
+    if (disabled) return 'gray';
+    if (theme === 'focus') return 'white';
+    return 'black';
   };
 
   const IconComponent = iconMap[icon];
@@ -81,10 +76,7 @@ export default function CircleButton({
         className="absolute inset-0 w-full h-full"
         style={{ zIndex: 0 }}
       />
-      <div
-        className="relative flex items-center justify-center"
-        style={{ zIndex: 1 }}
-      >
+      <div className="relative flex items-center justify-center" style={{ zIndex: 1 }}>
         <IconComponent size={24} color={getColor()} />
       </div>
     </button>

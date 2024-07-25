@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { ReactComponent as YellowRainbow } from '../../../../assets/symbols/rainbow-yellow.svg';
-import { ReactComponent as OrangeRainbow } from '../../../../assets/symbols/rainbow-orange.svg';
-import { ReactComponent as GreenRainbow } from '../../../../assets/symbols/rainbow-green.svg';
-import { ReactComponent as BlueRainbow } from '../../../../assets/symbols/rainbow-blue.svg';
-import { ReactComponent as IndigoRainbow } from '../../../../assets/symbols/rainbow-indigo.svg';
-import { ReactComponent as VioletRainbow } from '../../../../assets/symbols/rainbow-violet.svg';
-import { ReactComponent as RedRainbow } from '../../../../assets/symbols/rainbow-red.svg';
+import { ReactComponent as YellowRainbow } from 'assets/symbols/rainbow-yellow.svg';
+import { ReactComponent as OrangeRainbow } from 'assets/symbols/rainbow-orange.svg';
+import { ReactComponent as GreenRainbow } from 'assets/symbols/rainbow-green.svg';
+import { ReactComponent as BlueRainbow } from 'assets/symbols/rainbow-blue.svg';
+import { ReactComponent as IndigoRainbow } from 'assets/symbols/rainbow-indigo.svg';
+import { ReactComponent as VioletRainbow } from 'assets/symbols/rainbow-violet.svg';
+import { ReactComponent as RedRainbow } from 'assets/symbols/rainbow-red.svg';
 
 interface Props {
   color: 'none' | 'yellow' | 'violet' | 'blue' | 'green' | 'orange' | 'red' | 'indigo';
