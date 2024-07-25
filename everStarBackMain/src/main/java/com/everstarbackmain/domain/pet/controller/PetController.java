@@ -16,10 +16,12 @@ import com.everstarbackmain.global.util.HttpResponseUtil;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/pets")
+@Slf4j
 public class PetController {
 
 	private final PetService petService;
@@ -28,6 +30,10 @@ public class PetController {
 	@PostMapping
 	public ResponseEntity<Map<String, Object>> addPet(Authentication authentication, @RequestBody @Valid CreatePetRequestDto requestDto) {
 		petService.createPet(authentication, requestDto);
-		return responseUtil.createResponse(SuccessPetMessage.SUCCESS_CREATE_PET);
+		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
+			SuccessPetMessage.SUCCESS_CREATE_PET);
+		log.info("main server - request : {}", requestDto);
+		log.info("main server - response : {}", response);
+		return response;
 	}
 }
