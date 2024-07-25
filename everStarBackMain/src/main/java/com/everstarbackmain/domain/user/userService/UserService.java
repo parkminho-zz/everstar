@@ -1,10 +1,12 @@
 package com.everstarbackmain.domain.user.userService;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.everstarbackmain.domain.user.repository.UserRepository;
-import com.everstarbackmain.domain.user.responseDto.UserInfoResponseDto;
+import com.everstarbackmain.domain.user.model.User;
+import com.everstarbackmain.domain.user.responseDto.UserDetailResponseDto;
+import com.everstarbackmain.global.security.auth.PrincipalDetails;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserService {
 
-	private final UserRepository userRepository;
+	public UserDetailResponseDto getUserDetail(Authentication authentication) {
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 
-	public UserInfoResponseDto
-
-
+		UserDetailResponseDto responseDto = UserDetailResponseDto.createUserDetailResponseDto(user);
+		return responseDto;
+	}
 }
