@@ -1,6 +1,6 @@
 import React from 'react';
-import { ProgressBar } from '../../molecules/ProgressBar/ProgressBar';
-import LogoIcons from '../../atoms/symbols/Logo/LogoIcons';
+import { ProgressBar } from 'components/molecules/ProgressBar/ProgressBar';
+import LogoIcons from 'components/atoms/symbols/Logo/LogoIcons';
 
 interface Props {
   className: string;

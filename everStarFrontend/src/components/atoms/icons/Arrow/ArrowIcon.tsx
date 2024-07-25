@@ -1,8 +1,8 @@
 import React from 'react';
-import { ReactComponent as ArrowLeft } from '../../../../assets/icons/arrow-left.svg';
-import { ReactComponent as ArrowRight } from '../../../../assets/icons/arrow-right.svg';
-import { ReactComponent as ArrowUp } from '../../../../assets/icons/arrow-up.svg';
-import { ReactComponent as ArrowDown } from '../../../../assets/icons/arrow-down.svg';
+import { ReactComponent as ArrowLeft } from 'assets/icons/arrow-left.svg';
+import { ReactComponent as ArrowRight } from 'assets/icons/arrow-right.svg';
+import { ReactComponent as ArrowUp } from 'assets/icons/arrow-up.svg';
+import { ReactComponent as ArrowDown } from 'assets/icons/arrow-down.svg';
 
 interface ArrowIconProps {
   size: 16 | 24;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as MicrophoneIconSVG } from '../../../../assets/icons/microphone.svg';
+import { ReactComponent as MicrophoneIconSVG } from 'assets/icons/microphone.svg';
 
 interface MicrophoneIconProps {
   size: 16 | 24;

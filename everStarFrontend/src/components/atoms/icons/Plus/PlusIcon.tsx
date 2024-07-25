@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as PlusIconSVG } from '../../../../assets/icons/plus.svg';
+import { ReactComponent as PlusIconSVG } from 'assets/icons/plus.svg';
 
 interface PlusIconProps {
   size: 16 | 24;

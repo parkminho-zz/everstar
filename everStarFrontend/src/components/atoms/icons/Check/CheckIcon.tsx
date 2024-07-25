@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as CheckIconSVG } from '../../../../assets/icons/check.svg';
+import { ReactComponent as CheckIconSVG } from 'assets/icons/check.svg';
 
 interface CheckIconProps {
   size: 16 | 24;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as LocationIconSVG } from '../../../../assets/icons/location.svg';
+import { ReactComponent as LocationIconSVG } from 'assets/icons/location.svg';
 
 interface LocationIconProps {
   size: 16 | 24;

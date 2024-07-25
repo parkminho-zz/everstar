@@ -1,10 +1,10 @@
 import React from 'react';
-import Avatar from '../../atoms/symbols/Avatar/Avatar';
-import LetterIcons from '../../atoms/symbols/Letter/LetterIcons';
-import LetterboxIcons from '../../atoms/symbols/Letterbox/LetterboxIcons';
-import LogoIcons from '../../atoms/symbols/Logo/LogoIcons';
-import PostitIcons from '../../atoms/symbols/Postit/PostitIcons';
-import RocketIcons from '../../atoms/symbols/Rocket/RocketIcons';
+import Avatar from 'components/atoms/symbols/Avatar/Avatar';
+import LetterIcons from 'components/atoms/symbols/Letter/LetterIcons';
+import LetterboxIcons from 'components/atoms/symbols/Letterbox/LetterboxIcons';
+import LogoIcons from 'components/atoms/symbols/Logo/LogoIcons';
+import PostitIcons from 'components/atoms/symbols/Postit/PostitIcons';
+import RocketIcons from 'components/atoms/symbols/Rocket/RocketIcons';
 
 interface Props {
   type:

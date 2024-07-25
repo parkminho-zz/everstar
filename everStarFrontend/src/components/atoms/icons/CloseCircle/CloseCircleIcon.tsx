@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as CloseCircleIconSVG } from '../../../../assets/icons/close-circle.svg';
+import { ReactComponent as CloseCircleIconSVG } from 'assets/icons/close-circle.svg';
 
 interface CloseCircleIconProps {
   size: 16 | 24;

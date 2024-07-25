@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as PhoneStopIconSVG } from '../../../../assets/icons/phone-stop.svg';
+import { ReactComponent as PhoneStopIconSVG } from 'assets/icons/phone-stop.svg';
 
 interface PhoneStopIconProps {
   size: 16 | 24;
