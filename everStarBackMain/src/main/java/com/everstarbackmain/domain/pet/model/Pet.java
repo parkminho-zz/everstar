@@ -2,9 +2,8 @@ package com.everstarbackmain.domain.pet.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
+import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
@@ -19,7 +18,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -39,9 +37,6 @@ public class Pet extends BaseTimeEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
-
-	@OneToMany(mappedBy = "pet")
-	private List<Personality> personalities;
 
 	@Column(nullable = false)
 	private String name;
@@ -78,7 +73,7 @@ public class Pet extends BaseTimeEntity {
 	private LocalDateTime lastAccessTime;
 
 	@Builder
-	public Pet(User user, String name, Integer age, LocalDate memorialDate, String species, Gender gender,
+	private Pet(User user, String name, Integer age, LocalDate memorialDate, String species, Gender gender,
 		String relationship, String profileImageUrl, String introduction) {
 		this.user = user;
 		this.name = name;
@@ -89,10 +84,22 @@ public class Pet extends BaseTimeEntity {
 		this.relationship = relationship;
 		this.profileImageUrl = profileImageUrl;
 		this.introduction = introduction;
-		personalities = new ArrayList<>();
 		questIndex = 0;
 		isDeleted = false;
 		lastAccessTime = LocalDateTime.now();
+	}
+
+	public static Pet createPet(User user, CreatePetRequestDto createPetRequestDto) {
+		return Pet.builder()
+			.user(user)
+			.name(createPetRequestDto.getName())
+			.age(createPetRequestDto.getAge())
+			.memorialDate(createPetRequestDto.getMemorialDate())
+			.species(createPetRequestDto.getSpecies())
+			.gender(createPetRequestDto.getGender())
+			.relationship(createPetRequestDto.getRelationship())
+			.profileImageUrl(createPetRequestDto.getProfileImageUrl())
+			.introduction(createPetRequestDto.getIntroduction()).build();
 	}
 
 }
