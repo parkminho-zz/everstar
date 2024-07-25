@@ -1,4 +1,4 @@
-import Plus from '../../../atoms/icons/Plus/PlusIcon';
+import Plus from 'components/atoms/icons/Plus/PlusIcon';
 
 export const PostItPlusCard = () => {
   return (

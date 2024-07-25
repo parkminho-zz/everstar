@@ -1,5 +1,5 @@
-import { InformationText } from '../../../atoms/texts/InformationText';
-import { LetterText } from '../../../atoms/texts/LetterText';
+import { InformationText } from 'components/atoms/texts/InformationText';
+import { LetterText } from 'components/atoms/texts/LetterText';
 type LetterType = 'default' | 'send' | 'receive';
 type LetterColor = 'white' | 'bgorange' | 'orange' | 'gray';
 type LetterState = 'received' | 'notReceived';

@@ -12,30 +12,39 @@ const sizeMap = {
 };
 
 const Avatar: React.FC<AvatarProps> = ({ size, name }) => {
-  const avatarSrc = require('../../../../assets/symbols/avatar.png');
+  const avatarSrc = require('assets/symbols/avatar.png');
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {size === 'text' ? (
-        <div style={{
-          position: 'relative',
-          width: '24px',
-          height: '24px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontFamily: "'Noto_Sans-Bold',Helvetica",
-          fontWeight: 'bold',
-          fontSize: '8px',
-          color: 'black',
-          lineHeight: '8px',
-          textAlign: 'center',
-          whiteSpace: 'nowrap'
-        }}>
+        <div
+          style={{
+            position: 'relative',
+            width: '24px',
+            height: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontFamily: "'Noto_Sans-Bold',Helvetica",
+            fontWeight: 'bold',
+            fontSize: '8px',
+            color: 'black',
+            lineHeight: '8px',
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
+          }}
+        >
           마이페이지
         </div>
       ) : (
-        <div style={{ width: sizeMap[size], height: sizeMap[size], borderRadius: '50%', overflow: 'hidden' }}>
+        <div
+          style={{
+            width: sizeMap[size],
+            height: sizeMap[size],
+            borderRadius: '50%',
+            overflow: 'hidden',
+          }}
+        >
           <img src={avatarSrc} alt="avatar" style={{ width: '100%', height: '100%' }} />
         </div>
       )}

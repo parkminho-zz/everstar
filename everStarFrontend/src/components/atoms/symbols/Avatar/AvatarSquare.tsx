@@ -1,5 +1,5 @@
 export const AvatarSquare = () => {
-  const avatarSrc = require('../../../../assets/symbols/avatar.png');
+  const avatarSrc = require('assets/symbols/avatar.png');
 
   return (
     <div className=" w-[340px] h-[250px] self-stretch">
