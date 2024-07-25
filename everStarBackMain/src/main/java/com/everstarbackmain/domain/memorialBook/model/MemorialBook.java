@@ -40,7 +40,7 @@ public class MemorialBook {
 	@Column(nullable = false)
 	private Boolean isDeleted;
 
-	public MemorialBook(Pet pet) {
+	private MemorialBook(Pet pet) {
 		this.pet = pet;
 		isOpen = false;
 		isActive = false;
