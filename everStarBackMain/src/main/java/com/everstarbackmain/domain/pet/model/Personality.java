@@ -32,10 +32,14 @@ public class Personality {
 
 	private Boolean isDeleted;
 
-	public Personality(Long id, Pet pet, String content) {
+	private Personality(Pet pet, String content) {
 		this.pet = pet;
 		this.content = content;
 		isDeleted = false;
+	}
+
+	public static Personality createPersonality(Pet pet, String content) {
+		return new Personality(pet, content);
 	}
 
 }
