@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import CheckCircleIcon from './CheckCircleIcon';
+import { CheckCircleIcon } from './CheckCircleIcon';
 
 const meta: Meta<typeof CheckCircleIcon> = {
   title: 'Atoms/Icons/CheckCircleIcon',

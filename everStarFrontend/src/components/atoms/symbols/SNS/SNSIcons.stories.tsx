@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import SNSIcons from './SNSIcons';
+import { SNSIcons } from './SNSIcons';
 
 const meta: Meta<typeof SNSIcons> = {
   title: 'Atoms/Symbols/SNSIcons',

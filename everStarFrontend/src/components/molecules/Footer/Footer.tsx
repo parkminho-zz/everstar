@@ -1,7 +1,7 @@
 // Footer.tsx
 import React from 'react';
-import LogoIcons from 'components/atoms/symbols/Logo/LogoIcons';
-import SNSIcons from 'components/atoms/symbols/SNS/SNSIcons';
+import { LogoIcons } from 'components/atoms/symbols/Logo/LogoIcons';
+import { SNSIcons } from 'components/atoms/symbols/SNS/SNSIcons';
 
 interface FooterProps {
   type: 'desktop' | 'tablet' | 'mobile';

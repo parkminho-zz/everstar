@@ -6,7 +6,7 @@ interface ShareIconProps {
   color?: 'black' | 'gray' | 'white' | 'orange';
 }
 
-const ShareIcon: React.FC<ShareIconProps> = ({ size, color = 'black' }) => {
+export const ShareIcon: React.FC<ShareIconProps> = ({ size, color = 'black' }) => {
   const sizeClasses = size === 16 ? 'w-4 h-4' : 'w-6 h-6';
   const colorClasses = {
     black: 'text-greyscaleblack-100',
@@ -18,5 +18,4 @@ const ShareIcon: React.FC<ShareIconProps> = ({ size, color = 'black' }) => {
   return <ShareIconSVG className={`${sizeClasses} ${colorClasses[color]}`} />;
 };
 
-export default ShareIcon;
 export type { ShareIconProps };

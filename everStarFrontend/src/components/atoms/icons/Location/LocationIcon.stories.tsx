@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import LocationIcon from './LocationIcon';
+import { LocationIcon } from './LocationIcon';
 
 const meta: Meta<typeof LocationIcon> = {
   title: 'Atoms/Icons/LocationIcon',

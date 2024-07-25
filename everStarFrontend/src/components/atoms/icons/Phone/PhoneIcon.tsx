@@ -6,7 +6,7 @@ interface PhoneIconProps {
   color?: 'black' | 'gray' | 'white' | 'orange';
 }
 
-const PhoneIcon: React.FC<PhoneIconProps> = ({ size, color = 'black' }) => {
+export const PhoneIcon: React.FC<PhoneIconProps> = ({ size, color = 'black' }) => {
   const sizeClasses = size === 16 ? 'w-4 h-4' : 'w-6 h-6';
   const colorClasses = {
     black: 'text-greyscaleblack-100',
@@ -18,5 +18,4 @@ const PhoneIcon: React.FC<PhoneIconProps> = ({ size, color = 'black' }) => {
   return <PhoneIconSVG className={`${sizeClasses} ${colorClasses[color]}`} />;
 };
 
-export default PhoneIcon;
 export type { PhoneIconProps };

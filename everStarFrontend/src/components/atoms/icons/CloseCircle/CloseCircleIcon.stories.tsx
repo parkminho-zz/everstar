@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import CloseCircleIcon from './CloseCircleIcon';
+import  { CloseCircleIcon } from './CloseCircleIcon';
 
 const meta: Meta<typeof CloseCircleIcon> = {
   title: 'Atoms/Icons/CloseCircleIcon',

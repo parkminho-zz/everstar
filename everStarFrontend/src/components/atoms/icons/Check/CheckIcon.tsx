@@ -6,7 +6,7 @@ interface CheckIconProps {
   color?: 'black' | 'gray' | 'white' | 'orange';
 }
 
-const CheckIcon: React.FC<CheckIconProps> = ({ size, color = 'black' }) => {
+export const CheckIcon: React.FC<CheckIconProps> = ({ size, color = 'black' }) => {
   const sizeClasses = size === 16 ? 'w-4 h-4' : 'w-6 h-6';
   const colorClasses = {
     black: 'text-greyscaleblack-100',
@@ -18,5 +18,4 @@ const CheckIcon: React.FC<CheckIconProps> = ({ size, color = 'black' }) => {
   return <CheckIconSVG className={`${sizeClasses} ${colorClasses[color]}`} />;
 };
 
-export default CheckIcon;
 export type { CheckIconProps };

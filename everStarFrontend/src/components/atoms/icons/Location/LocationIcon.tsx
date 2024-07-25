@@ -6,7 +6,7 @@ interface LocationIconProps {
   color?: 'black' | 'gray' | 'white' | 'orange';
 }
 
-const LocationIcon: React.FC<LocationIconProps> = ({ size, color = 'black' }) => {
+export const LocationIcon: React.FC<LocationIconProps> = ({ size, color = 'black' }) => {
   const sizeClasses = size === 16 ? 'w-4 h-4' : 'w-6 h-6';
   const colorClasses = {
     black: 'text-greyscaleblack-100',
@@ -18,5 +18,4 @@ const LocationIcon: React.FC<LocationIconProps> = ({ size, color = 'black' }) =>
   return <LocationIconSVG className={`${sizeClasses} ${colorClasses[color]}`} />;
 };
 
-export default LocationIcon;
 export type { LocationIconProps };

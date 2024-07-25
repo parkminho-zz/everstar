@@ -1,4 +1,4 @@
-import Arrow from '../../atoms/icons/Arrow/ArrowIcon';
+import { ArrowIcon } from 'components/atoms/icons/Arrow/ArrowIcon';
 
 type TextButtonSize = 'large' | 'medium' | 'small';
 
@@ -31,7 +31,7 @@ export default function PrimaryButton({ size, children, onClick, disabled }: ITe
     >
       <span className={`flex-grow pr-4 mx-auto text-center ${fontStyle[size]}`}>{children}</span>
       <div className="ml-auto">
-        <Arrow
+        <ArrowIcon
           color={disabled ? 'gray' : 'black'}
           size={size === 'small' ? 16 : 24}
           direction="right"

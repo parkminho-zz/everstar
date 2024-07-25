@@ -19,10 +19,9 @@ const iconMap = {
   patron: PatronIcon,
 };
 
-const SNSIcons: React.FC<SNSIconsProps> = ({ variant }) => {
+export const SNSIcons: React.FC<SNSIconsProps> = ({ variant }) => {
   const IconComponent = iconMap[variant];
   return <IconComponent className="w-6 h-6" />;
 };
 
-export default SNSIcons;
 export type { SNSIconsProps };

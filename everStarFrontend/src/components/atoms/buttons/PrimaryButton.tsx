@@ -1,4 +1,4 @@
-import Arrow from 'components/atoms/icons/Arrow/ArrowIcon';
+import { ArrowIcon } from 'components/atoms/icons/Arrow/ArrowIcon';
 
 type PrimaryButtonTheme = 'focus' | 'hover' | 'white';
 type PrimaryButtonSize = 'large' | 'medium' | 'small';
@@ -73,7 +73,7 @@ export default function PrimaryButton({
     >
       <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>{children}</span>
       {/* <img className="ml-auto" src={getIconPath()} alt={alt} /> */}
-      <Arrow color={getIconColor()} direction="right" size={size === 'small' ? 16 : 24} />
+      <ArrowIcon color={getIconColor()} direction="right" size={size === 'small' ? 16 : 24} />
     </button>
   );
 }

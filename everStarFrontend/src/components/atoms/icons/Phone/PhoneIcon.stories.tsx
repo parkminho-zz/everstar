@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import PhoneIcon from './PhoneIcon';
+import { PhoneIcon } from './PhoneIcon';
 
 const meta: Meta<typeof PhoneIcon> = {
   title: 'Atoms/Icons/PhoneIcon',

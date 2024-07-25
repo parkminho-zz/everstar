@@ -6,7 +6,7 @@ interface LetterIconsProps {
   text?: string;
 }
 
-const LetterIcons: React.FC<LetterIconsProps> = ({ variant, text }) => {
+export const LetterIcons: React.FC<LetterIconsProps> = ({ variant, text }) => {
   return (
     <div style={{ position: 'relative', display: 'inline-block', textAlign: 'center' }}>
       {variant === 'letter-text' ? (
@@ -36,5 +36,4 @@ const LetterIcons: React.FC<LetterIconsProps> = ({ variant, text }) => {
   );
 };
 
-export default LetterIcons;
 export type { LetterIconsProps };

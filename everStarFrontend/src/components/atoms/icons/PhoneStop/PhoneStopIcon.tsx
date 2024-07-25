@@ -6,7 +6,7 @@ interface PhoneStopIconProps {
   color?: 'black' | 'gray' | 'white' | 'orange';
 }
 
-const PhoneStopIcon: React.FC<PhoneStopIconProps> = ({ size, color = 'black' }) => {
+export const PhoneStopIcon: React.FC<PhoneStopIconProps> = ({ size, color = 'black' }) => {
   const sizeClasses = size === 16 ? 'w-4 h-4' : 'w-6 h-6';
   const colorClasses = {
     black: 'text-greyscaleblack-100',
@@ -18,5 +18,4 @@ const PhoneStopIcon: React.FC<PhoneStopIconProps> = ({ size, color = 'black' }) 
   return <PhoneStopIconSVG className={`${sizeClasses} ${colorClasses[color]}`} />;
 };
 
-export default PhoneStopIcon;
 export type { PhoneStopIconProps };

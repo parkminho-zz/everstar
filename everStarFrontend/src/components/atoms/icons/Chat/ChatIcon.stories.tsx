@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import ChatIcon from './ChatIcon';
+import { ChatIcon } from './ChatIcon';
 
 const meta: Meta<typeof ChatIcon> = {
   title: 'Atoms/Icons/ChatIcon',

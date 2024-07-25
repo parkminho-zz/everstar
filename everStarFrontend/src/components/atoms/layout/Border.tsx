@@ -7,5 +7,3 @@ export const Border = (): JSX.Element => {
     </div>
   );
 };
-
-export default Border;

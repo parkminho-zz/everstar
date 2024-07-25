@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import ClipboardIcons from './ClipboardIcons';
+import { ClipboardIcons } from './ClipboardIcons';
 
 const meta: Meta<typeof ClipboardIcons> = {
   title: 'Atoms/Icons/ClipboardIcons',
