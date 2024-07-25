@@ -17,19 +17,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CustomExceptionHandler implements AuthenticationEntryPoint {
 
-    @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        CustomException exception = (CustomException) request.getAttribute("exception");
-        if(exception == null){
-            log.error(authException.getMessage());
-            exception = CustomException.ACCESS_DENIEND_EXCEPTION;
-        }
+	@Override
+	public void commence(HttpServletRequest request, HttpServletResponse response,
+		AuthenticationException authException) throws IOException, ServletException {
+		CustomException exception = (CustomException)request.getAttribute("exception");
+		if (exception == null) {
+			log.error(authException.getMessage());
+			exception = CustomException.ACCESS_DENIEND_EXCEPTION;
+		}
 
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().println("{ \"message\" : \"" + exception.getErrorMessage()
-                + "\", \"code\" : \"" +  exception.getErrorCode()
-                + "\", \"statusNum\" : " + exception.getStatusNum()
-                + "}");
-    }
+		response.setContentType("application/json;charset=UTF-8");
+		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		response.getWriter().println("{ \"message\" : \"" + exception.getErrorMessage()
+			+ "\", \"code\" : \"" + exception.getErrorCode()
+			+ "\", \"statusNum\" : " + exception.getStatusNum()
+			+ "}");
+	}
 }

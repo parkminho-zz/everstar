@@ -2,11 +2,12 @@ package com.everstarbackmain.domain.user.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 
-import com.everstarbackmain.domain.pet.model.Pet;
-import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
+import com.everstarbackmain.global.exception.CustomException;
+import com.everstarbackmain.global.exception.ExceptionResponse;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,9 +16,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -57,31 +56,13 @@ public class User extends BaseTimeEntity {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-	@OneToMany(mappedBy = "user")
-	private List<Pet> pet;
+	@Column(name = "is_deleted" , nullable = false)
+	private boolean isDeleted;
 
-	@Builder
-	private User(String email, String password, String userName, String phoneNumber, LocalDate birthDate, Gender gender, LocalTime questReceptionTime, Role role) {
-		this.email = email;
-		this.password = password;
-		this.userName = userName;
-		this.phoneNumber = phoneNumber;
-		this.birthDate = birthDate;
-		this.gender = gender;
-		this.questReceptionTime = questReceptionTime;
-		this.role = role;
-	}
-
-	public static User signUpUser(JoinRequestDto joinRequestDto) {
-		return User.builder()
-				.email(joinRequestDto.getEmail())
-				.password(joinRequestDto.getPassword())
-				.userName(joinRequestDto.getUserName())
-				.phoneNumber(joinRequestDto.getPhoneNumber())
-				.birthDate(joinRequestDto.getBirthDate())
-				.gender(joinRequestDto.getGender())
-				.questReceptionTime(joinRequestDto.getQuestReceptionTime())
-				.role(joinRequestDto.getRole())
-				.build();
+	public List<Role> getMemberRoles() {
+		if (this.role != null) {
+			return Arrays.asList(this.role);
+		}
+		throw new ExceptionResponse(CustomException.NOT_EMPTY_ROLE_EXCEPTION);
 	}
 }
