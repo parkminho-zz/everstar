@@ -7,7 +7,19 @@ const meta: Meta<typeof LogoIcons> = {
   tags: ['autodocs'],
   argTypes: {
     variant: {
-      control: { type: 'radio', options: ['earth', 'small-earth', 'vertical-earth', 'small-star', 'star', 'vertical-star'] },
+      control: {
+        type: 'radio',
+        options: [
+          'earth',
+          'small-earth',
+          'small-earth-img',
+          'vertical-earth',
+          'small-star',
+          'star',
+          'small-star-img',
+          'vertical-star',
+        ],
+      },
     },
   },
 };
