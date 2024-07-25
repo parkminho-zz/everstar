@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Tag } from './Tag';
 
 const meta: Meta<typeof Tag> = {
-  title: 'Molecules/Tag',
+  title: 'Atoms/Buttons/Tag',
   component: Tag,
   parameters: {
     layout: 'centered',

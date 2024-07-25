@@ -1,6 +1,6 @@
 import PencilIcon from 'components/atoms/icons/Pencil/PencilIcon';
 import { AvatarSquare } from 'components/atoms/symbols/Avatar/AvatarSquare';
-import { Tag } from '../../Tag';
+import { Tag } from '../../../atoms/buttons/Tag';
 
 interface IProfileCard {
   name: string;

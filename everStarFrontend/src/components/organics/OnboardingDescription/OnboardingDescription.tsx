@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tag } from 'components/molecules/Tag';
+import { Tag } from 'components/atoms/buttons/Tag';
 import Pagination from 'components/molecules/Pagination/Pagination';
 import PropTypes from 'prop-types';
 
