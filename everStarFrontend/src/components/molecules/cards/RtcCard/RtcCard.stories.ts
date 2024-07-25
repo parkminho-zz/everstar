@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { RtcCard } from './RtcCard';
 
 const meta: Meta<typeof RtcCard> = {
-  title: 'Molecules/RtcCard',
+  title: 'Molecules/Card/RtcCard',
   component: RtcCard,
   parameters: {
     layout: 'centered',

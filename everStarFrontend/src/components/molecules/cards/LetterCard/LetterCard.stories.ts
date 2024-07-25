@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { LetterCard } from './LetterCard';
 
 const meta: Meta<typeof LetterCard> = {
-  title: 'Molecules/LetterCard',
+  title: 'Molecules/Card/LetterCard',
   component: LetterCard,
   parameters: {
     layout: 'centered',
