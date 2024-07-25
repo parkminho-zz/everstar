@@ -1,16 +1,16 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import MainPage from "./pages/MainPage";
-import LoginPage from "./pages/LoginPage";
-import SignUpPage from "./pages/SignUpPage";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MainPage from './pages/MainPage';
+import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignUpPage';
 
-import { Header } from "./components/molecules/Header";
-import { Footer } from "./components/atoms/Footer";
+import { Header } from './components/molecules/Header/Header';
+import { Footer } from './components/atoms/Footer';
 
 function App() {
   return (
     <Router>
       <div className="container">
-        <Header />
+        <Header type="default" />
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/login" element={<LoginPage />} />
