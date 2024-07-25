@@ -5,7 +5,7 @@ type Color = 'black' | 'gray' | 'white';
 interface ILetterText {
   size: LabelSize;
   color: Color;
-  children: string;
+  children?: string;
 }
 
 const fontStyle = {
