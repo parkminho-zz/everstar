@@ -23,7 +23,7 @@ public class PrincipalDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findUserByEmail(email).orElseThrow(() ->
-                new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION)
+            new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION)
         );
         return new PrincipalDetails(user);
     }
