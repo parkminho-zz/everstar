@@ -10,7 +10,7 @@ import lombok.Builder;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-public class UserAccountResponseDto {
+public class UserInfoResponseDto {
 
 	private String email;
 	private String userName;
@@ -19,8 +19,8 @@ public class UserAccountResponseDto {
 	private Gender gender;
 	private LocalTime questReceptionTime;
 
-	public static UserAccountResponseDto createUserAccountResponseDto(User user) {
-		return UserAccountResponseDto.builder()
+	public static UserInfoResponseDto createUserAccountResponseDto(User user) {
+		return UserInfoResponseDto.builder()
 			.email(user.getEmail())
 			.userName(user.getUserName())
 			.phoneNumber(user.getPhoneNumber())
