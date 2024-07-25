@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as VideoIconSVG } from '../../../../assets/icons/video.svg';
+import { ReactComponent as VideoIconSVG } from 'assets/icons/video.svg';
 
 interface VideoIconProps {
   size: 16 | 24;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as ProfileIconSVG } from '../../../../assets/icons/profile.svg';
+import { ReactComponent as ProfileIconSVG } from 'assets/icons/profile.svg';
 
 interface ProfileIconProps {
   size: 16 | 24;

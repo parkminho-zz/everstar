@@ -1,6 +1,6 @@
 import React from 'react';
-import { ReactComponent as LockIconSVG } from '../../../../assets/icons/clipboard.svg';
-import { ReactComponent as LockCheckIconSVG } from '../../../../assets/icons/clipboard-check.svg';
+import { ReactComponent as LockIconSVG } from 'assets/icons/clipboard.svg';
+import { ReactComponent as LockCheckIconSVG } from 'assets/icons/clipboard-check.svg';
 
 interface ClipboardIconsProps {
   size: 16 | 24;

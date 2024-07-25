@@ -1,6 +1,6 @@
 import React from 'react';
-import { Tag } from '../../molecules/Tag';
-import Pagination from '../../molecules/Pagination/Pagination';
+import { Tag } from 'components/molecules/Tag';
+import Pagination from 'components/molecules/Pagination/Pagination';
 import PropTypes from 'prop-types';
 
 interface Props {

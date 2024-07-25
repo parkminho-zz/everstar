@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as SettingsIconSVG } from '../../../../assets/icons/settings.svg';
+import { ReactComponent as SettingsIconSVG } from 'assets/icons/settings.svg';
 
 interface SettingsIconProps {
   size: 16 | 24;

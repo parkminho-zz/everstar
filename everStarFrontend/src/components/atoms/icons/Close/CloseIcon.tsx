@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as CloseIconSVG } from '../../../../assets/icons/close.svg';
+import { ReactComponent as CloseIconSVG } from 'assets/icons/close.svg';
 
 interface CloseIconProps {
   size: 16 | 24;

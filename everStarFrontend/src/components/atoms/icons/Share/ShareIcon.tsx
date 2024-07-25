@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as ShareIconSVG } from '../../../../assets/icons/share.svg';
+import { ReactComponent as ShareIconSVG } from 'assets/icons/share.svg';
 
 interface ShareIconProps {
   size: 16 | 24;
