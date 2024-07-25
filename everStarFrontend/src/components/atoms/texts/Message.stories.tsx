@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Message } from './Message';
 
 const meta: Meta<typeof Message> = {
-  title: 'Molecules/Message',
+  title: 'Atoms/Texts/Message',
   component: Message,
   parameters: {
     layout: 'centered',
