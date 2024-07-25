@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as SearchIconSVG } from '../../../../assets/icons/search.svg';
+import { ReactComponent as SearchIconSVG } from 'assets/icons/search.svg';
 
 interface SearchIconProps {
   size: 16 | 24;

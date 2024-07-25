@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as PencilIconSVG } from '../../../../assets/icons/pencil.svg';
+import { ReactComponent as PencilIconSVG } from 'assets/icons/pencil.svg';
 
 interface PencilIconProps {
   size: 16 | 24;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as PhoneIconSVG } from '../../../../assets/icons/phone.svg';
+import { ReactComponent as PhoneIconSVG } from 'assets/icons/phone.svg';
 
 interface PhoneIconProps {
   size: 16 | 24;

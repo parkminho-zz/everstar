@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as ChatIconSVG } from '../../../../assets/icons/chat.svg';
+import { ReactComponent as ChatIconSVG } from 'assets/icons/chat.svg';
 
 interface ChatIconProps {
   size: 16 | 24;

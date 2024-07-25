@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as CheckCircleIconSVG } from '../../../../assets/icons/check-circle.svg';
+import { ReactComponent as CheckCircleIconSVG } from 'assets/icons/check-circle.svg';
 
 interface CheckCircleIconProps {
   size: 16 | 24;
