@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 import com.everstarbackauth.global.security.jwt.JwtAuthenticationFilter;
 import com.everstarbackauth.global.security.jwt.JwtUtil;
 import com.everstarbackauth.global.security.securityExceptionHandler.CustomExceptionHandler;
@@ -29,29 +30,38 @@ public class SecurityConfig {
 	private final HttpResponseUtil responseUtil;
 
 	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
 		return configuration.getAuthenticationManager();
 	}
 
 	@Bean
-	public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception{
+	public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
 		JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, objectMapper, responseUtil);
 		filter.setFilterProcessesUrl("/api/auth/login");
 		filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
 		return filter;
 	}
-	
+
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf((auth) -> auth.disable());
 		http.formLogin((auth) -> auth.disable());
 		http.httpBasic((auth) -> auth.disable());
 		http.sessionManagement((session) -> session
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		);
 		http.authorizeHttpRequests((auth) -> auth
-				.requestMatchers("/api/auth/login", "/api/auth/join").permitAll()
-				.anyRequest().authenticated()
+			.requestMatchers("/api/auth/login", "/api/auth/join").permitAll()
+			.anyRequest().authenticated()
+		);
+		http.oauth2Login((oauth) ->
+			oauth.userInfoEndpoint(c -> c.userService(oauthService))
+				.successHandler(oauthSuccessHandler)
+				.failureHandler(oauthFailHandler)
+				.redirectionEndpoint(
+					(redirectionEndpointConfig) -> redirectionEndpointConfig.baseUri(("/api/login/oauth2/code/*")))
+				.authorizationEndpoint((authorizationEndpointConfig) ->
+					authorizationEndpointConfig.baseUri("/api/oauth2/authorization"))
 		);
 		http.exceptionHandling((handle) -> handle.authenticationEntryPoint(customExceptionHandler));
 		http.addFilterAt(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
