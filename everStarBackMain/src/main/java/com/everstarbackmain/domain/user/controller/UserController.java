@@ -19,14 +19,14 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/accounts/users")
-@Slf4j
+@Slf4j(topic = "elk")
 public class UserController {
 
 	private final UserService userService;
 	private final HttpResponseUtil responseUtil;
 
 	@GetMapping
-	public ResponseEntity<?> getUserDetails(Authentication authentication) {
+	public ResponseEntity<Map<String, Object>> getUserDetails(Authentication authentication) {
 		UserDetailResponseDto responseDto = userService.getUserDetail(authentication);
 
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
