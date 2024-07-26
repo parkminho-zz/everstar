@@ -12,6 +12,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.everstarbackauth.global.security.jwt.JwtAuthenticationFilter;
 import com.everstarbackauth.global.security.jwt.JwtUtil;
+import com.everstarbackauth.global.security.oauth.OAuthService;
 import com.everstarbackauth.global.security.securityExceptionHandler.CustomExceptionHandler;
 import com.everstarbackauth.global.util.HttpResponseUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +29,7 @@ public class SecurityConfig {
 	private final ObjectMapper objectMapper;
 	private final CustomExceptionHandler customExceptionHandler;
 	private final HttpResponseUtil responseUtil;
+	private final OAuthService oauthService;
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
