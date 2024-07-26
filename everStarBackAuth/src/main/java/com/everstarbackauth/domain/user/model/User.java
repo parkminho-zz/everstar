@@ -71,7 +71,7 @@ public class User {
 		this.gender = gender;
 		this.questReceptionTime = questReceptionTime;
 		this.role = role;
-		this.isDeleted = true;
+		this.isDeleted = false;
 	}
 
 	public static User signUpUser(JoinRequestDto joinRequestDto) {

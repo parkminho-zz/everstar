@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class OAuthAttributeService {
 
-	public String getRegistrationId(OAuth2UserRequest userRequest){
+	public String getRegistrationId(OAuth2UserRequest userRequest) {
 		return userRequest.getClientRegistration().getRegistrationId();
 	}
 
-	public OAuthAttribute getOauthAttribute(OAuth2User oAuth2User , String registrationId){
-		return  OAuthAttribute.createOauthAttribute(oAuth2User.getAttributes(),registrationId);
+	public OAuthAttribute getOauthAttribute(OAuth2User oAuth2User, String registrationId) {
+		return OAuthAttribute.createOauthAttribute(oAuth2User.getAttributes(), registrationId);
 	}
 }
