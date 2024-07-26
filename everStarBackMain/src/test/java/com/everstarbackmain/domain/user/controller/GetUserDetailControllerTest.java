@@ -17,6 +17,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
@@ -49,9 +50,6 @@ public class GetUserDetailControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
-	@Autowired
-	private ObjectMapper objectMapper;
-
 	@MockBean
 	private UserService userService;
 
@@ -78,9 +76,10 @@ public class GetUserDetailControllerTest {
 	@WithMockAuthUser(email = "test@gmail.com", role = Role.ROLE_USER)
 	public void 유저_정보_조회_성공_테스트() throws Exception {
 		//given
-		Map<String, Object> mockResponseData = new HashMap<>();
+		Map<String, Object> response = new HashMap<>();
+		response.put("data", responseDto);
 		BDDMockito.given(userService.getUserDetail(authentication)).willReturn(responseDto);
-
+		BDDMockito.given(responseUtil.createResponse(responseDto)).willReturn(ResponseEntity.ok().body(response));
 
 		// when then
 		ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/accounts/users")
