@@ -50,7 +50,7 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 
-	@Column(name = "quest_reception_time", nullable = false)
+	@Column(name = "quest_reception_time")
 	private LocalTime questReceptionTime;
 
 	@Column(name = "role", nullable = false)
@@ -85,6 +85,19 @@ public class User {
 			.questReceptionTime(joinRequestDto.getQuestReceptionTime())
 			.role(joinRequestDto.getRole())
 			.build();
+	}
+
+	public static User oAuthSignUpUser(String email, String userName){
+		return User.builder()
+			.email(email)
+			.password("test")
+			.userName(userName)
+			.phoneNumber("test")
+			.birthDate(LocalDate.now())
+			.gender(Gender.MALE)
+			.role(Role.ROLE_USER)
+			.build();
+
 	}
 
 	public List<Role> getMemberRoles() {
