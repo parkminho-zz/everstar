@@ -25,11 +25,11 @@ public class JwtUtil {
 			.get("userEmail", String.class);
 	}
 
-	public String getAccessToken(User user, Long expiredMs) {
+	public String getAccessToken(User user) {
 		return Jwts.builder()
 			.claim("userEmail", user.getEmail())
 			.issuedAt(new Date(System.currentTimeMillis()))
-			.expiration(new Date(System.currentTimeMillis() + expiredMs))
+			.expiration(new Date(System.currentTimeMillis() + config.getAccessTokenExpire()))
 			.signWith(config.getKey())
 			.compact();
 	}

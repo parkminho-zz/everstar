@@ -12,7 +12,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.everstarbackauth.global.security.jwt.JwtAuthenticationFilter;
 import com.everstarbackauth.global.security.jwt.JwtUtil;
+import com.everstarbackauth.global.security.oauth.OAuthFailHandler;
 import com.everstarbackauth.global.security.oauth.OAuthService;
+import com.everstarbackauth.global.security.oauth.OAuthSuccessHandler;
 import com.everstarbackauth.global.security.securityExceptionHandler.CustomExceptionHandler;
 import com.everstarbackauth.global.util.HttpResponseUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +32,8 @@ public class SecurityConfig {
 	private final CustomExceptionHandler customExceptionHandler;
 	private final HttpResponseUtil responseUtil;
 	private final OAuthService oauthService;
+	private final OAuthSuccessHandler oAuthSuccessHandler;
+	private final OAuthFailHandler oAuthFailHandler;
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -58,8 +62,8 @@ public class SecurityConfig {
 		);
 		http.oauth2Login((oauth) ->
 			oauth.userInfoEndpoint(c -> c.userService(oauthService))
-				.successHandler(oauthSuccessHandler)
-				.failureHandler(oauthFailHandler)
+				.successHandler(oAuthSuccessHandler)
+				.failureHandler(oAuthFailHandler)
 				.redirectionEndpoint(
 					(redirectionEndpointConfig) -> redirectionEndpointConfig.baseUri(("/api/login/oauth2/code/*")))
 				.authorizationEndpoint((authorizationEndpointConfig) ->
