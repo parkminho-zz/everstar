@@ -1,8 +1,7 @@
-package com.everstarbackmain.domain.user;
+package com.everstarbackmain.domain.user.service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
