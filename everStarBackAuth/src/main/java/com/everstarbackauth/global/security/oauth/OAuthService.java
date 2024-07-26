@@ -15,6 +15,7 @@ import com.everstarbackauth.domain.user.model.User;
 import com.everstarbackauth.domain.user.repository.UserRepository;
 import com.everstarbackauth.global.exception.CustomException;
 import com.everstarbackauth.global.exception.ExceptionResponse;
+import com.everstarbackauth.global.security.auth.PrincipalDetails;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 		User user =
 			!userRepository.existsByEmailAndIsDeleted(oauthAttribute.getEmail(), false) ? createMember(oauthAttribute) :
 				findUser(oauthAttribute);
-		return new UserDetails(user, oAuth2User.getAttributes());
+		return new PrincipalDetails(user, oAuth2User.getAttributes());
 	}
 
 	private User createMember(OAuthAttribute oauthAttribute) {
