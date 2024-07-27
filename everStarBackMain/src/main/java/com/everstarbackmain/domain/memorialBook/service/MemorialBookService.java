@@ -35,4 +35,13 @@ public class MemorialBookService {
 			throw new ExceptionResponse(CustomException.NOT_ACTIVATED_MEMORIAL_BOOK_EXCEPTION);
 		}
 	}
+
+	@Transactional
+	public void changeActiveStatus(Long petId) {
+		Optional<MemorialBook> findMemorialBook = memorialBookRepository.findByPetId(petId);
+		MemorialBook memorialBook = findMemorialBook
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
+
+		memorialBook.changeActiveStatus();
+	}
 }
