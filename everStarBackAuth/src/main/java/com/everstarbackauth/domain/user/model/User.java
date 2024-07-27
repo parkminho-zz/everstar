@@ -1,9 +1,13 @@
 package com.everstarbackauth.domain.user.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import com.everstarbackauth.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackauth.global.exception.CustomException;
@@ -23,6 +27,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
 @Getter
 public class User {
 
@@ -38,9 +43,11 @@ public class User {
 	private String password;
 
 	@Column(name = "user_name", nullable = false)
+	@ColumnDefault("guest")
 	private String userName;
 
 	@Column(name = "phone_number", nullable = false, unique = true)
+	@ColumnDefault("guest")
 	private String phoneNumber;
 
 	@Column(name = "birth_date", nullable = false)
@@ -87,17 +94,15 @@ public class User {
 			.build();
 	}
 
-	public static User oAuthSignUpUser(String email, String userName){
+	public static User oAuthSignUpUser(String email, String password) {
 		return User.builder()
 			.email(email)
-			.password("test")
-			.userName(userName)
-			.phoneNumber("test")
+			.password(password)
 			.birthDate(LocalDate.now())
-			.gender(Gender.MALE)
-			.role(Role.ROLE_USER)
+			.questReceptionTime(LocalTime.now())
+			.gender(Gender.GUEST)
+			.role(Role.ROLE_GUEST)
 			.build();
-
 	}
 
 	public List<Role> getMemberRoles() {

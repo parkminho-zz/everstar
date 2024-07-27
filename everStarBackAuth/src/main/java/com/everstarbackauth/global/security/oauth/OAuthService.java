@@ -44,7 +44,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 		if (userRepository.existsByEmailAndIsDeleted(oauthAttribute.getEmail(), true))
 			throw new OAuth2AuthenticationException(
 				CustomException.EXIST_EMAIL.getErrorCode());
-		User user = User.oAuthSignUpUser(oauthAttribute.getEmail(), oauthAttribute.getName());
+		User user = User.oAuthSignUpUser(oauthAttribute.getEmail());
 
 		userRepository.save(user);
 		return user;
