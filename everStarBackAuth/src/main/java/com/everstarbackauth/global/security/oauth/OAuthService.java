@@ -1,8 +1,10 @@
 package com.everstarbackauth.global.security.oauth;
 
 import java.lang.reflect.Member;
+import java.time.LocalDate;
 
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -28,15 +30,18 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 	private final UserRepository userRepository;
 	private final DefaultOAuth2UserService delegate;
 	private final OAuthAttributeService oauthAttributeService;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 		OAuth2User oAuth2User = delegate.loadUser(userRequest);
 		String id = oauthAttributeService.getRegistrationId(userRequest);
 		OAuthAttribute oauthAttribute = oauthAttributeService.getOauthAttribute(oAuth2User, id);
+
 		User user =
 			!userRepository.existsByEmailAndIsDeleted(oauthAttribute.getEmail(), false) ? createMember(oauthAttribute) :
 				findUser(oauthAttribute);
+
 		return new PrincipalDetails(user, oAuth2User.getAttributes());
 	}
 
@@ -44,7 +49,9 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 		if (userRepository.existsByEmailAndIsDeleted(oauthAttribute.getEmail(), true))
 			throw new OAuth2AuthenticationException(
 				CustomException.EXIST_EMAIL.getErrorCode());
-		User user = User.oAuthSignUpUser(oauthAttribute.getEmail());
+
+		User user = User.oAuthSignUpUser(oauthAttribute.getEmail(),
+			passwordEncoder.encode(oauthAttribute.getEmail() + LocalDate.now()));
 
 		userRepository.save(user);
 		return user;
