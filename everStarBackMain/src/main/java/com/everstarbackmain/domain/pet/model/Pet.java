@@ -102,4 +102,8 @@ public class Pet extends BaseTimeEntity {
 			.introduction(createPetRequestDto.getIntroduction()).build();
 	}
 
+	public void plusQuestIndex() {
+		questIndex++;
+	}
+
 }
