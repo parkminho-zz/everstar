@@ -7,6 +7,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.everstarbackauth.domain.user.model.Role;
 import com.everstarbackauth.domain.user.model.User;
 import com.everstarbackauth.global.security.auth.PrincipalDetails;
 import com.everstarbackauth.global.security.jwt.JwtUtil;
@@ -27,13 +28,28 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
-		String token = jwtUtil.getAccessToken(user);
-		log.info("auth-server accesstoken : {}", token);
-		response.sendRedirect(makeRedirectUrl(token));
+
+		if(user.getRole().equals(Role.ROLE_GUEST)){
+			response.sendRedirect(sendNotAuthenticatedAuthUrl(user));
+			return;
+		}
+
+		if(user.getRole().equals(Role.ROLE_USER)){
+			response.sendRedirect(sendVerifiedAuthUrl(user));
+		}
 	}
 
-	private String makeRedirectUrl(String token) {
-		return UriComponentsBuilder.fromUriString("https://capsuletalk.site/oauth/" + token)
+	private String sendNotAuthenticatedAuthUrl(User user){
+		log.info("auth server: notAuthenticated");
+		return UriComponentsBuilder.fromUriString("https://i11b101.p.ssafy.io/auth/" + user.getEmail())
+			.build()
+			.toString();
+	}
+
+	private String sendVerifiedAuthUrl(User user) {
+		String token = jwtUtil.getAccessToken(user);
+		log.info("auth server accessToken : {}", token);
+		return UriComponentsBuilder.fromUriString("https://i11b101.p.ssafy.io/oauth/" + token)
 			.build()
 			.toString();
 	}
