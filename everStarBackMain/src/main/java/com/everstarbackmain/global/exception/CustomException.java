@@ -15,6 +15,8 @@ public enum CustomException {
 
 	ACCESS_DENIED_EXCEPTION(403, "AccessDeniedException", "권한이 없습니다"),
 
+	NOT_FOUND_PET_EXCEPTION(400, "NotFoundPetException", "반려동물이 존재하지 않습니다."),
+
 	NOT_FOUND_MEMORIAL_BOOK_EXCEPTION(400, "NotFoundMemorialBookException", "메모리얼북이 존재하지 않습니다."),
 	NOT_ACTIVATED_MEMORIAL_BOOK_EXCEPTION(400, "NotActivatedMemorialBookException", "메모리얼북이 활성화 상태가 아닙니다.")
 	;
