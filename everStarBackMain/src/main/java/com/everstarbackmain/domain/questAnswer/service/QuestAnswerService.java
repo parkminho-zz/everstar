@@ -1,18 +1,12 @@
 package com.everstarbackmain.domain.questAnswer.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Optional;
 
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.everstarbackmain.domain.memorialBook.service.MemorialBookService;
+import com.everstarbackmain.domain.memorialBook.util.MemorialBookScheduler;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;
@@ -30,10 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class QuestAnswerService {
 
-	private final TaskScheduler taskScheduler;
 	private final QuestAnswerRepository questAnswerRepository;
 	private final PetRepository petRepository;
-	private final MemorialBookService memorialBookService;
+	private final MemorialBookScheduler memorialBookScheduler;
 
 	@Transactional
 	public void createQuestAnswer(Authentication authentication, Long petId) {
@@ -50,18 +43,9 @@ public class QuestAnswerService {
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
 		pet.plusQuestIndex();
-
 		if (pet.getQuestIndex() == 49) {
-			scheduleMemorialBookActivation(user, pet);
+			memorialBookScheduler.scheduleMemorialBookActivation(user, petId);
 		}
-	}
-
-	private void scheduleMemorialBookActivation(User user, Pet pet) {
-		LocalTime questReceptionTime = user.getQuestReceptionTime();
-		LocalDateTime nextDayQuestReceptionTime = LocalDateTime.of(LocalDate.now().plusDays(1), questReceptionTime);
-		Date nextDayQuestReceptionDate = Date.from(nextDayQuestReceptionTime.atZone(ZoneId.systemDefault()).toInstant());
-
-		taskScheduler.schedule(() -> memorialBookService.changeActiveStatus(pet.getId()), nextDayQuestReceptionDate);
 	}
 
 }
