@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/pets/{pet-id}/memorialbooks")
-@Slf4j
+@Slf4j(topic = "elk")
 public class MemorialBookController {
 
 	private final MemorialBookService memorialBookService;

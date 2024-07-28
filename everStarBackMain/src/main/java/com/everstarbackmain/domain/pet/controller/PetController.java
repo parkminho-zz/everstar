@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/pets")
-@Slf4j
+@Slf4j(topic = "elk")
 public class PetController {
 
 	private final PetService petService;

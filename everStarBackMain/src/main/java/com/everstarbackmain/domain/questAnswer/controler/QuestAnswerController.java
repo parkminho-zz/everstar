@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-@Slf4j
+@Slf4j(topic = "elk")
 public class QuestAnswerController {
 
 	private final QuestAnswerService questAnswerService;
