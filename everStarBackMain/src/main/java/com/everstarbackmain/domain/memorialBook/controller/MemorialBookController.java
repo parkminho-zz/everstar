@@ -16,6 +16,7 @@ import com.everstarbackmain.domain.memorialBook.requestDto.MemorialBookTestResul
 import com.everstarbackmain.domain.memorialBook.service.MemorialBookService;
 import com.everstarbackmain.global.util.HttpResponseUtil;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,7 +43,7 @@ public class MemorialBookController {
 	@PatchMapping("/{memorialbook-id}/psychological-test")
 	public ResponseEntity<Map<String, Object>> addPsychologicalTestResult(Authentication authentication,
 		@PathVariable("pet-id") Long petId, @PathVariable("memorialbook-id") Long memorialBookId,
-		@RequestBody MemorialBookTestResultRequestDto testResultRequestDto) {
+		@RequestBody @Valid MemorialBookTestResultRequestDto testResultRequestDto) {
 		memorialBookService.addPsychologicalTestResult(authentication, petId, memorialBookId, testResultRequestDto);
 
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
