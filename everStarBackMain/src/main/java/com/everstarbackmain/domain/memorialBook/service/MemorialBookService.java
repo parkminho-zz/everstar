@@ -33,8 +33,7 @@ public class MemorialBookService {
 
 	@Transactional
 	public void changeOpenStatus(Long memorialBookId) {
-		Optional<MemorialBook> findMemorialBook = memorialBookRepository.findById(memorialBookId);
-		MemorialBook memorialBook = findMemorialBook
+		MemorialBook memorialBook = memorialBookRepository.findById(memorialBookId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
 		validateActiveStatus(memorialBook);
 		memorialBook.changeOpenStatus();
@@ -49,8 +48,7 @@ public class MemorialBookService {
 	@Transactional
 	@Async
 	public void changeActiveStatus(Long petId) {
-		Optional<MemorialBook> findMemorialBook = memorialBookRepository.findByPetId(petId);
-		MemorialBook memorialBook = findMemorialBook
+		MemorialBook memorialBook = memorialBookRepository.findByPetId(petId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
 
 		memorialBook.changeActiveStatus();
@@ -59,8 +57,7 @@ public class MemorialBookService {
 	@Transactional
 	public void addPsychologicalTestResult(Authentication authentication, Long petId, Long memorialBookId,
 		MemorialBookTestResultRequestDto testResultRequestDto) {
-		Optional<MemorialBook> findMemorialBook = memorialBookRepository.findById(memorialBookId);
-		MemorialBook memorialBook = findMemorialBook
+		MemorialBook memorialBook = memorialBookRepository.findById(memorialBookId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
 
 		validateMemorialBook(authentication, petId, memorialBook);
@@ -70,8 +67,7 @@ public class MemorialBookService {
 	private void validateMemorialBook(Authentication authentication, Long petId, MemorialBook memorialBook) {
 		User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
 
-		Optional<Pet> findPet = petRepository.findById(petId);
-		Pet pet = findPet
+		Pet pet = petRepository.findById(petId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
 		if ((pet.getUser().getId() != user.getId()) || (petId != memorialBook.getPet().getId())) {
