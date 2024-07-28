@@ -17,11 +17,15 @@ import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import com.everstarbackmain.domain.memorialBook.message.PsychologicalTestResultMessage;
 import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 import com.everstarbackmain.domain.memorialBook.repository.MemorialBookRepository;
+import com.everstarbackmain.domain.memorialBook.requestDto.MemorialBookTestResultRequestDto;
 import com.everstarbackmain.domain.pet.model.Pet;
+import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
@@ -29,6 +33,7 @@ import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
+import com.everstarbackmain.global.security.auth.PrincipalDetails;
 
 @ExtendWith(MockitoExtension.class)
 class MemorialBookServiceTest {
@@ -38,6 +43,15 @@ class MemorialBookServiceTest {
 
 	@Mock
 	private MemorialBookRepository memorialBookRepository;
+
+	@Mock
+	private PetRepository petRepository;
+
+	@Mock
+	private Authentication authentication;
+
+	@Mock
+	private PrincipalDetails principalDetails;
 
 	private User user;
 	private Pet pet;
@@ -52,11 +66,13 @@ class MemorialBookServiceTest {
 			"relationship", "profileImageUrl", "introduction", List.of("개구쟁이", "귀염둥이")));
 		memorialBook = MemorialBook.createMemorialBook(pet);
 		memorialBook.changeActiveStatus();
+
+		ReflectionTestUtils.setField(user, "id", 1);
+		ReflectionTestUtils.setField(pet, "id", 1L);
 	}
 
 	@Test
 	@DisplayName("메모리얼북_공개_여부_수정_성공_테스트")
-	@Transactional
 	public void 메모리얼북_공개_여부_수정_성공_테스트() {
 		// given
 		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
@@ -70,7 +86,6 @@ class MemorialBookServiceTest {
 
 	@Test
 	@DisplayName("메모리얼북_공개_여부_수정_비활성화_에러_테스트")
-	@Transactional
 	public void 메모리얼북_공개_여부_수정_비활성화_에러_테스트() {
 		// given
 		memorialBook.changeActiveStatus();
@@ -84,7 +99,6 @@ class MemorialBookServiceTest {
 
 	@Test
 	@DisplayName("메모리얼북_공개_여부_수정_NOT_FOUND_에러_테스트")
-	@Transactional
 	public void 메모리얼북_공개_여부_수정_NOT_FOUND_에러_테스트() {
 		// given
 		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.empty());
@@ -95,4 +109,76 @@ class MemorialBookServiceTest {
 			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION);
 	}
 
+	@Test
+	@DisplayName("심리_검사_결과_추가_성공_테스트")
+	public void 심리_검사_결과_추가_성공_테스트() {
+		// given
+		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(petRepository.findById(anyLong())).willReturn(Optional.of(pet));
+		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
+		BDDMockito.given(principalDetails.getUser()).willReturn(user);
+		MemorialBookTestResultRequestDto requestDto = new MemorialBookTestResultRequestDto(2);
+
+		// when
+		Assertions.assertThatNoException().isThrownBy(() -> memorialBookService.addPsychologicalTestResult(
+			authentication, 1L, 1L, requestDto));
+
+		// then
+		Assertions.assertThat(memorialBook.getPsychologicalTestResult()).isEqualTo(PsychologicalTestResultMessage.NORMAL.getMessage());
+	}
+
+	@Test
+	@DisplayName("존재하지_않는_메모리얼북_심리_검사_결과_추가_에러_테스트")
+	public void 존재하지_않는_메모리얼북_심리_검사_결과_추가_에러_테스트() {
+		// given
+		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.empty());
+		MemorialBookTestResultRequestDto requestDto = new MemorialBookTestResultRequestDto(10);
+
+		// then
+		Assertions.assertThatThrownBy(() -> memorialBookService.addPsychologicalTestResult(
+				authentication, 1L, 2L, requestDto))
+			.isInstanceOf(ExceptionResponse.class)
+			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION);
+	}
+
+	@Test
+	@DisplayName("잘못된_심리_검사_결과_추가_에러_테스트")
+	public void 잘못된_심리_검사_결과_추가_에러_테스트() {
+		// given
+		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(petRepository.findById(anyLong())).willReturn(Optional.of(pet));
+		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
+		BDDMockito.given(principalDetails.getUser()).willReturn(user);
+		MemorialBookTestResultRequestDto requestDto = new MemorialBookTestResultRequestDto(30);
+
+		// then
+		Assertions.assertThatThrownBy(() -> memorialBookService.addPsychologicalTestResult(
+				authentication, 1L, 1L, requestDto))
+			.isInstanceOf(ExceptionResponse.class)
+			.hasFieldOrPropertyWithValue("customException", CustomException.WRONG_TYPE_EXCEPTION);
+	}
+
+	@Test
+	@DisplayName("다른_사용자의_메모리얼북_심리_검사_결과_추가_에러_테스트")
+	public void 다른_사용자의_메모리얼북_심리_검사_결과_추가_에러_테스트() {
+		// given
+		User otherUser = User.signUpUser(new JoinRequestDto("otherEmail", "password", "name", "010-1111-1111",
+			LocalDate.now(), Gender.MALE, LocalTime.now(), Role.ROLE_USER));
+		Pet otherPet = Pet.createPet(otherUser, new CreatePetRequestDto("otherPetName", 10,
+			LocalDate.of(1990, 1, 1), "species", Gender.MALE,
+			"relationship", "profileImageUrl", "introduction", List.of("개구쟁이", "귀염둥이")));
+		MemorialBook otherMemorialBook = MemorialBook.createMemorialBook(otherPet);
+		MemorialBookTestResultRequestDto requestDto = new MemorialBookTestResultRequestDto(10);
+
+		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(otherMemorialBook));
+		BDDMockito.given(petRepository.findById(anyLong())).willReturn(Optional.of(otherPet));
+		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
+		BDDMockito.given(principalDetails.getUser()).willReturn(user);
+
+		// then
+		Assertions.assertThatThrownBy(() -> memorialBookService.addPsychologicalTestResult(
+				authentication, 1L, 1L, requestDto))
+			.isInstanceOf(ExceptionResponse.class)
+			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_MY_MEMORIAL_BOOK_EXCEPTION);
+	}
 }
