@@ -57,7 +57,7 @@ public class SecurityConfig {
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		);
 		http.authorizeHttpRequests((auth) -> auth
-			.requestMatchers("/api/auth/login", "/api/auth/join").permitAll()
+			.requestMatchers("/api/auth/login", "/api/auth/join", "/api/oauth2/**", "/api/login/**").permitAll()
 			.anyRequest().authenticated()
 		);
 		http.oauth2Login((oauth) ->

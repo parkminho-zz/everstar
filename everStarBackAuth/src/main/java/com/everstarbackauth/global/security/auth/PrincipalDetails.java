@@ -18,7 +18,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
 	@Getter
 	private User user;
-
 	private Map<String, Object> attributes;
 
 	public PrincipalDetails(User user) {
@@ -33,20 +32,21 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<GrantedAuthority> authorities = new ArrayList<>();
-		user.getMemberRoles().forEach((r) -> {
+		this.user.getMemberRoles().forEach((r) -> {
 			authorities.add(() -> r.getRole());
 		});
 		return authorities;
 	}
 
+	//일반 로그인
 	@Override
 	public String getPassword() {
-		return user.getPassword();
+		return this.user.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		return user.getUserName();
+		return this.user.getEmail();
 	}
 
 	@Override
@@ -71,6 +71,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
 	@Override
 	public String getName() {
-		return this.user.getUserName();
+		return this.user.getEmail();
 	}
 }

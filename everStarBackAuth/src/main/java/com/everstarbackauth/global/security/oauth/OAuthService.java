@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
+@Slf4j(topic = "elk")
 public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
 	private final UserRepository userRepository;
@@ -39,13 +39,13 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 		OAuthAttribute oauthAttribute = oauthAttributeService.getOauthAttribute(oAuth2User, id);
 
 		User user =
-			!userRepository.existsByEmailAndIsDeleted(oauthAttribute.getEmail(), false) ? createMember(oauthAttribute) :
+			!userRepository.existsByEmailAndIsDeleted(oauthAttribute.getEmail(), false) ? oAuthSignUpUser(oauthAttribute) :
 				findUser(oauthAttribute);
 
 		return new PrincipalDetails(user, oAuth2User.getAttributes());
 	}
 
-	private User createMember(OAuthAttribute oauthAttribute) {
+	private User oAuthSignUpUser(OAuthAttribute oauthAttribute) {
 		if (userRepository.existsByEmailAndIsDeleted(oauthAttribute.getEmail(), true))
 			throw new OAuth2AuthenticationException(
 				CustomException.EXIST_EMAIL.getErrorCode());
@@ -58,7 +58,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 	}
 
 	private User findUser(OAuthAttribute oauthAttribute) {
-		return userRepository.findUserByEmailIsDeleted(oauthAttribute.getEmail(), false)
+		return userRepository.findUserByEmailAndIsDeleted(oauthAttribute.getEmail(), false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_EXIST_EMAIL));
 	}
 }

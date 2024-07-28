@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j(topic = "logs")
+@Slf4j(topic = "elk")
 public class OAuthFailHandler implements AuthenticationFailureHandler {
 
 	@Override
@@ -27,7 +27,7 @@ public class OAuthFailHandler implements AuthenticationFailureHandler {
 	}
 
 	private String makeRedirectUrl() {
-		return UriComponentsBuilder.fromUriString("https://i11b101.p.ssafy.io/login/")
+		return UriComponentsBuilder.fromUriString("https://localhost:3000/login/")
 			.build()
 			.toString();
 	}

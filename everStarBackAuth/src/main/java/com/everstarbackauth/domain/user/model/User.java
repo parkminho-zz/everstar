@@ -10,6 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.everstarbackauth.domain.user.requestDto.JoinRequestDto;
+import com.everstarbackauth.global.entity.BaseTimeEntity;
 import com.everstarbackauth.global.exception.CustomException;
 import com.everstarbackauth.global.exception.ExceptionResponse;
 
@@ -29,7 +30,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @Getter
-public class User {
+public class User extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,11 +44,11 @@ public class User {
 	private String password;
 
 	@Column(name = "user_name", nullable = false)
-	@ColumnDefault("guest")
+	@ColumnDefault("'guest'")
 	private String userName;
 
 	@Column(name = "phone_number", nullable = false, unique = true)
-	@ColumnDefault("guest")
+	@ColumnDefault("'guest'")
 	private String phoneNumber;
 
 	@Column(name = "birth_date", nullable = false)

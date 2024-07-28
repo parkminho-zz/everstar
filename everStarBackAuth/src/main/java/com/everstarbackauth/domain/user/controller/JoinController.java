@@ -15,10 +15,12 @@ import com.everstarbackauth.global.util.HttpResponseUtil;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
+@Slf4j(topic = "elk")
 public class JoinController {
 
 	private final JoinService joinService;

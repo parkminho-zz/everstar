@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
+@Slf4j(topic = "elk")
 public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 	private final JwtUtil jwtUtil;
 
@@ -29,27 +29,27 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 		Authentication authentication) throws IOException, ServletException {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 
-		if(user.getRole().equals(Role.ROLE_GUEST)){
+		if (user.getRole().equals(Role.ROLE_GUEST)) {
 			response.sendRedirect(sendNotAuthenticatedAuthUrl(user));
 			return;
 		}
 
-		if(user.getRole().equals(Role.ROLE_USER)){
+		if (user.getRole().equals(Role.ROLE_USER)) {
 			response.sendRedirect(sendVerifiedAuthUrl(user));
 		}
 	}
 
-	private String sendNotAuthenticatedAuthUrl(User user){
+	private String sendNotAuthenticatedAuthUrl(User user) {
 		log.info("auth server: notAuthenticated");
-		return UriComponentsBuilder.fromUriString("https://i11b101.p.ssafy.io/auth/" + user.getEmail())
+		return UriComponentsBuilder.fromUriString("http://localhost:3000/auth/" + user.getEmail())
 			.build()
 			.toString();
 	}
 
 	private String sendVerifiedAuthUrl(User user) {
 		String token = jwtUtil.getAccessToken(user);
-		log.info("auth server accessToken : {}", token);
-		return UriComponentsBuilder.fromUriString("https://i11b101.p.ssafy.io/oauth/" + token)
+		log.info("auth server - accessToken : {}", token);
+		return UriComponentsBuilder.fromUriString("https://localhost:3000/oauth/" + token)
 			.build()
 			.toString();
 	}
