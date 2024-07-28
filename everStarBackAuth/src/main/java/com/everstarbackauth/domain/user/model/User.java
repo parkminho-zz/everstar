@@ -48,7 +48,6 @@ public class User extends BaseTimeEntity {
 	private String userName;
 
 	@Column(name = "phone_number", nullable = false, unique = true)
-	@ColumnDefault("'guest'")
 	private String phoneNumber;
 
 	@Column(name = "birth_date", nullable = false)
@@ -99,6 +98,7 @@ public class User extends BaseTimeEntity {
 		return User.builder()
 			.email(email)
 			.password(password)
+			.phoneNumber(email)
 			.birthDate(LocalDate.now())
 			.questReceptionTime(LocalTime.now())
 			.gender(Gender.GUEST)

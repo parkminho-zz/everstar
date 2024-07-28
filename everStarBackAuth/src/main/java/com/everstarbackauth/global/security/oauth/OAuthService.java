@@ -39,7 +39,8 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 		OAuthAttribute oauthAttribute = oauthAttributeService.getOauthAttribute(oAuth2User, id);
 
 		User user =
-			!userRepository.existsByEmailAndIsDeleted(oauthAttribute.getEmail(), false) ? oAuthSignUpUser(oauthAttribute) :
+			!userRepository.existsByEmailAndIsDeleted(oauthAttribute.getEmail(), false) ?
+				oAuthSignUpUser(oauthAttribute) :
 				findUser(oauthAttribute);
 
 		return new PrincipalDetails(user, oAuth2User.getAttributes());
