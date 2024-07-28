@@ -19,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.everstarbackmain.domain.memorialBook.message.PsychologicalTestResultMessage;
 import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
@@ -74,7 +73,6 @@ class MemorialBookServiceTest {
 
 	@Test
 	@DisplayName("메모리얼북_공개_여부_수정_성공_테스트")
-	@Transactional
 	public void 메모리얼북_공개_여부_수정_성공_테스트() {
 		// given
 		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
@@ -88,7 +86,6 @@ class MemorialBookServiceTest {
 
 	@Test
 	@DisplayName("메모리얼북_공개_여부_수정_비활성화_에러_테스트")
-	@Transactional
 	public void 메모리얼북_공개_여부_수정_비활성화_에러_테스트() {
 		// given
 		memorialBook.changeActiveStatus();
@@ -102,7 +99,6 @@ class MemorialBookServiceTest {
 
 	@Test
 	@DisplayName("메모리얼북_공개_여부_수정_NOT_FOUND_에러_테스트")
-	@Transactional
 	public void 메모리얼북_공개_여부_수정_NOT_FOUND_에러_테스트() {
 		// given
 		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.empty());
@@ -115,7 +111,6 @@ class MemorialBookServiceTest {
 
 	@Test
 	@DisplayName("심리_검사_결과_추가_성공_테스트")
-	@Transactional
 	public void 심리_검사_결과_추가_성공_테스트() {
 		// given
 		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
@@ -134,7 +129,6 @@ class MemorialBookServiceTest {
 
 	@Test
 	@DisplayName("존재하지_않는_메모리얼북_심리_검사_결과_추가_에러_테스트")
-	@Transactional
 	public void 존재하지_않는_메모리얼북_심리_검사_결과_추가_에러_테스트() {
 		// given
 		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.empty());
@@ -149,7 +143,6 @@ class MemorialBookServiceTest {
 
 	@Test
 	@DisplayName("잘못된_심리_검사_결과_추가_에러_테스트")
-	@Transactional
 	public void 잘못된_심리_검사_결과_추가_에러_테스트() {
 		// given
 		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
@@ -167,7 +160,6 @@ class MemorialBookServiceTest {
 
 	@Test
 	@DisplayName("다른_사용자의_메모리얼북_심리_검사_결과_추가_에러_테스트")
-	@Transactional
 	public void 다른_사용자의_메모리얼북_심리_검사_결과_추가_에러_테스트() {
 		// given
 		User otherUser = User.signUpUser(new JoinRequestDto("otherEmail", "password", "name", "010-1111-1111",
