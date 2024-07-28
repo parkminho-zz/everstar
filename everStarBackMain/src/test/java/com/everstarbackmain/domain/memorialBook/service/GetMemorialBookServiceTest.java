@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 import com.everstarbackmain.domain.memorialBook.repository.MemorialBookRepository;
@@ -62,7 +61,6 @@ public class GetMemorialBookServiceTest {
 
 	@Test
 	@DisplayName("메모리얼북_펫_ID로_조회_성공_테스트")
-	@Transactional(readOnly = true)
 	public void 메모리얼북_펫_ID로_조회_성공_테스트() {
 		// given
 		BDDMockito.given(memorialBookRepository.findByPetId(anyLong())).willReturn(Optional.of(memorialBook));
@@ -76,7 +74,6 @@ public class GetMemorialBookServiceTest {
 
 	@Test
 	@DisplayName("메모리얼북_펫_ID로_조회_메모리얼북_존재하지_않는_에외_테스트")
-	@Transactional(readOnly = true)
 	public void 메모리얼북_펫_ID로_조회_메모리얼북_존재하지_않는_에외_테스트() {
 		// given
 		BDDMockito.given(memorialBookRepository.findByPetId(anyLong())).willReturn(Optional.empty());
