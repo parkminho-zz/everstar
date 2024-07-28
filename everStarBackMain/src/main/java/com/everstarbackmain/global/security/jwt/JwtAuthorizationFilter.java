@@ -53,8 +53,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		log.info("mainServer bearerToken : {}", bearerToken);
 
 		if (!StringUtils.hasText(bearerToken) || !bearerToken.startsWith("Bearer ")) {
-			log.error("mainServer error: {}", CustomException.ACCESS_DENIEND_EXCEPTION);
-			throw new ExceptionResponse(CustomException.ACCESS_DENIEND_EXCEPTION);
+			log.error("mainServer error: {}", CustomException.ACCESS_DENIED_EXCEPTION);
+			throw new ExceptionResponse(CustomException.ACCESS_DENIED_EXCEPTION);
 		}
 
 		return bearerToken.substring(7);

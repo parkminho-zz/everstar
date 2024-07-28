@@ -23,7 +23,7 @@ public class CustomExceptionHandler implements AuthenticationEntryPoint {
 		CustomException exception = (CustomException)request.getAttribute("exception");
 		if (exception == null) {
 			log.error(authException.getMessage());
-			exception = CustomException.ACCESS_DENIEND_EXCEPTION;
+			exception = CustomException.ACCESS_DENIED_EXCEPTION;
 		}
 
 		response.setContentType("application/json;charset=UTF-8");

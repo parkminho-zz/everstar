@@ -55,4 +55,11 @@ public class MemorialBook {
 		this.psychologicalTestResult = psychologicalTestResult;
 	}
 
+	public void changeOpenStatus() {
+		isOpen = !isOpen;
+	}
+
+	public void changeActiveStatus() {
+		isActive = !isActive;
+	}
 }
