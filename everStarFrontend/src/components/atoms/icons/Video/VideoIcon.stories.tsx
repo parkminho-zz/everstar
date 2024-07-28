@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import VideoIcon from './VideoIcon';
+import {VideoIcon} from './VideoIcon';
 
 const meta: Meta<typeof VideoIcon> = {
   title: 'Atoms/Icons/VideoIcon',

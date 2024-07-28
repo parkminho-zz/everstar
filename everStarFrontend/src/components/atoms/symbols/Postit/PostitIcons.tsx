@@ -6,7 +6,7 @@ interface PostitIconsProps {
   text?: string;
 }
 
-const PostitIcons: React.FC<PostitIconsProps> = ({ variant, text }) => {
+export const PostitIcons: React.FC<PostitIconsProps> = ({ variant, text }) => {
   return (
     <div style={{ position: 'relative', display: 'inline-block', textAlign: 'center' }}>
       {variant === 'postit-text' ? (
@@ -36,5 +36,4 @@ const PostitIcons: React.FC<PostitIconsProps> = ({ variant, text }) => {
   );
 };
 
-export default PostitIcons;
 export type { PostitIconsProps };

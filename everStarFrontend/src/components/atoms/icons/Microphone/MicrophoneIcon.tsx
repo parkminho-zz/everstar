@@ -6,7 +6,7 @@ interface MicrophoneIconProps {
   color?: 'black' | 'gray' | 'white' | 'orange';
 }
 
-const MicrophoneIcon: React.FC<MicrophoneIconProps> = ({ size, color = 'black' }) => {
+export const MicrophoneIcon: React.FC<MicrophoneIconProps> = ({ size, color = 'black' }) => {
   const sizeClasses = size === 16 ? 'w-4 h-4' : 'w-6 h-6';
   const colorClasses = {
     black: 'text-greyscaleblack-100',
@@ -18,5 +18,4 @@ const MicrophoneIcon: React.FC<MicrophoneIconProps> = ({ size, color = 'black' }
   return <MicrophoneIconSVG className={`${sizeClasses} ${colorClasses[color]}`} />;
 };
 
-export default MicrophoneIcon;
 export type { MicrophoneIconProps };

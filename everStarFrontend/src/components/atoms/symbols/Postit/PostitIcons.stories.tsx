@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import PostitIcons from './PostitIcons';
+import { PostitIcons } from './PostitIcons';
 
 const meta: Meta<typeof PostitIcons> = {
   title: 'Atoms/Symbols/PostitIcons',

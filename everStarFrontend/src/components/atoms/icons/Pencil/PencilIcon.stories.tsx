@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import PencilIcon from './PencilIcon';
+import {PencilIcon} from './PencilIcon';
 
 const meta: Meta<typeof PencilIcon> = {
   title: 'Atoms/Icons/PencilIcon',

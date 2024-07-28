@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import CheckIcon from './CheckIcon';
+import { CheckIcon } from './CheckIcon';
 
 const meta: Meta<typeof CheckIcon> = {
   title: 'Atoms/Icons/CheckIcon',

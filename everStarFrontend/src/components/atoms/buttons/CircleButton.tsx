@@ -3,14 +3,14 @@ import CircleWhite from 'assets/images/circle-white.svg';
 import CircleDisabled from 'assets/images/circle-disabled.svg';
 import CircleHover from 'assets/images/circle-hover.svg';
 import CircleFocus from 'assets/images/circle-focus.svg';
-import PlusIcon from 'components/atoms/icons/Plus/PlusIcon';
-import MicrophoneIcon from 'components/atoms/icons/Microphone/MicrophoneIcon';
-import PhoneStopIcon from 'components/atoms/icons/PhoneStop/PhoneStopIcon';
-import PhoneIcon from 'components/atoms/icons/Phone/PhoneIcon';
-import VideoIcon from 'components/atoms/icons/Video/VideoIcon';
-import SettingsIcon from 'components/atoms/icons/Settings/SettingsIcon';
-import ChatIcon from 'components/atoms/icons/Chat/ChatIcon';
-import ShareIcon from 'components/atoms/icons/Share/ShareIcon';
+import {PlusIcon} from 'components/atoms/icons/Plus/PlusIcon';
+import {MicrophoneIcon} from 'components/atoms/icons/Microphone/MicrophoneIcon';
+import {PhoneStopIcon} from 'components/atoms/icons/PhoneStop/PhoneStopIcon';
+import {PhoneIcon} from 'components/atoms/icons/Phone/PhoneIcon';
+import {VideoIcon} from 'components/atoms/icons/Video/VideoIcon';
+import {SettingsIcon} from 'components/atoms/icons/Settings/SettingsIcon';
+import {ChatIcon} from 'components/atoms/icons/Chat/ChatIcon';
+import {ShareIcon} from 'components/atoms/icons/Share/ShareIcon';
 
 type CircleButtonTheme = 'focus' | 'hover' | 'white';
 type RtcIconTheme =
@@ -42,7 +42,7 @@ const iconMap: Record<RtcIconTheme, React.ComponentType<any>> = {
   share: ShareIcon,
 };
 
-export default function CircleButton({ theme, icon, onClick, disabled }: ICircleButtonProps) {
+export function CircleButton({ theme, icon, onClick, disabled }: ICircleButtonProps) {
   const getBgPath = () => {
     if (disabled) return CircleDisabled;
     switch (theme) {

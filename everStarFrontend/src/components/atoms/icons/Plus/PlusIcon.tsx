@@ -6,7 +6,7 @@ interface PlusIconProps {
   color?: 'black' | 'gray' | 'white' | 'orange';
 }
 
-const PlusIcon: React.FC<PlusIconProps> = ({ size, color = 'black' }) => {
+export const PlusIcon: React.FC<PlusIconProps> = ({ size, color = 'black' }) => {
   const sizeClasses = size === 16 ? 'w-4 h-4' : 'w-6 h-6';
   const colorClasses = {
     black: 'text-greyscaleblack-100',
@@ -18,5 +18,4 @@ const PlusIcon: React.FC<PlusIconProps> = ({ size, color = 'black' }) => {
   return <PlusIconSVG className={`${sizeClasses} ${colorClasses[color]}`} />;
 };
 
-export default PlusIcon;
 export type { PlusIconProps };

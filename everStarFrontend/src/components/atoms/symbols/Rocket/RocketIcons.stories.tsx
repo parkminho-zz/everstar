@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import RocketIcons from './RocketIcons';
+import { RocketIcons } from './RocketIcons';
 
 const meta: Meta<typeof RocketIcons> = {
   title: 'Atoms/Symbols/RocketIcons',

@@ -1,5 +1,5 @@
-import MicrophoneIcon from 'components/atoms/icons/Microphone/MicrophoneIcon';
-import ProfileIcon from 'components/atoms/icons/Profile/ProfileIcon';
+import {MicrophoneIcon} from 'components/atoms/icons/Microphone/MicrophoneIcon';
+import {ProfileIcon} from 'components/atoms/icons/Profile/ProfileIcon';
 
 interface IRtcCardProps {
   name: string;

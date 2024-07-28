@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import LogoIcons from './LogoIcons';
+import { LogoIcons } from './LogoIcons';
 
 const meta: Meta<typeof LogoIcons> = {
   title: 'Atoms/Symbols/LogoIcons',

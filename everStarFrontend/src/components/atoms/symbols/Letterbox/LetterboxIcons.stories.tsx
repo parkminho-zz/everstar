@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import LetterboxIcons from './LetterboxIcons';
+import { LetterboxIcons } from './LetterboxIcons';
 
 const meta: Meta<typeof LetterboxIcons> = {
   title: 'Atoms/Symbols/LetterboxIcons',

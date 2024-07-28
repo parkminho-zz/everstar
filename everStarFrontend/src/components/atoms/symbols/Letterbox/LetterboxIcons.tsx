@@ -6,7 +6,7 @@ interface LetterboxIconsProps {
   number?: number;
 }
 
-const LetterboxIcons: React.FC<LetterboxIconsProps> = ({ variant, number }) => {
+export const LetterboxIcons: React.FC<LetterboxIconsProps> = ({ variant, number }) => {
   return (
     <div style={{ position: 'relative', display: 'inline-block', textAlign: 'center' }}>
       {variant === 'letterbox-text' ? (
@@ -61,5 +61,4 @@ const LetterboxIcons: React.FC<LetterboxIconsProps> = ({ variant, number }) => {
   );
 };
 
-export default LetterboxIcons;
 export type { LetterboxIconsProps };

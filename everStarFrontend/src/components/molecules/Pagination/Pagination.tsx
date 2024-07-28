@@ -5,7 +5,7 @@ interface Props {
   className?: string;
 }
 
-const Pagination: React.FC<Props> = ({ type, className }): JSX.Element => {
+export const Pagination: React.FC<Props> = ({ type, className }): JSX.Element => {
   return (
     <div className={`inline-flex items-center gap-2 px-1 py-0 relative ${className}`}>
       <div
@@ -32,5 +32,4 @@ const Pagination: React.FC<Props> = ({ type, className }): JSX.Element => {
   );
 };
 
-export default Pagination;
 export type { Props };

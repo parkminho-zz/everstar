@@ -6,7 +6,7 @@ interface RocketIconsProps {
   text?: string;
 }
 
-const RocketIcons: React.FC<RocketIconsProps> = ({ variant, text }) => {
+export const RocketIcons: React.FC<RocketIconsProps> = ({ variant, text }) => {
   return (
     <div style={{ position: 'relative', display: 'inline-block', textAlign: 'center' }}>
       {variant === 'rocket-text' ? (
@@ -36,5 +36,4 @@ const RocketIcons: React.FC<RocketIconsProps> = ({ variant, text }) => {
   );
 };
 
-export default RocketIcons;
 export type { RocketIconsProps };

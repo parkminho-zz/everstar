@@ -10,7 +10,7 @@ interface ArrowIconProps {
   color?: 'black' | 'gray' | 'white' | 'orange';
 }
 
-const ArrowIcon: React.FC<ArrowIconProps> = ({ size, direction, color = 'black' }) => {
+export const ArrowIcon: React.FC<ArrowIconProps> = ({ size, direction, color = 'black' }) => {
   let IconComponent;
   switch (direction) {
     case 'left':
@@ -40,5 +40,4 @@ const ArrowIcon: React.FC<ArrowIconProps> = ({ size, direction, color = 'black' 
   return <IconComponent className={`${sizeClasses} ${colorClasses[color]}`} />;
 };
 
-export default ArrowIcon;
 export type { ArrowIconProps };

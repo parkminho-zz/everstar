@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import MicrophoneIcon from './MicrophoneIcon';
+import { MicrophoneIcon } from './MicrophoneIcon';
 
 const meta: Meta<typeof MicrophoneIcon> = {
   title: 'Atoms/Icons/MicrophoneIcon',

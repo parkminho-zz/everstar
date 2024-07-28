@@ -31,10 +31,9 @@ const iconMap = {
   'vertical-star': VerticalStarIcon,
 };
 
-const LogoIcons: React.FC<LogoIconsProps> = ({ variant }) => {
+export const LogoIcons: React.FC<LogoIconsProps> = ({ variant }) => {
   const IconComponent = iconMap[variant];
   return <IconComponent />;
 };
 
-export default LogoIcons;
 export type { LogoIconsProps };

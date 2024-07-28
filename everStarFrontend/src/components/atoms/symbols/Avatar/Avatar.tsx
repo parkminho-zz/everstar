@@ -3,6 +3,7 @@ import React from 'react';
 interface AvatarProps {
   size: 'small' | 'medium' | 'large' | 'text';
   name?: string;
+  className?: string; // 추가된 부분
 }
 
 const sizeMap = {
@@ -11,11 +12,11 @@ const sizeMap = {
   large: '180px',
 };
 
-const Avatar: React.FC<AvatarProps> = ({ size, name }) => {
+export const Avatar: React.FC<AvatarProps> = ({ size, name, className }) => {
   const avatarSrc = require('assets/symbols/avatar.png');
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} className={className}>
       {size === 'text' ? (
         <div
           style={{
@@ -57,5 +58,4 @@ const Avatar: React.FC<AvatarProps> = ({ size, name }) => {
   );
 };
 
-export default Avatar;
 export type { AvatarProps };

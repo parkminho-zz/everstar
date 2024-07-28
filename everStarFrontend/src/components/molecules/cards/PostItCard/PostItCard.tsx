@@ -1,4 +1,4 @@
-import Close from 'components/atoms/icons/Close/CloseIcon';
+import {CloseIcon} from 'components/atoms/icons/Close/CloseIcon';
 type ColorKey = 'pink' | 'green' | 'blue' | 'purple' | 'gray' | 'yellow';
 
 interface IPostItCard {
@@ -25,7 +25,7 @@ export const PostItCard = ({ contents, name, color }: IPostItCard) => {
       style={{ backgroundColor: colorValue }}
     >
       <div className="flex items-end justify-end ">
-        <Close size={24} color="black" />
+        <CloseIcon size={24} color="black" />
       </div>
       <div className="flex flex-col justify-between flex-1 w-full">
         <label className="max-w-full max-h-[82px] text-greyscaleblack-100 kor-p-p2 line-clamp-4 break-words ">

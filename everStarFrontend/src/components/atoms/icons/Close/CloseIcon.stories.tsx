@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import CloseIcon from './CloseIcon';
+import { CloseIcon } from './CloseIcon';
 
 const meta: Meta<typeof CloseIcon> = {
   title: 'Atoms/Icons/CloseIcon',
