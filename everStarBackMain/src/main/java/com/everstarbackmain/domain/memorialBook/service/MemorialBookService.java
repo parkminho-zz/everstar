@@ -7,10 +7,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.everstarbackmain.domain.memorialBook.message.PsychologicalTestResultMessage;
 import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 import com.everstarbackmain.domain.memorialBook.repository.MemorialBookRepository;
 import com.everstarbackmain.domain.memorialBook.requestDto.MemorialBookTestResultRequestDto;
+import com.everstarbackmain.domain.memorialBook.responseDto.MemorialBookInfoResponseDto;
 import com.everstarbackmain.domain.memorialBook.util.PsychologicalTestResultMapper;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
@@ -86,5 +86,13 @@ public class MemorialBookService {
 
 		String resultMessage = PsychologicalTestResultMapper.getTestResultMessage(resultScore);
 		memorialBook.addPsychologicalTestResult(resultMessage);
+	}
+
+	public MemorialBookInfoResponseDto getMemorialBookInfoByPetId(Long petId) {
+		Optional<MemorialBook> findMemorialBook = memorialBookRepository.findByPetId(petId);
+		MemorialBook memorialBook = findMemorialBook
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
+
+		return MemorialBookInfoResponseDto.createMemorialBookDetailResponseDto(memorialBook);
 	}
 }
