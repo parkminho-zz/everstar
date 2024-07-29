@@ -14,6 +14,7 @@ public enum CustomException {
 	ID_PASSWORD_INPUT_EXCEPTION(400, "IdPasswordInputException", "아이디 패스워드 입력이 잘못 되었습니다."),
 	DUPLICATED_ID_EXCEPTION(400, "DuplicatedIDException", "가입된 아이디가 존재합니다."),
 	EXIST_EMAIL(400, "ExistEMAIL", "해당 메일이 존재합니다."),
+	DUPLICATED_PHONENUMBER_EXCEPTION(400,"DuplicatedPhoneNumberException","이미 가입된 휴대폰번호 입니다."),
 
 	EXPIRED_JWT_EXCEPTION(401, "ExpiredJwtException", "토큰이 만료했습니다."),
 	NOT_VALID_JWT_EXCEPTION(401, "NotValidJwtException", "토큰이 유효하지 않습니다."),
