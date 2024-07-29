@@ -57,7 +57,7 @@ public class SecurityConfig {
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		);
 		http.authorizeHttpRequests((auth) -> auth
-			.requestMatchers("/api/auth/login", "/api/auth/join", "/api/oauth2/**", "/api/login/**").permitAll()
+			.requestMatchers("/api/auth/login", "/api/auth/join", "/api/auth/oauth2/**", "/api/auth/login/**").permitAll()
 			.anyRequest().authenticated()
 		);
 		http.oauth2Login((oauth) ->
@@ -65,9 +65,9 @@ public class SecurityConfig {
 				.successHandler(oAuthSuccessHandler)
 				.failureHandler(oAuthFailHandler)
 				.redirectionEndpoint(
-					(redirectionEndpointConfig) -> redirectionEndpointConfig.baseUri(("/api/login/oauth2/code/*")))
+					(redirectionEndpointConfig) -> redirectionEndpointConfig.baseUri(("/api/auth/login/oauth2/code/*")))
 				.authorizationEndpoint((authorizationEndpointConfig) ->
-					authorizationEndpointConfig.baseUri("/api/oauth2/authorization"))
+					authorizationEndpointConfig.baseUri("/api/auth/oauth2/authorization"))
 		);
 		http.exceptionHandling((handle) -> handle.authenticationEntryPoint(customExceptionHandler));
 		http.addFilterAt(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
