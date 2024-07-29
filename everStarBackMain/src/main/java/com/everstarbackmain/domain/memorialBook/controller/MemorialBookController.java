@@ -7,13 +7,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.everstarbackmain.domain.memorialBook.message.SuccessMemorialBookMessage;
 import com.everstarbackmain.domain.memorialBook.requestDto.MemorialBookTestResultRequestDto;
+import com.everstarbackmain.domain.memorialBook.responseDto.MemorialBookDetailResponseDto;
 import com.everstarbackmain.domain.memorialBook.responseDto.MemorialBookInfoResponseDto;
 import com.everstarbackmain.domain.memorialBook.service.MemorialBookService;
 import com.everstarbackmain.global.util.HttpResponseUtil;
@@ -65,4 +65,14 @@ public class MemorialBookController {
 		return response;
 	}
 
+	@GetMapping("/{memorialbook-id}")
+	public ResponseEntity<Map<String, Object>> getMemorialBookDetail(Authentication authentication,
+		@PathVariable("pet-id") Long petId, @PathVariable("memorialbook-id") Long memorialBookId) {
+		MemorialBookDetailResponseDto responseDto = memorialBookService.getMemorialBookDetail(authentication, petId, memorialBookId);
+
+		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
+		log.info("main server - request : petId {}, memorialBookId {}", petId, memorialBookId);
+		log.info("main server - response : {}", response);
+		return response;
+	}
 }
