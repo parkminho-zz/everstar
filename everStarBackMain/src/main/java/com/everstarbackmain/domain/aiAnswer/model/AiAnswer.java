@@ -1,5 +1,6 @@
 package com.everstarbackmain.domain.aiAnswer.model;
 
+import com.everstarbackmain.domain.aiAnswer.requestDto.CreateAiAnswerRequestDto;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.quest.model.Quest;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
@@ -47,11 +48,22 @@ public class AiAnswer extends BaseTimeEntity {
 	private AiAnswerType type;
 
 	@Builder
-	public AiAnswer(Pet pet, Quest quest, String content, String imageUrl, AiAnswerType type) {
+	private AiAnswer(Pet pet, Quest quest, String content, String imageUrl, AiAnswerType type) {
+		this.id = new AiAnswerId(pet.getId(), quest.getId());
 		this.pet = pet;
 		this.quest = quest;
 		this.content = content;
 		this.imageUrl = imageUrl;
 		this.type = type;
+	}
+
+	public static AiAnswer createAiAnswer(Pet pet, Quest quest, CreateAiAnswerRequestDto requestDto) {
+		return AiAnswer.builder()
+			.pet(pet)
+			.quest(quest)
+			.content(requestDto.getContent())
+			.imageUrl(requestDto.getImageUrl())
+			.type(AiAnswerType.valueOf(requestDto.getType()))
+			.build();
 	}
 }
