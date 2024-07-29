@@ -37,8 +37,12 @@ public class SentimentAnalysis {
 	private Double week6Result;
 	private Double week7Result;
 
-	public SentimentAnalysis(Pet pet) {
+	private SentimentAnalysis(Pet pet) {
 		this.pet = pet;
+	}
+
+	public static SentimentAnalysis createSentimentAnalysis(Pet pet) {
+		return new SentimentAnalysis(pet);
 	}
 
 	public void addResult(String result) {
