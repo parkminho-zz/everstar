@@ -39,7 +39,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		FilterChain filterChain) throws ServletException, IOException {
 		String accessToken = extractAccessToken(request);
 		String userEmail = extractUserEmail(accessToken);
-		User user = userRepository.findUserByEmailAndIsDeleted(userEmail, true).orElseThrow(() ->
+		User user = userRepository.findUserByEmailAndIsDeleted(userEmail, false).orElseThrow(() ->
 			new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION)
 		);
 
