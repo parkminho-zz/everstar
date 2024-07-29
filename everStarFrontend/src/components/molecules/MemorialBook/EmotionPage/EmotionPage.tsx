@@ -8,12 +8,12 @@ export interface EmotionPageProps {
 
 export const EmotionPage: React.FC<EmotionPageProps> = ({ data }) => {
   const chartData = {
-    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7'],
     datasets: [
       {
-        label: 'Emotion Intensity',
+        label: '감정 일조량',
         data: data,
-        backgroundColor: 'rgba(75,192,192,0.6)',
+        backgroundColor: 'rgba(255, 237, 101, 0.6)',
       },
     ],
   };
