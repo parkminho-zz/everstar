@@ -1,13 +1,13 @@
-// Footer.tsx
 import React from 'react';
 import { LogoIcons } from 'components/atoms/symbols/Logo/LogoIcons';
 import { SNSIcons } from 'components/atoms/symbols/SNS/SNSIcons';
 
 interface FooterProps {
   type: 'desktop' | 'tablet' | 'mobile';
+  className?: string;
 }
 
-export const Footer: React.FC<FooterProps> = ({ type }) => {
+export const Footer: React.FC<FooterProps> = ({ type, className }) => {
   const renderContent = (containerClass: string, gapClass: string) => (
     <div className={`flex items-center justify-between ${containerClass} h-[76px]`}>
       <LogoIcons variant="small-star" />
@@ -34,19 +34,14 @@ export const Footer: React.FC<FooterProps> = ({ type }) => {
     </div>
   );
 
-  const containerClass =
-    'w-full h-[400px] flex items-center justify-center bg-transparent rounded-[5px] overflow-hidden border border-dashed border-[#9747ff]';
-
   return (
-    <div className={containerClass}>
-      <footer className="flex flex-col items-center justify-center w-full h-full gap-4">
-        <div className="flex flex-col h-20 items-center justify-center w-full border-t border-[#1f2329]">
-          {type === 'desktop' && renderContent('w-[1000px]', 'gap-4')}
-          {type === 'tablet' && renderContent('w-[720px]', 'gap-4')}
-          {type === 'mobile' && renderContent('w-[320px]', 'gap-2')}
-        </div>
-      </footer>
-    </div>
+    <footer className={`flex flex-col items-center justify-center w-full ${className}`}>
+      <div className="flex flex-col h-20 items-center justify-center w-full border-t border-[#1f2329]">
+        {type === 'desktop' && renderContent('w-[1000px]', 'gap-4')}
+        {type === 'tablet' && renderContent('w-[720px]', 'gap-4')}
+        {type === 'mobile' && renderContent('w-[320px]', 'gap-2')}
+      </div>
+    </footer>
   );
 };
 
