@@ -6,10 +6,13 @@ import { ImagePage } from 'components/molecules/MemorialBook/ImagePage/ImagePage
 import { ChartPage } from 'components/molecules/MemorialBook/ChartPage/ChartPage';
 
 // 페이지 컴포넌트 정의
-const Page = React.forwardRef<HTMLDivElement, { children: React.ReactNode }>((props, ref) => {
+const Page = React.forwardRef<HTMLDivElement, { children: React.ReactNode, pageIndex: number }>((props, ref) => {
   return (
-    <div className="flex items-center justify-center w-full h-full p-4" ref={ref}>
+    <div className="demoPage h-[600px] w-[360px]" ref={ref}>
       {props.children}
+      <div className="absolute bottom-2 right-2 text-xs text-gray-500">
+        {props.pageIndex + 1}
+      </div>
     </div>
   );
 });
@@ -18,10 +21,11 @@ Page.displayName = 'Page';
 // 각 페이지 타입 정의
 export type PageType =
   | { type: 'cover' }
-  | { type: 'question'; question: string; petName: string }
+  | { type: 'question'; question: string; myAnswer: string; petName: string; petAnswer: string }
   | {
       type: 'imageQuestion';
       question: string;
+      petName: string;
       myImage: string;
       myAnswer: string;
       petImage: string;
@@ -55,15 +59,8 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
     console.log('Current page: ' + e.data);
   }, []);
 
-  const nextPage = () => {
-    if (bookRef.current) {
-      (bookRef.current as any).pageFlip().flipNext();
-    }
-  };
-
   return (
-    <div className="flex items-center justify-center">
-      <button onClick={nextPage}>Next page</button>
+    <div>
       <HTMLFlipBook
         width={width}
         height={height}
@@ -78,7 +75,7 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
         startZIndex={0}
         autoSize={true}
         maxShadowOpacity={1}
-        showCover={false}
+        showCover={true}
         mobileScrollSupport={true}
         swipeDistance={30}
         clickEventForward={true}
@@ -86,7 +83,7 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
         renderOnlyPageLengthChange={false}
         onFlip={onFlip}
         ref={bookRef as MutableRefObject<any>}
-        className="memorial-book"
+        className=""
         style={{}}
         startPage={0}
         showPageCorners={true}
@@ -96,21 +93,27 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
           switch (page.type) {
             case 'cover':
               return (
-                <Page key={index}>
+                <Page key={index} pageIndex={index}>
                   <MemorialBookCover />
                 </Page>
               );
             case 'question':
               return (
-                <Page key={index}>
-                  <QuestionPage title={page.question} petName={page.petName} />
+                <Page key={index} pageIndex={index}>
+                  <QuestionPage 
+                    title={page.question}
+                    myAnswer={page.myAnswer}
+                    petName={page.petName}
+                    petAnswer={page.petAnswer}
+                  />
                 </Page>
               );
             case 'imageQuestion':
               return (
-                <Page key={index}>
+                <Page key={index} pageIndex={index}>
                   <ImagePage
                     question={page.question}
+                    petName={page.petName}
                     myImage={page.myImage}
                     myAnswer={page.myAnswer}
                     petImage={page.petImage}
@@ -120,7 +123,7 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
               );
             case 'chart':
               return (
-                <Page key={index}>
+                <Page key={index} pageIndex={index}>
                   <ChartPage title={page.title} content={page.content} scores={page.scores} />
                 </Page>
               );

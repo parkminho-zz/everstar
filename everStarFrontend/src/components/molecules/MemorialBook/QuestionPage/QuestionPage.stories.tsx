@@ -7,13 +7,15 @@ const meta: Meta<typeof QuestionPage> = {
   tags: ['autodocs'],
 };
 
-export default meta; // 기본 내보내기 추가
+export default meta;
 
 type Story = StoryObj<typeof QuestionPage>;
 
 export const Default: Story = {
   args: {
-    title: '반려동물 어쩌고 저쩌고 질문입니다. 어떻게 질문을 써야할지는 잘 모르겠습니다.',
-    petName: '강아지',
+    title: '강아지와 행복했던 순간을 말해주세요.',
+    myAnswer: '나는 강아지와 공원에서 산책하는 것을 좋아합니다.',
+    petName: '바둑이',
+    petAnswer: '바둑이는 나와 함께 놀 때 가장 행복해 보입니다.',
   },
 };

@@ -2,6 +2,7 @@ import React from 'react';
 
 export interface ImagePageProps {
   question: string;
+  petName: string;
   myImage: string;
   myAnswer: string;
   petImage: string;
@@ -10,31 +11,39 @@ export interface ImagePageProps {
 
 export const ImagePage: React.FC<ImagePageProps> = ({
   question,
+  petName,
   myImage,
   myAnswer,
   petImage,
   petAnswer,
 }) => {
   return (
-    <div className="relative inline-flex flex-col items-center justify-center gap-5 p-5">
-      <div className="relative flex flex-col items-start w-full gap-4">
-        <div className="relative self-stretch h-[33px] font-kor-h-h2 font-bold text-greyscaleblack-100 text-xl text-center tracking-wide leading-8">
+    <div className="relative flex flex-col items-center justify-between p-5 h-[600px] w-[360px] mx-auto">
+      <div className="text-center">
+        <span className="block text-xl font-bold leading-tight tracking-wide font-kor-h-h2 text-greyscaleblack-100">
+          Q.
+        </span>
+        <p className="mt-2 text-base leading-tight tracking-wide font-kor-p-p1 text-greyscaleblack-100">
           {question}
-        </div>
-        <div className="flex flex-col items-center mt-4">
-          <img src={myImage} alt="My Answer" className="w-[360px] h-[270px] object-cover mb-2" />
-          <p className="text-base font-medium leading-6 tracking-wide text-center font-kor-subtitle-subtitle1 text-greyscaleblack-100">
-            나의 답변: {myAnswer}
-          </p>
-          <img
-            src={petImage}
-            alt="Pet's Answer"
-            className="w-[360px] h-[270px] object-cover mb-2 mt-4"
-          />
-          <p className="text-base font-medium leading-6 tracking-wide text-center font-kor-subtitle-subtitle1 text-greyscaleblack-100">
-            반려동물의 답변: {petAnswer}
-          </p>
-        </div>
+        </p>
+      </div>
+      <div className="flex flex-col items-center mt-4 w-full">
+        <img src={myImage} alt="My Answer" className="w-[180px] h-[135px] object-cover mb-2" />
+        <p className="text-base font-bold leading-6 tracking-wide text-center font-kor-subtitle-subtitle1 text-greyscaleblack-100">
+          나의 답변
+        </p>
+        <p className="mt-2 text-base leading-tight tracking-wide font-kor-p-p1 text-greyscaleblack-100">
+          {myAnswer}
+        </p>
+      </div>
+      <div className="flex flex-col items-center mt-4 w-full">
+        <img src={petImage} alt="Pet's Answer" className="w-[180px] h-[135px]object-cover mb-2" />
+        <p className="text-base font-bold leading-6 tracking-wide text-center font-kor-subtitle-subtitle1 text-greyscaleblack-100">
+          {petName}의 답변
+        </p>
+        <p className="mt-2 text-base leading-tight tracking-wide font-kor-p-p1 text-greyscaleblack-100">
+          {petAnswer}
+        </p>
       </div>
     </div>
   );

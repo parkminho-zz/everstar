@@ -29,7 +29,7 @@ export const ChartPage: React.FC<ChartPageProps> = ({ title, content, scores }) 
     datasets: [
       {
         label: '감정 일조량',
-        data: scores,
+        data: scores.slice(0, 7),
         backgroundColor: 'rgba(255, 237, 101, 0.6)',
       },
     ],
@@ -40,20 +40,24 @@ export const ChartPage: React.FC<ChartPageProps> = ({ title, content, scores }) 
   };
 
   return (
-    <div className="w-[360px] mx-auto p-4">
-      <div className="mb-4 text-center">
-        <h2 className="text-xl font-bold">{title}</h2>
-        <p>{content}</p>
+    <div className="relative flex flex-col items-center p-5 h-[600px] w-[360px] mx-auto">
+      <div className="text-center mb-16">
+        <h2 className="text-xl font-bold leading-tight tracking-wide text-greyscaleblack-100">
+          {title}
+        </h2>
+        <p className="mt-2 text-base leading-tight tracking-wide text-greyscaleblack-100">
+          {content}
+        </p>
       </div>
-      <div className="flex items-center justify-center mb-4">
-        {scores.map((score, index) => (
+      <div className="flex items-center justify-center w-[320px]">
+        {scores.slice(0, 7).map((score, index) => (
           <div key={index} className="flex flex-col items-center mx-2">
             <WeatherIcon type={getWeatherType(score)} />
-            <p className="text-center">{`Week ${index + 1}`}</p>
+            <p className="text-center text-xs">{`Week ${index + 1}`}</p>
           </div>
         ))}
       </div>
-      <div style={{ width: '360px', height: '270px' }}>
+      <div className="absolute bottom-5 w-[320px] h-[240px]">
         <Bar data={chartData} options={options} />
       </div>
     </div>

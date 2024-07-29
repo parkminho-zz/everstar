@@ -6,6 +6,9 @@ const meta: Meta<typeof MemorialBook> = {
   component: MemorialBook,
   tags: ['autodocs'],
   argTypes: {
+    pages: {
+      control: 'object',
+    },
     width: { control: 'number' },
     height: { control: 'number' },
     minWidth: { control: 'number' },
@@ -21,25 +24,38 @@ type Story = StoryObj<typeof MemorialBook>;
 
 const pages: PageType[] = [
   { type: 'cover' },
-  { type: 'question', question: 'Q. What is your favorite memory?', petName: 'Buddy' },
-  {
-    type: 'imageQuestion',
-    question: 'Q. Share a drawing',
-    myImage: 'https://via.placeholder.com/360x270',
-    myAnswer: 'This is my drawing.',
-    petImage: 'https://via.placeholder.com/360x270',
-    petAnswer: "This is Buddy's drawing.",
-  },
   {
     type: 'chart',
-    title: 'Evaluation Result',
-    content: 'It has improved significantly.',
+    title: '평가 결과',
+    content: '굉장히 많이 호전되었어요.',
     scores: [10, 30, 50, 70, 90, 60, 40],
+  },
+  {
+    type: 'question',
+    question: '강아지와 행복했던 순간을 말해주세요.',
+    myAnswer: '나의 답변 내용입니다.',
+    petName: '반려동물',
+    petAnswer: '반려동물의 답변 내용입니다.',
+  },
+  {
+    type: 'imageQuestion',
+    question: '그린 그림을 공유해주세요',
+    petName: '반려동물',
+    myImage: 'https://via.placeholder.com/180x135',
+    myAnswer: '이것은 나의 그림입니다.',
+    petImage: 'https://via.placeholder.com/180x135',
+    petAnswer: '이것은 반려동물의 그림입니다.',
   },
 ];
 
 export const Default: Story = {
   args: {
     pages,
+    width: 360,
+    height: 600,
+    minWidth: 360,
+    maxWidth: 600,
+    minHeight: 600,
+    maxHeight: 600,
   },
 };

@@ -13,10 +13,11 @@ type Story = StoryObj<typeof ImagePage>;
 
 export const Default: Story = {
   args: {
-    question: 'Q. 그린 그림을 공유해주세요',
-    myImage: 'https://via.placeholder.com/360x270',
+    question: '그린 그림을 공유해주세요',
+    myImage: 'https://via.placeholder.com/180x135',
     myAnswer: '이것은 나의 그림입니다.',
-    petImage: 'https://via.placeholder.com/360x270',
+    petImage: 'https://via.placeholder.com/180x135',
     petAnswer: '이것은 반려동물의 그림입니다.',
+    petName : '뚜뚜',
   },
 };
