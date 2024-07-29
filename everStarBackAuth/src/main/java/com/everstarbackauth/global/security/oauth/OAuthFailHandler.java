@@ -22,7 +22,7 @@ public class OAuthFailHandler implements AuthenticationFailureHandler {
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 		org.springframework.security.core.AuthenticationException exception) throws IOException, ServletException {
-		log.error("main server - error : {}", exception);
+		log.error("auth server - error : {}", exception);
 		response.sendRedirect(makeRedirectUrl());
 	}
 
