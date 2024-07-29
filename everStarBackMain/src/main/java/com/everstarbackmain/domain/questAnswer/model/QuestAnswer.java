@@ -3,6 +3,7 @@ package com.everstarbackmain.domain.questAnswer.model;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.quest.model.Quest;
 import com.everstarbackmain.domain.quest.model.QuestType;
+import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
 
 import jakarta.persistence.Column;
@@ -40,6 +41,7 @@ public class QuestAnswer extends BaseTimeEntity {
 	@JoinColumn(name = "quest_id")
 	private Quest quest;
 
+	@Column(nullable = false)
 	private String content;
 
 	private String imageUrl;
@@ -52,12 +54,23 @@ public class QuestAnswer extends BaseTimeEntity {
 	private Boolean isDeleted;
 
 	@Builder
-	public QuestAnswer(Pet pet, Quest quest, String content, String imageUrl, QuestType type) {
+	private QuestAnswer(Pet pet, Quest quest, String content, String imageUrl, QuestType type) {
+		this.id = new QuestAnswerId(pet.getId(), quest.getId());
 		this.pet = pet;
 		this.quest = quest;
 		this.content = content;
 		this.imageUrl = imageUrl;
 		this.type = type;
 		isDeleted = false;
+	}
+
+	public static QuestAnswer createQuestAnswer(Pet pet, Quest quest, CreateAnswerRequestDto requestDto) {
+		return QuestAnswer.builder()
+			.pet(pet)
+			.quest(quest)
+			.content(requestDto.getContent())
+			.imageUrl(requestDto.getImageUrl())
+			.type(QuestType.valueOf(requestDto.getType()))
+			.build();
 	}
 }
