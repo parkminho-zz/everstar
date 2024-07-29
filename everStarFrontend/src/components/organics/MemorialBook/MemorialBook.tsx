@@ -6,16 +6,16 @@ import { ImagePage } from 'components/molecules/MemorialBook/ImagePage/ImagePage
 import { ChartPage } from 'components/molecules/MemorialBook/ChartPage/ChartPage';
 
 // 페이지 컴포넌트 정의
-const Page = React.forwardRef<HTMLDivElement, { children: React.ReactNode, pageIndex: number }>((props, ref) => {
-  return (
-    <div className="demoPage h-[600px] w-[360px]" ref={ref}>
-      {props.children}
-      <div className="absolute bottom-2 right-2 text-xs text-gray-500">
-        {props.pageIndex + 1}
+const Page = React.forwardRef<HTMLDivElement, { children: React.ReactNode; pageIndex: number }>(
+  (props, ref) => {
+    return (
+      <div className="demoPage h-[600px] w-[360px]" ref={ref}>
+        {props.children}
+        <div className="absolute text-xs text-gray-500 bottom-2 right-2">{props.pageIndex + 1}</div>
       </div>
-    </div>
-  );
-});
+    );
+  },
+);
 Page.displayName = 'Page';
 
 // 각 페이지 타입 정의
@@ -55,7 +55,7 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
 }) => {
   const bookRef = useRef<MutableRefObject<typeof HTMLFlipBook | null>>(null);
 
-  const onFlip = useCallback((e: any) => {
+  const onFlip = useCallback((e: { data: number }) => {
     console.log('Current page: ' + e.data);
   }, []);
 
@@ -82,7 +82,7 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
         useMouseEvents={true}
         renderOnlyPageLengthChange={false}
         onFlip={onFlip}
-        ref={bookRef as MutableRefObject<any>}
+        ref={bookRef as MutableRefObject<typeof HTMLFlipBook | null>}
         className=""
         style={{}}
         startPage={0}
@@ -100,7 +100,7 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
             case 'question':
               return (
                 <Page key={index} pageIndex={index}>
-                  <QuestionPage 
+                  <QuestionPage
                     title={page.question}
                     myAnswer={page.myAnswer}
                     petName={page.petName}
