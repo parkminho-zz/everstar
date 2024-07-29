@@ -3,18 +3,21 @@ import PropTypes from 'prop-types';
 
 interface QuestionPageProps {
   title: string;
-  description: string;
+  petName: string;
 }
 
-const QuestionPage: React.FC<QuestionPageProps> = ({ title, description }) => {
+const QuestionPage: React.FC<QuestionPageProps> = ({ title, petName }) => {
   return (
-    <div className="inline-flex items-start justify-center gap-5 relative">
-      <div className="flex flex-col w-[294px] items-start gap-4 relative">
-        <div className="relative self-stretch h-[33px] mt-[-1.00px] font-kor-h-h2 font-bold text-greyscaleblack-100 text-xl text-center tracking-wide leading-8">
+    <div className="w-[360px] p-4 mx-auto">
+      <div className="w-full text-center">
+        <span className="block text-xl font-bold leading-tight tracking-wide font-kor-h-h2 text-greyscaleblack-100">
+          Q.
+        </span>
+        <p className="mt-2 text-base leading-tight tracking-wide font-kor-p-p1 text-greyscaleblack-100">
           {title}
-        </div>
-        <p className="relative self-stretch font-kor-subtitle-subtitle1 font-medium text-greyscaleblack-100 text-base text-center tracking-wide leading-6">
-          {description}
+        </p>
+        <p className="mt-2 text-base leading-tight tracking-wide font-kor-p-p1 text-greyscaleblack-100">
+          {petName}와 행복했던 순간을 말해주세요.
         </p>
       </div>
     </div>
@@ -23,7 +26,7 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ title, description }) => {
 
 QuestionPage.propTypes = {
   title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  petName: PropTypes.string.isRequired,
 };
 
 export { QuestionPage };
