@@ -60,7 +60,7 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
   }, []);
 
   return (
-    <div>
+    <div className="flex justify-center">
       <HTMLFlipBook
         width={width}
         height={height}
