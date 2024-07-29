@@ -16,21 +16,18 @@ public class JwtUtil {
 
 	private final JwtValueConfig config;
 
-	public String getUserEmail(String token) {
-		return Jwts.parser()
-			.verifyWith(config.getKey())
-			.build()
-			.parseSignedClaims(token)
-			.getPayload()
-			.get("userEmail", String.class);
-	}
-
 	public String getAccessToken(User user) {
 		return Jwts.builder()
 			.claim("userEmail", user.getEmail())
 			.issuedAt(new Date(System.currentTimeMillis()))
-			.expiration(new Date(System.currentTimeMillis() + config.getAccessTokenExpire()))
+			.expiration(tokenExpiresIn(Long.parseLong(config.getAccessTokenExpire())))
 			.signWith(config.getKey())
 			.compact();
+	}
+
+	private Date tokenExpiresIn(long expires) {
+		long now = (new Date()).getTime();
+		Date dateExpiresIn = new Date(now + expires);
+		return dateExpiresIn;
 	}
 }
