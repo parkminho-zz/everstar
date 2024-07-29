@@ -6,6 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.everstarbackauth.domain.sms.repository.SmsCertificationRepository;
 import com.everstarbackauth.domain.sms.requestDto.CheckCodeRequestDto;
 import com.everstarbackauth.domain.sms.requestDto.SendCodeRequestDto;
+import com.everstarbackauth.domain.user.repository.UserRepository;
+import com.everstarbackauth.global.exception.CustomException;
+import com.everstarbackauth.global.exception.ExceptionResponse;
 import com.everstarbackauth.global.util.SmsCertificationUtil;
 
 import jakarta.validation.Valid;
@@ -19,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SmsService {
 	private final SmsCertificationUtil smsUtil;
 	private final SmsCertificationRepository smsCertificationRepository;
+	private final UserRepository userRepository;
 
 	@Transactional
 	public void sendSms(@Valid SendCodeRequestDto sendCodeRequestDto) {
@@ -36,7 +40,7 @@ public class SmsService {
 		String phone = validatePhoneNumber(checkCodeRequestDto.getPhone());
 
 		if (!isVerify(checkCodeRequestDto)) {
-			throw new RuntimeException("인증번호가 일치하지 않습니다.");
+			throw new ExceptionResponse(CustomException.NOT_MATCH_AUTH_CODE_EXCEPTION);
 		}
 
 		smsCertificationRepository.deleteSmsCertification(phone);
@@ -61,15 +65,10 @@ public class SmsService {
 	}
 
 	private String validatePhoneNumber(String phone) {
-		if (phone == null || phone.isEmpty()) {
-			throw new IllegalArgumentException("전화번호는 필수 입력값입니다.");
-		}
-		String phonePattern = "^01(?:0|1|[6-9])[.-]?(\\d{3}|\\d{4})[.-]?(\\d{4})$";
-		if (!phone.matches(phonePattern)) {
-			throw new IllegalArgumentException("전화번호 형식이 유효하지 않습니다.");
+		if (userRepository.findUserByPhoneNumber(phone).isPresent()) {
+			throw new ExceptionResponse(CustomException.DUPLICATED_PHONENUMBER_EXCEPTION);
 		}
 		return phone;
-
 	}
 
 	private String generateCertificationNumber() {
