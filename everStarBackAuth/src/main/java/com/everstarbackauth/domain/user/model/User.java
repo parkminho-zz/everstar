@@ -1,11 +1,16 @@
 package com.everstarbackauth.domain.user.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
 import com.everstarbackauth.domain.user.requestDto.JoinRequestDto;
+import com.everstarbackauth.global.entity.BaseTimeEntity;
 import com.everstarbackauth.global.exception.CustomException;
 import com.everstarbackauth.global.exception.ExceptionResponse;
 
@@ -23,8 +28,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
 @Getter
-public class User {
+public class User extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +44,7 @@ public class User {
 	private String password;
 
 	@Column(name = "user_name", nullable = false)
+	@ColumnDefault("'guest'")
 	private String userName;
 
 	@Column(name = "phone_number", nullable = false, unique = true)
@@ -50,7 +57,7 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 
-	@Column(name = "quest_reception_time", nullable = false)
+	@Column(name = "quest_reception_time")
 	private LocalTime questReceptionTime;
 
 	@Column(name = "role", nullable = false)
@@ -71,7 +78,7 @@ public class User {
 		this.gender = gender;
 		this.questReceptionTime = questReceptionTime;
 		this.role = role;
-		this.isDeleted = true;
+		this.isDeleted = false;
 	}
 
 	public static User signUpUser(JoinRequestDto joinRequestDto) {
@@ -84,6 +91,18 @@ public class User {
 			.gender(joinRequestDto.getGender())
 			.questReceptionTime(joinRequestDto.getQuestReceptionTime())
 			.role(joinRequestDto.getRole())
+			.build();
+	}
+
+	public static User oAuthSignUpUser(String email, String password) {
+		return User.builder()
+			.email(email)
+			.password(password)
+			.phoneNumber(email)
+			.birthDate(LocalDate.now())
+			.questReceptionTime(LocalTime.now())
+			.gender(Gender.GUEST)
+			.role(Role.ROLE_GUEST)
 			.build();
 	}
 
