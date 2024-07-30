@@ -17,6 +17,7 @@ const focus = 'bg-mainprimary text-greyscalewhite hover:bg-bgorange';
 const white = 'bg-white text-mainsecondary hover:bg-bgorange';
 const hover = 'bg-bgorange text-mainsecondary hover:bg-mainprimary';
 const disabledStyle = 'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
+const shadowStyle = 'shadow-[0px_4px_8px_#dbe5ec99,0px_0px_1px_1px_#dbe5ec99]';
 
 const color: Record<PrimaryButtonTheme, string> = {
   focus,
@@ -64,6 +65,7 @@ export function PrimaryButton({
         rounded-lg
         px-4
         ${disabledStyle}
+        ${shadowStyle}
         ${color[theme]}
         ${sizeStyle[size]}
       `}
