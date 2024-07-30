@@ -35,7 +35,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
       <div className="flex flex-col items-center w-[360px] gap-8 p-5 bg-white rounded-lg shadow-md">
         {/* Header */}
         <header className="w-full py-4">
-          <h1 className="text-2xl font-bold text-center">{headerText}</h1>
+          <h1 className="kor-h-h2 text-center">{headerText}</h1>
         </header>
 
         {/* Content */}
