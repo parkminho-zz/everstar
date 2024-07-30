@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { MemorialBookPage } from 'components/templates/MemorialBookPage';
+import { MemorialBook } from 'components/templates/MemorialBook';
 
-const meta: Meta<typeof MemorialBookPage> = {
-  title: 'Templates/MemorialBookPage',
-  component: MemorialBookPage,
+const meta: Meta<typeof MemorialBook> = {
+  title: 'Templates/MemorialBook',
+  component: MemorialBook,
   parameters: {
     viewport: {
       viewports: {
@@ -28,7 +28,7 @@ const meta: Meta<typeof MemorialBookPage> = {
 
 export default meta;
 
-type Story = StoryObj<typeof MemorialBookPage>;
+type Story = StoryObj<typeof MemorialBook>;
 
 export const Default: Story = {
   args: {},

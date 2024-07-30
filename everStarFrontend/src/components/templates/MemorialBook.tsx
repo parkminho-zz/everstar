@@ -1,6 +1,9 @@
 import React, { useRef } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { MemorialBook, PageType } from 'components/organics/MemorialBook/MemorialBook';
+import {
+  MemorialBook as OrganicsMemorialBook,
+  PageType,
+} from 'components/organics/MemorialBook/MemorialBook';
 import { Header } from 'components/molecules/Header/Header';
 import { Footer } from 'components/molecules/Footer/Footer';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
@@ -207,7 +210,7 @@ const parseMemorialBookData = (data: typeof jsonData) => {
 
 const questionsAndAnswers = parseMemorialBookData(jsonData);
 
-export const MemorialBookPage: React.FC = () => {
+export const MemorialBook: React.FC = () => {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
 
@@ -260,7 +263,7 @@ export const MemorialBookPage: React.FC = () => {
     >
       <Header type={headerType} className="sticky top-0 z-50" />
       <div className="my-4" ref={memorialBookRef}>
-        <MemorialBook pages={questionsAndAnswers} />
+        <OrganicsMemorialBook pages={questionsAndAnswers} />
       </div>
       <div className="flex justify-center my-4 space-x-4">
         <PrimaryButton
