@@ -30,7 +30,7 @@ public class SmsService {
 		String certificationNumber = generateCertificationNumber();
 
 		smsUtil.sendSms(to, certificationNumber);
-		smsCertificationRepository.createSmsCertification(to, certificationNumber);
+		smsCertificationRepository.saveSmsCertification(to, certificationNumber);
 
 		log.info("SMS sent successfully to {}", to);
 		log.info("SMS sent successfully certificationNumber {}", certificationNumber);
@@ -44,6 +44,7 @@ public class SmsService {
 			throw new ExceptionResponse(CustomException.NOT_MATCH_AUTH_CODE_EXCEPTION);
 		}
 
+		smsCertificationRepository.saveSuccessNumber(phone);
 		smsCertificationRepository.deleteSmsCertification(phone);
 
 		log.info("SMS verification successful for {}", phone);

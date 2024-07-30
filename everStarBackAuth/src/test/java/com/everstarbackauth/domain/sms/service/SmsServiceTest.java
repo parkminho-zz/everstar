@@ -84,7 +84,7 @@ class SmsServiceTest {
 
 		// Then
 		verify(smsUtil, times(1)).sendSms(anyString(), anyString());
-		verify(smsCertificationRepository, times(1)).createSmsCertification(anyString(), anyString());
+		verify(smsCertificationRepository, times(1)).saveSmsCertification(anyString(), anyString());
 	}
 
 	@Test

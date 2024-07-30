@@ -15,7 +15,7 @@ public class SmsCertificationRepository {
 	private static final int LIMIT_TIME_SECONDS = 3 * 60;
 	private final StringRedisTemplate stringRedisTemplate;
 
-	public void createSmsCertification(String phone, String certificationNumber) {
+	public void saveSmsCertification(String phone, String certificationNumber) {
 		setWithTTL(PREFIX + phone, certificationNumber, LIMIT_TIME_SECONDS);
 	}
 
