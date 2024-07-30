@@ -100,7 +100,7 @@ public class User extends BaseTimeEntity {
 			.password(password)
 			.phoneNumber(email)
 			.birthDate(LocalDate.now())
-			.questReceptionTime(LocalTime.now())
+			.questReceptionTime(LocalTime.parse("09:00:00"))
 			.gender(Gender.GUEST)
 			.role(Role.ROLE_GUEST)
 			.build();

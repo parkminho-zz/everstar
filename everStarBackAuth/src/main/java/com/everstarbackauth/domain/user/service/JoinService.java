@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Slf4j
+@Slf4j(topic = "elk")
 public class JoinService {
 
 	private final UserRepository userRepository;
@@ -34,9 +34,11 @@ public class JoinService {
 
 	@Transactional
 	public void authenticateUser(AuthenticateUserRequestDto requestDto) {
-		User user = userRepository.findUserByEmailAndIsDeleted(requestDto.getEmail(), false).orElseThrow(() -> new ExceptionResponse(
-			CustomException.NOT_FOUND_USER_EXCEPTION));
-		if(!smsCertificationRepository.existsBySuccessNumber(requestDto.getPhoneNumber())){
+		User user = userRepository.findUserByEmailAndIsDeleted(requestDto.getEmail(), false)
+			.orElseThrow(() -> new ExceptionResponse(
+				CustomException.NOT_FOUND_USER_EXCEPTION));
+		if (!smsCertificationRepository.existsBySuccessNumber(requestDto.getPhoneNumber())) {
+			log.error("auth server - error: {}", CustomException.NOT_AUTH_PHONE_NUMBER);
 			throw new ExceptionResponse(CustomException.NOT_AUTH_PHONE_NUMBER);
 		}
 

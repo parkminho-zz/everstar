@@ -41,6 +41,8 @@ public class JoinController {
 		joinService.authenticateUser(requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(JoinResponseMessage.SUCCESS_SIGNUP);
 
+		log.info("auth server - request {}", requestDto);
+		log.info("auth server - response {}", response);
 		return response;
 	}
 }
