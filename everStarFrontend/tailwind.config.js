@@ -193,7 +193,4 @@ module.exports = {
       Kyobo: ['KyoboHand'],
     },
   },
-  plugins: [
-    require('@tailwindcss/line-clamp'), // 플러그인 추가
-  ],
 };
