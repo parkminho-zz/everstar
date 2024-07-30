@@ -9,7 +9,7 @@ import { ChartPage } from 'components/molecules/MemorialBook/ChartPage/ChartPage
 const Page = React.forwardRef<HTMLDivElement, { children: React.ReactNode; pageIndex: number }>(
   (props, ref) => {
     return (
-      <div className="demoPage h-[600px] w-[360px]" ref={ref}>
+      <div className="demoPage h-[600px] w-[360px] bg-white" ref={ref}>
         {props.children}
         <div className="absolute text-xs text-gray-500 bottom-2 right-2">{props.pageIndex + 1}</div>
       </div>
