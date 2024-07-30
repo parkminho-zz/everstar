@@ -8,31 +8,204 @@ import bgImage from 'assets/images/bg-everstar.png';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
-const questionsAndAnswers: PageType[] = [
-  { type: 'cover' },
-  {
+// JSON 데이터
+const jsonData = {
+  data: {
+    memorialBook: {
+      id: 1,
+      psychologicalTestResult: null,
+      isOpen: false,
+      isActive: true,
+    },
+    pet: {
+      id: 1,
+      userId: 1,
+      name: 'Buddy',
+      age: 3,
+      memorialDate: '2023-07-24',
+      species: 'Dog',
+      gender: 'MALE',
+      relationship: 'Friend',
+      profileImageUrl: 'http://example.com/profile.jpg',
+      introduction: 'A friendly dog',
+      questIndex: 0,
+      lastAccessTime: '2024-07-29T23:32:42.469602',
+    },
+    sentimentAnalysis: {
+      id: 1,
+      totalResult: '점점 나아지고 있어요.',
+      week1Result: 0.4,
+      week2Result: 0.5,
+      week3Result: 0.6,
+      week4Result: 0.7,
+      week5Result: 0.8,
+      week6Result: 0.9,
+      week7Result: 1,
+    },
+    quests: [
+      {
+        id: 1,
+        content: 'Quest 1 content',
+        type: 'TEXT',
+      },
+      {
+        id: 2,
+        content: 'Quest 2 content',
+        type: 'TEXT_IMAGE',
+      },
+      {
+        id: 3,
+        content: 'Quest 3 content',
+        type: 'WEBRTC',
+      },
+    ],
+    questAnswers: [
+      {
+        petId: 1,
+        questId: 1,
+        content: 'Quest Answer 1 for pet 1',
+        imageUrl: 'http://example.com/image1.jpg',
+        type: 'TEXT',
+      },
+      {
+        petId: 1,
+        questId: 2,
+        content: 'Quest Answer 2 for pet 1',
+        imageUrl: 'http://example.com/image2.jpg',
+        type: 'TEXT_IMAGE',
+      },
+      {
+        petId: 1,
+        questId: 3,
+        content: 'Quest Answer 3 for pet 1',
+        imageUrl: 'http://example.com/image3.jpg',
+        type: 'WEBRTC',
+      },
+    ],
+    aiAnswers: [
+      {
+        petId: 1,
+        questId: 1,
+        content: 'AI Answer 1 for pet 1',
+        imageUrl: 'http://example.com/ai_image1.jpg',
+        type: 'TEXT',
+      },
+      {
+        petId: 1,
+        questId: 2,
+        content: 'AI Answer 2 for pet 1',
+        imageUrl: 'http://example.com/ai_image2.jpg',
+        type: 'TEXT_IMAGE',
+      },
+      {
+        petId: 1,
+        questId: 3,
+        content: 'AI Answer 3 for pet 1',
+        imageUrl: 'http://example.com/ai_image3.jpg',
+        type: 'MUSIC',
+      },
+    ],
+    diaries: [
+      {
+        id: 1,
+        memorialBookId: 1,
+        title: 'Diary Title 1',
+        content: 'Diary content 1',
+        imageUrl: 'http://example.com/diary_image1.jpg',
+        createdTime: '2024-07-29T23:32:49',
+      },
+      {
+        id: 2,
+        memorialBookId: 1,
+        title: 'Diary Title 2',
+        content: 'Diary content 2',
+        imageUrl: 'http://example.com/diary_image2.jpg',
+        createdTime: '2024-07-29T23:32:49',
+      },
+      {
+        id: 3,
+        memorialBookId: 1,
+        title: 'Diary Title 3',
+        content: 'Diary content 3',
+        imageUrl: 'http://example.com/diary_image3.jpg',
+        createdTime: '2024-07-29T23:32:49',
+      },
+    ],
+  },
+};
+
+// JSON 데이터를 MemorialBook의 PageType 배열로 변환하는 함수
+const parseMemorialBookData = (data: typeof jsonData) => {
+  const { quests, questAnswers, aiAnswers, diaries, sentimentAnalysis } = data.data;
+
+  const pages: PageType[] = [];
+
+  // Cover 페이지 추가
+  pages.push({
+    type: 'cover',
+  });
+  // Sentiment Analysis 차트 페이지 추가
+  const sentimentResults = [
+    sentimentAnalysis.week1Result * 100,
+    sentimentAnalysis.week2Result * 100,
+    sentimentAnalysis.week3Result * 100,
+    sentimentAnalysis.week4Result * 100,
+    sentimentAnalysis.week5Result * 100,
+    sentimentAnalysis.week6Result * 100,
+    sentimentAnalysis.week7Result * 100,
+  ];
+
+  pages.push({
     type: 'chart',
-    title: '평가 결과',
-    content: '굉장히 많이 호전되었어요.',
-    scores: [10, 30, 50, 70, 90, 60, 40],
-  },
-  {
-    type: 'question',
-    question: '강아지와 행복했던 순간을 말해주세요.',
-    myAnswer: '나의 답변 내용입니다.',
-    petName: '반려동물',
-    petAnswer: '반려동물의 답변 내용입니다.',
-  },
-  {
-    type: 'imageQuestion',
-    question: '그린 그림을 공유해주세요',
-    petName: '반려동물',
-    myImage: 'https://via.placeholder.com/180x135',
-    myAnswer: '이것은 나의 그림입니다.',
-    petImage: 'https://via.placeholder.com/180x135',
-    petAnswer: '이것은 반려동물의 그림입니다.',
-  },
-];
+    title: '감정 분석',
+    content: sentimentAnalysis.totalResult,
+    scores: sentimentResults,
+  });
+
+  // Quest Pages 추가
+  quests.forEach((quest) => {
+    const questAnswer = questAnswers.find((answer) => answer.questId === quest.id);
+    const aiAnswer = aiAnswers.find((answer) => answer.questId === quest.id);
+
+    if (quest.type === 'TEXT' && questAnswer && aiAnswer) {
+      pages.push({
+        type: 'question',
+        question: quest.content,
+        myAnswer: questAnswer.content,
+        petName: data.data.pet.name,
+        petAnswer: aiAnswer.content,
+      });
+    } else if (
+      (quest.type === 'TEXT_IMAGE' || quest.type === 'WEBRTC') &&
+      questAnswer &&
+      aiAnswer
+    ) {
+      pages.push({
+        type: 'imageQuestion',
+        question: quest.content,
+        petName: data.data.pet.name,
+        myImage: questAnswer.imageUrl,
+        myAnswer: questAnswer.content,
+        petImage: aiAnswer.imageUrl,
+        petAnswer: aiAnswer.content,
+      });
+    }
+  });
+
+  // Diary Pages 추가
+  diaries.forEach((diary) => {
+    pages.push({
+      type: 'diary',
+      title: diary.title,
+      content: diary.content,
+      imageUrl: diary.imageUrl,
+    });
+  });
+
+  return pages;
+};
+
+const questionsAndAnswers = parseMemorialBookData(jsonData);
 
 export const MemorialBookPage: React.FC = () => {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
@@ -59,7 +232,6 @@ export const MemorialBookPage: React.FC = () => {
 
       for (let i = 0; i < book.length; i++) {
         const page = book[i] as HTMLElement;
-        // 페이지가 눈에 보이도록 스타일 수정
         page.style.display = 'block';
         const canvas = await html2canvas(page, { scale: 2 });
         const imgData = canvas.toDataURL('image/png');
@@ -71,7 +243,6 @@ export const MemorialBookPage: React.FC = () => {
         if (i < book.length - 1) {
           pdf.addPage();
         }
-        // 페이지를 다시 보이지 않도록 스타일 수정
         page.style.display = 'none';
       }
       pdf.save('memorial-book.pdf');
@@ -79,7 +250,6 @@ export const MemorialBookPage: React.FC = () => {
   };
 
   const handleWriteDiary = () => {
-    // 일기 작성 로직 구현
     console.log('일기 작성');
   };
 

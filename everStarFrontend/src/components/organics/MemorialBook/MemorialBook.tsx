@@ -4,6 +4,7 @@ import { MemorialBookCover } from 'components/molecules/MemorialBook/MemorialBoo
 import { QuestionPage } from 'components/molecules/MemorialBook/QuestionPage/QuestionPage';
 import { ImagePage } from 'components/molecules/MemorialBook/ImagePage/ImagePage';
 import { ChartPage } from 'components/molecules/MemorialBook/ChartPage/ChartPage';
+import { DiaryPage } from 'components/molecules/MemorialBook/DiaryPage/DiaryPage';
 
 // 페이지 컴포넌트 정의
 const Page = React.forwardRef<HTMLDivElement, { children: React.ReactNode; pageIndex: number }>(
@@ -31,7 +32,8 @@ export type PageType =
       petImage: string;
       petAnswer: string;
     }
-  | { type: 'chart'; title: string; content: string; scores: number[] };
+  | { type: 'chart'; title: string; content: string; scores: number[] }
+  | { type: 'diary'; title: string; content: string; imageUrl?: string };
 
 // MemorialBook 컴포넌트 정의
 export interface MemorialBookProps {
@@ -125,6 +127,12 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
               return (
                 <Page key={index} pageIndex={index}>
                   <ChartPage title={page.title} content={page.content} scores={page.scores} />
+                </Page>
+              );
+            case 'diary':
+              return (
+                <Page key={index} pageIndex={index}>
+                  <DiaryPage title={page.title} content={page.content} imageUrl={page.imageUrl} />
                 </Page>
               );
             default:
