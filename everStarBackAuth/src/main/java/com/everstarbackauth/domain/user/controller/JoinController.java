@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,10 +29,14 @@ public class JoinController {
 
 	@PostMapping("/join")
 	public ResponseEntity<?> signup(@RequestBody @Valid JoinRequestDto requestDto) {
-
 		joinService.signup(requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(JoinResponseMessage.SUCCESS_SIGNUP);
-		
+
 		return response;
+	}
+
+	@PutMapping("/oauth/auth")
+	public ResponseEntity<?> authUser(@RequestBody @Valid JoinRequestDto requestDto) {
+
 	}
 }

@@ -6,6 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.everstarbackauth.domain.user.model.User;
 import com.everstarbackauth.domain.user.repository.UserRepository;
 import com.everstarbackauth.domain.user.requestDto.JoinRequestDto;
+import com.everstarbackauth.global.exception.CustomException;
+import com.everstarbackauth.global.exception.ExceptionResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,5 +26,13 @@ public class JoinService {
 		requestDto.passwordEncode(passwordEncoder.encode(requestDto.getPassword()));
 		User user = User.signUpUser(requestDto);
 		userRepository.save(user);
+	}
+
+	@Transactional
+	public void authUser(JoinRequestDto requestDto) {
+		User user = userRepository.findUserByEmailAndIsDeleted(requestDto.getEmail(), false).orElseThrow(() -> new ExceptionResponse(
+			CustomException.NOT_FOUND_USER_EXCEPTION));
+
+
 	}
 }
