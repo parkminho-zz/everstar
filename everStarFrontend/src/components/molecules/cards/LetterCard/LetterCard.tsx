@@ -24,7 +24,7 @@ export const LetterCard = ({
   state,
   message,
   dateTime,
-  fontFamily = 'var(--kor-p-p1-font-family)',
+  fontFamily,
 }: ILetterProps) => {
   const getState = () => {
     if (state === 'received') return '답장 완료';
