@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 
-import PrimaryButton from './PrimaryButton';
+import { PrimaryButton } from './PrimaryButton';
 const meta = {
   title: 'Atoms/Buttons/PrimaryButton',
   component: PrimaryButton,
