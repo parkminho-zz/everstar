@@ -21,7 +21,10 @@ public enum CustomException {
 
 	NOT_FOUND_MEMORIAL_BOOK_EXCEPTION(404, "NotFoundMemorialBookException", "메모리얼북이 존재하지 않습니다."),
 	NOT_ACTIVATED_MEMORIAL_BOOK_EXCEPTION(400, "NotActivatedMemorialBookException", "메모리얼북이 활성화 상태가 아닙니다."),
-	NOT_MY_MEMORIAL_BOOK_EXCEPTION(403, "NotMyMemorialBookException", "사용자의 메모리얼북이 아닙니다.")
+	NOT_MY_MEMORIAL_BOOK_EXCEPTION(403, "NotMyMemorialBookException", "사용자의 메모리얼북이 아닙니다."),
+	NOT_OPEN_MEMORIAL_BOOK_EXCEPTION(403, "NotOpenMemorialBookException", "메모리얼북이 공개되지 않았습니다."),
+
+	NOT_FOUND_SENTIMENT_ANALYSIS(404, "NotFoundSentimentAnalysis", "감정 분석 결과가 존재하지 않습니다.")
 	;
 
 	private int statusNum;

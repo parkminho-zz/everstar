@@ -1,6 +1,5 @@
 package com.everstarbackmain.domain.memorialBook.service;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 
 import java.time.LocalDate;
@@ -36,7 +35,7 @@ import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
 
 @ExtendWith(MockitoExtension.class)
-class MemorialBookServiceTest {
+class UpdateMemorialBookServiceTest {
 
 	@InjectMocks
 	private MemorialBookService memorialBookService;

@@ -1,19 +1,37 @@
 package com.everstarbackmain.domain.memorialBook.service;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.everstarbackmain.domain.memorialBook.message.PsychologicalTestResultMessage;
+import com.everstarbackmain.domain.aiAnswer.model.AiAnswer;
+import com.everstarbackmain.domain.aiAnswer.repository.AiAnswerRepository;
+import com.everstarbackmain.domain.aiAnswer.responseDto.AiAnswerDetailResponseDto;
+import com.everstarbackmain.domain.diary.model.Diary;
+import com.everstarbackmain.domain.diary.repository.DiaryRepository;
+import com.everstarbackmain.domain.diary.responseDto.DiaryDetailResponseDto;
 import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 import com.everstarbackmain.domain.memorialBook.repository.MemorialBookRepository;
 import com.everstarbackmain.domain.memorialBook.requestDto.MemorialBookTestResultRequestDto;
+import com.everstarbackmain.domain.memorialBook.responseDto.MemorialBookDetailResponseDto;
+import com.everstarbackmain.domain.memorialBook.responseDto.MemorialBookInfoResponseDto;
 import com.everstarbackmain.domain.memorialBook.util.PsychologicalTestResultMapper;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
+import com.everstarbackmain.domain.pet.responseDto.PetDetailResponseDto;
+import com.everstarbackmain.domain.quest.model.Quest;
+import com.everstarbackmain.domain.quest.repository.QuestRepository;
+import com.everstarbackmain.domain.quest.responseDto.QuestDetailResponseDto;
+import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
+import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;
+import com.everstarbackmain.domain.questAnswer.responseDto.QuestAnswerDetailResponseDto;
+import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;
+import com.everstarbackmain.domain.sentimentAnalysis.repository.SentimentAnalysisRepository;
+import com.everstarbackmain.domain.sentimentAnalysis.responseDto.SentimentAnalysisDetailResponseDto;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
@@ -30,6 +48,11 @@ public class MemorialBookService {
 
 	private final MemorialBookRepository memorialBookRepository;
 	private final PetRepository petRepository;
+	private final SentimentAnalysisRepository sentimentAnalysisRepository;
+	private final QuestRepository questRepository;
+	private final QuestAnswerRepository questAnswerRepository;
+	private final AiAnswerRepository aiAnswerRepository;
+	private final DiaryRepository diaryRepository;
 
 	@Transactional
 	public void changeOpenStatus(Long memorialBookId) {
@@ -83,4 +106,66 @@ public class MemorialBookService {
 		String resultMessage = PsychologicalTestResultMapper.getTestResultMessage(resultScore);
 		memorialBook.addPsychologicalTestResult(resultMessage);
 	}
+
+	public MemorialBookInfoResponseDto getMemorialBookInfoByPetId(Long petId) {
+		MemorialBook memorialBook = memorialBookRepository.findByPetId(petId)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
+
+		return MemorialBookInfoResponseDto.createMemorialBookDetailResponseDto(memorialBook);
+	}
+
+	public MemorialBookDetailResponseDto getMemorialBookDetail(Authentication authentication, Long petId, Long memorialBookId) {
+		MemorialBook memorialBook = memorialBookRepository.findById(memorialBookId)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
+		validateMemorialBook(authentication, memorialBook);
+
+		Pet pet = petRepository.findById(petId)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+
+		SentimentAnalysis sentimentAnalysis = sentimentAnalysisRepository.findByPetId(petId)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_SENTIMENT_ANALYSIS));
+
+		List<Quest> quests = questRepository.findAll();
+		List<QuestAnswer> questAnswers = questAnswerRepository.findByPetId(petId);
+		List<AiAnswer> aiAnswers = aiAnswerRepository.findByPetId(petId);
+		List<Diary> diaries = diaryRepository.findByMemorialBookId(memorialBookId);
+
+		return convertToMemorialBookDetailDto(memorialBook, pet, sentimentAnalysis, quests, questAnswers, aiAnswers, diaries);
+	}
+
+	private void validateMemorialBook(Authentication authentication, MemorialBook memorialBook) {
+		User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
+
+		if (!memorialBook.getIsActive()) {
+			throw new ExceptionResponse(CustomException.NOT_ACTIVATED_MEMORIAL_BOOK_EXCEPTION);
+		}
+
+		if ((memorialBook.getPet().getUser().getId() != user.getId()) && !memorialBook.getIsOpen()) {
+			throw new ExceptionResponse(CustomException.NOT_OPEN_MEMORIAL_BOOK_EXCEPTION);
+		}
+	}
+
+	private MemorialBookDetailResponseDto convertToMemorialBookDetailDto(MemorialBook memorialBook, Pet pet,
+		SentimentAnalysis sentimentAnalysis, List<Quest> quests, List<QuestAnswer> questAnswers,
+		List<AiAnswer> aiAnswers, List<Diary> diaries) {
+
+		return MemorialBookDetailResponseDto.builder()
+			.memorialBook(MemorialBookInfoResponseDto.createMemorialBookDetailResponseDto(memorialBook))
+			.pet(PetDetailResponseDto.createPetDetailResponseDto(pet))
+			.sentimentAnalysis(SentimentAnalysisDetailResponseDto.createSentimentAnalysisDetailResponseDto(sentimentAnalysis))
+			.quests(quests.stream()
+				.map(QuestDetailResponseDto::createQuestDetailResponseDto)
+				.collect(Collectors.toList()))
+			.questAnswers(questAnswers.stream()
+				.map(QuestAnswerDetailResponseDto::createQuestAnswerDetailResponseDto)
+				.collect(Collectors.toList()))
+			.aiAnswers(aiAnswers.stream()
+				.map(AiAnswerDetailResponseDto::createAiAnswerDetailResponseDto)
+				.collect(Collectors.toList()))
+			.diaries(diaries.stream()
+				.map(DiaryDetailResponseDto::createDiaryDetailResponseDto)
+				.collect(Collectors.toList()))
+			.build();
+	}
+
 }

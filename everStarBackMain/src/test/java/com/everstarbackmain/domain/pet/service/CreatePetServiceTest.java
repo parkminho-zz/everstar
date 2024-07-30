@@ -19,6 +19,7 @@ import com.everstarbackmain.domain.memorialBook.repository.MemorialBookRepositor
 import com.everstarbackmain.domain.pet.repository.PersonalityRepository;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
+import com.everstarbackmain.domain.sentimentAnalysis.repository.SentimentAnalysisRepository;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;
@@ -36,6 +37,9 @@ public class CreatePetServiceTest {
 
 	@Mock
 	private MemorialBookRepository memorialBookRepository;
+
+	@Mock
+	private SentimentAnalysisRepository sentimentAnalysisRepository;
 
 	@Mock
 	private Authentication authentication;
