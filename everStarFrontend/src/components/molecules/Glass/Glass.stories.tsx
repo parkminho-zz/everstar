@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { Glass } from './Glass';
 
 const meta: Meta<typeof Glass> = {
-  title: 'Atoms/Glass',
+  title: 'Molecules/Glass',
   component: Glass,
   argTypes: {
     variant: {

@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { PageIndicator } from './PageIndicator';
 
 const meta: Meta<typeof PageIndicator> = {
-  title: 'Atoms/PageIndicator',
+  title: 'Molecules/PageIndicator',
   component: PageIndicator,
   argTypes: {
     currentPage: {
