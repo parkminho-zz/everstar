@@ -28,18 +28,18 @@ public class Personality {
 	private Pet pet;
 
 	@Column(nullable = false)
-	private String personalityType;
+	private String personalityValue;
 
 	private Boolean isDeleted;
 
-	private Personality(Pet pet, String personalityType) {
+	private Personality(Pet pet, String personalityValue) {
 		this.pet = pet;
-		this.personalityType = personalityType;
+		this.personalityValue = personalityValue;
 		isDeleted = false;
 	}
 
-	public static Personality createPersonality(Pet pet, String personalityType) {
-		return new Personality(pet, personalityType);
+	public static Personality createPersonality(Pet pet, String personalityValue) {
+		return new Personality(pet, personalityValue);
 	}
 
 }

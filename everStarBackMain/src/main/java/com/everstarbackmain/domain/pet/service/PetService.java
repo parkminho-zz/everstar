@@ -11,9 +11,12 @@ import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.repository.PersonalityRepository;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
+import com.everstarbackmain.domain.pet.requestDto.UpdatePetIntroductionDto;
 import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;
 import com.everstarbackmain.domain.sentimentAnalysis.repository.SentimentAnalysisRepository;
 import com.everstarbackmain.domain.user.model.User;
+import com.everstarbackmain.global.exception.CustomException;
+import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
 
 import lombok.RequiredArgsConstructor;
@@ -49,10 +52,13 @@ public class PetService {
 		}
 	}
 
-	private void updatePetIntroduction(Pet pet) {
-
+	@Transactional
+	public void updatePetIntroduction(Long petId, String newIntroduction) {
+		Pet pet = petRepository.findById(petId)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+		pet.updatePetIntroduction(newIntroduction);
+		petRepository.save(pet);
 	}
-
 
 	private void createMemorialBook(Pet pet) {
 		MemorialBook memorialBook = MemorialBook.createMemorialBook(pet);

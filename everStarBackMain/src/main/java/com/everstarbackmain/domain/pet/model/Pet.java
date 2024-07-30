@@ -61,7 +61,7 @@ public class Pet extends BaseTimeEntity {
 	private String profileImageUrl;
 
 	@Column(nullable = false)
-	private String introduction = "소개글을 입력 해주세요.";
+	private String introduction;
 
 	@Column(nullable = false)
 	private Integer questIndex;
@@ -104,6 +104,13 @@ public class Pet extends BaseTimeEntity {
 
 	public void plusQuestIndex() {
 		questIndex++;
+	}
+
+	public void updatePetIntroduction(String newIntroduction) {
+		if (newIntroduction != null && !newIntroduction.isEmpty()) {
+			this.introduction = newIntroduction;
+		}
+
 	}
 
 }
