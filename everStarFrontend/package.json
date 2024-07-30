@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "@fontsource/noto-sans-kr": "^5.0.19",
-    "@react-pdf/renderer": "^3.4.4",
     "@reduxjs/toolkit": "^2.2.6",
+    "@react-pdf/renderer": "^3.4.4",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -25,6 +25,7 @@
     "react-router-dom": "^6.24.1",
     "react-scripts": "5.0.1",
     "redux": "^5.0.1",
+    "redux-persist": "^6.0.0",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
