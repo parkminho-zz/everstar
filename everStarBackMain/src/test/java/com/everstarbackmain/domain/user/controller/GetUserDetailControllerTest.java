@@ -68,7 +68,7 @@ public class GetUserDetailControllerTest {
 		user = User.signUpUser(new JoinRequestDto("email", "password", "name", "010-1111-1111", LocalDate.now(),
 			Gender.MALE, LocalTime.now(), Role.ROLE_USER));
 
-		responseDto = new UserDetailResponseDto(user.getEmail(),user.getUserName(),user.getPhoneNumber(),user.getBirthDate(),user.getGender(),user.getQuestReceptionTime());
+		responseDto = UserDetailResponseDto.createUserDetailResponseDto(user);
 	}
 
 	@Test
