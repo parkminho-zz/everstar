@@ -23,7 +23,7 @@ public class SmsCertificationRepository {
 		setWithTTL(SUCCESS + phone, "success", LIMIT_TIME_SECONDS);
 	}
 
-	public boolean existsBuSuccessNumber(String phone){
+	public boolean existsBySuccessNumber(String phone){
 		String value = stringRedisTemplate.opsForValue().get(SUCCESS + phone);;
 		if(value == null){
 			return false;

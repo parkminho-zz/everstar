@@ -39,6 +39,8 @@ public class JoinController {
 	@PutMapping("/oauth/auth")
 	public ResponseEntity<?> authUser(@RequestBody @Valid AuthenticateUserRequestDto requestDto) {
 		joinService.authenticateUser(requestDto);
+		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(JoinResponseMessage.SUCCESS_SIGNUP);
 
+		return response;
 	}
 }
