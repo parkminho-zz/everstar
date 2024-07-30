@@ -50,7 +50,7 @@ const meta: Meta<typeof InputContainer> = {
     letterCardFontFamily: {
       control: 'text',
       description: 'LetterCard의 폰트 패밀리',
-      defaultValue: 'var(--kor-subtitle-subtitle3-font-family)',
+      defaultValue: 'var(--kor-p-p1-font-family)',
     },
     textboxLabel: {
       control: 'text',

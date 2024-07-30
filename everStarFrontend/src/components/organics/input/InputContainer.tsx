@@ -21,7 +21,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
   letterCardColor,
   letterCardState,
   letterCardMessage,
-  letterCardFontFamily,
+  letterCardFontFamily="var(--kor-p-p1-font-family)",
   textboxLabel,
   largeButtonText,
   smallButtonText,
