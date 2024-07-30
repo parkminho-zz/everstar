@@ -30,9 +30,10 @@ public class SmsService {
 		String certificationNumber = generateCertificationNumber();
 
 		smsUtil.sendSms(to, certificationNumber);
-		smsCertificationRepository.createSmsCertification(to, certificationNumber);
+		smsCertificationRepository.saveSmsCertification(to, certificationNumber);
 
 		log.info("SMS sent successfully to {}", to);
+		log.info("SMS sent successfully certificationNumber {}", certificationNumber);
 	}
 
 	@Transactional
@@ -43,29 +44,23 @@ public class SmsService {
 			throw new ExceptionResponse(CustomException.NOT_MATCH_AUTH_CODE_EXCEPTION);
 		}
 
+		smsCertificationRepository.saveSuccessNumber(phone);
 		smsCertificationRepository.deleteSmsCertification(phone);
+
 		log.info("SMS verification successful for {}", phone);
 	}
 
 	public boolean isVerify(CheckCodeRequestDto checkCodeRequestDto) {
-		String phone = validatePhoneNumber(checkCodeRequestDto.getPhone());
-		String storedCertificationNumber = smsCertificationRepository.getSmsCertification(phone);
+		String storedCertificationNumber = smsCertificationRepository.getSmsCertification(checkCodeRequestDto.getPhone());
 
-		boolean verificationResult = smsCertificationRepository.hasKey(phone) &&
+		boolean verificationResult = smsCertificationRepository.hasKey(checkCodeRequestDto.getPhone()) &&
 			storedCertificationNumber.equals(checkCodeRequestDto.getCertificationNumber());
-
-		if (!verificationResult) {
-			log.warn("SMS verification failed for {}", phone);
-		}
-		if (verificationResult) {
-			log.info("SMS verification successful for {}", phone);
-		}
 
 		return verificationResult;
 	}
 
 	private String validatePhoneNumber(String phone) {
-		if (userRepository.findUserByPhoneNumber(phone).isPresent()) {
+		if (userRepository.existsUserByPhoneNumber(phone)) {
 			throw new ExceptionResponse(CustomException.DUPLICATED_PHONENUMBER_EXCEPTION);
 		}
 		return phone;

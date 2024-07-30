@@ -1,7 +1,6 @@
 package com.everstarbackauth.domain.user.model;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.List;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+import com.everstarbackauth.domain.user.requestDto.AuthenticateUserRequestDto;
 import com.everstarbackauth.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackauth.global.entity.BaseTimeEntity;
 import com.everstarbackauth.global.exception.CustomException;
@@ -100,10 +100,19 @@ public class User extends BaseTimeEntity {
 			.password(password)
 			.phoneNumber(email)
 			.birthDate(LocalDate.now())
-			.questReceptionTime(LocalTime.now())
+			.questReceptionTime(LocalTime.parse("09:00:00"))
 			.gender(Gender.GUEST)
 			.role(Role.ROLE_GUEST)
 			.build();
+	}
+
+	public void authenticateUser(AuthenticateUserRequestDto authenticateUserRequestDto){
+		this.userName = authenticateUserRequestDto.getUserName();
+		this.phoneNumber = authenticateUserRequestDto.getPhoneNumber();
+		this.birthDate = authenticateUserRequestDto.getBirthDate();
+		this.gender = authenticateUserRequestDto.getGender();
+		this.questReceptionTime = authenticateUserRequestDto.getQuestReceptionTime();
+		this.role = Role.ROLE_USER;
 	}
 
 	public List<Role> getMemberRoles() {

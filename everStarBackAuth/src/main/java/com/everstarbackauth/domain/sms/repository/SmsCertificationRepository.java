@@ -1,5 +1,6 @@
 package com.everstarbackauth.domain.sms.repository;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
@@ -10,12 +11,24 @@ import lombok.RequiredArgsConstructor;
 @Repository
 public class SmsCertificationRepository {
 	private static final String PREFIX = "sms:";
+	private static final String SUCCESS = "auth";
 	private static final int LIMIT_TIME_SECONDS = 3 * 60;
-
 	private final StringRedisTemplate stringRedisTemplate;
 
-	public void createSmsCertification(String phone, String certificationNumber) {
+	public void saveSmsCertification(String phone, String certificationNumber) {
 		setWithTTL(PREFIX + phone, certificationNumber, LIMIT_TIME_SECONDS);
+	}
+
+	public void saveSuccessNumber(String phone){
+		setWithTTL(SUCCESS + phone, "success", LIMIT_TIME_SECONDS);
+	}
+
+	public boolean existsBySuccessNumber(String phone){
+		String value = stringRedisTemplate.opsForValue().get(SUCCESS + phone);;
+		if(value == null){
+			return false;
+		}
+		return true;
 	}
 
 	public String getSmsCertification(String phone) {

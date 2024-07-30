@@ -4,10 +4,12 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.everstarbackauth.domain.user.requestDto.AuthenticateUserRequestDto;
 import com.everstarbackauth.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackauth.domain.user.responseDto.JoinResponseMessage;
 import com.everstarbackauth.domain.user.service.JoinService;
@@ -28,10 +30,19 @@ public class JoinController {
 
 	@PostMapping("/join")
 	public ResponseEntity<?> signup(@RequestBody @Valid JoinRequestDto requestDto) {
-
 		joinService.signup(requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(JoinResponseMessage.SUCCESS_SIGNUP);
-		
+
+		return response;
+	}
+
+	@PutMapping("/oauth/join")
+	public ResponseEntity<?> authUser(@RequestBody @Valid AuthenticateUserRequestDto requestDto) {
+		joinService.authenticateUser(requestDto);
+		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(JoinResponseMessage.SUCCESS_SIGNUP);
+
+		log.info("auth server - request {}", requestDto);
+		log.info("auth server - response {}", response);
 		return response;
 	}
 }
