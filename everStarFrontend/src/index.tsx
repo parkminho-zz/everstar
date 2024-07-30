@@ -5,14 +5,10 @@ import '@fontsource/noto-sans-kr/700.css';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration'; // serviceWorkerRegistration 모듈 임포트
+// import * as serviceWorkerRegistration from './serviceWorkerRegistration'; // serviceWorkerRegistration 모듈 임포트
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+root.render(<App />);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
@@ -23,4 +19,4 @@ reportWebVitals();
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA
 // serviceWorkerRegistration.unregister();  // 필요 시 주석 해제
-serviceWorkerRegistration.register();
+// serviceWorkerRegistration.register();
