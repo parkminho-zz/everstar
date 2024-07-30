@@ -123,7 +123,7 @@ public class MemorialBookService {
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
 		SentimentAnalysis sentimentAnalysis = sentimentAnalysisRepository.findByPetId(petId)
-			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_SENTIMENT_ANALYSIS));
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_SENTIMENT_ANALYSIS_EXCEPTION));
 
 		List<Quest> quests = questRepository.findAll();
 		List<QuestAnswer> questAnswers = questAnswerRepository.findByPetId(petId);
