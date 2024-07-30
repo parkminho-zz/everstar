@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.everstarbackauth.domain.user.model.User;
 import com.everstarbackauth.domain.user.repository.UserRepository;
+import com.everstarbackauth.domain.user.requestDto.AuthenticateUserRequestDto;
 import com.everstarbackauth.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackauth.global.exception.CustomException;
 import com.everstarbackauth.global.exception.ExceptionResponse;
@@ -29,10 +30,11 @@ public class JoinService {
 	}
 
 	@Transactional
-	public void authUser(JoinRequestDto requestDto) {
+	public void authenticateUser(AuthenticateUserRequestDto requestDto) {
 		User user = userRepository.findUserByEmailAndIsDeleted(requestDto.getEmail(), false).orElseThrow(() -> new ExceptionResponse(
 			CustomException.NOT_FOUND_USER_EXCEPTION));
 
+		user.authenticateUser(requestDto);
 
 	}
 }

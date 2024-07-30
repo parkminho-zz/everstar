@@ -1,7 +1,6 @@
 package com.everstarbackauth.domain.user.model;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.List;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
-import com.everstarbackauth.domain.user.requestDto.AuthUserRequestDto;
+import com.everstarbackauth.domain.user.requestDto.AuthenticateUserRequestDto;
 import com.everstarbackauth.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackauth.global.entity.BaseTimeEntity;
 import com.everstarbackauth.global.exception.CustomException;
@@ -107,12 +106,12 @@ public class User extends BaseTimeEntity {
 			.build();
 	}
 
-	public void authUser(AuthUserRequestDto authUserRequestDto){
-		this.userName = authUserRequestDto.getUserName();
-		this.phoneNumber = authUserRequestDto.getPhoneNumber();
-		this.birthDate = authUserRequestDto.getBirthDate();
-		this.gender = authUserRequestDto.getGender();
-		this.questReceptionTime = authUserRequestDto.getQuestReceptionTime();
+	public void authenticateUser(AuthenticateUserRequestDto authenticateUserRequestDto){
+		this.userName = authenticateUserRequestDto.getUserName();
+		this.phoneNumber = authenticateUserRequestDto.getPhoneNumber();
+		this.birthDate = authenticateUserRequestDto.getBirthDate();
+		this.gender = authenticateUserRequestDto.getGender();
+		this.questReceptionTime = authenticateUserRequestDto.getQuestReceptionTime();
 		this.role = Role.ROLE_USER;
 	}
 

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.everstarbackauth.domain.user.requestDto.AuthenticateUserRequestDto;
 import com.everstarbackauth.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackauth.domain.user.responseDto.JoinResponseMessage;
 import com.everstarbackauth.domain.user.service.JoinService;
@@ -36,7 +37,8 @@ public class JoinController {
 	}
 
 	@PutMapping("/oauth/auth")
-	public ResponseEntity<?> authUser(@RequestBody @Valid JoinRequestDto requestDto) {
+	public ResponseEntity<?> authUser(@RequestBody @Valid AuthenticateUserRequestDto requestDto) {
+		joinService.authenticateUser(requestDto);
 
 	}
 }

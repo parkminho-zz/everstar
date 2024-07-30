@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class AuthUserRequestDto {
+public class AuthenticateUserRequestDto {
 
 	@NotBlank
 	private String email;
