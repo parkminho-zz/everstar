@@ -37,7 +37,6 @@ public class SmsCertificationUtil {
 		message.setText("[영원별] 아래의 본인 확인 인증번호를 입력하세요 \n인증번호는 " + verificationCode + "입니다.");
 
 		SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
-		System.out.println(response);
 		return response;
 	}
 }
