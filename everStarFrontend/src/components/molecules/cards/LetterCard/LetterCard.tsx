@@ -50,25 +50,25 @@ export const LetterCard = ({
       style={{ fontFamily }}
     >
       {name && (
-        <LetterText size="large" color={getTextColor()}>
+        <LetterText size="large" color={getTextColor()} style={{ fontFamily }}>
           {name}
         </LetterText>
       )}
       {type === 'default' && (
         <div className="flex flex-col gap-[16px]">
           <div className="flex flex-row gap-[10px]">
-            <LetterText size="medium" color="black">
+            <LetterText size="medium" color="black" style={{ fontFamily }}>
               보낸 편지
             </LetterText>
-            <LetterText size="small" color={getTextColor()}>
+            <LetterText size="small" color={getTextColor()} style={{ fontFamily }}>
               {sendMessage}
             </LetterText>
           </div>
           <div className="flex flex-row gap-[10px]">
-            <LetterText size="medium" color="black">
+            <LetterText size="medium" color="black" style={{ fontFamily }}>
               상태
             </LetterText>
-            <LetterText size="small" color={getTextColor()}>
+            <LetterText size="small" color={getTextColor()} style={{ fontFamily }}>
               {getState()}
             </LetterText>
           </div>
@@ -76,7 +76,7 @@ export const LetterCard = ({
       )}
       {(type === 'receive' || type === 'send') && (
         <div>
-          <LetterText size="small" color="black">
+          <LetterText size="small" color="black" style={{ fontFamily }}>
             {message}
           </LetterText>
         </div>
