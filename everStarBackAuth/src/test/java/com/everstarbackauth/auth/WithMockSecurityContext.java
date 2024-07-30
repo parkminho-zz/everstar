@@ -9,11 +9,11 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
-import com.everstarbackmain.domain.user.model.Gender;
-import com.everstarbackmain.domain.user.model.Role;
-import com.everstarbackmain.domain.user.model.User;
-import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
-import com.everstarbackmain.global.security.auth.PrincipalDetails;
+import com.everstarbackauth.domain.user.model.Gender;
+import com.everstarbackauth.domain.user.model.Role;
+import com.everstarbackauth.domain.user.model.User;
+import com.everstarbackauth.domain.user.requestDto.JoinRequestDto;
+import com.everstarbackauth.global.security.auth.PrincipalDetails;
 
 public class WithMockSecurityContext implements WithSecurityContextFactory<WithMockAuthUser> {
 

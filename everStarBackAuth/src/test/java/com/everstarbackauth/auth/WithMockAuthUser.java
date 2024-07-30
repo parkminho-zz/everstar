@@ -5,7 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 
 import org.springframework.security.test.context.support.WithSecurityContext;
 
-import com.everstarbackmain.domain.user.model.Role;
+import com.everstarbackauth.domain.user.model.Role;
 
 @Retention(RetentionPolicy.RUNTIME)
 @WithSecurityContext(factory = WithMockSecurityContext.class)
