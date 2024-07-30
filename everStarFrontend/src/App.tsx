@@ -8,7 +8,7 @@ function App() {
   return (
     <Router>
       <div className="container">
-        <Header type="default" />
+        <Header type="everstar" />
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/signup" element={<SignUpPage />} />
