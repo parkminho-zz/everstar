@@ -28,7 +28,8 @@ public class PetController {
 	private final HttpResponseUtil responseUtil;
 
 	@PostMapping
-	public ResponseEntity<Map<String, Object>> addPet(Authentication authentication, @RequestBody @Valid CreatePetRequestDto requestDto) {
+	public ResponseEntity<Map<String, Object>> addPet(Authentication authentication,
+		@RequestBody @Valid CreatePetRequestDto requestDto) {
 		petService.createPet(authentication, requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessPetMessage.SUCCESS_CREATE_PET);

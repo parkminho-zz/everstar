@@ -20,9 +20,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Slf4j
+@RequiredArgsConstructor
+@Slf4j(topic = "elk")
 public class PetService {
 
 	private final PetRepository petRepository;
@@ -32,7 +32,7 @@ public class PetService {
 
 	@Transactional
 	public void createPet(Authentication authentication, CreatePetRequestDto createPetRequestDto) {
-		User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 
 		Pet pet = Pet.createPet(user, createPetRequestDto);
 		petRepository.save(pet);
@@ -48,6 +48,11 @@ public class PetService {
 			personalityRepository.save(personality);
 		}
 	}
+
+	private void updatePetIntroduction(Pet pet) {
+
+	}
+
 
 	private void createMemorialBook(Pet pet) {
 		MemorialBook memorialBook = MemorialBook.createMemorialBook(pet);
