@@ -24,7 +24,8 @@ public enum CustomException {
 	NOT_MY_MEMORIAL_BOOK_EXCEPTION(403, "NotMyMemorialBookException", "사용자의 메모리얼북이 아닙니다."),
 	NOT_OPEN_MEMORIAL_BOOK_EXCEPTION(403, "NotOpenMemorialBookException", "메모리얼북이 공개되지 않았습니다."),
 
-	NOT_FOUND_SENTIMENT_ANALYSIS(404, "NotFoundSentimentAnalysis", "감정 분석 결과가 존재하지 않습니다.")
+	NOT_FOUND_SENTIMENT_ANALYSIS_EXCEPTION(404, "NotFoundSentimentAnalysisException", "감정 분석 결과가 존재하지 않습니다."),
+	NAVER_SENTIMENT_API_EXCEPTION(400, "NaverSentimentApiException", "네이버 감정 분석 API 사용 중 예외가 발생했습니다.")
 	;
 
 	private int statusNum;
