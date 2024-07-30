@@ -3,6 +3,7 @@ import { useMediaQuery } from 'react-responsive';
 import { MemorialBook, PageType } from 'components/organics/MemorialBook/MemorialBook';
 import { Header } from 'components/molecules/Header/Header';
 import { Footer } from 'components/molecules/Footer/Footer';
+import bgImage from 'assets/images/bg-everstar.png';
 
 const questionsAndAnswers: PageType[] = [
   { type: 'cover' },
@@ -37,18 +38,28 @@ export const MemorialBookPage: React.FC = () => {
   const headerType = isMobile
     ? 'mobile-everstar'
     : isTabletOrMobile
-    ? 'tablet-everstar'
-    : 'everstar';
+      ? 'tablet-everstar'
+      : 'everstar';
 
   const footerType = isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop';
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header type={headerType} className="sticky top-0 z-50" />
-      <div className="my-4">
-        <MemorialBook pages={questionsAndAnswers} />
-      </div>
+    <div
+      className="flex flex-col min-h-screen bg-center bg-cover"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+      }}
+    >
+      <div className="flex flex-col min-h-screen">
+        <Header type={headerType} className="sticky top-0 z-50" />
+        <div className="my-4">
+          <MemorialBook pages={questionsAndAnswers} />
+        </div>
         <Footer type={footerType} className="mt-auto" />
+      </div>
     </div>
   );
 };
