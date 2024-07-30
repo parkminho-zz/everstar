@@ -1,3 +1,4 @@
+import React from 'react';
 import { ArrowIcon } from 'components/atoms/icons/Arrow/ArrowIcon';
 
 type PrimaryButtonTheme = 'focus' | 'hover' | 'white';
@@ -9,11 +10,12 @@ interface IPrimaryButtonProps {
   disabled: boolean;
   children: string;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
+  icon?: React.ReactNode | null;
 }
 
-const focus = 'bg-mainprimary text-greyscalewhite';
-const white = 'bg-white text-mainsecondary';
-const hover = 'bg-bgorange text-mainsecondary';
+const focus = 'bg-mainprimary text-greyscalewhite hover:bg-bgorange';
+const white = 'bg-white text-mainsecondary hover:bg-bgorange';
+const hover = 'bg-bgorange text-mainsecondary hover:bg-mainprimary';
 const disabledStyle = 'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
 
 const color: Record<PrimaryButtonTheme, string> = {
@@ -32,12 +34,13 @@ const sizeStyle: Record<PrimaryButtonSize, string> = {
   small,
 };
 
-export default function PrimaryButton({
+export function PrimaryButton({
   theme,
   size,
   children,
   onClick,
   disabled,
+  icon = <ArrowIcon color="black" direction="right" size={24} />, // 기본 아이콘 설정
 }: IPrimaryButtonProps) {
   const getTextStyle = () => {
     switch (size) {
@@ -47,13 +50,9 @@ export default function PrimaryButton({
         return 'kor-subtitle-subtitle2';
       case 'small':
         return 'kor-p-p4';
+      default:
+        return '';
     }
-  };
-
-  const getIconColor = () => {
-    if (disabled) return 'gray';
-    if (theme === 'focus') return 'white';
-    return 'black';
   };
 
   return (
@@ -72,8 +71,7 @@ export default function PrimaryButton({
       onClick={onClick}
     >
       <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>{children}</span>
-      {/* <img className="ml-auto" src={getIconPath()} alt={alt} /> */}
-      <ArrowIcon color={getIconColor()} direction="right" size={size === 'small' ? 16 : 24} />
+      {icon && <span className="ml-auto">{icon}</span>}
     </button>
   );
 }

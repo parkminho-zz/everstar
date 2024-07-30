@@ -1,5 +1,6 @@
 import { InformationText } from 'components/atoms/texts/InformationText';
 import { LetterText } from 'components/atoms/texts/LetterText';
+
 type LetterType = 'default' | 'send' | 'receive';
 type LetterColor = 'white' | 'bgorange' | 'orange' | 'gray';
 type LetterState = 'received' | 'notReceived';
@@ -8,10 +9,11 @@ interface ILetterProps {
   type: LetterType;
   color: LetterColor;
   state: LetterState;
-  name: string;
+  name?: string;
   sendMessage?: string;
   message?: string;
-  dateTime: string;
+  dateTime?: string;
+  fontFamily?: string;
 }
 
 export const LetterCard = ({
@@ -22,6 +24,7 @@ export const LetterCard = ({
   state,
   message,
   dateTime,
+  fontFamily = 'var(--kor-p-p1-font-family)',
 }: ILetterProps) => {
   const getState = () => {
     if (state === 'received') return '답장 완료';
@@ -40,13 +43,17 @@ export const LetterCard = ({
     if (color === 'bgorange') return 'bg-bgorange';
     if (color === 'gray') return 'bg-greyscaleblack-20';
   };
+
   return (
     <div
       className={`${getBgColor()} flex flex-col self-stretch gap-[16px] p-4 rounded-[20px] shadow-md ${type === 'default' ? 'w-[270px]' : 'w-[320px]'}`}
+      style={{ fontFamily }}
     >
-      <LetterText size="large" color={getTextColor()}>
-        {name}
-      </LetterText>
+      {name && (
+        <LetterText size="large" color={getTextColor()}>
+          {name}
+        </LetterText>
+      )}
       {type === 'default' && (
         <div className="flex flex-col gap-[16px]">
           <div className="flex flex-row gap-[10px]">
@@ -67,14 +74,7 @@ export const LetterCard = ({
           </div>
         </div>
       )}
-      {type === 'receive' && (
-        <div>
-          <LetterText size="small" color="black">
-            {message}
-          </LetterText>
-        </div>
-      )}
-      {type === 'send' && (
+      {(type === 'receive' || type === 'send') && (
         <div>
           <LetterText size="small" color="black">
             {message}
@@ -82,14 +82,16 @@ export const LetterCard = ({
         </div>
       )}
       <hr className="border-greyscaleblack-60 border-0.5" />
-      <div className="flex justify-end">
-        <InformationText
-          state="default"
-          divClassName={color === 'orange' ? 'text-greyscalewhite' : ''}
-        >
-          {dateTime}
-        </InformationText>
-      </div>
+      {dateTime && (
+        <div className="flex justify-end">
+          <InformationText
+            state="default"
+            divClassName={color === 'orange' ? 'text-greyscalewhite' : ''}
+          >
+            {dateTime}
+          </InformationText>
+        </div>
+      )}
     </div>
   );
 };
