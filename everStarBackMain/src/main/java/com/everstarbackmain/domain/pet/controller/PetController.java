@@ -45,7 +45,6 @@ public class PetController {
 	public ResponseEntity<Map<String, Object>> updatePetIntroduction(
 		@PathVariable("pet-id") Long petId, @RequestBody @Valid UpdatePetIntroductionDto requestDto) {
 		String newIntroduction = requestDto.getIntroduction();
-		// 서비스 호출
 		petService.updatePetIntroduction(petId, newIntroduction);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessPetMessage.SUUCESS_UPDATE_PET_INTRODUCTION);

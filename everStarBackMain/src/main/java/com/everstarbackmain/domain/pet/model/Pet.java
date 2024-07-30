@@ -83,7 +83,7 @@ public class Pet extends BaseTimeEntity {
 		this.gender = gender;
 		this.relationship = relationship;
 		this.profileImageUrl = profileImageUrl;
-		this.introduction = (introduction != null && !introduction.isEmpty()) ? introduction : name + "의 소개글을 작성 해주세요";
+		this.introduction = (introduction != null && !introduction.isEmpty()) ? introduction : name + " 의 사랑스런 소개글을 작성 해주세요";
 		questIndex = 0;
 		isDeleted = false;
 		lastAccessTime = LocalDateTime.now();
@@ -99,7 +99,7 @@ public class Pet extends BaseTimeEntity {
 			.gender(createPetRequestDto.getGender())
 			.relationship(createPetRequestDto.getRelationship())
 			.profileImageUrl(createPetRequestDto.getProfileImageUrl())
-			.introduction(createPetRequestDto.getIntroduction()).build();
+			.build();
 	}
 
 	public void plusQuestIndex() {
