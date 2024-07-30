@@ -2,11 +2,12 @@ package com.everstarbackmain.domain.sentimentAnalysis.responseDto;
 
 import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Getter
 public class SentimentAnalysisDetailResponseDto {

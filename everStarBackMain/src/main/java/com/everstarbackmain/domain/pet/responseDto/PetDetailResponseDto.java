@@ -6,11 +6,12 @@ import java.time.LocalDateTime;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.user.model.Gender;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Getter
 public class PetDetailResponseDto {

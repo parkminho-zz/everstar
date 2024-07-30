@@ -2,11 +2,12 @@ package com.everstarbackmain.domain.questAnswer.responseDto;
 
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Getter
 public class QuestAnswerDetailResponseDto {

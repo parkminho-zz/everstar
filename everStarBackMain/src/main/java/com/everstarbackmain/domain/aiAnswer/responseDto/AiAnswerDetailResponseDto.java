@@ -2,11 +2,12 @@ package com.everstarbackmain.domain.aiAnswer.responseDto;
 
 import com.everstarbackmain.domain.aiAnswer.model.AiAnswer;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Getter
 public class AiAnswerDetailResponseDto {

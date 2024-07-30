@@ -9,11 +9,12 @@ import com.everstarbackmain.domain.quest.responseDto.QuestDetailResponseDto;
 import com.everstarbackmain.domain.questAnswer.responseDto.QuestAnswerDetailResponseDto;
 import com.everstarbackmain.domain.sentimentAnalysis.responseDto.SentimentAnalysisDetailResponseDto;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Getter
 public class MemorialBookDetailResponseDto {
