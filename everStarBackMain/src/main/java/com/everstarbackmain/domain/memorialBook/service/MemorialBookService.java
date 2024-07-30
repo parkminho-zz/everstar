@@ -1,7 +1,6 @@
 package com.everstarbackmain.domain.memorialBook.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.scheduling.annotation.Async;
@@ -109,8 +108,7 @@ public class MemorialBookService {
 	}
 
 	public MemorialBookInfoResponseDto getMemorialBookInfoByPetId(Long petId) {
-		Optional<MemorialBook> findMemorialBook = memorialBookRepository.findByPetId(petId);
-		MemorialBook memorialBook = findMemorialBook
+		MemorialBook memorialBook = memorialBookRepository.findByPetId(petId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
 
 		return MemorialBookInfoResponseDto.createMemorialBookDetailResponseDto(memorialBook);
