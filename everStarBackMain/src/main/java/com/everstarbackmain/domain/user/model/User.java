@@ -5,6 +5,9 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
 import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
 import com.everstarbackmain.global.exception.CustomException;
@@ -24,9 +27,10 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
 @Getter
 public class User extends BaseTimeEntity {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id", nullable = false)
@@ -39,26 +43,27 @@ public class User extends BaseTimeEntity {
 	private String password;
 
 	@Column(name = "user_name", nullable = false)
+	@ColumnDefault("'guest'")
 	private String userName;
 
 	@Column(name = "phone_number", nullable = false, unique = true)
 	private String phoneNumber;
 
-	@Column(name = "birth_date" , nullable = false)
+	@Column(name = "birth_date", nullable = false)
 	private LocalDate birthDate;
 
 	@Column(name = "gender", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 
-	@Column(name = "quest_reception_time" , nullable = false)
+	@Column(name = "quest_reception_time")
 	private LocalTime questReceptionTime;
 
 	@Column(name = "role", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-	@Column(name = "is_deleted" , nullable = false)
+	@Column(name = "is_deleted", nullable = false)
 	private boolean isDeleted;
 
 	public List<Role> getMemberRoles() {
