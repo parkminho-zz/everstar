@@ -1,4 +1,5 @@
 import React from 'react';
+import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
 import { LetterCard } from 'components/molecules/cards/LetterCard/LetterCard';
 import { Textbox } from 'components/molecules/input/Textbox';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
@@ -21,7 +22,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
   letterCardColor,
   letterCardState,
   letterCardMessage,
-  letterCardFontFamily="var(--kor-p-p1-font-family)",
+  letterCardFontFamily = 'var(--kor-p-p1-font-family)',
   textboxLabel,
   largeButtonText,
   smallButtonText,
@@ -33,10 +34,8 @@ export const InputContainer: React.FC<InputContainerProps> = ({
   return (
     <div className="flex justify-center p-6 bg-gray-100">
       <div className="flex flex-col items-center w-[360px] gap-8 p-5 bg-white rounded-lg shadow-md">
-        {/* Header */}
-        <header className="w-full py-4">
-          <h1 className="kor-h-h2 text-center">{headerText}</h1>
-        </header>
+        {/* Modal Header */}
+        <ModalHeader text={headerText} showLeftIcon={true} />
 
         {/* Content */}
         <div className="flex flex-col items-center w-full gap-8">
