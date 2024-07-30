@@ -77,7 +77,7 @@ class SmsServiceTest {
 	@DisplayName("문자전송 성공 테스트")
 	void 문자전송_성공() {
 		// Given
-		given(userRepository.findUserByPhoneNumber(sendCodeRequestDto.getPhone())).willReturn(Optional.empty());
+		given(userRepository.existsUserByPhoneNumber(sendCodeRequestDto.getPhone())).willReturn(false);
 
 		// When
 		smsService.sendSms(sendCodeRequestDto);
@@ -106,7 +106,7 @@ class SmsServiceTest {
 	@DisplayName("문자전송 거부: 이미 가입된 전화번호 테스트")
 	void 문자전송_거부_이미_가입된_전화번호() {
 		// Given
-		given(userRepository.findUserByPhoneNumber(sendCodeRequestDto.getPhone())).willReturn(Optional.of(user));
+		given(userRepository.existsUserByPhoneNumber(sendCodeRequestDto.getPhone())).willReturn(true);
 
 		// Then
 		assertThatThrownBy(() -> smsService.sendSms(sendCodeRequestDto))
