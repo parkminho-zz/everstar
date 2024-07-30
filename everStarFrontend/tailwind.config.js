@@ -2,6 +2,12 @@
 module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    screens: {
+      // 아래의 값들은 min-width
+      mobile: '360px',
+      tablet: '768px',
+      laptop: '1200px',
+    },
     extend: {
       colors: {
         bggrey: 'var(--bggrey)',
