@@ -1,48 +1,99 @@
+import { Meta, StoryObj } from '@storybook/react';
+import { InputField } from './InputField';
 
-import { fn } from "@storybook/test";
-import {InputField} from './Inputfield';
-
-export const ActionsData = {
-  onArchiveTask: fn(),
-  onPinTask: fn(),
-};
-
-export default {
+const meta: Meta<typeof InputField> = {
+  title: 'Organics/InputField',
   component: InputField,
-  title: 'Organics/Inputfield',
   tags: ['autodocs'],
-  //👇 Our exports that end in "Data" are not stories.
-  excludeStories: /.*Data$/,
-  args: {
-    ...ActionsData,
-  },
-};
-
-export const Default = {
-  args: {
-    task: {
-      id: '3',
-      title: 'Inputfield',
-      state: 'TASK_INBOX',
+  argTypes: {
+    showLabel: {
+      control: 'boolean',
+      description: '레이블 표시 여부',
+      defaultValue: true,
+    },
+    showValidationText: {
+      control: 'boolean',
+      description: '유효성 검사 텍스트 표시 여부',
+      defaultValue: true,
+    },
+    state: {
+      control: { type: 'select', options: ['default', 'focus', 'disable', 'done', 'error'] },
+      description: 'InputField 상태',
+      defaultValue: 'default',
+    },
+    className: {
+      control: 'text',
+      description: '추가 클래스 이름',
+      defaultValue: '',
+    },
+    text: {
+      control: 'text',
+      description: 'InputField의 텍스트',
+      defaultValue: '비밀번호를 입력해 주세요',
+    },
+    showCheckIcon: {
+      control: 'boolean',
+      description: '체크 아이콘 표시 여부',
+      defaultValue: false,
     },
   },
 };
 
-export const Pinned = {
+export default meta;
+
+type Story = StoryObj<typeof InputField>;
+
+export const Default: Story = {
   args: {
-    task: {
-      ...Default.args.task,
-      state: 'TASK_PINNED',
-    },
+    showLabel: true,
+    showValidationText: true,
+    state: 'default',
+    className: '',
+    text: '비밀번호를 입력해 주세요',
+    showCheckIcon: false,
   },
 };
 
-export const Archived = {
+export const Focus: Story = {
   args: {
-    task: {
-      ...Default.args.task,
-      state: 'TASK_ARCHIVED',
-    },
+    showLabel: true,
+    showValidationText: true,
+    state: 'focus',
+    className: '',
+    text: '비밀번호를 입력해 주세요',
+    showCheckIcon: false,
   },
 };
 
+export const Disabled: Story = {
+  args: {
+    showLabel: true,
+    showValidationText: true,
+    state: 'disable',
+    className: '',
+    text: '비밀번호를 입력해 주세요',
+    showCheckIcon: false,
+  },
+};
+
+export const Done: Story = {
+  args: {
+    showLabel: true,
+    showValidationText: true,
+    state: 'done',
+    className: '',
+    text: '비밀번호를 입력해 주세요',
+    showCheckIcon: true,
+  },
+};
+
+export const Error: Story = {
+  args: {
+    showLabel: true,
+    showValidationText: true,
+    state: 'error',
+    className: '',
+    text: '비밀번호를 입력해 주세요',
+    showCheckIcon: false,
+  },
+};
