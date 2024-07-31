@@ -68,7 +68,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
           </div>
 
           {/* Textbox */}
-          <Textbox type="large" className="" label={textboxLabel} />
+          <Textbox type="large" className="" label={textboxLabel} showStar={false} />
 
           {/* Large Primary Button */}
           {showPrimaryButton && (
