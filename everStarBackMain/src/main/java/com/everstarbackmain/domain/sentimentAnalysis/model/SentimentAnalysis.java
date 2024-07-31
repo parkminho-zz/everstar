@@ -45,8 +45,8 @@ public class SentimentAnalysis {
 		return new SentimentAnalysis(pet);
 	}
 
-	public void addResult(String result) {
-		this.totalResult = result;
+	public void addTotalResult(String totalResult) {
+		this.totalResult = totalResult;
 	}
 
 	public void addWeekResult(Double weekResult, int week) {
