@@ -37,12 +37,17 @@ const meta: Meta<typeof InputField> = {
     text: {
       control: "text",
       description: "InputField의 텍스트",
-      defaultValue: "비밀번호를 입력해 주세요",
+      defaultValue: "",
     },
     showCheckIcon: {
       control: "boolean",
       description: "체크 아이콘 표시 여부",
       defaultValue: false,
+    },
+    placeholder: {
+      control: "text",
+      description: "플레이스홀더 텍스트",
+      defaultValue: "비밀번호를 입력해 주세요",
     },
   },
 };
@@ -58,8 +63,9 @@ export const Default: Story = {
     showValidationText: true,
     state: "default",
     className: "",
-    text: "비밀번호를 입력해 주세요",
+    text: "",
     showCheckIcon: false,
+    placeholder: "비밀번호를 입력해 주세요",
   },
 };
 
@@ -70,8 +76,9 @@ export const Focus: Story = {
     showValidationText: true,
     state: "focus",
     className: "",
-    text: "비밀번호를 입력해 주세요",
+    text: "",
     showCheckIcon: false,
+    placeholder: "비밀번호를 입력해 주세요",
   },
 };
 
@@ -82,8 +89,9 @@ export const Disabled: Story = {
     showValidationText: true,
     state: "disable",
     className: "",
-    text: "비밀번호를 입력해 주세요",
+    text: "",
     showCheckIcon: false,
+    placeholder: "비밀번호를 입력해 주세요",
   },
 };
 
@@ -94,8 +102,9 @@ export const Done: Story = {
     showValidationText: true,
     state: "done",
     className: "",
-    text: "비밀번호를 입력해 주세요",
+    text: "",
     showCheckIcon: true,
+    placeholder: "비밀번호를 입력해 주세요",
   },
 };
 
@@ -106,7 +115,8 @@ export const Error: Story = {
     showValidationText: true,
     state: "error",
     className: "",
-    text: "비밀번호를 입력해 주세요",
+    text: "",
     showCheckIcon: false,
+    placeholder: "비밀번호를 입력해 주세요",
   },
 };

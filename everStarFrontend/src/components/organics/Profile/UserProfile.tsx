@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ModalHeader } from "components/molecules/ModalHeader/ModalHeader";
 import { PrimaryButton } from "components/atoms/buttons/PrimaryButton";
 import { Tab } from "components/molecules/Tab/Tab";
@@ -42,12 +42,17 @@ export const UserProfile: React.FC<UserProfileProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<"one" | "two">("one");
   const [selectedPet, setSelectedPet] = useState<string>("");
+  const [currentPet, setCurrentPet] = useState<PetInfo | null>(null);
 
   const handleButtonClick = () => {
     console.log("Primary Button Clicked");
   };
 
-  const pet = selectedPet ? petInfo[selectedPet] : null;
+  useEffect(() => {
+    if (selectedPet) {
+      setCurrentPet(petInfo[selectedPet]);
+    }
+  }, [selectedPet, petInfo]);
 
   return (
     <div className="flex justify-center p-6 bg-gray-100">
@@ -108,7 +113,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
             />
             <Select
               className="custom-class"
-              options={["06:00~22:00"]}
+              options={Array.from({ length: 17 }, (_, i) => `${6 + i}:00`)}
               title="10:00"
               starshow={true}
               onOptionSelect={(option) =>
@@ -125,6 +130,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
               text={userInfo.phone}
               showCheckIcon={true}
               className=""
+              placeholder="전화번호를 입력해 주세요"
             />
             {/* Small Primary Button */}
             <div className="flex justify-end w-full">
@@ -151,9 +157,9 @@ export const UserProfile: React.FC<UserProfileProps> = ({
               infoText="반려동물을 선택해주세요"
               showLabel={false}
             />
-            {pet && (
+            {currentPet && (
               <>
-                <Avatar size="medium" name={pet.name} />
+                <Avatar size="medium" name={currentPet.name} />
                 <PrimaryButton
                   theme="white"
                   size="medium"
@@ -169,7 +175,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                   showValidationText={false}
                   starshow={false}
                   state="disable"
-                  text={pet.name}
+                  text={currentPet.name}
                   showCheckIcon={false}
                   className=""
                 />
@@ -179,7 +185,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                   showValidationText={false}
                   starshow={false}
                   state="disable"
-                  text={pet.birthdate}
+                  text={currentPet.birthdate}
                   showCheckIcon={false}
                   className=""
                 />
@@ -189,7 +195,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                   showValidationText={false}
                   starshow={false}
                   state="disable"
-                  text={pet.gender}
+                  text={currentPet.gender}
                   showCheckIcon={false}
                   className=""
                 />
@@ -199,7 +205,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                   showValidationText={false}
                   starshow={false}
                   state="disable"
-                  text={pet.breed}
+                  text={currentPet.breed}
                   showCheckIcon={false}
                   className=""
                 />
@@ -209,7 +215,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                   showValidationText={false}
                   starshow={false}
                   state="disable"
-                  text={pet.color}
+                  text={currentPet.color}
                   showCheckIcon={false}
                   className=""
                 />
@@ -220,7 +226,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                   className="self-start"
                 />
                 <div className="flex justify-between w-full">
-                  {pet.personality.map((trait, index) => (
+                  {currentPet.personality.map((trait, index) => (
                     <Tag key={index} className="greyscalewhite">
                       #{trait}
                     </Tag>

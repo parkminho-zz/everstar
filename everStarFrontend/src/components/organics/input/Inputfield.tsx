@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { InformationText } from "components/atoms/texts/InformationText";
 import { Lable } from "components/atoms/texts/Lable";
 import { CheckIcon } from "components/atoms/icons/Check/CheckIcon";
@@ -13,6 +13,8 @@ interface InputFieldProps {
   className?: string;
   text: string;
   showCheckIcon: boolean;
+  placeholder?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -22,11 +24,17 @@ export const InputField: React.FC<InputFieldProps> = ({
   starshow = true,
   state,
   className = "",
-  text = "비밀번호를 입력해 주세요",
+  text = "",
   showCheckIcon = false,
+  placeholder,
+  onChange,
 }) => {
   const [inputState, setInputState] = useState(state);
   const [inputText, setInputText] = useState(text);
+
+  useEffect(() => {
+    setInputText(text);
+  }, [text]);
 
   const handleFocus = () => {
     setInputState("focus");
@@ -38,6 +46,9 @@ export const InputField: React.FC<InputFieldProps> = ({
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(event.target.value);
+    if (onChange) {
+      onChange(event);
+    }
     if (inputState === "error" && event.target.value.length > 0) {
       setInputState("focus");
     } else if (event.target.value.length > 0) {
@@ -80,7 +91,7 @@ export const InputField: React.FC<InputFieldProps> = ({
             onChange={handleChange}
             className={`flex-1 ${inputState === "disable" ? "bg-[#f0f2f6] text-[#c3c9d3]" : "bg-white text-black"} border-none outline-none`}
             disabled={inputState === "disable"}
-            placeholder={text}
+            placeholder={placeholder}
           />
           {showCheckIcon && (
             <CheckIcon
@@ -114,6 +125,8 @@ InputField.propTypes = {
   text: PropTypes.string.isRequired,
   className: PropTypes.string,
   showCheckIcon: PropTypes.bool.isRequired,
+  placeholder: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 export type { InputFieldProps };
