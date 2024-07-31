@@ -3,6 +3,7 @@ import { ModalHeader } from './ModalHeader';
 
 export default {
   title: 'Molecules/ModalHeader',
+  tags: ['autodocs'],
   component: ModalHeader,
   argTypes: {
     text: { control: 'text', defaultValue: '오늘의 질문' },

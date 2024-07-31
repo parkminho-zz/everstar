@@ -1,18 +1,45 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { InputContainer } from './InputContainer';
+import { InteractiveForm } from './InteractiveForm';
+import { action } from '@storybook/addon-actions';
 
-const meta: Meta<typeof InputContainer> = {
-  title: 'Organics/InputContainer',
-  component: InputContainer,
+const meta: Meta<typeof InteractiveForm> = {
+  title: 'templates/InteractiveForm',
+  component: InteractiveForm,
   tags: ['autodocs'],
   parameters: {
-    docs: {
-      description: {
-        component: 'InputContainer 컴포넌트는 다양한 입력 요소들을 포함한 컨테이너입니다.',
+    viewport: {
+      viewports: {
+        desktop: {
+          name: 'Desktop',
+          styles: { width: '1280px', height: '800px' },
+        },
+        tablet: {
+          name: 'Tablet',
+          styles: { width: '768px', height: '1024px' },
+        },
+        mobile: {
+          name: 'Mobile',
+          styles: { width: '375px', height: '667px' },
+        },
       },
+      defaultViewport: 'desktop',
     },
   },
   argTypes: {
+    currentPage: {
+      control: 'number',
+      description: '현재 페이지 번호',
+      defaultValue: 1,
+    },
+    totalPages: {
+      control: 'number',
+      description: '전체 페이지 수',
+      defaultValue: 10,
+    },
+    onPageChange: {
+      action: 'pageChanged',
+      description: '페이지 변경 시 호출되는 함수',
+    },
     headerText: {
       control: 'text',
       description: '헤더에 표시될 텍스트',
@@ -54,13 +81,8 @@ const meta: Meta<typeof InputContainer> = {
     },
     centered: {
       control: 'boolean',
-      description: 'LetterCard의 중앙 정렬 여부',
+      description: 'LetterCard 중앙 정렬 여부',
       defaultValue: true,
-    },
-    customText: {
-      control: 'text',
-      description: '커스텀 텍스트',
-      defaultValue: '사랑하는 반려동물에게 <br /> 편지를 보내보세요',
     },
     textboxLabel: {
       control: 'text',
@@ -82,37 +104,68 @@ const meta: Meta<typeof InputContainer> = {
       description: 'Large Primary Button 표시 여부',
       defaultValue: true,
     },
+    customText: {
+      control: 'text',
+      description: 'LetterCard 대신 표시될 커스텀 텍스트',
+      defaultValue: '',
+    },
   },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof InputContainer>;
+type Story = StoryObj<typeof InteractiveForm>;
 
 export const Default: Story = {
   args: {
+    currentPage: 1,
+    totalPages: 10,
+    onPageChange: action('pageChanged'),
     headerText: '오늘의 질문',
     letterCardType: 'send',
     letterCardColor: 'white',
     letterCardState: 'notReceived',
     letterCardMessage: '뚜뚜의 생김새를 묘사해주세요',
-    letterCardClassName: 'font-body !kor-subtitle-subtitle3', // 기본 폰트 설정
+    letterCardClassName: 'font-body !kor-subtitle-subtitle3',
     centered: true,
-    customText: '사랑하는 반려동물에게 <br /> 편지를 보내보세요', // 기본 커스텀 텍스트 설정
     textboxLabel: '내용',
     largeButtonText: '이미지 추가',
     smallButtonText: '작성완료',
     showPrimaryButton: true,
+    customText: '',
   },
 };
 
 export const CustomText: Story = {
   args: {
-    headerText: '오늘의 질문',
-    customText: '사랑하는 반려동물에게 <br /> 편지를 보내보세요', // 기본 커스텀 텍스트 설정
+    currentPage: 1,
+    totalPages: 10,
+    onPageChange: action('pageChanged'),
+    headerText: '일기 쓰기',
     textboxLabel: '내용',
     largeButtonText: '이미지 추가',
     smallButtonText: '작성완료',
     showPrimaryButton: true,
+    customText: '기억을 <br /> 이어가보세요',
+  },
+};
+
+export const Text: Story = {
+  args: {
+    currentPage: 1,
+    totalPages: 10,
+    onPageChange: action('pageChanged'),
+    headerText: '오늘의 질문',
+    letterCardType: 'send',
+    letterCardColor: 'white',
+    letterCardState: 'notReceived',
+    letterCardMessage: '뚜뚜와 놀았던 이야기를 해주세요',
+    letterCardClassName: 'font-body !kor-subtitle-subtitle3',
+    centered: true,
+    textboxLabel: '내용',
+    largeButtonText: '이미지 추가',
+    smallButtonText: '작성완료',
+    showPrimaryButton: false,
+    customText: '',
   },
 };

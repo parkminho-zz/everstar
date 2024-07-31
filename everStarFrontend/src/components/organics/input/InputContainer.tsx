@@ -4,28 +4,35 @@ import { LetterCard } from 'components/molecules/cards/LetterCard/LetterCard';
 import { Textbox } from 'components/molecules/input/Textbox';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 
-interface InputContainerProps {
+export interface InputContainerProps {
   headerText: string;
-  letterCardType: 'default' | 'send' | 'receive';
-  letterCardColor: 'white' | 'bgorange' | 'orange' | 'gray';
-  letterCardState: 'received' | 'notReceived';
-  letterCardMessage: string;
-  letterCardFontFamily: string;
+  letterCardType?: 'default' | 'send' | 'receive';
+  letterCardColor?: 'white' | 'bgorange' | 'orange' | 'gray';
+  letterCardState?: 'received' | 'notReceived';
+  letterCardMessage?: string;
+  letterCardClassName?: string;
+  centered?: boolean;
+  customText?: string; // 커스텀 텍스트 속성 추가
+
   textboxLabel: string;
   largeButtonText: string;
   smallButtonText: string;
+  showPrimaryButton?: boolean;
 }
 
 export const InputContainer: React.FC<InputContainerProps> = ({
   headerText,
   letterCardType,
-  letterCardColor,
-  letterCardState,
+  letterCardColor = 'white', // 기본값 설정
+  letterCardState = 'notReceived', // 기본값 설정
   letterCardMessage,
-  letterCardFontFamily = 'var(--kor-p-p1-font-family)',
+  letterCardClassName = 'font-body !kor-subtitle-subtitle3', // 여기서 폰트 변경
+  centered = true,
+  customText = '', // 기본값 설정
   textboxLabel,
   largeButtonText,
   smallButtonText,
+  showPrimaryButton = true,
 }) => {
   const handleButtonClick = () => {
     console.log('Primary Button Clicked');
@@ -39,32 +46,44 @@ export const InputContainer: React.FC<InputContainerProps> = ({
 
         {/* Content */}
         <div className="flex flex-col items-center w-full gap-8">
-          {/* Letter Card */}
-          <div>
-            <LetterCard
-              type={letterCardType}
-              color={letterCardColor}
-              state={letterCardState}
-              message={letterCardMessage}
-              fontFamily={letterCardFontFamily}
-            />
+          <div className="flex flex-col items-center w-full">
+            {/* Letter Card or Custom Text */}
+            {letterCardType ? (
+              <LetterCard
+                type={letterCardType}
+                color={letterCardColor}
+                state={letterCardState}
+                message={letterCardMessage}
+                className={letterCardClassName}
+                centered={centered}
+              />
+            ) : (
+              <div className="w-full">
+                <div
+                  className="left-0 [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal]"
+                  dangerouslySetInnerHTML={{ __html: customText }}
+                />
+              </div>
+            )}
           </div>
 
           {/* Textbox */}
-          <Textbox type="large" className="" label={textboxLabel} />
+          <Textbox type="large" className="" label={textboxLabel} showStar={false} />
 
           {/* Large Primary Button */}
-          <div className="flex justify-center w-full">
-            <PrimaryButton
-              theme="white"
-              size="large"
-              onClick={handleButtonClick}
-              disabled={false}
-              icon={null}
-            >
-              {largeButtonText}
-            </PrimaryButton>
-          </div>
+          {showPrimaryButton && (
+            <div className="flex justify-center w-full">
+              <PrimaryButton
+                theme="white"
+                size="large"
+                onClick={handleButtonClick}
+                disabled={false}
+                icon={null}
+              >
+                {largeButtonText}
+              </PrimaryButton>
+            </div>
+          )}
 
           {/* Small Primary Button */}
           <div className="flex justify-end w-full">
