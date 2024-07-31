@@ -1,36 +1,36 @@
-import { Meta, StoryObj } from '@storybook/react';
-import { Select, SelectProps } from './Select';
+import { Meta, StoryObj } from "@storybook/react";
+import { Select, SelectProps } from "./Select";
 
 const meta: Meta<SelectProps> = {
-  title: 'Molecules/Select',
+  title: "Molecules/Select",
   component: Select,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
-    state: {
-      control: { type: 'radio', options: ['after', 'before'] },
-      description: 'Select 상태',
-      defaultValue: 'before',
-    },
     className: {
-      control: 'text',
-      description: '추가 클래스 이름',
-      defaultValue: '',
+      control: "text",
+      description: "추가 클래스 이름",
+      defaultValue: "",
     },
     options: {
-      control: 'object',
-      description: '드롭다운 옵션 목록',
-      defaultValue: ['Option 1', 'Option 2', 'Option 3'],
+      control: "object",
+      description: "드롭다운 옵션 목록",
+      defaultValue: ["Option 1", "Option 2", "Option 3"],
     },
-    onOptionSelect: { action: 'option selected' },
+    onOptionSelect: { action: "option selected" },
     title: {
-      control: 'text',
-      description: '드롭다운 기본 타이틀',
-      defaultValue: 'Select an option',
+      control: "text",
+      description: "드롭다운 기본 타이틀",
+      defaultValue: "Select an option",
     },
     starshow: {
-      control: 'boolean',
-      description: '레이블 옆 별표 표시 여부',
+      control: "boolean",
+      description: "레이블 옆 별표 표시 여부",
       defaultValue: true,
+    },
+    infoText: {
+      control: "text",
+      description: "정보 텍스트",
+      defaultValue: "",
     },
   },
 };
@@ -41,20 +41,20 @@ type Story = StoryObj<SelectProps>;
 
 export const GenderSelect: Story = {
   args: {
-    state: 'before',
-    className: 'custom-class',
-    options: ['Male', 'Female'],
-    title: 'Select Gender',
+    className: "custom-class",
+    options: ["Male", "Female"],
+    title: "Select Gender",
     starshow: true,
+    infoText: "Please select your gender",
   },
 };
 
 export const YearSelect: Story = {
   args: {
-    state: 'before',
-    className: 'custom-class',
+    className: "custom-class",
     options: Array.from({ length: 100 }, (_, i) => 2024 - i),
-    title: 'Select Year',
+    title: "Select Year",
     starshow: true,
+    infoText: "Please select your birth year",
   },
 };
