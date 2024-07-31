@@ -13,6 +13,7 @@ interface SelectProps {
   starshow?: boolean;
   onOptionSelect: (option: string | number) => void;
   infoText: string;
+  showIcon?: boolean;
 }
 
 export const Select: React.FC<SelectProps> = ({
@@ -23,6 +24,7 @@ export const Select: React.FC<SelectProps> = ({
   starshow = true,
   onOptionSelect,
   infoText,
+  showIcon = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | number | null>(
@@ -85,13 +87,15 @@ export const Select: React.FC<SelectProps> = ({
           >
             {selectedOption || title}
           </div>
-          <div className="flex-none">
-            <ArrowIcon
-              size={24}
-              direction={isOpen ? "up" : "down"}
-              color={isOpen ? "orange" : selectedOption ? "black" : "gray"}
-            />
-          </div>
+          {showIcon && (
+            <div className="flex-none">
+              <ArrowIcon
+                size={24}
+                direction={isOpen ? "up" : "down"}
+                color={isOpen ? "orange" : selectedOption ? "black" : "gray"}
+              />
+            </div>
+          )}
         </div>
         {isOpen && (
           <div className="absolute z-10 w-full mt-14 bg-white rounded-md shadow-lg">
@@ -119,6 +123,7 @@ Select.propTypes = {
   starshow: PropTypes.bool,
   onOptionSelect: PropTypes.func.isRequired,
   infoText: PropTypes.string.isRequired,
+  showIcon: PropTypes.bool,
 };
 
 export type { SelectProps };

@@ -22,6 +22,11 @@ const meta: Meta<SelectProps> = {
       description: "드롭다운 기본 타이틀",
       defaultValue: "Select an option",
     },
+    showLabel: {
+      control: "boolean",
+      description: "레이블 표시 여부",
+      defaultValue: true,
+    },
     starshow: {
       control: "boolean",
       description: "레이블 옆 별표 표시 여부",
@@ -31,6 +36,11 @@ const meta: Meta<SelectProps> = {
       control: "text",
       description: "정보 텍스트",
       defaultValue: "",
+    },
+    showIcon: {
+      control: "boolean",
+      description: "아이콘 표시 여부",
+      defaultValue: true,
     },
   },
 };
@@ -44,8 +54,10 @@ export const GenderSelect: Story = {
     className: "custom-class",
     options: ["Male", "Female"],
     title: "Select Gender",
+    showLabel: true,
     starshow: true,
     infoText: "Please select your gender",
+    showIcon: true,
   },
 };
 
@@ -54,7 +66,21 @@ export const YearSelect: Story = {
     className: "custom-class",
     options: Array.from({ length: 100 }, (_, i) => 2024 - i),
     title: "Select Year",
+    showLabel: true,
     starshow: true,
     infoText: "Please select your birth year",
+    showIcon: true,
+  },
+};
+
+export const NoIconSelect: Story = {
+  args: {
+    className: "custom-class",
+    options: ["Option 1", "Option 2", "Option 3"],
+    title: "Select an option",
+    showLabel: true,
+    starshow: true,
+    infoText: "Select an option from the dropdown",
+    showIcon: false,
   },
 };
