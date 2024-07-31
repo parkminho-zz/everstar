@@ -11,18 +11,21 @@ import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.repository.PersonalityRepository;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
+import com.everstarbackmain.domain.pet.requestDto.UpdatePetIntroductionDto;
 import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;
 import com.everstarbackmain.domain.sentimentAnalysis.repository.SentimentAnalysisRepository;
 import com.everstarbackmain.domain.user.model.User;
+import com.everstarbackmain.global.exception.CustomException;
+import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Slf4j
+@RequiredArgsConstructor
+@Slf4j(topic = "elk")
 public class PetService {
 
 	private final PetRepository petRepository;
@@ -32,7 +35,7 @@ public class PetService {
 
 	@Transactional
 	public void createPet(Authentication authentication, CreatePetRequestDto createPetRequestDto) {
-		User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 
 		Pet pet = Pet.createPet(user, createPetRequestDto);
 		petRepository.save(pet);
@@ -47,6 +50,15 @@ public class PetService {
 			Personality personality = Personality.createPersonality(pet, personalityValue);
 			personalityRepository.save(personality);
 		}
+	}
+
+	@Transactional
+	public void updatePetIntroduction(Long petId, UpdatePetIntroductionDto requestDto) {
+		String newIntroduction = requestDto.getIntroduction();
+		Pet pet = petRepository.findById(petId)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+		pet.updatePetIntroduction(newIntroduction);
+		petRepository.save(pet);
 	}
 
 	private void createMemorialBook(Pet pet) {

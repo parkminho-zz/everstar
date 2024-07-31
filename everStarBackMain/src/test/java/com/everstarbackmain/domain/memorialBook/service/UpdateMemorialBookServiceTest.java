@@ -60,9 +60,9 @@ class UpdateMemorialBookServiceTest {
 	public void setup() {
 		user = User.signUpUser(new JoinRequestDto("email", "password", "name", "010-1111-1111",
 			LocalDate.now(), Gender.MALE, LocalTime.now(), Role.ROLE_USER));
-		pet = Pet.createPet(user, new CreatePetRequestDto("petName",10,
-			LocalDate.of(1990, 1, 1),"species", Gender.MALE,
-			"relationship", "profileImageUrl", "introduction", List.of("개구쟁이", "귀염둥이")));
+		pet = Pet.createPet(user, new CreatePetRequestDto("petName", 10,
+			LocalDate.of(1990, 1, 1), "species", Gender.MALE,
+			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
 		memorialBook = MemorialBook.createMemorialBook(pet);
 		memorialBook.changeActiveStatus();
 
@@ -123,7 +123,8 @@ class UpdateMemorialBookServiceTest {
 			authentication, 1L, 1L, requestDto));
 
 		// then
-		Assertions.assertThat(memorialBook.getPsychologicalTestResult()).isEqualTo(PsychologicalTestResultMessage.NORMAL.getMessage());
+		Assertions.assertThat(memorialBook.getPsychologicalTestResult())
+			.isEqualTo(PsychologicalTestResultMessage.NORMAL.getMessage());
 	}
 
 	@Test
@@ -165,7 +166,7 @@ class UpdateMemorialBookServiceTest {
 			LocalDate.now(), Gender.MALE, LocalTime.now(), Role.ROLE_USER));
 		Pet otherPet = Pet.createPet(otherUser, new CreatePetRequestDto("otherPetName", 10,
 			LocalDate.of(1990, 1, 1), "species", Gender.MALE,
-			"relationship", "profileImageUrl", "introduction", List.of("개구쟁이", "귀염둥이")));
+			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
 		MemorialBook otherMemorialBook = MemorialBook.createMemorialBook(otherPet);
 		MemorialBookTestResultRequestDto requestDto = new MemorialBookTestResultRequestDto(10);
 
