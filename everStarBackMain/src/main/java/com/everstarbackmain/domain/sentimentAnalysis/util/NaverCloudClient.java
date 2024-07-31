@@ -1,5 +1,6 @@
 package com.everstarbackmain.domain.sentimentAnalysis.util;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -12,9 +13,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Component
+@Slf4j
 public class NaverCloudClient {
 
 	private final ObjectMapper objectMapper;
@@ -34,7 +37,8 @@ public class NaverCloudClient {
 	}
 
 	public SentimentAnalysisResult analyseSentiment(String content) {
-		String requestBody = "{\"content\":\"" + content + "\"}";
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("content", content);
 
 		Mono<SentimentAnalysisResult> responseMono = webClient.post()
 			.uri(uriBuilder -> uriBuilder.path("/sentiment-analysis/v1/analyze")
@@ -42,7 +46,7 @@ public class NaverCloudClient {
 			.header("X-NCP-APIGW-API-KEY-ID", clientId)
 			.header("X-NCP-APIGW-API-KEY", clientSecret)
 			.contentType(MediaType.APPLICATION_JSON)
-			.bodyValue(requestBody)
+			.bodyValue(jsonObject.toString())
 			.retrieve()
 			.bodyToMono(String.class)
 			.map(this::getConfidenceFromResponse);
