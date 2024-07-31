@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.everstarbackmain.domain.memorialBook.util.MemorialBookScheduler;
+import com.everstarbackmain.domain.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;
@@ -35,6 +36,7 @@ public class QuestAnswerService {
 	private final SentimentAnalysisRepository sentimentAnalysisRepository;
 	private final MemorialBookScheduler memorialBookScheduler;
 	private final NaverCloudClient naverCloudClient;
+	private final OpenAiClient openAiClient;
 
 	@Transactional
 	public void createQuestAnswer(Authentication authentication, Long petId) {
@@ -59,6 +61,7 @@ public class QuestAnswerService {
 
 		if (petQuestIndex == 49) {
 			memorialBookScheduler.scheduleMemorialBookActivation(user, petId);
+			analysisTotalQuestAnswer(petId);
 		}
 	}
 
@@ -76,4 +79,10 @@ public class QuestAnswerService {
 		sentimentAnalysis.addWeekResult(sentimentAnalysisResult.calculateAnalysis(), petQuestIndex / 7);
 	}
 
+	private void analysisTotalQuestAnswer(Long petId) {
+		SentimentAnalysis sentimentAnalysis = sentimentAnalysisRepository.findByPetId(petId)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_SENTIMENT_ANALYSIS_EXCEPTION));
+
+		sentimentAnalysis.addTotalResult(openAiClient.analysisTotalSentiment(sentimentAnalysis));
+	}
 }
