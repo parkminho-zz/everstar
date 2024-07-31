@@ -9,7 +9,7 @@ export const ActionsData = {
 
 export default {
   component: Select,
-  title: 'Organics/Select',
+  title: 'Molecules/Select',
   tags: ['autodocs'],
   //👇 Our exports that end in "Data" are not stories.
   excludeStories: /.*Data$/,
