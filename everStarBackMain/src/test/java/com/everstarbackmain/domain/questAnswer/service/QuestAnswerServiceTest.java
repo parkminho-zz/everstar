@@ -115,7 +115,7 @@ class QuestAnswerServiceTest {
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findById(anyLong())).willReturn(Optional.of(pet));
-		given(questAnswerRepository.findContentByPetIdAndQuestIdRange(anyLong(), anyInt(), anyInt()))
+		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIds(anyLong(), anyInt(), anyInt()))
 			.willReturn(List.of("answer1", "answer2", "answer3", "answer4", "answer5", "answer6", "answer7"));
 		given(naverCloudClient.analyseSentiment(anyString()))
 			.willReturn(SentimentAnalysisResult.createSentimentAnalysisResult(0.1, 0.2, 0.7));
@@ -143,7 +143,7 @@ class QuestAnswerServiceTest {
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findById(anyLong())).willReturn(Optional.of(pet));
-		given(questAnswerRepository.findContentByPetIdAndQuestIdRange(anyLong(), anyInt(), anyInt()))
+		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIds(anyLong(), anyInt(), anyInt()))
 			.willReturn(List.of("answer1", "answer2", "answer3", "answer4", "answer5", "answer6", "answer7"));
 		given(naverCloudClient.analyseSentiment(anyString()))
 			.willThrow(new ExceptionResponse(CustomException.NAVER_SENTIMENT_API_EXCEPTION));
@@ -168,7 +168,7 @@ class QuestAnswerServiceTest {
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findById(anyLong())).willReturn(Optional.of(pet));
-		given(questAnswerRepository.findContentByPetIdAndQuestIdRange(anyLong(), anyInt(), anyInt()))
+		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIds(anyLong(), anyInt(), anyInt()))
 			.willReturn(List.of("answer1", "answer2", "answer3", "answer4", "answer5", "answer6", "answer7"));
 		given(naverCloudClient.analyseSentiment(anyString()))
 			.willReturn(SentimentAnalysisResult.createSentimentAnalysisResult(0.1, 0.2, 0.7));
