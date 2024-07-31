@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 /** Components */
+import { PlayButton } from "components/atoms/buttons/PlayButton";
 import MusicProgressbar from "./MusicProgressbar";
 
 interface MusicControlButtonProps {
@@ -53,6 +54,12 @@ const MusicControlButton: React.FC<MusicControlButtonProps> = ({
     };
   }, [isPlaying, duration]);
 
+  const getPlayButtonProps = () => {
+    if (isPlaying) return { direction: "stop", size: 16 };
+    if (currentTime >= duration) return { direction: "play", size: 16 };
+    return { direction: "play", size: 16 };
+  };
+
   return (
     <ButtonContainer>
       <MusicProgressbar
@@ -61,13 +68,12 @@ const MusicControlButton: React.FC<MusicControlButtonProps> = ({
         onChange={(value) => setCurrentTime(value * duration)}
         initialValue={currentTime / duration}
       />
-      <Button onClick={handlePlayPauseRestart}>
-        {isPlaying
-          ? "멈추기"
-          : currentTime >= duration
-            ? "재생하기"
-            : "재생하기"}
-      </Button>
+      <PlayButton
+        {...getPlayButtonProps()}
+        size={16}
+        onClick={handlePlayPauseRestart}
+        direction="play"
+      />
     </ButtonContainer>
   );
 };
@@ -76,24 +82,6 @@ const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-`;
-
-const Button = styled.button`
-  padding: 10px 20px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-  border-radius: 4px;
-
-  &:disabled {
-    background-color: #6c757d;
-    cursor: not-allowed;
-  }
-
-  &:hover {
-    background-color: #0056b3;
-  }
 `;
 
 export default MusicControlButton;
