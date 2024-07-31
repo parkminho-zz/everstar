@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "@fontsource/noto-sans-kr": "^5.0.19",
-    "@reduxjs/toolkit": "^2.2.6",
     "@react-pdf/renderer": "^3.4.4",
+    "@reduxjs/toolkit": "^2.2.6",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -14,6 +14,7 @@
     "@types/node": "^16.18.101",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "framer-motion": "^11.3.19",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "react": "^18.3.1",
@@ -24,8 +25,10 @@
     "react-responsive": "^10.0.0",
     "react-router-dom": "^6.24.1",
     "react-scripts": "5.0.1",
+    "react-use-measure": "^2.1.1",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
+    "styled-components": "^6.1.12",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
