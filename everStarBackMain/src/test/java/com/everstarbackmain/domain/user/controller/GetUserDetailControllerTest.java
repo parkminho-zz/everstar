@@ -21,22 +21,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackmain.domain.user.responseDto.UserDetailResponseDto;
-import com.everstarbackmain.domain.user.userService.UserService;
+import com.everstarbackmain.domain.user.service.UserService;
 import com.everstarbackmain.global.auth.WithMockAuthUser;
 import com.everstarbackmain.global.config.SecurityConfig;
 import com.everstarbackmain.global.util.HttpResponseUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(
 	controllers = UserController.class,

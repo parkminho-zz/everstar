@@ -5,12 +5,11 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.everstarbackmain.domain.user.responseDto.UserDetailResponseDto;
-import com.everstarbackmain.domain.user.userService.UserService;
+import com.everstarbackmain.domain.user.service.UserService;
 import com.everstarbackmain.global.util.HttpResponseUtil;
 
 import lombok.RequiredArgsConstructor;

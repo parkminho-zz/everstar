@@ -1,4 +1,4 @@
-package com.everstarbackmain.domain.user.userService;
+package com.everstarbackmain.domain.user.service;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
