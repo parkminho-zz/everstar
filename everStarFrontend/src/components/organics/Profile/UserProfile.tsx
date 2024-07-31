@@ -1,20 +1,53 @@
-import React from 'react';
-import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
-import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
+import React, { useState } from "react";
+import { ModalHeader } from "components/molecules/ModalHeader/ModalHeader";
+import { PrimaryButton } from "components/atoms/buttons/PrimaryButton";
+import { Tab } from "components/molecules/Tab/Tab";
+import { InputField } from "components/organics/input/InputField";
+import { Select } from "components/molecules/input/Select";
+import { Avatar } from "components/atoms/symbols/Avatar/Avatar";
+import { Lable } from "components/atoms/texts/Lable";
+import { Tag } from "components/atoms/buttons/Tag";
 
-export interface InputContainerProps {
+export interface PetInfo {
+  name: string;
+  birthdate: string;
+  gender: string;
+  breed: string;
+  color: string;
+  personality: string[];
+}
+
+export interface UserProfileProps {
   headerText: string;
-
-  textboxLabel: string;
   largeButtonText: string;
   smallButtonText: string;
   showPrimaryButton?: boolean;
+  userInfo: {
+    name: string;
+    birthdate: string;
+    gender: string;
+    email: string;
+    phone: string;
+  };
+  petOptions: string[];
+  petInfo: { [key: string]: PetInfo };
 }
 
-export const InputContainer: React.FC<InputContainerProps> = ({ headerText, smallButtonText }) => {
+export const UserProfile: React.FC<UserProfileProps> = ({
+  headerText,
+  smallButtonText,
+  userInfo,
+  petOptions,
+  petInfo,
+}) => {
+  const [activeTab, setActiveTab] = useState<"one" | "two">("one");
+  const [selectedPet, setSelectedPet] = useState<string>("");
+
   const handleButtonClick = () => {
-    console.log('Primary Button Clicked');
+    console.log("Primary Button Clicked");
   };
+
+  const pet = selectedPet ? petInfo[selectedPet] : null;
 
   return (
     <div className="flex justify-center p-6 bg-gray-100">
@@ -22,21 +55,181 @@ export const InputContainer: React.FC<InputContainerProps> = ({ headerText, smal
         {/* Modal Header */}
         <ModalHeader text={headerText} showLeftIcon={true} />
 
-        {/* Content */}
-        <div className="flex flex-col items-center w-full gap-8">
-          {/* Small Primary Button */}
-          <div className="flex justify-end w-full">
-            <PrimaryButton
-              theme="white"
-              size="small"
-              onClick={handleButtonClick}
-              disabled={false}
-              icon={null}
-            >
-              {smallButtonText}
-            </PrimaryButton>
-          </div>
-        </div>
+        {/* Tabs */}
+        <Tab
+          row="two"
+          activeTab={activeTab}
+          className="mb-4"
+          onTabClick={(tab) => setActiveTab(tab as "one" | "two")}
+        />
+
+        {/* Content based on active tab */}
+        {activeTab === "one" ? (
+          <>
+            <InputField
+              label="이름"
+              showLabel={true}
+              showValidationText={false}
+              starshow={false}
+              state="disable"
+              text={userInfo.name}
+              showCheckIcon={false}
+              className=""
+            />
+            <InputField
+              label="생년월일"
+              showLabel={true}
+              showValidationText={false}
+              starshow={false}
+              state="disable"
+              text={userInfo.birthdate}
+              showCheckIcon={false}
+              className=""
+            />
+            <InputField
+              label="성별"
+              showLabel={true}
+              showValidationText={false}
+              starshow={false}
+              state="disable"
+              text={userInfo.gender}
+              showCheckIcon={false}
+              className=""
+            />
+            <InputField
+              label="이메일"
+              showLabel={true}
+              showValidationText={false}
+              starshow={false}
+              state="disable"
+              text={userInfo.email}
+              showCheckIcon={false}
+              className=""
+            />
+            <Select
+              className="custom-class"
+              options={["06:00~22:00"]}
+              title="10:00"
+              starshow={true}
+              onOptionSelect={(option) =>
+                console.log("Selected option:", option)
+              }
+              infoText="06:00~22:00 가능"
+            />
+            <InputField
+              label="전화번호"
+              showLabel={true}
+              showValidationText={false}
+              starshow={false}
+              state="default"
+              text={userInfo.phone}
+              showCheckIcon={true}
+              className=""
+            />
+            {/* Small Primary Button */}
+            <div className="flex justify-end w-full">
+              <PrimaryButton
+                theme="white"
+                size="small"
+                onClick={handleButtonClick}
+                disabled={false}
+                icon={null}
+                hug={true}
+              >
+                {smallButtonText}
+              </PrimaryButton>
+            </div>
+          </>
+        ) : (
+          <>
+            <Select
+              className="custom-class"
+              options={petOptions}
+              title="반려동물을 선택해주세요"
+              starshow={false}
+              onOptionSelect={(option) => setSelectedPet(option as string)}
+              infoText="반려동물을 선택해주세요"
+              showLabel={false}
+            />
+            {pet && (
+              <>
+                <Avatar size="medium" name={pet.name} />
+                <PrimaryButton
+                  theme="white"
+                  size="medium"
+                  onClick={() => console.log("Change profile picture")}
+                  disabled={false}
+                  icon={null}
+                >
+                  프로필 사진 변경
+                </PrimaryButton>
+                <InputField
+                  label="이름"
+                  showLabel={true}
+                  showValidationText={false}
+                  starshow={false}
+                  state="disable"
+                  text={pet.name}
+                  showCheckIcon={false}
+                  className=""
+                />
+                <InputField
+                  label="생년월일"
+                  showLabel={true}
+                  showValidationText={false}
+                  starshow={false}
+                  state="disable"
+                  text={pet.birthdate}
+                  showCheckIcon={false}
+                  className=""
+                />
+                <InputField
+                  label="성별"
+                  showLabel={true}
+                  showValidationText={false}
+                  starshow={false}
+                  state="disable"
+                  text={pet.gender}
+                  showCheckIcon={false}
+                  className=""
+                />
+                <InputField
+                  label="종류"
+                  showLabel={true}
+                  showValidationText={false}
+                  starshow={false}
+                  state="disable"
+                  text={pet.breed}
+                  showCheckIcon={false}
+                  className=""
+                />
+                <InputField
+                  label="색상"
+                  showLabel={true}
+                  showValidationText={false}
+                  starshow={false}
+                  state="disable"
+                  text={pet.color}
+                  showCheckIcon={false}
+                  className=""
+                />
+                <Lable
+                  prop="성격"
+                  show={false}
+                  font="default"
+                  className="self-start"
+                />
+                <div className="flex justify-between w-full">
+                  {pet.personality.map((trait, index) => (
+                    <Tag key={index} className="greyscalewhite">
+                      #{trait}
+                    </Tag>
+                  ))}
+                </div>
+              </>
+            )}
+          </>
+        )}
       </div>
     </div>
   );
