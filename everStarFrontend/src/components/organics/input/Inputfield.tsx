@@ -3,8 +3,8 @@ import React from "react";
 import { ButtonText } from "../../atoms/icons/inputfiled/ButtonText";
 import { InformationText } from "../../atoms/icons/inputfiled/InformationText";
 import { Lable } from "../../atoms/icons/inputfiled/Lable";
-import './Inputfield.css'
-interface InputFieldProps  {
+import "./Inputfield.css";
+interface InputFieldProps {
   showLabel: boolean;
   showValidationText: boolean;
   state: "default" | "focus" | "disable" | "done" | "error";
@@ -17,26 +17,8 @@ export const InputField = ({
   showLabel = true,
   showValidationText = true,
   state,
-  className = "",
-  buttonTextIcon = (
-    <svg
-      className={`${className}`}
-      fill="none"
-      height="16"
-      viewBox="0 0 16 16"
-      width="16"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        clipRule="evenodd"
-        d="M13.197 4.13633C13.4899 4.42922 13.4899 4.90409 13.197 5.19699L7.23743 11.1565C6.55401 11.84 5.44597 11.84 4.76255 11.1565L2.13633 8.53032C1.84343 8.23743 1.84343 7.76255 2.13633 7.46966C2.42922 7.17677 2.90409 7.17677 3.19699 7.46966L5.82321 10.0959C5.92085 10.1935 6.07914 10.1935 6.17677 10.0959L12.1363 4.13633C12.4292 3.84343 12.9041 3.84343 13.197 4.13633Z"
-        fill="grey"
-        fillRule="evenodd"
-      />
-    </svg>
-  ),
-  text = "비밀번호를 입력해 주세요", // 기본값 설정
-}: InputFieldProps ): JSX.Element => {
+  className = "", // 기본값 설정
+}: InputFieldProps): JSX.Element => {
   // 상태에 따른 텍스트 처리
   let validationText = "";
   if (state === "error") {
@@ -46,8 +28,12 @@ export const InputField = ({
   }
 
   return (
-    <div className={`w-80 flex flex-col items-start gap-2 relative ${className}`}>
-      {showLabel && <Lable className="!flex-[0_0_auto]" prop="레이블" show font="kyobo" />}
+    <div
+      className={`w-80 flex flex-col items-start gap-2 relative ${className}`}
+    >
+      {showLabel && (
+        <Lable className="!flex-[0_0_auto]" prop="레이블" show font="kyobo" />
+      )}
       <div
         className={`flex items-center px-4 py-2 relative w-full flex-col rounded-xl gap-2 self-stretch h-14 overflow-hidden justify-center
         ${state === "focus" ? "border-[#ff9078]" : state === "error" ? "border-[#fd2929]" : ""}
@@ -71,10 +57,10 @@ export const InputField = ({
                 state === "focus"
                   ? "l"
                   : state === "done"
-                  ? "완료 텍스트"
-                  : state === "error"
-                  ? "에러 텍스트"
-                  : "고스트 텍스트"
+                    ? "완료 텍스트"
+                    : state === "error"
+                      ? "에러 텍스트"
+                      : "고스트 텍스트"
               }
               size="large"
             />
@@ -106,4 +92,4 @@ InputField.propTypes = {
   text: PropTypes.string.isRequired, // text는 반드시 string 타입이어야 합니다.
 };
 
-export type { InputFieldProps }
+export type { InputFieldProps };
