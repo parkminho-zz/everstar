@@ -4,7 +4,7 @@ import { LetterCard } from 'components/molecules/cards/LetterCard/LetterCard';
 import { Textbox } from 'components/molecules/input/Textbox';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 
-interface InputContainerProps {
+export interface InputContainerProps {
   headerText: string;
   letterCardType?: 'default' | 'send' | 'receive';
   letterCardColor?: 'white' | 'bgorange' | 'orange' | 'gray';
@@ -12,6 +12,7 @@ interface InputContainerProps {
   letterCardMessage?: string;
   letterCardClassName?: string;
   centered?: boolean;
+  customText?: string; // 커스텀 텍스트 속성 추가
 
   textboxLabel: string;
   largeButtonText: string;
@@ -27,6 +28,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
   letterCardMessage,
   letterCardClassName = 'font-body !kor-subtitle-subtitle3', // 여기서 폰트 변경
   centered = true,
+  customText = '', // 기본값 설정
   textboxLabel,
   largeButtonText,
   smallButtonText,
@@ -57,9 +59,10 @@ export const InputContainer: React.FC<InputContainerProps> = ({
               />
             ) : (
               <div className="w-full">
-                <div className="left-0 [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal]">
-                  사랑하는 반려동물에게 <br /> 편지를 보내보세요
-                </div>
+                <div
+                  className="left-0 [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal]"
+                  dangerouslySetInnerHTML={{ __html: customText }}
+                />
               </div>
             )}
           </div>
