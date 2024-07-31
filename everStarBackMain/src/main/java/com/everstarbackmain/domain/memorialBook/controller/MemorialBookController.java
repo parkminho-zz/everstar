@@ -32,7 +32,8 @@ public class MemorialBookController {
 	private final HttpResponseUtil responseUtil;
 
 	@PatchMapping("/{memorialbook-id}/is-open")
-	public ResponseEntity<Map<String ,Object>> changeOpenStatus(@PathVariable("pet-id") Long petId, @PathVariable("memorialbook-id") Long memorialBookId) {
+	public ResponseEntity<Map<String, Object>> changeOpenStatus(@PathVariable("pet-id") Long petId,
+		@PathVariable("memorialbook-id") Long memorialBookId) {
 		memorialBookService.changeOpenStatus(memorialBookId);
 
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
@@ -68,7 +69,8 @@ public class MemorialBookController {
 	@GetMapping("/{memorialbook-id}")
 	public ResponseEntity<Map<String, Object>> getMemorialBookDetail(Authentication authentication,
 		@PathVariable("pet-id") Long petId, @PathVariable("memorialbook-id") Long memorialBookId) {
-		MemorialBookDetailResponseDto responseDto = memorialBookService.getMemorialBookDetail(authentication, petId, memorialBookId);
+		MemorialBookDetailResponseDto responseDto = memorialBookService.getMemorialBookDetail(authentication, petId,
+			memorialBookId);
 
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
 		log.info("main server - request : petId {}, memorialBookId {}", petId, memorialBookId);

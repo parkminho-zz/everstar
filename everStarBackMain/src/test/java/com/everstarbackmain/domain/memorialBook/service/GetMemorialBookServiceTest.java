@@ -204,7 +204,7 @@ public class GetMemorialBookServiceTest {
 		// when then
 		Assertions.assertThatThrownBy(() -> memorialBookService.getMemorialBookDetail(authentication, 1L, 1L))
 			.isInstanceOf(ExceptionResponse.class)
-			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_FOUND_SENTIMENT_ANALYSIS);
+			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_FOUND_SENTIMENT_ANALYSIS_EXCEPTION);
 	}
 
 	@Test

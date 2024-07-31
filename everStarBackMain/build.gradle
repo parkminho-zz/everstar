@@ -38,6 +38,8 @@ dependencies {
 
 	//springboot
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	testImplementation 'io.projectreactor:reactor-test'
 
 	//lombok
 	compileOnly 'org.projectlombok:lombok'
@@ -62,6 +64,10 @@ dependencies {
 	//kafka
 	implementation 'com.github.danielwegener:logback-kafka-appender:0.1.0'
 	implementation 'net.logstash.logback:logstash-logback-encoder:6.2'
+
+	// https://mvnrepository.com/artifact/org.json/json
+	implementation group: 'org.json', name: 'json', version: '20231013'
+
 }
 
 tasks.named('test') {

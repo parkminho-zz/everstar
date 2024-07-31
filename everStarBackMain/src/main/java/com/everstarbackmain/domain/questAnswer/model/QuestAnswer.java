@@ -48,13 +48,13 @@ public class QuestAnswer extends BaseTimeEntity {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private QuestType type;
+	private QuestAnswerType type;
 
 	@Column(nullable = false)
 	private Boolean isDeleted;
 
 	@Builder
-	private QuestAnswer(Pet pet, Quest quest, String content, String imageUrl, QuestType type) {
+	private QuestAnswer(Pet pet, Quest quest, String content, String imageUrl, QuestAnswerType type) {
 		this.id = new QuestAnswerId(pet.getId(), quest.getId());
 		this.pet = pet;
 		this.quest = quest;
@@ -70,7 +70,7 @@ public class QuestAnswer extends BaseTimeEntity {
 			.quest(quest)
 			.content(requestDto.getContent())
 			.imageUrl(requestDto.getImageUrl())
-			.type(QuestType.valueOf(requestDto.getType()))
+			.type(QuestAnswerType.valueOf(requestDto.getType()))
 			.build();
 	}
 }

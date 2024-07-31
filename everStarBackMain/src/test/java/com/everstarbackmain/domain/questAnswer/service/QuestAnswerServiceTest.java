@@ -24,10 +24,16 @@ import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;
+import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;
+import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysisResult;
+import com.everstarbackmain.domain.sentimentAnalysis.repository.SentimentAnalysisRepository;
+import com.everstarbackmain.domain.sentimentAnalysis.util.NaverCloudClient;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
+import com.everstarbackmain.global.exception.CustomException;
+import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,6 +52,12 @@ class QuestAnswerServiceTest {
 	private QuestAnswerRepository questAnswerRepository;
 
 	@Mock
+	private SentimentAnalysisRepository sentimentAnalysisRepository;
+
+	@Mock
+	private NaverCloudClient naverCloudClient;
+
+	@Mock
 	private TaskScheduler taskScheduler;
 
 	@Mock
@@ -57,6 +69,8 @@ class QuestAnswerServiceTest {
 	private User user;
 	private Pet pet;
 	private MemorialBook memorialBook;
+	private SentimentAnalysis sentimentAnalysis;
+	private SentimentAnalysisResult sentimentAnalysisResult;
 
 	@BeforeEach
 	public void setup() {
@@ -66,6 +80,8 @@ class QuestAnswerServiceTest {
 			LocalDate.of(1990, 1, 1), "species", Gender.MALE,
 			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
 		memorialBook = MemorialBook.createMemorialBook(pet);
+		sentimentAnalysis = SentimentAnalysis.createSentimentAnalysis(pet);
+		sentimentAnalysisResult = SentimentAnalysisResult.createSentimentAnalysisResult(0.1, 0.3, 0.6);
 	}
 
 	@Test
@@ -78,11 +94,93 @@ class QuestAnswerServiceTest {
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findById(anyLong())).willReturn(Optional.of(pet));
+		given(sentimentAnalysisRepository.findByPetId(anyLong())).willReturn(Optional.of(sentimentAnalysis));
+		given(naverCloudClient.analyseSentiment(anyString())).willReturn(Optional.of(sentimentAnalysisResult).get());
 
 		// when
 		questAnswerService.createQuestAnswer(authentication, 1L);
 
 		// then
 		verify(memorialBookScheduler).scheduleMemorialBookActivation(user, 1L);
+	}
+
+	@Test
+	@DisplayName("퀘스트_답변_분석_메서드_호출_테스트")
+	public void 퀘스트_답변_분석_메서드_호출_테스트() {
+		// given
+		for (int i = 0 ; i < 6; i++) {
+			pet.plusQuestIndex();
+		}
+		SentimentAnalysis sentimentAnalysis = mock(SentimentAnalysis.class);
+		given(authentication.getPrincipal()).willReturn(principalDetails);
+		given(principalDetails.getUser()).willReturn(user);
+		given(petRepository.findById(anyLong())).willReturn(Optional.of(pet));
+		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIds(anyLong(), anyInt(), anyInt()))
+			.willReturn(List.of("answer1", "answer2", "answer3", "answer4", "answer5", "answer6", "answer7"));
+		given(naverCloudClient.analyseSentiment(anyString()))
+			.willReturn(SentimentAnalysisResult.createSentimentAnalysisResult(0.1, 0.2, 0.7));
+		given(sentimentAnalysisRepository.findByPetId(anyLong()))
+			.willReturn(Optional.of(sentimentAnalysis));
+
+		// when
+		questAnswerService.createQuestAnswer(authentication, 1L);
+
+		// then
+		verify(naverCloudClient, times(1)).analyseSentiment(anyString());
+		verify(sentimentAnalysisRepository, times(1)).findByPetId(anyLong());
+		verify(sentimentAnalysis, times(1)).addWeekResult(anyDouble(), eq(1));
+		assertNotNull(sentimentAnalysis.getWeek1Result());
+	}
+
+	@Test
+	@DisplayName("네이버_감정분석_API_예외_처리_테스트")
+	public void 네이버_감정분석_API_예외_처리_테스트() {
+		// given
+		for (int i = 0; i < 6; i++) {
+			pet.plusQuestIndex();
+		}
+
+		given(authentication.getPrincipal()).willReturn(principalDetails);
+		given(principalDetails.getUser()).willReturn(user);
+		given(petRepository.findById(anyLong())).willReturn(Optional.of(pet));
+		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIds(anyLong(), anyInt(), anyInt()))
+			.willReturn(List.of("answer1", "answer2", "answer3", "answer4", "answer5", "answer6", "answer7"));
+		given(naverCloudClient.analyseSentiment(anyString()))
+			.willThrow(new ExceptionResponse(CustomException.NAVER_SENTIMENT_API_EXCEPTION));
+
+		// when
+		ExceptionResponse exceptionResponse = assertThrows(ExceptionResponse.class, () -> {
+			questAnswerService.createQuestAnswer(authentication, 1L);
+		});
+
+		// then
+		assertEquals(CustomException.NAVER_SENTIMENT_API_EXCEPTION, exceptionResponse.getCustomException());
+	}
+
+	@Test
+	@DisplayName("감정분석_NOT_FOUND_예외_처리_테스트")
+	public void 감정분석_NOT_FOUND_예외_처리_테스트() {
+		// given
+		for (int i = 0; i < 6; i++) {
+			pet.plusQuestIndex();
+		}
+
+		given(authentication.getPrincipal()).willReturn(principalDetails);
+		given(principalDetails.getUser()).willReturn(user);
+		given(petRepository.findById(anyLong())).willReturn(Optional.of(pet));
+		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIds(anyLong(), anyInt(), anyInt()))
+			.willReturn(List.of("answer1", "answer2", "answer3", "answer4", "answer5", "answer6", "answer7"));
+		given(naverCloudClient.analyseSentiment(anyString()))
+			.willReturn(SentimentAnalysisResult.createSentimentAnalysisResult(0.1, 0.2, 0.7));
+		given(sentimentAnalysisRepository.findByPetId(anyLong()))
+			.willReturn(Optional.empty()); // SentimentAnalysis가 존재하지 않는 경우
+
+		// when
+		ExceptionResponse exceptionResponse = assertThrows(ExceptionResponse.class, () -> {
+			questAnswerService.createQuestAnswer(authentication, 1L);
+		});
+
+		// then
+		assertEquals(CustomException.NOT_FOUND_SENTIMENT_ANALYSIS_EXCEPTION, exceptionResponse.getCustomException());
 	}
 }

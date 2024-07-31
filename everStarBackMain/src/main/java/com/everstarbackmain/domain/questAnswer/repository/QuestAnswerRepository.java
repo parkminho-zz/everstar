@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 
-public interface QuestAnswerRepository extends JpaRepository<QuestAnswer, Long> {
+public interface QuestAnswerRepository extends JpaRepository<QuestAnswer, Long>, QuestAnswerCustomRepository {
 
 	List<QuestAnswer> findByPetId(Long petId);
+
 }

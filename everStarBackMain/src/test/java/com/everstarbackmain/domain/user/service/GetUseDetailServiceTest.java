@@ -20,7 +20,6 @@ import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.user.repository.UserRepository;
 import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackmain.domain.user.responseDto.UserDetailResponseDto;
-import com.everstarbackmain.domain.user.userService.UserService;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
 
 @ExtendWith(MockitoExtension.class)
