@@ -1,39 +1,47 @@
-import { Meta, StoryObj } from '@storybook/react';
-import { InputField } from './InputField';
+import { Meta, StoryObj } from "@storybook/react";
+import { InputField } from "./InputField";
 
 const meta: Meta<typeof InputField> = {
-  title: 'Organics/InputField',
+  title: "Organics/InputField",
   component: InputField,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
+    label: {
+      control: "text",
+      description: "레이블 텍스트",
+      defaultValue: "레이블",
+    },
     showLabel: {
-      control: 'boolean',
-      description: '레이블 표시 여부',
+      control: "boolean",
+      description: "레이블 표시 여부",
       defaultValue: true,
     },
     showValidationText: {
-      control: 'boolean',
-      description: '유효성 검사 텍스트 표시 여부',
+      control: "boolean",
+      description: "유효성 검사 텍스트 표시 여부",
       defaultValue: true,
     },
     state: {
-      control: { type: 'select', options: ['default', 'focus', 'disable', 'done', 'error'] },
-      description: 'InputField 상태',
-      defaultValue: 'default',
+      control: {
+        type: "select",
+        options: ["default", "focus", "disable", "done", "error"],
+      },
+      description: "InputField 상태",
+      defaultValue: "default",
     },
     className: {
-      control: 'text',
-      description: '추가 클래스 이름',
-      defaultValue: '',
+      control: "text",
+      description: "추가 클래스 이름",
+      defaultValue: "",
     },
     text: {
-      control: 'text',
-      description: 'InputField의 텍스트',
-      defaultValue: '비밀번호를 입력해 주세요',
+      control: "text",
+      description: "InputField의 텍스트",
+      defaultValue: "비밀번호를 입력해 주세요",
     },
     showCheckIcon: {
-      control: 'boolean',
-      description: '체크 아이콘 표시 여부',
+      control: "boolean",
+      description: "체크 아이콘 표시 여부",
       defaultValue: false,
     },
   },
@@ -45,55 +53,60 @@ type Story = StoryObj<typeof InputField>;
 
 export const Default: Story = {
   args: {
+    label: "레이블",
     showLabel: true,
     showValidationText: true,
-    state: 'default',
-    className: '',
-    text: '비밀번호를 입력해 주세요',
+    state: "default",
+    className: "",
+    text: "비밀번호를 입력해 주세요",
     showCheckIcon: false,
   },
 };
 
 export const Focus: Story = {
   args: {
+    label: "레이블",
     showLabel: true,
     showValidationText: true,
-    state: 'focus',
-    className: '',
-    text: '비밀번호를 입력해 주세요',
+    state: "focus",
+    className: "",
+    text: "비밀번호를 입력해 주세요",
     showCheckIcon: false,
   },
 };
 
 export const Disabled: Story = {
   args: {
+    label: "레이블",
     showLabel: true,
     showValidationText: true,
-    state: 'disable',
-    className: '',
-    text: '비밀번호를 입력해 주세요',
+    state: "disable",
+    className: "",
+    text: "비밀번호를 입력해 주세요",
     showCheckIcon: false,
   },
 };
 
 export const Done: Story = {
   args: {
+    label: "레이블",
     showLabel: true,
     showValidationText: true,
-    state: 'done',
-    className: '',
-    text: '비밀번호를 입력해 주세요',
+    state: "done",
+    className: "",
+    text: "비밀번호를 입력해 주세요",
     showCheckIcon: true,
   },
 };
 
 export const Error: Story = {
   args: {
+    label: "레이블",
     showLabel: true,
     showValidationText: true,
-    state: 'error',
-    className: '',
-    text: '비밀번호를 입력해 주세요',
+    state: "error",
+    className: "",
+    text: "비밀번호를 입력해 주세요",
     showCheckIcon: false,
   },
 };

@@ -5,6 +5,7 @@ import { Lable } from "components/atoms/texts/Lable";
 import { CheckIcon } from "components/atoms/icons/Check/CheckIcon";
 
 interface InputFieldProps {
+  label: string;
   showLabel: boolean;
   showValidationText: boolean;
   starshow: boolean;
@@ -15,6 +16,7 @@ interface InputFieldProps {
 }
 
 export const InputField: React.FC<InputFieldProps> = ({
+  label,
   showLabel = true,
   showValidationText = true,
   starshow = true,
@@ -51,8 +53,17 @@ export const InputField: React.FC<InputFieldProps> = ({
   }
 
   return (
-    <div className={`w-80 flex flex-col items-start gap-2 relative ${className}`}>
-      {showLabel && <Lable className="!flex-[0_0_auto]" prop="레이블" show={starshow} font="kyobo" />}
+    <div
+      className={`w-80 flex flex-col items-start gap-2 relative ${className}`}
+    >
+      {showLabel && (
+        <Lable
+          className="!flex-[0_0_auto]"
+          prop={label}
+          show={starshow}
+          font="default"
+        />
+      )}
       <div
         className={`flex items-center px-4 py-2 relative w-full flex-col rounded-xl gap-2 self-stretch h-14 overflow-hidden justify-center
         ${inputState === "focus" ? "border-[#ff9078]" : inputState === "error" ? "border-[#fd2929]" : ""}
@@ -71,7 +82,12 @@ export const InputField: React.FC<InputFieldProps> = ({
             disabled={inputState === "disable"}
             placeholder={text}
           />
-          {showCheckIcon && <CheckIcon size={24} color={inputState === "done" ? "orange" : "gray"} />}
+          {showCheckIcon && (
+            <CheckIcon
+              size={24}
+              color={inputState === "done" ? "orange" : "gray"}
+            />
+          )}
         </div>
       </div>
       {showValidationText && (
@@ -87,10 +103,14 @@ export const InputField: React.FC<InputFieldProps> = ({
 };
 
 InputField.propTypes = {
+  label: PropTypes.string.isRequired,
   showLabel: PropTypes.bool.isRequired,
   showValidationText: PropTypes.bool.isRequired,
   starshow: PropTypes.bool.isRequired,
-  state: PropTypes.oneOf(["default", "focus", "disable", "done", "error"]).isRequired as PropTypes.Validator<"default" | "focus" | "disable" | "done" | "error">,
+  state: PropTypes.oneOf(["default", "focus", "disable", "done", "error"])
+    .isRequired as PropTypes.Validator<
+    "default" | "focus" | "disable" | "done" | "error"
+  >,
   text: PropTypes.string.isRequired,
   className: PropTypes.string,
   showCheckIcon: PropTypes.bool.isRequired,
