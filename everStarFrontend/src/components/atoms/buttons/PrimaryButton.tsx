@@ -11,6 +11,7 @@ interface IPrimaryButtonProps {
   children: string;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   icon?: React.ReactNode | null;
+  hug?: boolean;
 }
 
 const focus = 'bg-mainprimary text-greyscalewhite hover:bg-bgorange';
@@ -42,6 +43,7 @@ export function PrimaryButton({
   onClick,
   disabled,
   icon = <ArrowIcon color="black" direction="right" size={24} />, // 기본 아이콘 설정
+  hug = false, // 기본값을 false로 설정
 }: IPrimaryButtonProps) {
   const getTextStyle = () => {
     switch (size) {
@@ -56,22 +58,27 @@ export function PrimaryButton({
     }
   };
 
+  const getButtonClasses = () => {
+    let classes = `
+      flex
+      items-center
+      justify-between
+      rounded-lg
+      px-4
+      ${disabledStyle}
+      ${shadowStyle}
+      ${color[theme]}
+    `;
+    if (hug) {
+      classes += ` w-auto ${sizeStyle[size].split(' ')[1]}`; // 높이는 고정, 너비는 auto
+    } else {
+      classes += ` ${sizeStyle[size]}`;
+    }
+    return classes;
+  };
+
   return (
-    <button
-      className={`
-        flex
-        items-center
-        justify-between
-        rounded-lg
-        px-4
-        ${disabledStyle}
-        ${shadowStyle}
-        ${color[theme]}
-        ${sizeStyle[size]}
-      `}
-      disabled={disabled}
-      onClick={onClick}
-    >
+    <button className={getButtonClasses()} disabled={disabled} onClick={onClick}>
       <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>{children}</span>
       {icon && <span className="ml-auto">{icon}</span>}
     </button>
