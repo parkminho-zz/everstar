@@ -5,9 +5,9 @@ type Color = 'black' | 'gray' | 'white';
 
 interface ILetterText {
   size: LabelSize;
-  color: Color;
+  color: string; // Color 타입을 string으로 변경
   children?: string;
-  style?: React.CSSProperties; // 스타일을 받을 수 있도록 추가
+  className?: string; // className을 받을 수 있도록 추가
 }
 
 const fontStyle = {
@@ -22,12 +22,11 @@ const colorStyle = {
   white: 'text-greyscalewhite',
 };
 
-export const LetterText = ({ size, color, children, style }: ILetterText) => {
+export const LetterText = ({ size, color, children, className }: ILetterText) => {
   return (
     <div className="max-w-full">
       <div
-        className={`top-0 left-0 font-Kyobo ${fontStyle[size]} ${colorStyle[color]}`}
-        style={style}
+        className={`top-0 left-0 font-Kyobo ${fontStyle[size]} ${colorStyle[color as Color] || ''} ${className || ''}`}
       >
         {children}
       </div>

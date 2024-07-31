@@ -4,9 +4,6 @@ import { LetterCard } from './LetterCard';
 const meta: Meta<typeof LetterCard> = {
   title: 'Molecules/Card/LetterCard',
   component: LetterCard,
-  parameters: {
-    layout: 'centered',
-  },
   tags: ['autodocs'],
   argTypes: {
     type: {
@@ -53,10 +50,17 @@ const meta: Meta<typeof LetterCard> = {
       description: '날짜 및 시간',
       defaultValue: '2024-07-24 10:00:00',
     },
-    fontFamily: {
-      control: 'text',
-      description: '폰트 패밀리',
+    className: {
+      control: {
+        type: 'text',
+      },
+      description: '클래스 네임 (폰트 패밀리)',
       defaultValue: '',
+    },
+    centered: {
+      control: 'boolean',
+      description: '중앙 정렬 여부',
+      defaultValue: false,
     },
   },
 };
@@ -74,7 +78,8 @@ export const Default: Story = {
     sendMessage: '안녕하세요',
     message: '안녕하세요',
     dateTime: '2024-07-24 10:00:00',
-    fontFamily: '',
+    className: '', // 기본 폰트 설정
+    centered: false,
   },
 };
 
@@ -86,7 +91,8 @@ export const SentLetter: Story = {
     name: '이순신',
     message: '안녕하세요, 이순신입니다.',
     dateTime: '2024-07-24 10:00:00',
-    fontFamily: '',
+    className: '', // 기본 폰트 설정
+    centered: false,
   },
 };
 
@@ -98,6 +104,7 @@ export const ReceivedLetter: Story = {
     name: '이순신',
     message: '안녕하세요, 답장 보냅니다.',
     dateTime: '2024-07-24 10:00:00',
-    fontFamily: '',
+    className: '', // 기본 폰트 설정
+    centered: false,
   },
 };

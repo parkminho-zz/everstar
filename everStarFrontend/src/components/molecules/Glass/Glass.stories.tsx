@@ -3,6 +3,7 @@ import { Glass } from './Glass';
 
 const meta: Meta<typeof Glass> = {
   title: 'Molecules/Glass',
+  tags: ['autodocs'],
   component: Glass,
   argTypes: {
     variant: {
