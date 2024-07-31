@@ -8,9 +8,15 @@ interface ArrowIconProps {
   size: 16 | 24;
   direction: 'left' | 'right' | 'up' | 'down';
   color?: 'black' | 'gray' | 'white' | 'orange';
+  hover?: boolean;
 }
 
-export const ArrowIcon: React.FC<ArrowIconProps> = ({ size, direction, color = 'black' }) => {
+export const ArrowIcon: React.FC<ArrowIconProps> = ({
+  size,
+  direction,
+  color = 'black',
+  hover = false,
+}) => {
   let IconComponent;
   switch (direction) {
     case 'left':
@@ -36,8 +42,9 @@ export const ArrowIcon: React.FC<ArrowIconProps> = ({ size, direction, color = '
     white: 'text-greyscalewhite',
     orange: 'text-mainprimary',
   };
+  const hoverClass = hover ? 'hover:text-mainprimary' : '';
 
-  return <IconComponent className={`${sizeClasses} ${colorClasses[color]}`} />;
+  return <IconComponent className={`${sizeClasses} ${colorClasses[color]} ${hoverClass}`} />;
 };
 
 export type { ArrowIconProps };

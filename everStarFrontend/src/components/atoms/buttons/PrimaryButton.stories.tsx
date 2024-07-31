@@ -1,90 +1,76 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { fn } from '@storybook/test';
-
 import { PrimaryButton } from './PrimaryButton';
-const meta = {
+import { ArrowIcon } from 'components/atoms/icons/Arrow/ArrowIcon';
+import { LogoIcons } from 'components/atoms/symbols/Logo/LogoIcons';
+
+const iconOptions = {
+  None: null,
+  ArrowIcon: <ArrowIcon color="black" direction="right" size={24} />,
+  SmallStarImg: <LogoIcons variant="small-star-img" />,
+  SmallEarthImg: <LogoIcons variant="small-earth-img" />,
+};
+
+const meta: Meta<typeof PrimaryButton> = {
   title: 'Atoms/Buttons/PrimaryButton',
   component: PrimaryButton,
-  parameters: {
-    layout: 'centered',
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ width: '360px' }}>
-        <Story />
-      </div>
-    ),
-  ],
   tags: ['autodocs'],
   argTypes: {
     theme: {
-      control: {
-        type: 'select',
-        options: ['focus', 'hover', 'white'],
-      },
-      description: '버튼 테마',
-      defaultValue: 'white',
+      control: { type: 'radio', options: ['focus', 'hover', 'white'] },
+      description: '버튼의 테마를 설정합니다.',
     },
     size: {
-      control: {
-        type: 'select',
-        options: ['large', 'midium', 'small'],
-      },
-      description: '버튼 크기',
-      defaultValue: 'large',
-    },
-    children: {
-      control: 'text',
-      description: '버튼 text',
-      defaultValue: '텍스트 버튼',
+      control: { type: 'radio', options: ['large', 'medium', 'small'] },
+      description: '버튼의 크기를 설정합니다.',
     },
     disabled: {
       control: 'boolean',
-      description: '버튼 비활성화 여부',
-      defaultValue: true,
+      description: '버튼의 비활성화 상태를 설정합니다.',
     },
-    onClick: { action: 'clicked', description: '버튼 클릭 이벤트' },
+    children: {
+      control: 'text',
+      description: '버튼의 텍스트를 설정합니다.',
+    },
+    icon: {
+      control: 'select',
+      options: Object.keys(iconOptions),
+      mapping: iconOptions,
+      description: '버튼의 아이콘을 설정합니다.',
+    },
+    onClick: { action: 'clicked' },
   },
-  args: {
-    onClick: fn(),
-  },
-} satisfies Meta<typeof PrimaryButton>;
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 
-export const Focus: Story = {
+type Story = StoryObj<typeof PrimaryButton>;
+
+export const Default: Story = {
   args: {
-    size: 'large',
-    children: 'Button',
     theme: 'focus',
+    size: 'large',
     disabled: false,
+    children: '클릭하세요',
+    icon: 'ArrowIcon',
   },
 };
 
-export const Hover: Story = {
+export const WithSmallStarImg: Story = {
   args: {
+    theme: 'focus',
     size: 'large',
-    children: 'Button',
-    theme: 'hover',
     disabled: false,
+    children: '클릭하세요',
+    icon: 'SmallStarImg',
   },
 };
 
-export const White: Story = {
+export const WithSmallEarthImg: Story = {
   args: {
+    theme: 'focus',
     size: 'large',
-    children: 'Button',
-    theme: 'white',
     disabled: false,
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    size: 'large',
-    children: 'Button',
-    theme: 'white',
-    disabled: true,
+    children: '클릭하세요',
+    icon: 'SmallEarthImg',
   },
 };

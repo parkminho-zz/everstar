@@ -56,7 +56,7 @@ const meta: Meta<typeof LetterCard> = {
     fontFamily: {
       control: 'text',
       description: '폰트 패밀리',
-      defaultValue: 'var(--kor-p-p1-font-family)',
+      defaultValue: '',
     },
   },
 };
@@ -74,7 +74,7 @@ export const Default: Story = {
     sendMessage: '안녕하세요',
     message: '안녕하세요',
     dateTime: '2024-07-24 10:00:00',
-    fontFamily: 'var(--kor-p-p1-font-family)',
+    fontFamily: '',
   },
 };
 
@@ -86,7 +86,7 @@ export const SentLetter: Story = {
     name: '이순신',
     message: '안녕하세요, 이순신입니다.',
     dateTime: '2024-07-24 10:00:00',
-    fontFamily: 'var(--kor-p-p1-font-family)',
+    fontFamily: '',
   },
 };
 
@@ -98,6 +98,6 @@ export const ReceivedLetter: Story = {
     name: '이순신',
     message: '안녕하세요, 답장 보냅니다.',
     dateTime: '2024-07-24 10:00:00',
-    fontFamily: 'var(--kor-p-p1-font-family)',
+    fontFamily: '',
   },
 };

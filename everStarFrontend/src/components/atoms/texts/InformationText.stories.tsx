@@ -31,11 +31,20 @@ const meta: Meta<typeof InformationText> = {
       description: '내부 div에 추가할 클래스 이름',
       defaultValue: '',
     },
+    align: {
+      control: {
+        type: 'select',
+        options: ['left', 'center', 'right'],
+      },
+      description: '텍스트 정렬',
+      defaultValue: 'center',
+    },
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+
+type Story = StoryObj<typeof InformationText>;
 
 export const Default: Story = {
   args: {
@@ -43,6 +52,7 @@ export const Default: Story = {
     children: '2019-10-08 09:38:07',
     className: '',
     divClassName: '',
+    align: 'center',
   },
 };
 
@@ -52,5 +62,6 @@ export const Error: Story = {
     children: 'Error: Please check your input.',
     className: '',
     divClassName: '',
+    align: 'center',
   },
 };

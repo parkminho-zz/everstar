@@ -5,6 +5,7 @@ interface IInformationText {
   state: 'error' | 'default';
   className?: string;
   divClassName?: string;
+  align?: 'left' | 'center' | 'right';
 }
 
 export const InformationText = ({
@@ -12,9 +13,18 @@ export const InformationText = ({
   state,
   className = '',
   divClassName = '',
+  align = 'center',
 }: IInformationText): JSX.Element => {
+  const alignmentClasses = {
+    left: 'justify-start',
+    center: 'justify-center',
+    right: 'justify-end',
+  };
+
   return (
-    <div className={`relative justify-center w-[116px] h-[17px] inline-flex gap-2 ${className}`}>
+    <div
+      className={`relative w-[116px] h-[17px] inline-flex gap-2 ${alignmentClasses[align]} ${className}`}
+    >
       <div
         className={`kor-p-p4 font-normal ${
           state === 'error' ? 'w-fit text-mainerror' : 'text-greyscaleblack-80'

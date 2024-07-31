@@ -1,4 +1,5 @@
 import React from 'react';
+
 type LabelSize = 'large' | 'medium' | 'small';
 type Color = 'black' | 'gray' | 'white';
 
@@ -6,6 +7,7 @@ interface ILetterText {
   size: LabelSize;
   color: Color;
   children?: string;
+  style?: React.CSSProperties; // 스타일을 받을 수 있도록 추가
 }
 
 const fontStyle = {
@@ -20,10 +22,13 @@ const colorStyle = {
   white: 'text-greyscalewhite',
 };
 
-export const LetterText = ({ size, color, children }: ILetterText) => {
+export const LetterText = ({ size, color, children, style }: ILetterText) => {
   return (
     <div className="max-w-full">
-      <div className={`top-0 left-0 font-Kyobo ${fontStyle[size]} ${colorStyle[color]}`}>
+      <div
+        className={`top-0 left-0 font-Kyobo ${fontStyle[size]} ${colorStyle[color]}`}
+        style={style}
+      >
         {children}
       </div>
     </div>
