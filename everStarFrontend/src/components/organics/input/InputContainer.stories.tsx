@@ -47,10 +47,10 @@ const meta: Meta<typeof InputContainer> = {
       description: 'LetterCard의 메시지',
       defaultValue: '뚜뚜의 생김새를 묘사해주세요',
     },
-    letterCardFontFamily: {
+    letterCardClassName: {
       control: 'text',
-      description: 'LetterCard의 폰트 패밀리',
-      defaultValue: 'var(--kor-p-p1-font-family)',
+      description: 'LetterCard의 폰트 클래스',
+      defaultValue: 'font-body !kor-subtitle-subtitle3',
     },
     textboxLabel: {
       control: 'text',
@@ -67,6 +67,11 @@ const meta: Meta<typeof InputContainer> = {
       description: '작은 버튼에 표시될 텍스트',
       defaultValue: '작성완료',
     },
+    showPrimaryButton: {
+      control: 'boolean',
+      description: 'Large Primary Button 표시 여부',
+      defaultValue: true,
+    },
   },
 };
 
@@ -81,9 +86,20 @@ export const Default: Story = {
     letterCardColor: 'white',
     letterCardState: 'notReceived',
     letterCardMessage: '뚜뚜의 생김새를 묘사해주세요',
-    letterCardFontFamily: 'var(--kor-subtitle-subtitle3-font-family)',
+    letterCardClassName: 'font-body !kor-subtitle-subtitle3', // 기본 폰트 설정
     textboxLabel: '내용',
     largeButtonText: '이미지 추가',
     smallButtonText: '작성완료',
+    showPrimaryButton: true,
+  },
+};
+
+export const CustomText: Story = {
+  args: {
+    headerText: '오늘의 질문',
+    textboxLabel: '내용',
+    largeButtonText: '이미지 추가',
+    smallButtonText: '작성완료',
+    showPrimaryButton: true,
   },
 };
