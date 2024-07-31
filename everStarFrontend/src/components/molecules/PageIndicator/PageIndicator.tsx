@@ -27,13 +27,13 @@ export const PageIndicator: React.FC<PageIndicatorProps> = ({
   return (
     <div className="inline-flex items-center gap-[25px] relative">
       <button onClick={handlePrevClick} disabled={currentPage === 1}>
-        <ArrowIcon size={24} direction="left" />
+        <ArrowIcon size={24} direction="left" hover={true} />
       </button>
       <div className="relative w-fit mt-[-1.00px] [font-family:'Pretendard-Medium',Helvetica] font-medium text-[#1f2329] text-base text-center tracking-[0] leading-6 whitespace-nowrap">
         {currentPage} / {totalPages}
       </div>
       <button onClick={handleNextClick} disabled={currentPage === totalPages}>
-        <ArrowIcon size={24} direction="right" />
+        <ArrowIcon size={24} direction="right" hover={true} />
       </button>
     </div>
   );

@@ -7,6 +7,7 @@ import {
 import { Header } from 'components/molecules/Header/Header';
 import { Footer } from 'components/molecules/Footer/Footer';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
+import { Glass } from 'components/molecules/Glass/Glass';
 import bgImage from 'assets/images/bg-everstar.png';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -258,14 +259,21 @@ export const MemorialBook: React.FC = () => {
 
   return (
     <div
-      className="flex flex-col min-h-screen bg-center bg-cover"
+      className="relative flex flex-col min-h-screen bg-center bg-cover"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
       <Header type={headerType} className="sticky top-0 z-50" />
-      <div className="my-4" ref={memorialBookRef}>
+      <Glass
+        variant={isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop'}
+        currentPage={1}
+        totalPages={questionsAndAnswers.length}
+        onPageChange={(newPage) => console.log('Page changed to:', newPage)}
+        showPageIndicator={false}
+      />
+      <div className="relative z-10 my-4" ref={memorialBookRef}>
         <OrganicsMemorialBook pages={questionsAndAnswers} />
       </div>
-      <div className="flex justify-center my-4 space-x-4">
+      <div className="relative z-10 flex justify-center my-4 space-x-4">
         <PrimaryButton
           theme="white"
           size="medium"
@@ -285,7 +293,7 @@ export const MemorialBook: React.FC = () => {
           일기 작성
         </PrimaryButton>
       </div>
-      <Footer type={footerType} className="mt-auto" />
+      <Footer type={footerType} className="relative z-10 mt-auto" />
     </div>
   );
 };
