@@ -53,7 +53,8 @@ public class PetService {
 	}
 
 	@Transactional
-	public void updatePetIntroduction(Long petId, String newIntroduction) {
+	public void updatePetIntroduction(Long petId, UpdatePetIntroductionDto requestDto) {
+		String newIntroduction = requestDto.getIntroduction();
 		Pet pet = petRepository.findById(petId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 		pet.updatePetIntroduction(newIntroduction);
