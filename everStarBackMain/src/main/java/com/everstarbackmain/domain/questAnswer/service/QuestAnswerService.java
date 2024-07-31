@@ -63,8 +63,8 @@ public class QuestAnswerService {
 	}
 
 	private void analyseWeeklyQuestAnswer(Long petId, int petQuestIndex) {
-		List<String> answerContents = questAnswerRepository.findContentByPetIdAndQuestIdRange(petId,
-			petQuestIndex - 6, petQuestIndex);
+		List<String> answerContents = questAnswerRepository.findContentByPetIdAndSpecificQuestIds(petId,
+			petQuestIndex - 3, petQuestIndex);
 
 		String weeklyAnswerContent = answerContents.parallelStream()
 			.collect(Collectors.joining(""));

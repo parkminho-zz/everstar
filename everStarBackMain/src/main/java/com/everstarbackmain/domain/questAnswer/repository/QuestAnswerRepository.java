@@ -12,7 +12,7 @@ public interface QuestAnswerRepository extends JpaRepository<QuestAnswer, Long> 
 
 	List<QuestAnswer> findByPetId(Long petId);
 
-	@Query("SELECT qa.content FROM QuestAnswer qa WHERE qa.pet.id = :petId AND qa.quest.id BETWEEN :startQuestId AND :endQuestId")
-	List<String> findContentByPetIdAndQuestIdRange(@Param("petId") Long petId,
+	@Query("SELECT qa.content FROM QuestAnswer qa WHERE qa.pet.id = :petId AND qa.quest.id IN (:startQuestId, :endQuestId)")
+	List<String> findContentByPetIdAndSpecificQuestIds(@Param("petId") Long petId,
 		@Param("startQuestId") Integer startQuestId, @Param("endQuestId") Integer endQuestId);
 }
