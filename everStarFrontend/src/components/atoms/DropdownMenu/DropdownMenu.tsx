@@ -12,7 +12,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({ options, onOptionSel
         {options.map((option, index) => (
           <li
             key={index}
-            className="z-10 flex items-center justify-center p-4 mt-1 text-xl list-none cursor-pointer text-kor-h-h3"
+            className="z-10 flex items-center justify-start p-4 mt-1 list-none cursor-pointer text-kor-h-h3"
             onClick={() => onOptionSelect(option)}
           >
             {option}
