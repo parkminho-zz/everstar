@@ -78,7 +78,7 @@ class QuestAnswerServiceTest {
 			LocalDate.now(), Gender.MALE, LocalTime.now(), Role.ROLE_USER));
 		pet = Pet.createPet(user, new CreatePetRequestDto("petName", 10,
 			LocalDate.of(1990, 1, 1), "species", Gender.MALE,
-			"relationship", "profileImageUrl", "introduction", List.of("개구쟁이", "귀염둥이")));
+			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
 		memorialBook = MemorialBook.createMemorialBook(pet);
 		sentimentAnalysis = SentimentAnalysis.createSentimentAnalysis(pet);
 		sentimentAnalysisResult = SentimentAnalysisResult.createSentimentAnalysisResult(0.1, 0.3, 0.6);

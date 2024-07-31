@@ -38,9 +38,6 @@ public class CreatePetRequestDto {
 	@NotBlank
 	private String profileImageUrl;
 
-	@NotBlank
-	private String introduction;
-
 	@NotNull
 	private List<String> personalities;
 
