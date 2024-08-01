@@ -9,5 +9,5 @@ import com.everstarbackmain.domain.pet.model.Pet;
 
 public interface PetRepository extends JpaRepository<Pet, Long> {
 
-	// Optional<Pet> findByPetname(String petname);
+	Optional<Pet> findByIdAndIsDeleted(Long id, boolean isDeleted);
 }
