@@ -78,7 +78,7 @@ public class CreateDiaryServiceTest {
 	public void 다이어리_생성_성공_테스트() {
 		// given
 		memorialBook.changeActiveStatus();
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
 
@@ -93,7 +93,7 @@ public class CreateDiaryServiceTest {
 	@DisplayName("다이어리_생성_실패_존재하지_않는_메모리얼북_테스트")
 	public void 다이어리_생성_실패_존재하지_않는_메모리얼북_테스트() {
 		// given
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.empty());
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.empty());
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
 
@@ -111,7 +111,7 @@ public class CreateDiaryServiceTest {
 			LocalDate.now(), Gender.MALE, LocalTime.now(), Role.ROLE_USER));
 		ReflectionTestUtils.setField(anotherUser, "id", 2);
 
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(anotherUser);
 
@@ -127,7 +127,7 @@ public class CreateDiaryServiceTest {
 		// given
 		ReflectionTestUtils.setField(memorialBook, "isActive", false);
 
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
 
