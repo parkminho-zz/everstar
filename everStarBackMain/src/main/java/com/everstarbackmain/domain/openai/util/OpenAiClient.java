@@ -38,7 +38,8 @@ public class OpenAiClient {
 			"2. 편지에 언급된 추억에 감사해 주세요.\n" +
 			"3. 사랑의 메시지를 전달해 주세요.\n" +
 			"4. 따뜻하고 진심 어린 톤으로 작성해 주세요.\n" +
-			"5. 최대 250글자로 작성해 주세요.\n\n" +
+			"5. 너무 딱딱하지 않게 문장이 부드럽게 작성해주세요\n" +
+			"6. 최대 varchar(255)로 글자를 작성해 주세요.\n\n" +
 			"감사합니다.";
 
 	public String analysisTotalSentiment(SentimentAnalysis sentimentAnalysis) {
