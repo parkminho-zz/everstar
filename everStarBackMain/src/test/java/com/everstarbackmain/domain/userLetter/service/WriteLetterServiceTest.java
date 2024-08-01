@@ -50,6 +50,7 @@ public class WriteLetterServiceTest {
 	private PrincipalDetails principalDetails;
 
 	private WriteLetterRequestDto requestDto;
+	private WriteLetterRequestDto noImageRequestDto;
 	private User user;
 	private Pet pet;
 	private UserLetter userLetter;
@@ -64,6 +65,7 @@ public class WriteLetterServiceTest {
 			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
 
 		requestDto = new WriteLetterRequestDto("dd", "dd");
+		noImageRequestDto = new WriteLetterRequestDto("dd");
 		userLetter = UserLetter.writeLetterHasImage(pet, requestDto);
 	}
 
@@ -79,5 +81,19 @@ public class WriteLetterServiceTest {
 		//then
 		Assertions.assertThatNoException()
 			.isThrownBy(() -> userLetterService.writeLetter(authentication, id, requestDto));
+	}
+
+	@Test
+	@DisplayName("유저 편지 쓰기 성공 테스트 이미지 없음")
+	public void 유저_편지_쓰기_성공_테스트_이미지_없음() {
+		long id = 1;
+		//given
+		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
+		BDDMockito.given(principalDetails.getUser()).willReturn(user);
+		BDDMockito.given(petRepository.findById(id)).willReturn(Optional.of(pet));
+
+		//then
+		Assertions.assertThatNoException()
+			.isThrownBy(() -> userLetterService.writeLetter(authentication, id, noImageRequestDto));
 	}
 }
