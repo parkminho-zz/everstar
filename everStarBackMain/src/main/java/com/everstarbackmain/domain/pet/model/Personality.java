@@ -1,5 +1,7 @@
 package com.everstarbackmain.domain.pet.model;
 
+import com.everstarbackmain.global.entity.BaseTimeEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "pet_personality")
-public class Personality {
+public class Personality extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +32,7 @@ public class Personality {
 	@Column(nullable = false)
 	private String personalityValue;
 
+	@Column(nullable = false)
 	private Boolean isDeleted;
 
 	private Personality(Pet pet, String personalityValue) {
