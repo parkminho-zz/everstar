@@ -22,8 +22,8 @@ export const Login: React.FC = () => {
     >
       <LogoIcons variant="star" />
       <OnboardingDescription page={page} onChangePage={setPage} />
-      <KakaoLoginButton size="large" variant="narrow" />
-      <GoogleLoginButton shape="square" variant="ctn" />
+      <KakaoLoginButton />
+      <GoogleLoginButton />
     </div>
   );
 };
