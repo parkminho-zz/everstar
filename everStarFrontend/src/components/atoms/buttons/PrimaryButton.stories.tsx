@@ -37,6 +37,10 @@ const meta: Meta<typeof PrimaryButton> = {
       mapping: iconOptions,
       description: '버튼의 아이콘을 설정합니다.',
     },
+    hug: {
+      control: 'boolean',
+      description: 'hug 여부를 설정합니다.',
+    },
     onClick: { action: 'clicked' },
   },
 };
@@ -52,6 +56,7 @@ export const Default: Story = {
     disabled: false,
     children: '클릭하세요',
     icon: 'ArrowIcon',
+    hug: false,
   },
 };
 
@@ -62,6 +67,7 @@ export const WithSmallStarImg: Story = {
     disabled: false,
     children: '클릭하세요',
     icon: 'SmallStarImg',
+    hug: false,
   },
 };
 
@@ -72,5 +78,17 @@ export const WithSmallEarthImg: Story = {
     disabled: false,
     children: '클릭하세요',
     icon: 'SmallEarthImg',
+    hug: false,
+  },
+};
+
+export const HugButton: Story = {
+  args: {
+    theme: 'focus',
+    size: 'large',
+    disabled: false,
+    children: '클릭하세요',
+    icon: 'ArrowIcon',
+    hug: true,
   },
 };
