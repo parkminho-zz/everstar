@@ -3,7 +3,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import CheerMessage from './CheerMessage';
 
 export default {
-  title: 'Organics/CheerMessage',
+  title: 'Organics/CheerMessage/CheerMessage',
   component: CheerMessage,
 } as Meta;
 
@@ -47,6 +47,16 @@ Default.args = {
     { contents: '할 수 있어!', name: 'Alice', color: 'pink' },
     { contents: '계속 진행해!', name: 'Bob', color: 'green' },
     { contents: '훌륭해!', name: 'Charlie', color: 'blue' },
+    { contents: '잘 하고 있어!', name: 'David', color: 'yellow' },
+    { contents: '힘내!', name: 'Eve', color: 'purple' },
+    { contents: '조금 더 힘내자!', name: 'Frank', color: 'gray' },
+    { contents: '너라면 할 수 있어!', name: 'Grace', color: 'pink' },
+    { contents: '파이팅!', name: 'Heidi', color: 'green' },
+    { contents: '멋져!', name: 'Ivan', color: 'blue' },
+    { contents: '굉장해!', name: 'Judy', color: 'yellow' },
+    { contents: '좋아!', name: 'Karl', color: 'purple' },
+    { contents: '탁월해!', name: 'Leo', color: 'gray' },
+    { contents: '잘했어!', name: 'Mallory', color: 'pink' },
   ],
   totalPages: 1,
 };
