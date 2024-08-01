@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal } from 'components/molecules/Modal/Modal';
-import { InputField } from 'components/organics/input/InputField';
+import { InputField } from 'components/organics/input/InputFields';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { ArrowIcon } from 'components/atoms/icons/Arrow/ArrowIcon';
 
