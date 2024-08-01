@@ -106,6 +106,7 @@ public class Pet extends BaseTimeEntity {
 		questIndex++;
 	}
 
+	// 기본 소개글 수정(not blank)시 null일 때 = 즉 else문 어떻게 쓸지 잘 모르겠습니다.
 	public void updatePetIntroduction(String newIntroduction) {
 		if (newIntroduction != null && !newIntroduction.isEmpty()) {
 			this.introduction = newIntroduction;
