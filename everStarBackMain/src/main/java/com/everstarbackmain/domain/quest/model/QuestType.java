@@ -12,5 +12,5 @@ public enum QuestType {
 	TEXT_IMAGE("TEXT_IMAGE"),
 	WEBRTC("WEBRTC");
 
-	private String type;
+	private final String type;
 }
