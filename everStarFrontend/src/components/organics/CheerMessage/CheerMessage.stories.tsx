@@ -25,6 +25,7 @@ const Template: StoryFn = (args) => {
         avatarUrl: '',
       }}
       postItCards={[]}
+      postItPlusCards={[]}
       totalPages={0}
       {...args}
       currentPage={currentPage}
@@ -48,5 +49,6 @@ Default.args = {
     { contents: '계속 진행해!', name: 'Bob', color: 'green' },
     { contents: '훌륭해!', name: 'Charlie', color: 'blue' },
   ],
+  postItPlusCards: [{}, {}],
   totalPages: 1,
 };

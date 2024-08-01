@@ -14,6 +14,7 @@ interface CheerMessageProps {
     avatarUrl: string;
   };
   postItCards: Array<{ contents: string; name: string; color: string }>;
+  postItPlusCards: Array<{ contents: string; name: string; color: string }>;
   currentPage: number;
   totalPages: number;
   onPageChange: (newPage: number) => void;
@@ -22,12 +23,13 @@ interface CheerMessageProps {
 const CheerMessage: React.FC<CheerMessageProps> = ({
   profile,
   postItCards,
+  postItPlusCards,
   currentPage,
   totalPages,
   onPageChange,
 }) => {
   const renderPostItCards = () => {
-    const cards = postItCards.map((card, index) => (
+    return postItCards.map((card, index) => (
       <PostItCard
         key={index}
         contents={card.contents}
@@ -35,12 +37,12 @@ const CheerMessage: React.FC<CheerMessageProps> = ({
         color={card.color as never}
       />
     ));
+  };
 
-    if (cards.length < 12) {
-      cards.push(<PostItPlusCard key='plus' />);
-    }
-
-    return cards;
+  const renderPostItPlusCards = () => {
+    return postItPlusCards.map((_, index) => (
+      <PostItPlusCard key={`plus-${index}`} />
+    ));
   };
 
   return (
@@ -58,6 +60,7 @@ const CheerMessage: React.FC<CheerMessageProps> = ({
           </div>
           <div className='grid flex-grow grid-cols-4 gap-4'>
             {renderPostItCards()}
+            {renderPostItPlusCards()}
           </div>
         </div>
         <div className='mt-4'>
