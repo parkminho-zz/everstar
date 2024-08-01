@@ -17,7 +17,12 @@ const fontStyle = {
   small: 'kor-p-p4',
 };
 
-export default function PrimaryButton({ size, children, onClick, disabled }: ITextButtonProps) {
+export default function PrimaryButton({
+  size,
+  children,
+  onClick,
+  disabled,
+}: ITextButtonProps) {
   return (
     <button
       className={`
@@ -29,12 +34,14 @@ export default function PrimaryButton({ size, children, onClick, disabled }: ITe
       disabled={disabled}
       onClick={onClick}
     >
-      <span className={`flex-grow pr-4 mx-auto text-center ${fontStyle[size]}`}>{children}</span>
-      <div className="ml-auto">
+      <span className={`flex-grow pr-4 mx-auto text-center ${fontStyle[size]}`}>
+        {children}
+      </span>
+      <div className='ml-auto'>
         <ArrowIcon
           color={disabled ? 'gray' : 'black'}
           size={size === 'small' ? 16 : 24}
-          direction="right"
+          direction='right'
         />
       </div>
     </button>

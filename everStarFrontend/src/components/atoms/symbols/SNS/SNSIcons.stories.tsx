@@ -7,7 +7,17 @@ const meta: Meta<typeof SNSIcons> = {
   tags: ['autodocs'],
   argTypes: {
     variant: {
-      control: { type: 'radio', options: ['google', 'kakao', 'notion', 'youtube', 'instagram', 'patron'] },
+      control: {
+        type: 'radio',
+        options: [
+          'google',
+          'kakao',
+          'notion',
+          'youtube',
+          'instagram',
+          'patron',
+        ],
+      },
     },
   },
 };

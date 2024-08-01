@@ -7,7 +7,10 @@ const meta: Meta<typeof OnboardingDescription> = {
   tags: ['autodocs'],
   argTypes: {
     page: {
-      control: { type: 'radio', options: ['page-1', 'page-2', 'page-3', 'page-4'] },
+      control: {
+        type: 'radio',
+        options: ['page-1', 'page-2', 'page-3', 'page-4'],
+      },
       description: '페이지 종류를 설정합니다.',
       table: {
         type: { summary: 'string' },

@@ -55,25 +55,35 @@ export const LetterCard = ({
       className={`${getBgColor()} ${getAlignmentClass()} flex flex-col self-stretch gap-[16px] p-4 rounded-[20px] shadow-md ${type === 'default' ? 'w-[270px]' : 'w-[320px]'}`}
     >
       {name && (
-        <LetterText size="large" color={getTextColor()} className={className}>
+        <LetterText size='large' color={getTextColor()} className={className}>
           {name}
         </LetterText>
       )}
       {type === 'default' && (
-        <div className={`flex flex-col gap-[16px] ${centered ? 'items-center' : ''}`}>
-          <div className="flex flex-row gap-[10px]">
-            <LetterText size="medium" color="black" className={className}>
+        <div
+          className={`flex flex-col gap-[16px] ${centered ? 'items-center' : ''}`}
+        >
+          <div className='flex flex-row gap-[10px]'>
+            <LetterText size='medium' color='black' className={className}>
               보낸 편지
             </LetterText>
-            <LetterText size="small" color={getTextColor()} className={className}>
+            <LetterText
+              size='small'
+              color={getTextColor()}
+              className={className}
+            >
               {sendMessage}
             </LetterText>
           </div>
-          <div className="flex flex-row gap-[10px]">
-            <LetterText size="medium" color="black" className={className}>
+          <div className='flex flex-row gap-[10px]'>
+            <LetterText size='medium' color='black' className={className}>
               상태
             </LetterText>
-            <LetterText size="small" color={getTextColor()} className={className}>
+            <LetterText
+              size='small'
+              color={getTextColor()}
+              className={className}
+            >
               {getState()}
             </LetterText>
           </div>
@@ -81,18 +91,18 @@ export const LetterCard = ({
       )}
       {(type === 'receive' || type === 'send') && (
         <div>
-          <LetterText size="small" color="black" className={className}>
+          <LetterText size='small' color='black' className={className}>
             {message}
           </LetterText>
         </div>
       )}
-      <div className="w-full">
-        <hr className="border-greyscaleblack-60 border-0.5" />
+      <div className='w-full'>
+        <hr className='border-greyscaleblack-60 border-0.5' />
       </div>
       {dateTime && (
-        <div className="flex justify-end w-full">
+        <div className='flex justify-end w-full'>
           <InformationText
-            state="default"
+            state='default'
             divClassName={color === 'orange' ? 'text-greyscalewhite' : ''}
           >
             {dateTime}

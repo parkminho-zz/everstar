@@ -8,7 +8,11 @@ interface BookIconsProps {
 }
 
 export const BookIcons: React.FC<BookIconsProps> = ({ variant }) => {
-  return <div>{variant === 'book-close' ? <BookIconDefault /> : <BookIconOpen />}</div>;
+  return (
+    <div>
+      {variant === 'book-close' ? <BookIconDefault /> : <BookIconOpen />}
+    </div>
+  );
 };
 
 export type { BookIconsProps };

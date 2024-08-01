@@ -5,14 +5,17 @@ interface DropdownMenuProps {
   onOptionSelect: (option: string | number) => void;
 }
 
-export const DropdownMenu: React.FC<DropdownMenuProps> = ({ options, onOptionSelect }) => {
+export const DropdownMenu: React.FC<DropdownMenuProps> = ({
+  options,
+  onOptionSelect,
+}) => {
   return (
-    <div className="absolute z-10 w-full mt-2 bg-white rounded-md shadow-lg">
-      <ul className="py-1">
+    <div className='absolute z-10 w-full mt-2 bg-white rounded-md shadow-lg'>
+      <ul className='py-1'>
         {options.map((option, index) => (
           <li
             key={index}
-            className="z-10 flex items-center justify-start p-4 mt-1 list-none cursor-pointer text-kor-h-h3"
+            className='z-10 flex items-center justify-start p-4 mt-1 list-none cursor-pointer text-kor-h-h3'
             onClick={() => onOptionSelect(option)}
           >
             {option}
@@ -22,4 +25,3 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({ options, onOptionSel
     </div>
   );
 };
-

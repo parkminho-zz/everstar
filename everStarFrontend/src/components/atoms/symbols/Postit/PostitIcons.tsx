@@ -8,7 +8,13 @@ interface PostitIconsProps {
 
 export const PostitIcons: React.FC<PostitIconsProps> = ({ variant, text }) => {
   return (
-    <div style={{ position: 'relative', display: 'inline-block', textAlign: 'center' }}>
+    <div
+      style={{
+        position: 'relative',
+        display: 'inline-block',
+        textAlign: 'center',
+      }}
+    >
       {variant === 'postit-text' ? (
         <div
           style={{
@@ -30,7 +36,7 @@ export const PostitIcons: React.FC<PostitIconsProps> = ({ variant, text }) => {
           {text || '텍스트'}
         </div>
       ) : (
-        <Postit className="w-6 h-6" />
+        <Postit className='w-6 h-6' />
       )}
     </div>
   );

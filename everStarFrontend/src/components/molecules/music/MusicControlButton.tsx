@@ -1,10 +1,10 @@
 /** React */
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 
 /** Components */
-import { PlayButton } from "components/atoms/buttons/PlayButton";
-import MusicProgressbar from "./MusicProgressbar";
+import { PlayButton } from 'components/atoms/buttons/PlayButton';
+import MusicProgressbar from './MusicProgressbar';
 
 interface MusicControlButtonProps {
   duration: number; // Duration in seconds
@@ -55,9 +55,9 @@ export const MusicControlButton: React.FC<MusicControlButtonProps> = ({
   }, [isPlaying, duration]);
 
   const getPlayButtonProps = () => {
-    if (isPlaying) return { direction: "stop", size: 16 };
-    if (currentTime >= duration) return { direction: "play", size: 16 };
-    return { direction: "play", size: 16 };
+    if (isPlaying) return { direction: 'stop', size: 16 };
+    if (currentTime >= duration) return { direction: 'play', size: 16 };
+    return { direction: 'play', size: 16 };
   };
 
   return (
@@ -72,7 +72,7 @@ export const MusicControlButton: React.FC<MusicControlButtonProps> = ({
         {...getPlayButtonProps()}
         size={16}
         onClick={handlePlayPauseRestart}
-        direction="play"
+        direction='play'
       />
     </ButtonContainer>
   );

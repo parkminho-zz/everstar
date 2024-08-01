@@ -1,12 +1,12 @@
-import React from "react";
-import { Meta, StoryFn } from "@storybook/react";
-import { MusicControlButton } from "./MusicControlButton";
+import React from 'react';
+import { Meta, StoryFn } from '@storybook/react';
+import { MusicControlButton } from './MusicControlButton';
 
 export default {
-  title: "Molecules/MusicControlButton",
+  title: 'Molecules/MusicControlButton',
   component: MusicControlButton,
   argTypes: {
-    duration: { control: "number", defaultValue: 120 }, // Duration in seconds
+    duration: { control: 'number', defaultValue: 120 }, // Duration in seconds
   },
 } as Meta;
 

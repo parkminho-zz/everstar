@@ -44,7 +44,11 @@ export const ArrowIcon: React.FC<ArrowIconProps> = ({
   };
   const hoverClass = hover ? 'hover:text-mainprimary' : '';
 
-  return <IconComponent className={`${sizeClasses} ${colorClasses[color]} ${hoverClass}`} />;
+  return (
+    <IconComponent
+      className={`${sizeClasses} ${colorClasses[color]} ${hoverClass}`}
+    />
+  );
 };
 
 export type { ArrowIconProps };

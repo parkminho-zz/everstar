@@ -1,5 +1,8 @@
 import React from 'react';
-import { InputContainer, InputContainerProps } from 'components/organics/input/InputContainer';
+import {
+  InputContainer,
+  InputContainerProps,
+} from 'components/organics/input/InputContainer';
 import { Glass } from 'components/molecules/Glass/Glass';
 import { useMediaQuery } from 'react-responsive';
 
@@ -35,7 +38,7 @@ export const InteractiveForm: React.FC<InteractiveFormProps> = ({
   const customLetterCardMessage = letterCardMessage;
 
   return (
-    <div className="relative flex items-center justify-center min-h-screen">
+    <div className='relative flex items-center justify-center min-h-screen'>
       <Glass
         variant={isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop'}
         currentPage={currentPage}
@@ -43,7 +46,7 @@ export const InteractiveForm: React.FC<InteractiveFormProps> = ({
         onPageChange={onPageChange}
         showPageIndicator={false}
       />
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className='absolute inset-0 flex items-center justify-center'>
         <InputContainer
           headerText={customHeaderText}
           letterCardType={letterCardType}

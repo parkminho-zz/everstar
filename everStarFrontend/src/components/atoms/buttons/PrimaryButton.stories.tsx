@@ -5,9 +5,9 @@ import { LogoIcons } from 'components/atoms/symbols/Logo/LogoIcons';
 
 const iconOptions = {
   None: null,
-  ArrowIcon: <ArrowIcon color="black" direction="right" size={24} />,
-  SmallStarImg: <LogoIcons variant="small-star-img" />,
-  SmallEarthImg: <LogoIcons variant="small-earth-img" />,
+  ArrowIcon: <ArrowIcon color='black' direction='right' size={24} />,
+  SmallStarImg: <LogoIcons variant='small-star-img' />,
+  SmallEarthImg: <LogoIcons variant='small-earth-img' />,
 };
 
 const meta: Meta<typeof PrimaryButton> = {

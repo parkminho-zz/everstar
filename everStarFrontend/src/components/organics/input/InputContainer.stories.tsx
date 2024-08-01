@@ -8,7 +8,8 @@ const meta: Meta<typeof InputContainer> = {
   parameters: {
     docs: {
       description: {
-        component: 'InputContainer 컴포넌트는 다양한 입력 요소들을 포함한 컨테이너입니다.',
+        component:
+          'InputContainer 컴포넌트는 다양한 입력 요소들을 포함한 컨테이너입니다.',
       },
     },
   },

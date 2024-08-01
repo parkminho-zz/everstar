@@ -24,7 +24,7 @@ export const DropDown = ({ type, title }: IDropDownProps) => {
   return (
     <>
       <button
-        className="flex flex-row items-center self-stretch justify-center gap-2 px-4 py-2 mt-6 bg-white rounded-md shadow-small h-14 w-[288px]"
+        className='flex flex-row items-center self-stretch justify-center gap-2 px-4 py-2 mt-6 bg-white rounded-md shadow-small h-14 w-[288px]'
         onClick={onToggle}
       >
         <div
@@ -32,16 +32,16 @@ export const DropDown = ({ type, title }: IDropDownProps) => {
         >
           {selectTitle !== '' ? selectTitle : title}
         </div>
-        {!isOpen && <ArrowIcon color="gray" direction="down" size={16} />}
-        {isOpen && <ArrowIcon color="orange" direction="up" size={16} />}
+        {!isOpen && <ArrowIcon color='gray' direction='down' size={16} />}
+        {isOpen && <ArrowIcon color='orange' direction='up' size={16} />}
       </button>
       {isOpen && (
-        <div className="absolute z-10 w-[288px] mt-2 bg-white rounded-md shadow-lg">
-          <ul className="py-1">
+        <div className='absolute z-10 w-[288px] mt-2 bg-white rounded-md shadow-lg'>
+          <ul className='py-1'>
             {data.map((item, index) => (
               <li
                 key={index}
-                className="z-10 flex items-center justify-center p-4 mt-1 text-xl list-none cursor-pointer text-kor-p-p1"
+                className='z-10 flex items-center justify-center p-4 mt-1 text-xl list-none cursor-pointer text-kor-p-p1'
                 onClick={onOptionClicked(item)}
               >
                 {item}

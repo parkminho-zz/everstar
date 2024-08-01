@@ -7,7 +7,10 @@ interface ClipboardIconsProps {
   variant: 'lock' | 'lock-check';
 }
 
-export const ClipboardIcons: React.FC<ClipboardIconsProps> = ({ size, variant }) => {
+export const ClipboardIcons: React.FC<ClipboardIconsProps> = ({
+  size,
+  variant,
+}) => {
   const sizeClasses = size === 16 ? 'w-4 h-4' : 'w-6 h-6';
 
   return variant === 'lock' ? (

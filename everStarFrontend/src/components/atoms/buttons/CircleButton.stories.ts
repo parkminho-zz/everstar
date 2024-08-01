@@ -21,7 +21,15 @@ const meta = {
     icon: {
       control: {
         type: 'select',
-        options: ['mic', 'phone', 'phoneStrop', 'video', 'settings', 'chat', 'share'],
+        options: [
+          'mic',
+          'phone',
+          'phoneStrop',
+          'video',
+          'settings',
+          'chat',
+          'share',
+        ],
       },
       description: '아이콘',
       defaultValue: 'mic',

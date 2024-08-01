@@ -1,5 +1,5 @@
 /** React */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
 /** Styled Components */
 import {
@@ -12,10 +12,10 @@ import {
   ProgressIndicator,
   TimeLabel,
   TimeLabelGroup,
-} from "./MusicProgressbar.styled";
+} from './MusicProgressbar.styled';
 
 /** Libs */
-import useMeasure from "react-use-measure";
+import useMeasure from 'react-use-measure';
 
 /** Animation */
 import {
@@ -23,7 +23,7 @@ import {
   useMotionValue,
   useTransform,
   type PanInfo,
-} from "framer-motion";
+} from 'framer-motion';
 
 export type MusicProgressbarProp = {
   musicDuration?: number;
@@ -78,11 +78,11 @@ const MusicProgressbar: React.FC<MusicProgressbarProp> = ({
   const [isHovered, setIsHovered] = useState(false);
 
   /** Animation State */
-  const animateState = isPanning ? "panning" : isHovered ? "hovered" : "idle";
+  const animateState = isPanning ? 'panning' : isHovered ? 'hovered' : 'idle';
 
   useEffect(() => {
-    roundedProgress.on("change", (v) => setCurrentProgress(v));
-    roundedHoverProgress.on("change", (v) => setHoverTimeProgress(v));
+    roundedProgress.on('change', (v) => setCurrentProgress(v));
+    roundedHoverProgress.on('change', (v) => setHoverTimeProgress(v));
   }, [roundedProgress, roundedHoverProgress]);
 
   useEffect(() => {
@@ -191,7 +191,7 @@ const MusicProgressbar: React.FC<MusicProgressbarProp> = ({
 };
 
 /* #region Animation Const */
-const motionTransition = { type: "spring", bounce: 0, duration: 0.5 };
+const motionTransition = { type: 'spring', bounce: 0, duration: 0.5 };
 
 const indicatorVariants = {
   hovered: { opacity: 1 },
@@ -204,8 +204,8 @@ const hoverTimeVariants = {
 };
 
 const timeLabelGroupVariants = {
-  hovered: { color: "#FFF" },
-  panning: { color: "#FFF" },
+  hovered: { color: '#FFF' },
+  panning: { color: '#FFF' },
 };
 /* #endregion */
 
@@ -221,7 +221,7 @@ const roundTo = (number: number, decimalPlaces: number) => {
 const formattedTime = (duration: number) => {
   const min = Math.floor(duration / 60);
   const sec = Math.floor(duration % 60);
-  return `${min.toString()}:${sec.toString().padStart(2, "0")}`;
+  return `${min.toString()}:${sec.toString().padStart(2, '0')}`;
 };
 /* #endregion */
 

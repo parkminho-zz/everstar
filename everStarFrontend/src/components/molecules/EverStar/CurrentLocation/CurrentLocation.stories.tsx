@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { CurrentLocation } from "./CurrentLocation";
+import type { Meta, StoryObj } from '@storybook/react';
+import { CurrentLocation } from './CurrentLocation';
 
 const meta: Meta<typeof CurrentLocation> = {
-  title: "Molecules/EverStar/CurrentLocation",
+  title: 'Molecules/EverStar/CurrentLocation',
   component: CurrentLocation,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -13,6 +13,6 @@ type Story = StoryObj<typeof CurrentLocation>;
 
 export const Default: Story = {
   args: {
-    title: "뚜뚜1",
+    title: '뚜뚜1',
   },
 };

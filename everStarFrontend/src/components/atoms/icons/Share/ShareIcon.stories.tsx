@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import {ShareIcon} from './ShareIcon';
+import { ShareIcon } from './ShareIcon';
 
 const meta: Meta<typeof ShareIcon> = {
   title: 'Atoms/Icons/ShareIcon',

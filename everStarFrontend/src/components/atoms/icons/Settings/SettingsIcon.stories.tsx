@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import {SettingsIcon} from './SettingsIcon';
+import { SettingsIcon } from './SettingsIcon';
 
 const meta: Meta<typeof SettingsIcon> = {
   title: 'Atoms/Icons/SettingsIcon',

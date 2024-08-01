@@ -39,14 +39,14 @@ export const InputContainer: React.FC<InputContainerProps> = ({
   };
 
   return (
-    <div className="flex justify-center p-6 bg-gray-100">
-      <div className="flex flex-col items-center w-[360px] gap-8 p-5 bg-white rounded-lg shadow-md">
+    <div className='flex justify-center p-6 bg-gray-100'>
+      <div className='flex flex-col items-center w-[360px] gap-8 p-5 bg-white rounded-lg shadow-md'>
         {/* Modal Header */}
         <ModalHeader text={headerText} showLeftIcon={true} />
 
         {/* Content */}
-        <div className="flex flex-col items-center w-full gap-8">
-          <div className="flex flex-col items-center w-full">
+        <div className='flex flex-col items-center w-full gap-8'>
+          <div className='flex flex-col items-center w-full'>
             {/* Letter Card or Custom Text */}
             {letterCardType ? (
               <LetterCard
@@ -58,7 +58,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
                 centered={centered}
               />
             ) : (
-              <div className="w-full">
+              <div className='w-full'>
                 <div
                   className="left-0 [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal]"
                   dangerouslySetInnerHTML={{ __html: customText }}
@@ -68,14 +68,19 @@ export const InputContainer: React.FC<InputContainerProps> = ({
           </div>
 
           {/* Textbox */}
-          <Textbox type="large" className="" label={textboxLabel} showStar={false} />
+          <Textbox
+            type='large'
+            className=''
+            label={textboxLabel}
+            showStar={false}
+          />
 
           {/* Large Primary Button */}
           {showPrimaryButton && (
-            <div className="flex justify-center w-full">
+            <div className='flex justify-center w-full'>
               <PrimaryButton
-                theme="white"
-                size="large"
+                theme='white'
+                size='large'
                 onClick={handleButtonClick}
                 disabled={false}
                 icon={null}
@@ -86,10 +91,10 @@ export const InputContainer: React.FC<InputContainerProps> = ({
           )}
 
           {/* Small Primary Button */}
-          <div className="flex justify-end w-full">
+          <div className='flex justify-end w-full'>
             <PrimaryButton
-              theme="white"
-              size="small"
+              theme='white'
+              size='small'
               onClick={handleButtonClick}
               disabled={false}
               icon={null}

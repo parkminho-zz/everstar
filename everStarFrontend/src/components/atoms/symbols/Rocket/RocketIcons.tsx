@@ -8,7 +8,13 @@ interface RocketIconsProps {
 
 export const RocketIcons: React.FC<RocketIconsProps> = ({ variant, text }) => {
   return (
-    <div style={{ position: 'relative', display: 'inline-block', textAlign: 'center' }}>
+    <div
+      style={{
+        position: 'relative',
+        display: 'inline-block',
+        textAlign: 'center',
+      }}
+    >
       {variant === 'rocket-text' ? (
         <div
           style={{
@@ -30,7 +36,7 @@ export const RocketIcons: React.FC<RocketIconsProps> = ({ variant, text }) => {
           {text || '영원별탐사'}
         </div>
       ) : (
-        <Rocket className="w-6 h-6" />
+        <Rocket className='w-6 h-6' />
       )}
     </div>
   );

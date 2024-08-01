@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface letterState {
   letterInfo: LetterInfo;
@@ -11,8 +11,8 @@ const initialState: letterState = {
     parentLetterId: 0,
     isRead: 0,
     isUserSend: 0,
-    content: "",
-    imageUrl: "",
+    content: '',
+    imageUrl: '',
   },
 };
 
@@ -27,7 +27,7 @@ export interface LetterInfo {
 }
 
 export const letterSlice = createSlice({
-  name: "letter",
+  name: 'letter',
   initialState,
   reducers: {
     //  편지정보 저장 액션 (편지 읽기 : SetLetter)

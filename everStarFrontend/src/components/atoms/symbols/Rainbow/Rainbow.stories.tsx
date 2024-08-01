@@ -8,7 +8,16 @@ const meta: Meta<typeof Rainbow> = {
     color: {
       control: {
         type: 'select',
-        options: ['none', 'yellow', 'violet', 'blue', 'green', 'orange', 'red', 'indigo'],
+        options: [
+          'none',
+          'yellow',
+          'violet',
+          'blue',
+          'green',
+          'orange',
+          'red',
+          'indigo',
+        ],
       },
     },
   },
