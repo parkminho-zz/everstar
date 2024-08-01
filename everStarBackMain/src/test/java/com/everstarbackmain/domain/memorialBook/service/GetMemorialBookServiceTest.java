@@ -105,7 +105,7 @@ public class GetMemorialBookServiceTest {
 		aiAnswer = AiAnswer.createAiAnswer(pet, quest, new CreateAiAnswerRequestDto("content", "url", "TEXT"));
 		diary = Diary.createDiary(memorialBook, new CreateDiaryRequestDto("title", "content", "url"));
 
-		ReflectionTestUtils.setField(user, "id", 1);
+		ReflectionTestUtils.setField(user, "id", 1L);
 		ReflectionTestUtils.setField(pet, "id", 1L);
 	}
 

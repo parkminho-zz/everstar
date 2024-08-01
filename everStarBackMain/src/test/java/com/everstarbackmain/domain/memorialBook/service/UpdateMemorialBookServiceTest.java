@@ -67,7 +67,7 @@ class UpdateMemorialBookServiceTest {
 		memorialBook = MemorialBook.createMemorialBook(pet);
 		memorialBook.changeActiveStatus();
 
-		ReflectionTestUtils.setField(user, "id", 1);
+		ReflectionTestUtils.setField(user, "id", 1L);
 		ReflectionTestUtils.setField(pet, "id", 1L);
 	}
 
