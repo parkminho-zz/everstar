@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { Tab } from 'components/molecules/Tab/Tab';
-import { InputField } from 'components/organics/input/InputField';
+import { InputField } from 'components/organics/input/InputFields';
 import { Select } from 'components/molecules/input/Select';
 import { Avatar } from 'components/atoms/symbols/Avatar/Avatar';
 import { Lable } from 'components/atoms/texts/Lable';
