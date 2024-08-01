@@ -12,11 +12,13 @@ import googleButton from 'assets/symbols/google-button.svg';
 interface GoogleLoginButtonProps {
   shape?: 'round' | 'square';
   variant?: 'ctn' | 'na' | 'SI' | 'SU';
+  onClick?: () => void;
 }
 
 export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
-  shape = 'square',
-  variant = 'ctn',
+  shape,
+  variant,
+  onClick,
 }) => {
   let src = googleButton; // 기본값 설정
 
@@ -38,7 +40,11 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
     src = webNeutralSqSU;
   }
 
-  const style = shape === 'square' && variant === 'ctn' ? { width: '366px', height: '90px' } : {};
-
-  return <img src={src} alt={`google login button ${shape} ${variant}`} style={style} />;
+  return (
+    <img
+      src={src}
+      alt={`google login button ${shape || 'default'} ${variant || 'default'}`}
+      onClick={onClick}
+    />
+  );
 };

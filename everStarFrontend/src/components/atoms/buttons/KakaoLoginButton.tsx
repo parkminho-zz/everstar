@@ -8,10 +8,11 @@ import kakaoButton from 'assets/symbols/kakao-button.svg';
 interface KakaoLoginButtonProps {
   size?: 'large' | 'medium';
   variant?: 'narrow' | 'wide';
+  onClick?: () => void;
 }
 
-export const KakaoLoginButton: React.FC<KakaoLoginButtonProps> = ({ size, variant }) => {
-  let src = kakaoButton; // 기본값 설정
+export const KakaoLoginButton: React.FC<KakaoLoginButtonProps> = ({ size, variant, onClick }) => {
+  let src = kakaoButton;
 
   if (size === 'large' && variant === 'narrow') {
     src = kakaoLoginLargeNarrow;
@@ -23,5 +24,5 @@ export const KakaoLoginButton: React.FC<KakaoLoginButtonProps> = ({ size, varian
     src = kakaoLoginMediumWide;
   }
 
-  return <img src={src} alt={`kakao login button ${size} ${variant}`} />;
+  return <img src={src} alt={`kakao login button ${size} ${variant}`} onClick={onClick} />;
 };
