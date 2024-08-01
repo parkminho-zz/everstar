@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class EnrolledPetsResponseDto {
+
 	private String profileImageUrl;
 	private String name;
 
