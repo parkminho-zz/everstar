@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { InputField } from 'components/organics/input/InputFields';
 import { Select } from 'components/molecules/input/Select';
+import { DateInputField } from 'components/organics/input/DateInputField';
 
 export interface SignUpFormProps {
   headerText: string;
   smallButtonText: string;
   showPrimaryButton?: boolean;
+  text: string;
 }
 
 export const SignUpForm: React.FC<SignUpFormProps> = ({
   headerText,
   smallButtonText,
   showPrimaryButton = true,
+  text,
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -30,24 +31,27 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
   };
 
   const handleInputChange = (field: keyof typeof formData, value: string | Date | null) => {
-    if (value !== null) {
-      setFormData({
-        ...formData,
-        [field]: value,
-      });
-    }
+    setFormData({
+      ...formData,
+      [field]: value,
+    });
   };
 
   return (
     <div className="flex justify-center p-6">
       <div className="flex flex-col items-center w-[360px] gap-8 p-5 bg-white rounded-lg shadow-md">
         <ModalHeader text={headerText} showLeftIcon={true} />
-
+        <div className="flex flex-col w-full">
+          <div
+            className="left-0 text-left [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal]"
+            dangerouslySetInnerHTML={{ __html: text.replace(/\n/g, '<br />') }}
+          />
+        </div>
         <InputField
           label="이름"
           showLabel={true}
           showValidationText={false}
-          starshow={false}
+          starshow={true}
           state="default"
           text={formData.name}
           showCheckIcon={false}
@@ -55,22 +59,23 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
           onChange={(e) => handleInputChange('name', e.target.value)}
         />
 
-        <div className="w-full">
-          <label className="block text-sm font-medium text-gray-700">생년월일</label>
-          <DatePicker
-            selected={formData.birthdate}
-            onChange={(date) => handleInputChange('birthdate', date)}
-            dateFormat="yyyy-MM-dd"
-            className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
+        <DateInputField
+          label="생년월일"
+          showLabel={true}
+          showValidationText={false}
+          starshow={true}
+          state="default"
+          date={formData.birthdate}
+          placeholder="생년월일을 선택하세요"
+          onChange={(date) => handleInputChange('birthdate', date)}
+        />
 
         <Select
           className=""
           options={['남성', '여성']}
           title="성별을 선택하세요"
           showLabel={true}
-          starshow={false}
+          starshow={true}
           onOptionSelect={(option) => handleInputChange('gender', option as string)}
           infoText=""
           showIcon={true}
@@ -80,7 +85,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
           label="이메일"
           showLabel={true}
           showValidationText={false}
-          starshow={false}
+          starshow={true}
           state="default"
           text={formData.email}
           showCheckIcon={false}
@@ -92,7 +97,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
           label="전화번호"
           showLabel={true}
           showValidationText={false}
-          starshow={false}
+          starshow={true}
           state="default"
           text={formData.phone}
           showCheckIcon={true}
@@ -108,7 +113,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
               size="small"
               onClick={handleButtonClick}
               disabled={false}
-              icon={null}
+              icon={true}
               hug={true}
             >
               {smallButtonText}
