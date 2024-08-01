@@ -221,7 +221,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                   className=""
                 />
                 <Lable prop="성격" show={false} font="default" className="self-start" />
-                <div className="flex justify-between w-full">
+                <div className="flex justify-center space-x-5">
                   {currentPet.personality.map((trait, index) => (
                     <Tag key={index} className="greyscalewhite">
                       #{trait}
