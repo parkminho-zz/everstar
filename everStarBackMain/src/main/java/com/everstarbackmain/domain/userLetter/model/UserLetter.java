@@ -38,7 +38,6 @@ public class UserLetter extends BaseTimeEntity {
 	@Column(nullable = false)
 	private String content;
 
-	@Column(nullable = false)
 	private String imgUrl;
 
 	@Builder
