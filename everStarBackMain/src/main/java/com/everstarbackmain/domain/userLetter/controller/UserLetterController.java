@@ -27,8 +27,8 @@ public class UserLetterController {
 
 	@PostMapping
 	public ResponseEntity<Map<String, Object>> writeLetter(Authentication authentication, @PathVariable("pet-id") long petId, @RequestBody @Valid WriteLetterRequestDto requestDto) {
-
-
+		userLetterService.writeLetter(authentication, petId, requestDto);
+		ResponseEntity<Map>
 
 	}
 }
