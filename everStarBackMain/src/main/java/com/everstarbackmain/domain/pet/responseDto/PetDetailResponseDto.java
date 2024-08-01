@@ -17,7 +17,7 @@ import lombok.Getter;
 public class PetDetailResponseDto {
 
 	private Long id;
-	private Integer userId;
+	private Long userId;
 	private String name;
 	private Integer age;
 	private LocalDate memorialDate;
