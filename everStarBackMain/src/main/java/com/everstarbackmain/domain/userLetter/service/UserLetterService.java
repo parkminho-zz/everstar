@@ -30,7 +30,7 @@ public class UserLetterService {
 	public void writeLetter(Authentication authentication, long petId, WriteLetterRequestDto requestDto) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 
-		Pet pet = petRepository.findById(petId)
+		Pet pet = petRepository.findByIdAndIsDeleted(petId,false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
 		if(requestDto.getImageUrl() == null){

@@ -76,7 +76,7 @@ public class WriteLetterServiceTest {
 		//given
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
-		BDDMockito.given(petRepository.findById(id)).willReturn(Optional.of(pet));
+		BDDMockito.given(petRepository.findByIdAndIsDeleted(id, false)).willReturn(Optional.of(pet));
 
 		//then
 		Assertions.assertThatNoException()
@@ -90,7 +90,7 @@ public class WriteLetterServiceTest {
 		//given
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
-		BDDMockito.given(petRepository.findById(id)).willReturn(Optional.of(pet));
+		BDDMockito.given(petRepository.findByIdAndIsDeleted(id, false)).willReturn(Optional.of(pet));
 
 		//then
 		Assertions.assertThatNoException()
