@@ -22,6 +22,6 @@ public class PetLetterScheduler {
 		LocalDateTime nextDayWritePetLetterTime = userLetter.getCreatedTime().plusMinutes(1);
 		Date nextDayWritePetLetterDate = Date.from(nextDayWritePetLetterTime.atZone(ZoneId.systemDefault()).toInstant());
 
-		taskScheduler.schedule(() -> petLetterService.writePetLetter(userLetter), nextDayWritePetLetterDate);
+		taskScheduler.schedule(() -> petLetterService.writePetLetterAnswer(userLetter), nextDayWritePetLetterDate);
 	}
 }

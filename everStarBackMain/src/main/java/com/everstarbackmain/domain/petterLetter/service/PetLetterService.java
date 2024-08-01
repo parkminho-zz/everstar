@@ -1,5 +1,6 @@
 package com.everstarbackmain.domain.petterLetter.service;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,9 @@ public class PetLetterService {
 	private final PetLetterRepository petLetterRepository;
 	private final OpenAiClient openAiClient;
 
-	public void writePetLetter(UserLetter userLetter) {
+	@Transactional
+	@Async
+	public void writePetLetterAnswer(UserLetter userLetter) {
 		String content = openAiClient.writePetLetter(userLetter);
 		PetLetter petLetter = PetLetter.writePetLetterAnswer(userLetter, content);
 		petLetterRepository.save(petLetter);
