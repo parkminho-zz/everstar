@@ -3,8 +3,8 @@ package com.everstarbackmain.domain.pet.responseDto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.everstarbackmain.domain.pet.model.Gender;
 import com.everstarbackmain.domain.pet.model.Pet;
-import com.everstarbackmain.domain.user.model.Gender;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
