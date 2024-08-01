@@ -42,17 +42,25 @@ public class UserLetter extends BaseTimeEntity {
 	private String imgUrl;
 
 	@Builder
-	private UserLetter(Pet pet, String content, String imgUrl, boolean is_deleted) {
+	private UserLetter(Pet pet, String content, String imgUrl) {
 		this.pet = pet;
 		this.content = content;
 		this.imgUrl = imgUrl;
-		this.is_deleted = is_deleted;
+		this.is_deleted = false;
 	}
 
-	public static UserLetter writeLetter(Pet pet, WriteLetterRequestDto writeLetterRequestDto) {
+	public static UserLetter writeLetterHasImage(Pet pet, WriteLetterRequestDto writeLetterRequestDto) {
 		return UserLetter.builder()
 			.pet(pet)
-			.isRead(true)
+			.content(writeLetterRequestDto.getContent())
+			.imgUrl(writeLetterRequestDto.getImageUrl())
+			.build();
+	}
 
+	public static UserLetter writeLetterHasNotImage(Pet pet, WriteLetterRequestDto writeLetterRequestDto) {
+		return UserLetter.builder()
+			.pet(pet)
+			.content(writeLetterRequestDto.getContent())
+			.build();
 	}
 }
