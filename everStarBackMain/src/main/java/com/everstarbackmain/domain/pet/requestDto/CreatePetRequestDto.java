@@ -3,7 +3,7 @@ package com.everstarbackmain.domain.pet.requestDto;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.everstarbackmain.domain.user.model.Gender;
+import com.everstarbackmain.domain.pet.model.Gender;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
