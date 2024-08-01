@@ -12,20 +12,19 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 public class QuestAnswerCustomRepositoryImpl implements QuestAnswerCustomRepository {
 
 	private final JPAQueryFactory queryFactory;
-	private final JPAQueryFactory jpaQueryFactory;
 
-	public QuestAnswerCustomRepositoryImpl(JPAQueryFactory queryFactory, JPAQueryFactory jpaQueryFactory) {
+	public QuestAnswerCustomRepositoryImpl(JPAQueryFactory queryFactory) {
 		this.queryFactory = queryFactory;
-		this.jpaQueryFactory = jpaQueryFactory;
 	}
 
 	@Override
-	public List<String> findContentByPetIdAndSpecificQuestIds(Long petId, Integer firstQuestId, Integer secondQuestId) {
+	public List<String> findContentByPetIdAndSpecificQuestIdsAndIsDeleted(Long petId, Integer firstQuestId, Integer secondQuestId, boolean isDeleted) {
 		QQuestAnswer questAnswer = QQuestAnswer.questAnswer;
 		return queryFactory.select(questAnswer.content)
 			.from(questAnswer)
 			.where(questAnswer.pet.id.eq(petId)
-				.and(questAnswer.quest.id.in(firstQuestId, secondQuestId)))
+				.and(questAnswer.quest.id.in(firstQuestId, secondQuestId))
+				.and(questAnswer.isDeleted.eq(isDeleted)))
 			.fetch();
 	}
 }
