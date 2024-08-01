@@ -64,7 +64,7 @@ public class WriteLetterServiceTest {
 			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
 
 		requestDto = new WriteLetterRequestDto("dd", "dd");
-		userLetter = UserLetter.writeLetterHasImage(pet,requestDto);
+		userLetter = UserLetter.writeLetterHasImage(pet, requestDto);
 	}
 
 	@Test
@@ -77,6 +77,7 @@ public class WriteLetterServiceTest {
 		BDDMockito.given(petRepository.findById(id)).willReturn(Optional.of(pet));
 
 		//then
-		Assertions.assertThatNoException().isThrownBy(() -> userLetterService.writeLetter(authentication,id,requestDto));
+		Assertions.assertThatNoException()
+			.isThrownBy(() -> userLetterService.writeLetter(authentication, id, requestDto));
 	}
 }
