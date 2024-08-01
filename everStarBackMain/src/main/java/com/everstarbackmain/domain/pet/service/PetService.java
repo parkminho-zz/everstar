@@ -58,7 +58,6 @@ public class PetService {
 		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 		pet.updatePetIntroduction(newIntroduction);
-		petRepository.save(pet);
 	}
 
 	private void createMemorialBook(Pet pet) {
@@ -70,5 +69,7 @@ public class PetService {
 		SentimentAnalysis sentimentAnalysis = SentimentAnalysis.createSentimentAnalysis(pet);
 		sentimentAnalysisRepository.save(sentimentAnalysis);
 	}
+
+
 
 }
