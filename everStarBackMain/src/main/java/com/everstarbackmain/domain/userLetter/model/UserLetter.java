@@ -1,5 +1,6 @@
-package com.everstarbackmain.domain.letter.model;
+package com.everstarbackmain.domain.userLetter.model;
 
+import com.everstarbackmain.domain.userLetter.requestDto.WriteLetterRequestDto;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
 
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "letter")
-public class Letter extends BaseTimeEntity {
+public class UserLetter extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,16 +31,6 @@ public class Letter extends BaseTimeEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pet_id")
 	private Pet pet;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "letter_id")
-	private Letter letter;
-
-	@Column(nullable = false)
-	private boolean isRead;
-
-	@Column(nullable = false)
-	private boolean isUsersSend;
 
 	@Column(nullable = false)
 	private boolean is_deleted;
@@ -51,14 +42,17 @@ public class Letter extends BaseTimeEntity {
 	private String imgUrl;
 
 	@Builder
-	private Letter(Pet pet, Letter letter, boolean isRead, String content, String imgUrl, boolean is_deleted,
-		boolean isUsersSend) {
+	private UserLetter(Pet pet, String content, String imgUrl, boolean is_deleted) {
 		this.pet = pet;
-		this.letter = letter;
-		this.isRead = isRead;
 		this.content = content;
 		this.imgUrl = imgUrl;
 		this.is_deleted = is_deleted;
-		this.isUsersSend = isUsersSend;
+	}
+
+	public static UserLetter writeLetter(Pet pet, WriteLetterRequestDto writeLetterRequestDto) {
+		return UserLetter.builder()
+			.pet(pet)
+			.isRead(true)
+
 	}
 }
