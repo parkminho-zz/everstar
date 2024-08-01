@@ -30,25 +30,18 @@ public class DiaryService {
 	public void createDiary(Authentication authentication, Long memorialBookId,
 		CreateDiaryRequestDto createDiaryRequestDto) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
-
 		MemorialBook memorialBook = memorialBookRepository.findById(memorialBookId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
-		validateUserMemorialBook(user, memorialBook);
-		validateMemorialBookActivated(memorialBook);
 
-		Diary diary = Diary.createDiary(memorialBook, createDiaryRequestDto);
-		diaryRepository.save(diary);
-	}
-
-	private void validateUserMemorialBook(User user, MemorialBook memorialBook) {
 		if (user.getId() != memorialBook.getPet().getUser().getId()) {
 			throw new ExceptionResponse(CustomException.NOT_MY_MEMORIAL_BOOK_EXCEPTION);
 		}
-	}
 
-	private void validateMemorialBookActivated(MemorialBook memorialBook) {
 		if (!memorialBook.getIsActive()) {
 			throw new ExceptionResponse(CustomException.NOT_ACTIVATED_MEMORIAL_BOOK_EXCEPTION);
 		}
+
+		Diary diary = Diary.createDiary(memorialBook, createDiaryRequestDto);
+		diaryRepository.save(diary);
 	}
 }
