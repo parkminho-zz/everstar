@@ -29,8 +29,7 @@ public class DiaryController {
 	private final HttpResponseUtil responseUtil;
 
 	@PostMapping
-	public ResponseEntity<Map<String, Object>> createDiary(@PathVariable("pet-id") Long petId,
-		@PathVariable("memorialbook-id") Long memorialBookId,
+	public ResponseEntity<Map<String, Object>> createDiary(@PathVariable("memorialbook-id") Long memorialBookId,
 		Authentication authentication, @RequestBody @Valid CreateDiaryRequestDto requestDto) {
 		diaryService.createDiary(authentication, memorialBookId, requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
