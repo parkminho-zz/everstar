@@ -32,44 +32,45 @@ public class Pet extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@Column(nullable = false)
+	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(nullable = false)
+	@Column(name = "age", nullable = false)
 	private Integer age;
 
-	@Column(nullable = false)
+	@Column(name = "memorial_date", nullable = false)
 	private LocalDate memorialDate;
 
-	@Column(nullable = false)
+	@Column(name = "species", nullable = false)
 	private String species;
 
-	@Column(nullable = false)
+	@Column(name = "gender", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 
-	@Column(nullable = false)
+	@Column(name = "relationship", nullable = false)
 	private String relationship;
 
-	@Column(nullable = false)
+	@Column(name = "profile_image_url", nullable = false)
 	private String profileImageUrl;
 
-	@Column(nullable = false)
+	@Column(name = "introduction", nullable = false)
 	private String introduction;
 
-	@Column(nullable = false)
+	@Column(name = "quest_index", nullable = false)
 	private Integer questIndex;
 
-	@Column(nullable = false)
+	@Column(name = "is_deleted", nullable = false)
 	private Boolean isDeleted;
 
-	@Column(nullable = false)
+	@Column(name = "last_access_time", nullable = false)
 	private LocalDateTime lastAccessTime;
 
 	@Builder
