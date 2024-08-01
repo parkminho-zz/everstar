@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
-import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
 
@@ -84,7 +83,8 @@ public class Pet extends BaseTimeEntity {
 		this.gender = gender;
 		this.relationship = relationship;
 		this.profileImageUrl = profileImageUrl;
-		this.introduction = (introduction != null && !introduction.isEmpty()) ? introduction : name + " 의 사랑스런 소개글을 작성 해주세요";
+		this.introduction =
+			(introduction != null && !introduction.isEmpty()) ? introduction : name + " 의 사랑스런 소개글을 작성 해주세요";
 		questIndex = 0;
 		isDeleted = false;
 		lastAccessTime = LocalDateTime.now();
@@ -107,7 +107,6 @@ public class Pet extends BaseTimeEntity {
 		questIndex++;
 	}
 
-	// 기본 소개글 수정(not blank)시 null일 때 = 즉 else문 어떻게 쓸지 잘 모르겠습니다.
 	public void updatePetIntroduction(String newIntroduction) {
 		if (newIntroduction != null && !newIntroduction.isEmpty()) {
 			this.introduction = newIntroduction;
