@@ -52,12 +52,12 @@ public class Diary extends BaseTimeEntity {
 		isDeleted = false;
 	}
 
-	public static Diary createDiary(MemorialBook memorialBook, CreateDiaryRequestDto requestDto) {
+	public static Diary createDiary(MemorialBook memorialBook, CreateDiaryRequestDto requestDto, String imageUrl) {
 		return Diary.builder()
 			.memorialBook(memorialBook)
 			.title(requestDto.getTitle())
 			.content(requestDto.getContent())
-			.imageUrl(requestDto.getImageUrl())
+			.imageUrl(imageUrl)
 			.build();
 	}
 }
