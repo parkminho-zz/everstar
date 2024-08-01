@@ -57,7 +57,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
   }, [selectedPet, petInfo]);
 
   return (
-    <div className="flex justify-center p-6 bg-gray-100">
+    <div className="flex justify-center p-6 ">
       <div className="flex flex-col items-center w-[360px] gap-8 p-5 bg-white rounded-lg shadow-md">
         {/* Modal Header */}
         <ModalHeader text={headerText} showLeftIcon={true} />
