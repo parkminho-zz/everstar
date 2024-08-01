@@ -30,7 +30,7 @@ public class DiaryService {
 	public void createDiary(Authentication authentication, Long memorialBookId,
 		CreateDiaryRequestDto createDiaryRequestDto) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
-		MemorialBook memorialBook = memorialBookRepository.findById(memorialBookId)
+		MemorialBook memorialBook = memorialBookRepository.findByIdAndIsDeleted(memorialBookId, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
 
 		if (user.getId() != memorialBook.getPet().getUser().getId()) {
