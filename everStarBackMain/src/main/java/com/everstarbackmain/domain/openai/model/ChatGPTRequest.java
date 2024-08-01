@@ -3,9 +3,12 @@ package com.everstarbackmain.domain.openai.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatGPTRequest {
 
 	private String model;
@@ -13,12 +16,16 @@ public class ChatGPTRequest {
 
 	public ChatGPTRequest(String model, String prompt) {
 		this.model = model;
-		this.messages.add(new Message("user", prompt));
+		this.messages.add(Message.createMessage("user", prompt));
 	}
 
-	public ChatGPTRequest(String model, String systemPrompt, String userPrompt) {
+	private ChatGPTRequest(String model, String systemPrompt, String userPrompt) {
 		this.model = model;
-		this.messages.add(new Message("user", systemPrompt));
-		this.messages.add(new Message("user", userPrompt));
+		this.messages.add(Message.createMessage("user", systemPrompt));
+		this.messages.add(Message.createMessage("user", userPrompt));
+	}
+
+	public static ChatGPTRequest createChatGPTRequest(String model, String systemPrompt, String userPrompt) {
+		return new ChatGPTRequest(model, systemPrompt, userPrompt);
 	}
 }

@@ -1,15 +1,22 @@
 package com.everstarbackmain.domain.openai.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Message {
 
 	private String role;
 	private String content;
 
+	private Message(String role, String content) {
+		this.role = role;
+		this.content = content;
+	}
+
+	public static Message createMessage(String role, String content) {
+		return new Message(role, content);
+	}
 }

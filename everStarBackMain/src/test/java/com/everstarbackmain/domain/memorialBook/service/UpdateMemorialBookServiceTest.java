@@ -74,7 +74,7 @@ class UpdateMemorialBookServiceTest {
 	@DisplayName("메모리얼북_공개_여부_수정_성공_테스트")
 	public void 메모리얼북_공개_여부_수정_성공_테스트() {
 		// given
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
 
 		// when
 		Assertions.assertThatNoException().isThrownBy(() -> memorialBookService.changeOpenStatus(1L));
@@ -88,7 +88,7 @@ class UpdateMemorialBookServiceTest {
 	public void 메모리얼북_공개_여부_수정_비활성화_에러_테스트() {
 		// given
 		memorialBook.changeActiveStatus();
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
 
 		// then
 		Assertions.assertThatThrownBy(() -> memorialBookService.changeOpenStatus(1L))
@@ -100,7 +100,7 @@ class UpdateMemorialBookServiceTest {
 	@DisplayName("메모리얼북_공개_여부_수정_NOT_FOUND_에러_테스트")
 	public void 메모리얼북_공개_여부_수정_NOT_FOUND_에러_테스트() {
 		// given
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.empty());
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.empty());
 
 		// then
 		Assertions.assertThatThrownBy(() -> memorialBookService.changeOpenStatus(1L))
@@ -112,8 +112,8 @@ class UpdateMemorialBookServiceTest {
 	@DisplayName("심리_검사_결과_추가_성공_테스트")
 	public void 심리_검사_결과_추가_성공_테스트() {
 		// given
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
-		BDDMockito.given(petRepository.findById(anyLong())).willReturn(Optional.of(pet));
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
 		MemorialBookTestResultRequestDto requestDto = new MemorialBookTestResultRequestDto(2);
@@ -131,7 +131,9 @@ class UpdateMemorialBookServiceTest {
 	@DisplayName("존재하지_않는_메모리얼북_심리_검사_결과_추가_에러_테스트")
 	public void 존재하지_않는_메모리얼북_심리_검사_결과_추가_에러_테스트() {
 		// given
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.empty());
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.empty());
+		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
+		BDDMockito.given(principalDetails.getUser()).willReturn(user);
 		MemorialBookTestResultRequestDto requestDto = new MemorialBookTestResultRequestDto(10);
 
 		// then
@@ -145,8 +147,8 @@ class UpdateMemorialBookServiceTest {
 	@DisplayName("잘못된_심리_검사_결과_추가_에러_테스트")
 	public void 잘못된_심리_검사_결과_추가_에러_테스트() {
 		// given
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
-		BDDMockito.given(petRepository.findById(anyLong())).willReturn(Optional.of(pet));
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
 		MemorialBookTestResultRequestDto requestDto = new MemorialBookTestResultRequestDto(30);
@@ -170,8 +172,8 @@ class UpdateMemorialBookServiceTest {
 		MemorialBook otherMemorialBook = MemorialBook.createMemorialBook(otherPet);
 		MemorialBookTestResultRequestDto requestDto = new MemorialBookTestResultRequestDto(10);
 
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(otherMemorialBook));
-		BDDMockito.given(petRepository.findById(anyLong())).willReturn(Optional.of(otherPet));
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(otherMemorialBook));
+		BDDMockito.given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(otherPet));
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
 

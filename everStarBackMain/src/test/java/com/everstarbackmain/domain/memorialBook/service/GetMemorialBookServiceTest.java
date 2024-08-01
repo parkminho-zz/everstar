@@ -112,7 +112,7 @@ public class GetMemorialBookServiceTest {
 	@DisplayName("메모리얼북_펫_ID로_조회_성공_테스트")
 	public void 메모리얼북_펫_ID로_조회_성공_테스트() {
 		// given
-		BDDMockito.given(memorialBookRepository.findByPetId(anyLong())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(memorialBookRepository.findByPetIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
 
 		// when
 		MemorialBookInfoResponseDto responseDto = memorialBookService.getMemorialBookInfoByPetId(1L);
@@ -125,7 +125,7 @@ public class GetMemorialBookServiceTest {
 	@DisplayName("메모리얼북_펫_ID로_조회_메모리얼북_존재하지_않는_에외_테스트")
 	public void 메모리얼북_펫_ID로_조회_메모리얼북_존재하지_않는_에외_테스트() {
 		// given
-		BDDMockito.given(memorialBookRepository.findByPetId(anyLong())).willReturn(Optional.empty());
+		BDDMockito.given(memorialBookRepository.findByPetIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.empty());
 
 		// when then
 		Assertions.assertThatThrownBy(() -> memorialBookService.getMemorialBookInfoByPetId(1L))
@@ -140,13 +140,13 @@ public class GetMemorialBookServiceTest {
 		memorialBook.changeActiveStatus();
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
-		BDDMockito.given(petRepository.findById(anyLong())).willReturn(Optional.of(pet));
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
 		BDDMockito.given(sentimentAnalysisRepository.findByPetId(anyLong())).willReturn(Optional.of(sentimentAnalysis));
 		BDDMockito.given(questRepository.findAll()).willReturn(List.of(quest));
-		BDDMockito.given(questAnswerRepository.findByPetId(anyLong())).willReturn(List.of(questAnswer));
+		BDDMockito.given(questAnswerRepository.findByPetIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(List.of(questAnswer));
 		BDDMockito.given(aiAnswerRepository.findByPetId(anyLong())).willReturn(List.of(aiAnswer));
-		BDDMockito.given(diaryRepository.findByMemorialBookId(anyLong())).willReturn(List.of(diary));
+		BDDMockito.given(diaryRepository.findByMemorialBookIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(List.of(diary));
 
 		// when
 		MemorialBookDetailResponseDto responseDto = memorialBookService.getMemorialBookDetail(authentication, 1L, 1L);
@@ -166,7 +166,9 @@ public class GetMemorialBookServiceTest {
 	@DisplayName("메모리얼북_상세_조회_메모리얼북_존재하지_않는_예외_테스트")
 	public void 메모리얼북_상세_조회_메모리얼북_존재하지_않는_예외_테스트() {
 		// given
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.empty());
+		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
+		BDDMockito.given(principalDetails.getUser()).willReturn(user);
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.empty());
 
 		// when then
 		Assertions.assertThatThrownBy(() -> memorialBookService.getMemorialBookDetail(authentication, 1L, 1L))
@@ -181,8 +183,8 @@ public class GetMemorialBookServiceTest {
 		memorialBook.changeActiveStatus();
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
-		BDDMockito.given(petRepository.findById(anyLong())).willReturn(Optional.empty());
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.empty());
 
 		// when then
 		Assertions.assertThatThrownBy(() -> memorialBookService.getMemorialBookDetail(authentication, 1L, 1L))
@@ -197,8 +199,8 @@ public class GetMemorialBookServiceTest {
 		memorialBook.changeActiveStatus();
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
-		BDDMockito.given(petRepository.findById(anyLong())).willReturn(Optional.of(pet));
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
 		BDDMockito.given(sentimentAnalysisRepository.findByPetId(anyLong())).willReturn(Optional.empty());
 
 		// when then
@@ -213,7 +215,9 @@ public class GetMemorialBookServiceTest {
 		// given
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
+		BDDMockito.given(sentimentAnalysisRepository.findByPetId(anyLong())).willReturn(Optional.of(sentimentAnalysis));
 
 		// when then
 		Assertions.assertThatThrownBy(() -> memorialBookService.getMemorialBookDetail(authentication, 1L, 1L))
@@ -230,7 +234,9 @@ public class GetMemorialBookServiceTest {
 			LocalDate.now(), Gender.MALE, LocalTime.now(), Role.ROLE_USER));
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(otherUser);
-		BDDMockito.given(memorialBookRepository.findById(anyLong())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
+		BDDMockito.given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
+		BDDMockito.given(sentimentAnalysisRepository.findByPetId(anyLong())).willReturn(Optional.of(sentimentAnalysis));
 
 		// when then
 		Assertions.assertThatThrownBy(() -> memorialBookService.getMemorialBookDetail(authentication, 1L, 1L))

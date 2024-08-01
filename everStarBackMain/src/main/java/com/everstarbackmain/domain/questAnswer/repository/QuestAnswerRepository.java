@@ -8,6 +8,5 @@ import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 
 public interface QuestAnswerRepository extends JpaRepository<QuestAnswer, Long>, QuestAnswerCustomRepository {
 
-	List<QuestAnswer> findByPetId(Long petId);
-
+	List<QuestAnswer> findByPetIdAndIsDeleted(Long petId, Boolean isDeleted);
 }

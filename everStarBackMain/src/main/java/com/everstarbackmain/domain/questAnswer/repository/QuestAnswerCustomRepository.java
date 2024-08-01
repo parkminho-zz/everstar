@@ -6,5 +6,5 @@ import org.springframework.data.repository.query.Param;
 
 public interface QuestAnswerCustomRepository {
 
-	List<String> findContentByPetIdAndSpecificQuestIds(Long petId, Integer firstQuestId, Integer secondQuestId);
+	List<String> findContentByPetIdAndSpecificQuestIdsAndIsDeleted(Long petId, Integer firstQuestId, Integer secondQuestId, boolean isDeleted);
 }
