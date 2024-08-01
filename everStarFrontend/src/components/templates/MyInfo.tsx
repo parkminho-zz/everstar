@@ -63,11 +63,7 @@ export const MyInfo: React.FC = () => {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
 
-  const headerType = isMobile
-    ? 'mobile-everstar'
-    : isTabletOrMobile
-      ? 'tablet-everstar'
-      : 'everstar';
+  const headerType = isMobile ? 'mobile-mypage' : isTabletOrMobile ? 'tablet-mypage' : 'mypage';
 
   const footerType = isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop';
 
