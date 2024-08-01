@@ -23,10 +23,10 @@ export const InformationText = ({
 
   return (
     <div
-      className={`relative w-[116px] h-[17px] inline-flex gap-2 ${alignmentClasses[align]} ${className}`}
+      className={`relative inline-flex gap-2 ${alignmentClasses[align]} ${className}`}
     >
       <div
-        className={`kor-p-p4 font-normal ${
+        className={`whitespace-nowrap kor-p-p4 font-normal ${
           state === 'error' ? 'w-fit text-mainerror' : 'text-greyscaleblack-80'
         } ${divClassName}`}
       >
