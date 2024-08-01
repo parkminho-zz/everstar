@@ -2,14 +2,21 @@ package com.everstarbackmain.domain.openai.model;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatGPTResponse {
 
 	private List<Choice> choices;
+
+	private ChatGPTResponse(List<Choice> choices) {
+		this.choices = choices;
+	}
+
+	public static ChatGPTResponse chatGPTResponse(List<Choice> choices) {
+		return new ChatGPTResponse(choices);
+	}
 }
