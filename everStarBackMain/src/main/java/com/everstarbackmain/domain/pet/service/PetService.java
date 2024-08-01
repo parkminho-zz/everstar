@@ -1,5 +1,8 @@
 package com.everstarbackmain.domain.pet.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +15,7 @@ import com.everstarbackmain.domain.pet.repository.PersonalityRepository;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.pet.requestDto.UpdatePetIntroductionDto;
+import com.everstarbackmain.domain.pet.responseDto.EnrolledPetsResponseDto;
 import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;
 import com.everstarbackmain.domain.sentimentAnalysis.repository.SentimentAnalysisRepository;
 import com.everstarbackmain.domain.user.model.User;
@@ -68,6 +72,14 @@ public class PetService {
 	private void createSentimentAnalysis(Pet pet) {
 		SentimentAnalysis sentimentAnalysis = SentimentAnalysis.createSentimentAnalysis(pet);
 		sentimentAnalysisRepository.save(sentimentAnalysis);
+	}
+
+	public List<EnrolledPetsResponseDto> getAllUserPets(Authentication authentication) {
+		Long userId = ((PrincipalDetails) authentication.getPrincipal()).getUser().getId();
+		List<Pet> pets = petRepository.findAllByUserIdAndIsDeleted(userId,false);
+		return pets.stream()
+			.map(EnrolledPetsResponseDto::createEnrolledResponseDto)
+			.collect(Collectors.toList());
 	}
 
 
