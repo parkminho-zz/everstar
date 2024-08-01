@@ -81,6 +81,7 @@ public class User extends BaseTimeEntity {
 		this.birthDate = birthDate;
 		this.gender = gender;
 		this.questReceptionTime = questReceptionTime;
+		isDeleted = false;
 		this.role = role;
 	}
 
