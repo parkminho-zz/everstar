@@ -38,6 +38,9 @@ const meta: Meta<typeof EverStarMain> = {
       description: "버튼의 텍스트",
     },
     onButtonClick: { action: "clicked", description: "버튼 클릭 이벤트" },
+    buttonIcon: {
+      buttonIcon: "SmallStarImg",
+    },
   },
 };
 

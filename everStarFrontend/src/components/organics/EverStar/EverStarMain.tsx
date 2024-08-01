@@ -1,7 +1,9 @@
 import React from "react";
 import { CurrentLocation } from "components/molecules/EverStar/CurrentLocation/CurrentLocation";
-import { PrimaryButton } from "components/molecules/EverStar/PrimaryButton/PrimaryButton";
-import { ProgressBar } from "components/molecules/EverStar/ProgressBar/ProgressBar";
+import { PrimaryButton } from "components/atoms/buttons/PrimaryButton";
+import { ProgressBar } from "components/molecules/ProgressBar/ProgressBar";
+import { LogoIcons } from "components/atoms/symbols/Logo/LogoIcons";
+import { MusicControlButton } from "components/molecules/music/MusicControlButton";
 
 type ViewMemorialBookTheme = "focus" | "hover" | "white";
 type ViewMemorialBookSize = "large" | "medium" | "small";
@@ -14,6 +16,7 @@ interface EverStarMainProps {
   buttonSize: "large" | "medium" | "small";
   buttonDisabled: boolean;
   buttonText: string;
+  buttonIcon: "SmallStarimg" | "SmallEarthImg";
   onButtonClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -116,6 +119,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   buttonSize,
   buttonDisabled,
   buttonText,
+  buttonIcon = <LogoIcons variant="small-earth-img" />,
   onButtonClick,
   className,
 }) => {
@@ -128,7 +132,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   return (
     <div>
       <div
-        className={`flex flex-col w-80 h-[300px] items-start gap-[19px] pl-4 pr-2 py-6 relative bg-[#f3f6fb] shadow-[0px_4px_4px_#00000040] ${className}`}
+        className={`flex flex-col w-80 h-[400px] items-start gap-[19px] pl-4 pr-2 py-6 relative bg-[#f3f6fb] shadow-[0px_4px_4px_#00000040] ${className}`}
       >
         <div className="flex w-72 items-center justify-center gap-8 relative flex-[0_0_auto]">
           <div className="relative w-fit mt-[-1.00px] font-kor-h-h1 font-[number:var(--kor-h-h1-font-weight)] text-greyscaleblack-100 text-[length:var(--kor-h-h1-font-size)] tracking-[var(--kor-h-h1-letter-spacing)] leading-[var(--kor-h-h1-line-height)] [font-style:var(--kor-h-h1-font-style)]">
@@ -142,12 +146,17 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
             size={buttonSize}
             disabled={buttonDisabled}
             onClick={onButtonClick}
+            icon={buttonIcon}
           >
             {buttonText}
           </PrimaryButton>
         </div>
 
-        <div className="flex flex-col items-start gap-[13px] p-6 relative bg-white rounded-xl w-full">
+        <div className="flex flex-col items-start gap-[13px] p-3 relative bg-white rounded-xl w-full ">
+          <MusicControlButton duration={180} />
+        </div>
+
+        <div className="flex flex-col items-start gap-[13px] p-6 relative bg-white rounded-xl w-full ">
           <ProgressBar className="w-full" fill={fill} />
         </div>
 

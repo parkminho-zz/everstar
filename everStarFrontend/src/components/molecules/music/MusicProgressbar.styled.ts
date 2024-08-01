@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export const Container = styled.div`
   position: relative;
-  width: 240px; /* 너비를 240px로 설정 */
+  width: 210px;
 `;
 
 export const ProgressContainer = styled(motion.div)`

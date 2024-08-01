@@ -10,7 +10,7 @@ interface MusicControlButtonProps {
   duration: number; // Duration in seconds
 }
 
-const MusicControlButton: React.FC<MusicControlButtonProps> = ({
+export const MusicControlButton: React.FC<MusicControlButtonProps> = ({
   duration,
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -83,5 +83,3 @@ const ButtonContainer = styled.div`
   align-items: center;
   gap: 10px;
 `;
-
-export default MusicControlButton;

@@ -1,6 +1,6 @@
 import React from "react";
 import { Meta, StoryFn } from "@storybook/react";
-import MusicControlButton from "./MusicControlButton";
+import { MusicControlButton } from "./MusicControlButton";
 
 export default {
   title: "Molecules/MusicControlButton",

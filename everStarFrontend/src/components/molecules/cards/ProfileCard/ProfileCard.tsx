@@ -1,6 +1,6 @@
-import {PencilIcon} from 'components/atoms/icons/Pencil/PencilIcon';
-import { AvatarSquare } from 'components/atoms/symbols/Avatar/AvatarSquare';
-import { Tag } from '../../../atoms/buttons/Tag';
+import { PencilIcon } from "components/atoms/icons/Pencil/PencilIcon";
+import { AvatarSquare } from "components/atoms/symbols/Avatar/AvatarSquare";
+import { Tag } from "../../../atoms/buttons/Tag";
 
 interface IProfileCard {
   name: string;
@@ -10,7 +10,13 @@ interface IProfileCard {
   tagList: string[];
 }
 
-export const ProfileCard = ({ name, age, date, description, tagList }: IProfileCard) => {
+export const ProfileCard = ({
+  name,
+  age,
+  date,
+  description,
+  tagList,
+}: IProfileCard) => {
   const visibleTags = tagList.slice(0, 3);
 
   return (
@@ -22,7 +28,9 @@ export const ProfileCard = ({ name, age, date, description, tagList }: IProfileC
           {age}살 | {date}
         </label>
       </div>
-      <p className="block p-4 mt-2 text-md text-greyscaleblack-80">{description}</p>
+      <p className="block p-4 mt-2 text-md text-greyscaleblack-80">
+        {description}
+      </p>
       <div className="flex flex-row items-center justify-between w-full">
         <div className="flex flex-wrap gap-2 p-4 mt-10">
           {visibleTags.map((tag, index) => (
