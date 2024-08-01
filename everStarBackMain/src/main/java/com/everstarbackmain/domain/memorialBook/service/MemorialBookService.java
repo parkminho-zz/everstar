@@ -58,14 +58,11 @@ public class MemorialBookService {
 	public void changeOpenStatus(Long memorialBookId) {
 		MemorialBook memorialBook = memorialBookRepository.findById(memorialBookId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
-		validateActiveStatus(memorialBook);
-		memorialBook.changeOpenStatus();
-	}
-
-	private void validateActiveStatus(MemorialBook memorialBook) {
 		if (!memorialBook.getIsActive()) {
 			throw new ExceptionResponse(CustomException.NOT_ACTIVATED_MEMORIAL_BOOK_EXCEPTION);
 		}
+
+		memorialBook.changeOpenStatus();
 	}
 
 	@Transactional
@@ -80,22 +77,17 @@ public class MemorialBookService {
 	@Transactional
 	public void addPsychologicalTestResult(Authentication authentication, Long petId, Long memorialBookId,
 		MemorialBookTestResultRequestDto testResultRequestDto) {
+		User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
 		MemorialBook memorialBook = memorialBookRepository.findById(memorialBookId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
-
-		validateMemorialBook(authentication, petId, memorialBook);
-		addTestResultString(memorialBook, testResultRequestDto.getPsychologicalTestResult());
-	}
-
-	private void validateMemorialBook(Authentication authentication, Long petId, MemorialBook memorialBook) {
-		User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
-
 		Pet pet = petRepository.findById(petId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
 		if ((pet.getUser().getId() != user.getId()) || (petId != memorialBook.getPet().getId())) {
 			throw new ExceptionResponse(CustomException.NOT_MY_MEMORIAL_BOOK_EXCEPTION);
 		}
+
+		addTestResultString(memorialBook, testResultRequestDto.getPsychologicalTestResult());
 	}
 
 	private void addTestResultString(MemorialBook memorialBook, Integer resultScore) {
@@ -115,26 +107,13 @@ public class MemorialBookService {
 	}
 
 	public MemorialBookDetailResponseDto getMemorialBookDetail(Authentication authentication, Long petId, Long memorialBookId) {
+		User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
 		MemorialBook memorialBook = memorialBookRepository.findById(memorialBookId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
-		validateMemorialBook(authentication, memorialBook);
-
 		Pet pet = petRepository.findById(petId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
-
 		SentimentAnalysis sentimentAnalysis = sentimentAnalysisRepository.findByPetId(petId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_SENTIMENT_ANALYSIS_EXCEPTION));
-
-		List<Quest> quests = questRepository.findAll();
-		List<QuestAnswer> questAnswers = questAnswerRepository.findByPetId(petId);
-		List<AiAnswer> aiAnswers = aiAnswerRepository.findByPetId(petId);
-		List<Diary> diaries = diaryRepository.findByMemorialBookId(memorialBookId);
-
-		return convertToMemorialBookDetailDto(memorialBook, pet, sentimentAnalysis, quests, questAnswers, aiAnswers, diaries);
-	}
-
-	private void validateMemorialBook(Authentication authentication, MemorialBook memorialBook) {
-		User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
 
 		if (!memorialBook.getIsActive()) {
 			throw new ExceptionResponse(CustomException.NOT_ACTIVATED_MEMORIAL_BOOK_EXCEPTION);
@@ -143,6 +122,13 @@ public class MemorialBookService {
 		if ((memorialBook.getPet().getUser().getId() != user.getId()) && !memorialBook.getIsOpen()) {
 			throw new ExceptionResponse(CustomException.NOT_OPEN_MEMORIAL_BOOK_EXCEPTION);
 		}
+
+		List<Quest> quests = questRepository.findAll();
+		List<QuestAnswer> questAnswers = questAnswerRepository.findByPetId(petId);
+		List<AiAnswer> aiAnswers = aiAnswerRepository.findByPetId(petId);
+		List<Diary> diaries = diaryRepository.findByMemorialBookId(memorialBookId);
+
+		return convertToMemorialBookDetailDto(memorialBook, pet, sentimentAnalysis, quests, questAnswers, aiAnswers, diaries);
 	}
 
 	private MemorialBookDetailResponseDto convertToMemorialBookDetailDto(MemorialBook memorialBook, Pet pet,
