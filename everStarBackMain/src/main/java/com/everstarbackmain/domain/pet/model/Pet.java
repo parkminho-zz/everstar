@@ -52,7 +52,7 @@ public class Pet extends BaseTimeEntity {
 
 	@Column(name = "gender", nullable = false)
 	@Enumerated(EnumType.STRING)
-	private Gender gender;
+	private PetGender gender;
 
 	@Column(name = "relationship", nullable = false)
 	private String relationship;
@@ -73,7 +73,7 @@ public class Pet extends BaseTimeEntity {
 	private LocalDateTime lastAccessTime;
 
 	@Builder
-	private Pet(User user, String name, Integer age, LocalDate memorialDate, String species, Gender gender,
+	private Pet(User user, String name, Integer age, LocalDate memorialDate, String species, PetGender gender,
 		String relationship, String profileImageUrl, String introduction) {
 		this.user = user;
 		this.name = name;

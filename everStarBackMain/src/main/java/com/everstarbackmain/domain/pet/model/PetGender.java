@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public enum Gender {
+public enum PetGender {
 
 	MALE("MALE"),
 	FEMALE("FEMALE");

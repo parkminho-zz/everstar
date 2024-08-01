@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 
 import com.everstarbackmain.domain.memorialBook.repository.MemorialBookRepository;
+import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.repository.PersonalityRepository;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
@@ -58,7 +59,7 @@ public class CreatePetServiceTest {
 		user = User.signUpUser(new JoinRequestDto("email", "password", "name", "010-1111-1111", LocalDate.now(),
 			Gender.MALE, LocalTime.now(), Role.ROLE_USER));
 		requestDto = new CreatePetRequestDto("petName",10,
-			LocalDate.of(1990, 1, 1),"species", Gender.MALE,
+			LocalDate.of(1990, 1, 1),"species", PetGender.MALE,
 			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이"));
 	}
 

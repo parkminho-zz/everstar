@@ -3,8 +3,8 @@ package com.everstarbackmain.domain.pet.responseDto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.everstarbackmain.domain.pet.model.Gender;
 import com.everstarbackmain.domain.pet.model.Pet;
+import com.everstarbackmain.domain.pet.model.PetGender;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ public class PetDetailResponseDto {
 	private Integer age;
 	private LocalDate memorialDate;
 	private String species;
-	private Gender gender;
+	private PetGender gender;
 	private String relationship;
 	private String profileImageUrl;
 	private String introduction;
