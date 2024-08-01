@@ -26,13 +26,19 @@ public class UserLetterService {
 	private final UserLetterRepository userLetterRepository;
 	private final PetRepository petRepository;
 
+	@Transactional
 	public void writeLetter(Authentication authentication, long petId, WriteLetterRequestDto requestDto) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 
 		Pet pet = petRepository.findById(petId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
-		UserLetter userLetter =
+		if(requestDto.getImageUrl() == null){
+			UserLetter userLetter = UserLetter.writeLetterHasNotImage(pet,requestDto);
+			userLetterRepository.save(userLetter);
+			return;
+		}
+		UserLetter userLetter = UserLetter.writeLetterHasImage(pet,requestDto);
+		userLetterRepository.save(userLetter);
 	}
-
 }
