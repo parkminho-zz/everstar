@@ -47,11 +47,20 @@ public class PetLetter extends BaseTimeEntity {
 	private String content;
 
 	@Builder
-	private PetLetter(Pet pet, UserLetter userLetter, boolean isRead, boolean isDeleted, String content) {
+	private PetLetter(Pet pet, UserLetter userLetter, boolean isRead, String content) {
 		this.pet = pet;
 		this.userLetter = userLetter;
 		this.isRead = isRead;
-		this.isDeleted = isDeleted;
+		this.isDeleted = false;
 		this.content = content;
+	}
+
+	public static PetLetter writePetLetterAnswer(UserLetter userLetter, String content) {
+		return PetLetter.builder()
+			.pet(userLetter.getPet())
+			.userLetter(userLetter)
+			.isRead(false)
+			.content(content)
+			.build();
 	}
 }

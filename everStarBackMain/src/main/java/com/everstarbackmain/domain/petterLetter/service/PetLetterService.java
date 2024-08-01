@@ -3,6 +3,8 @@ package com.everstarbackmain.domain.petterLetter.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.everstarbackmain.domain.openai.util.OpenAiClient;
+import com.everstarbackmain.domain.petterLetter.model.PetLetter;
 import com.everstarbackmain.domain.petterLetter.repository.PetLetterRepository;
 import com.everstarbackmain.domain.userLetter.model.UserLetter;
 
@@ -16,8 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 public class PetLetterService {
 
 	private final PetLetterRepository petLetterRepository;
+	private final OpenAiClient openAiClient;
 
 	public void writePetLetter(UserLetter userLetter){
+		String petLetterPrompt = openAiClient.writePetLetter(userLetter);
+		PetLetter petLetter = PetLetter.
+
 
 
 	}
