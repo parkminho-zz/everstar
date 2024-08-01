@@ -1,61 +1,52 @@
-import { Meta, StoryObj } from '@storybook/react';
-import { ProfileCard } from 'components/molecules/cards/ProfileCard/ProfileCard';
+import type { Meta, StoryObj } from '@storybook/react';
+import { ProfileCard } from './ProfileCard';
 
 const meta: Meta<typeof ProfileCard> = {
   title: 'Molecules/Card/ProfileCard',
   component: ProfileCard,
-  parameters: {
-    layout: 'centered',
-  },
   tags: ['autodocs'],
   argTypes: {
     name: {
-      control: 'text',
-      description: '이름',
-      defaultValue: '홍길동',
+      control: { type: 'text' },
     },
     age: {
-      control: 'number',
-      description: '나이',
-      defaultValue: 5,
+      control: { type: 'number' },
     },
     date: {
-      control: 'text',
-      description: '날짜',
-      defaultValue: '2023-07-25',
+      control: { type: 'text' },
     },
     description: {
-      control: 'text',
-      description: '설명',
-      defaultValue: '사랑스러운 반려동물입니다.',
+      control: { type: 'text' },
     },
     tagList: {
-      control: { type: 'select', options: ['쾌활한', '귀여운', '애교많은'] },
-      description: '태그 목록',
+      control: { type: 'object' },
+    },
+    avatarSrc: {
+      control: { type: 'text' },
     },
   },
 };
 
 export default meta;
-
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof ProfileCard>;
 
 export const Default: Story = {
   args: {
     name: '홍길동',
-    age: 5,
-    date: '2023-07-25',
-    description: '사랑스러운 반려동물입니다.',
-    tagList: ['쾌활한', '귀여운', '애교많은'],
+    age: 25,
+    date: '2024-08-01',
+    description: '여기에 설명을 입력하세요.',
+    tagList: ['친절한', '성실한', '열정적인'],
   },
 };
 
-export const WithManyTags: Story = {
+export const AvatarSrc: Story = {
   args: {
-    name: '김철수',
-    age: 3,
-    date: '2023-08-10',
-    description: '매우 활발한 반려동물입니다.',
-    tagList: ['활발한', '똑똑한', '장난꾸러기', '사랑스러운', '충성스러운'],
+    name: '이순신',
+    age: 45,
+    date: '2024-07-01',
+    description: '여기는 사용자 설명이 들어갑니다.',
+    tagList: ['용감한', '지혜로운', '강인한', '친절한'],
+    avatarSrc: 'https://via.placeholder.com/340x250', // 예시 이미지 URL
   },
 };
