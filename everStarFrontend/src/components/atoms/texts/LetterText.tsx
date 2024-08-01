@@ -22,9 +22,14 @@ const colorStyle = {
   white: 'text-greyscalewhite',
 };
 
-export const LetterText = ({ size, color, children, className }: ILetterText) => {
+export const LetterText = ({
+  size,
+  color,
+  children,
+  className,
+}: ILetterText) => {
   return (
-    <div className="max-w-full">
+    <div className='max-w-full'>
       <div
         className={`top-0 left-0 font-Kyobo ${fontStyle[size]} ${colorStyle[color as Color] || ''} ${className || ''}`}
       >

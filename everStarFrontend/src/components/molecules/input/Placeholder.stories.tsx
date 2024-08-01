@@ -1,6 +1,5 @@
-
-import { fn } from "@storybook/test";
-import {Placeholder} from './Placeholder';
+import { fn } from '@storybook/test';
+import { Placeholder } from './Placeholder';
 
 export const ActionsData = {
   onArchiveTask: fn(),
@@ -45,4 +44,3 @@ export const Archived = {
     },
   },
 };
-

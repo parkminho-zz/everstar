@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import {PhoneStopIcon} from './PhoneStopIcon';
+import { PhoneStopIcon } from './PhoneStopIcon';
 
 const meta: Meta<typeof PhoneStopIcon> = {
   title: 'Atoms/Icons/PhoneStopIcon',

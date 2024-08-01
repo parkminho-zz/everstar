@@ -16,7 +16,10 @@ export const Avatar: React.FC<AvatarProps> = ({ size, name, className }) => {
   const avatarSrc = require('assets/symbols/avatar.png');
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} className={className}>
+    <div
+      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      className={className}
+    >
       {size === 'text' ? (
         <div
           style={{
@@ -46,11 +49,20 @@ export const Avatar: React.FC<AvatarProps> = ({ size, name, className }) => {
             overflow: 'hidden',
           }}
         >
-          <img src={avatarSrc} alt="avatar" style={{ width: '100%', height: '100%' }} />
+          <img
+            src={avatarSrc}
+            alt='avatar'
+            style={{ width: '100%', height: '100%' }}
+          />
         </div>
       )}
       {size === 'medium' && name && (
-        <div style={{ fontFamily: 'var(--kor-subtitle-subtitle1-font-family)', marginTop: '8px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--kor-subtitle-subtitle1-font-family)',
+            marginTop: '8px',
+          }}
+        >
           {name}
         </div>
       )}

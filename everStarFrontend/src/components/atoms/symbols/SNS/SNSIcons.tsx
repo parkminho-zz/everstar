@@ -21,7 +21,7 @@ const iconMap = {
 
 export const SNSIcons: React.FC<SNSIconsProps> = ({ variant }) => {
   const IconComponent = iconMap[variant];
-  return <IconComponent className="w-6 h-6" />;
+  return <IconComponent className='w-6 h-6' />;
 };
 
 export type { SNSIconsProps };

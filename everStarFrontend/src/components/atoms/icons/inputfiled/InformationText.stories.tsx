@@ -1,6 +1,5 @@
-
-import { fn } from "@storybook/test";
-import {InformationText} from './InformationText';
+import { fn } from '@storybook/test';
+import { InformationText } from './InformationText';
 
 export const ActionsData = {
   onArchiveTask: fn(),

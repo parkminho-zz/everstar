@@ -1,6 +1,5 @@
-
-import { fn } from "@storybook/test";
-import {Lable} from './Lable';
+import { fn } from '@storybook/test';
+import { Lable } from './Lable';
 
 export const ActionsData = {
   onArchiveTask: fn(),
@@ -45,4 +44,3 @@ export const Archived = {
     },
   },
 };
-

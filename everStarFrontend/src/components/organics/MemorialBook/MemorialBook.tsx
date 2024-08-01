@@ -7,22 +7,31 @@ import { ChartPage } from 'components/molecules/MemorialBook/ChartPage/ChartPage
 import { DiaryPage } from 'components/molecules/MemorialBook/DiaryPage/DiaryPage';
 
 // 페이지 컴포넌트 정의
-const Page = React.forwardRef<HTMLDivElement, { children: React.ReactNode; pageIndex: number }>(
-  (props, ref) => {
-    return (
-      <div className="demoPage h-[600px] w-[360px] bg-white" ref={ref}>
-        {props.children}
-        <div className="absolute text-xs text-gray-500 bottom-2 right-2">{props.pageIndex + 1}</div>
+const Page = React.forwardRef<
+  HTMLDivElement,
+  { children: React.ReactNode; pageIndex: number }
+>((props, ref) => {
+  return (
+    <div className='demoPage h-[600px] w-[360px] bg-white' ref={ref}>
+      {props.children}
+      <div className='absolute text-xs text-gray-500 bottom-2 right-2'>
+        {props.pageIndex + 1}
       </div>
-    );
-  },
-);
+    </div>
+  );
+});
 Page.displayName = 'Page';
 
 // 각 페이지 타입 정의
 export type PageType =
   | { type: 'cover' }
-  | { type: 'question'; question: string; myAnswer: string; petName: string; petAnswer: string }
+  | {
+      type: 'question';
+      question: string;
+      myAnswer: string;
+      petName: string;
+      petAnswer: string;
+    }
   | {
       type: 'imageQuestion';
       question: string;
@@ -62,11 +71,11 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
   }, []);
 
   return (
-    <div className="flex justify-center">
+    <div className='flex justify-center'>
       <HTMLFlipBook
         width={width}
         height={height}
-        size="fixed"
+        size='fixed'
         minWidth={minWidth}
         maxWidth={maxWidth}
         minHeight={minHeight}
@@ -85,7 +94,7 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
         renderOnlyPageLengthChange={false}
         onFlip={onFlip}
         ref={bookRef as MutableRefObject<typeof HTMLFlipBook | null>}
-        className=""
+        className=''
         style={{}}
         startPage={0}
         showPageCorners={true}
@@ -126,13 +135,21 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
             case 'chart':
               return (
                 <Page key={index} pageIndex={index}>
-                  <ChartPage title={page.title} content={page.content} scores={page.scores} />
+                  <ChartPage
+                    title={page.title}
+                    content={page.content}
+                    scores={page.scores}
+                  />
                 </Page>
               );
             case 'diary':
               return (
                 <Page key={index} pageIndex={index}>
-                  <DiaryPage title={page.title} content={page.content} imageUrl={page.imageUrl} />
+                  <DiaryPage
+                    title={page.title}
+                    content={page.content}
+                    imageUrl={page.imageUrl}
+                  />
                 </Page>
               );
             default:

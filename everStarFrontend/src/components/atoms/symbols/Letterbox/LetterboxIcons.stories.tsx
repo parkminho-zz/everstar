@@ -7,7 +7,10 @@ const meta: Meta<typeof LetterboxIcons> = {
   tags: ['autodocs'],
   argTypes: {
     variant: {
-      control: { type: 'radio', options: ['letterbox', 'letterbox-alert', 'letterbox-text'] },
+      control: {
+        type: 'radio',
+        options: ['letterbox', 'letterbox-alert', 'letterbox-text'],
+      },
     },
     number: {
       control: { type: 'number' },

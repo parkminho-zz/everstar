@@ -16,7 +16,8 @@ const meta: Meta<typeof WeatherIcon> = {
   parameters: {
     docs: {
       description: {
-        component: 'WeatherIcon component displays various weather icons based on the type prop.',
+        component:
+          'WeatherIcon component displays various weather icons based on the type prop.',
       },
     },
   },

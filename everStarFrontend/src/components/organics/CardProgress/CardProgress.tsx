@@ -19,21 +19,24 @@ const getFillMessage = (fill: number) => {
   return '';
 };
 
-export const CardProgress: React.FC<Props> = ({ className, fill }): JSX.Element => {
+export const CardProgress: React.FC<Props> = ({
+  className,
+  fill,
+}): JSX.Element => {
   return (
     <div
       className={`flex flex-col w-80 h-[200px] items-start gap-[19px] pl-4 pr-2 py-6 relative bg-[#f3f6fb] shadow-[0px_4px_4px_#00000040] ${className}`}
     >
-      <div className="flex w-72 items-center justify-center gap-8 relative flex-[0_0_auto]">
-        <div className="relative w-fit mt-[-1.00px] font-kor-h-h1 font-[number:var(--kor-h-h1-font-weight)] text-greyscaleblack-100 text-[length:var(--kor-h-h1-font-size)] tracking-[var(--kor-h-h1-letter-spacing)] leading-[var(--kor-h-h1-line-height)] [font-style:var(--kor-h-h1-font-style)]">
+      <div className='flex w-72 items-center justify-center gap-8 relative flex-[0_0_auto]'>
+        <div className='relative w-fit mt-[-1.00px] font-kor-h-h1 font-[number:var(--kor-h-h1-font-weight)] text-greyscaleblack-100 text-[length:var(--kor-h-h1-font-size)] tracking-[var(--kor-h-h1-letter-spacing)] leading-[var(--kor-h-h1-line-height)] [font-style:var(--kor-h-h1-font-style)]'>
           현재 위치
         </div>
-        <LogoIcons variant="small-earth" />
+        <LogoIcons variant='small-earth' />
       </div>
-      <div className="inline-flex flex-col items-start gap-[13px] p-6 relative flex-[0_0_auto] bg-white rounded-xl">
-        <ProgressBar className="!flex-[0_0_auto]" fill={fill} />
+      <div className='inline-flex flex-col items-start gap-[13px] p-6 relative flex-[0_0_auto] bg-white rounded-xl'>
+        <ProgressBar className='!flex-[0_0_auto]' fill={fill} />
       </div>
-      <div className="relative w-[298px] h-[18px] mr-[-2.00px] font-kor-p-p1 font-[number:var(--kor-p-p1-font-weight)] text-black text-[length:var(--kor-p-p1-font-size)] text-center tracking-[var(--kor-p-p1-letter-spacing)] leading-[var(--kor-p-p1-line-height)] whitespace-nowrap [font-style:var(--kor-p-p1-font-style)]">
+      <div className='relative w-[298px] h-[18px] mr-[-2.00px] font-kor-p-p1 font-[number:var(--kor-p-p1-font-weight)] text-black text-[length:var(--kor-p-p1-font-size)] text-center tracking-[var(--kor-p-p1-letter-spacing)] leading-[var(--kor-p-p1-line-height)] whitespace-nowrap [font-style:var(--kor-p-p1-font-style)]'>
         {getFillMessage(fill)}
       </div>
     </div>

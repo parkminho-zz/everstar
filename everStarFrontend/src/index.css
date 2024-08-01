@@ -288,7 +288,8 @@ body {
   --eng-p-p2-line-height: normal;
 
   /* [shadow] */
-  --small: 0px 4px 8px 0px rgba(219, 229, 236, 0.6), 0px 0px 1px 1px rgba(219, 229, 236, 0.6);
+  --small: 0px 4px 8px 0px rgba(219, 229, 236, 0.6),
+    0px 0px 1px 1px rgba(219, 229, 236, 0.6);
   --large: 0px 8px 24px 0px rgba(219, 229, 236, 0.6);
   --error: 0px 0px 24px 0px rgba(254, 41, 41, 0.2);
   --focus: 0px 0px 24px 0px rgba(255, 144, 120, 0.3);

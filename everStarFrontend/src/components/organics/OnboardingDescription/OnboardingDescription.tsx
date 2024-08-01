@@ -49,25 +49,28 @@ export const OnboardingDescription: React.FC<Props> = ({ page }) => {
   const { title, description, details, paginationType } = content[page];
 
   return (
-    <div className="flex flex-col w-[334px] items-center relative">
-      <div className="flex flex-col items-start gap-4 p-4 relative self-stretch w-full flex-[0_0_auto]">
+    <div className='flex flex-col w-[334px] items-center relative'>
+      <div className='flex flex-col items-start gap-4 p-4 relative self-stretch w-full flex-[0_0_auto]'>
         <Tag>{title}</Tag>
-        <div className="inline-flex flex-col items-start gap-2 relative flex-[0_0_auto]">
-          <p className="relative w-fit mt-[-1.00px] font-kor-h-h1 font-[number:var(--kor-h-h1-font-weight)] text-gray-800 text-[length:var(--kor-h-h1-font-size)] tracking-[var(--kor-h-h1-letter-spacing)] leading-[var(--kor-h-h1-line-height)] [font-style:var(--kor-h-h1-font-style)]">
+        <div className='inline-flex flex-col items-start gap-2 relative flex-[0_0_auto]'>
+          <p className='relative w-fit mt-[-1.00px] font-kor-h-h1 font-[number:var(--kor-h-h1-font-weight)] text-gray-800 text-[length:var(--kor-h-h1-font-size)] tracking-[var(--kor-h-h1-letter-spacing)] leading-[var(--kor-h-h1-line-height)] [font-style:var(--kor-h-h1-font-style)]'>
             {description}
           </p>
         </div>
-        <p className="relative self-stretch h-[86px] font-kor-body-body1 font-[number:var(--kor-body-body1-font-weight)] text-greyscaleblack-100 text-[length:var(--kor-body-body1-font-size)] tracking-[var(--kor-body-body1-letter-spacing)] leading-[var(--kor-body-body1-line-height)] [font-style:var(--kor-body-body1-font-style)]">
+        <p className='relative self-stretch h-[86px] font-kor-body-body1 font-[number:var(--kor-body-body1-font-weight)] text-greyscaleblack-100 text-[length:var(--kor-body-body1-font-size)] tracking-[var(--kor-body-body1-letter-spacing)] leading-[var(--kor-body-body1-line-height)] [font-style:var(--kor-body-body1-font-style)]'>
           {details}
         </p>
       </div>
-      <Pagination className="!flex-[0_0_auto]" type={paginationType} />
+      <Pagination className='!flex-[0_0_auto]' type={paginationType} />
     </div>
   );
 };
 
 OnboardingDescription.propTypes = {
-  page: PropTypes.oneOf(['page-1', 'page-2', 'page-3', 'page-4']) as PropTypes.Validator<
-    'page-1' | 'page-2' | 'page-3' | 'page-4'
-  >,
+  page: PropTypes.oneOf([
+    'page-1',
+    'page-2',
+    'page-3',
+    'page-4',
+  ]) as PropTypes.Validator<'page-1' | 'page-2' | 'page-3' | 'page-4'>,
 };

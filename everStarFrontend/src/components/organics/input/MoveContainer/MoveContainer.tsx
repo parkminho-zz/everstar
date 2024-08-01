@@ -9,7 +9,11 @@ interface IMoveContainer {
   nextPage1: pageType;
   nextPage2: pageType;
 }
-export const MoveContainer = ({ title, nextPage1, nextPage2 }: IMoveContainer) => {
+export const MoveContainer = ({
+  title,
+  nextPage1,
+  nextPage2,
+}: IMoveContainer) => {
   const goNext = (next: pageType) => {
     switch (next) {
       case 'mypage':
@@ -25,23 +29,23 @@ export const MoveContainer = ({ title, nextPage1, nextPage2 }: IMoveContainer) =
     }
   };
   return (
-    <div className="flex w-[360px] h-[278px] py-6 px-0 flex-col items-center gap-4 flex-shrink-0 bg-white">
+    <div className='flex w-[360px] h-[278px] py-6 px-0 flex-col items-center gap-4 flex-shrink-0 bg-white'>
       <ModalHeader text={title} showLeftIcon={true} />
       <PrimaryButton
-        theme="white"
-        size="large"
+        theme='white'
+        size='large'
         onClick={() => console.log(goNext(nextPage1))}
         disabled={false}
-        icon={<ArrowIcon color="black" direction="right" size={24} />}
+        icon={<ArrowIcon color='black' direction='right' size={24} />}
       >
         {goNext(nextPage1)}
       </PrimaryButton>
       <PrimaryButton
-        theme="white"
-        size="large"
+        theme='white'
+        size='large'
         onClick={() => console.log(goNext(nextPage2))}
         disabled={false}
-        icon={<ArrowIcon color="black" direction="right" size={24} />}
+        icon={<ArrowIcon color='black' direction='right' size={24} />}
       >
         {goNext(nextPage2)}
       </PrimaryButton>

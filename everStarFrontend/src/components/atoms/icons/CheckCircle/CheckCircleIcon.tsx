@@ -6,7 +6,10 @@ interface CheckCircleIconProps {
   color?: 'black' | 'gray' | 'white' | 'orange';
 }
 
-export const CheckCircleIcon: React.FC<CheckCircleIconProps> = ({ size, color = 'black' }) => {
+export const CheckCircleIcon: React.FC<CheckCircleIconProps> = ({
+  size,
+  color = 'black',
+}) => {
   const sizeClasses = size === 16 ? 'w-4 h-4' : 'w-6 h-6';
   const colorClasses = {
     black: 'text-greyscaleblack-100',
@@ -15,7 +18,9 @@ export const CheckCircleIcon: React.FC<CheckCircleIconProps> = ({ size, color = 
     orange: 'text-mainprimary',
   };
 
-  return <CheckCircleIconSVG className={`${sizeClasses} ${colorClasses[color]}`} />;
+  return (
+    <CheckCircleIconSVG className={`${sizeClasses} ${colorClasses[color]}`} />
+  );
 };
 
 export type { CheckCircleIconProps };

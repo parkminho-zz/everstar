@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import {SearchIcon} from './SearchIcon';
+import { SearchIcon } from './SearchIcon';
 
 const meta: Meta<typeof SearchIcon> = {
   title: 'Atoms/Icons/SearchIcon',

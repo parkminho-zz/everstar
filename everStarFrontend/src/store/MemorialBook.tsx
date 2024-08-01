@@ -1,20 +1,19 @@
 //일기 아직 안넣음ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
-
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice } from '@reduxjs/toolkit';
 /*
 import { UserType, MemorialBookType } from "../components/page/MemorialBook"
 */
 
 interface memorialBookState {
-/*
+  /*
     userInfo: UserType
     memorialBookDetail : MemorialBookType
 */
 }
 
 const initialState: memorialBookState = {
-/*
+  /*
     userInfo: {
       id: 0,
       psychologicalTestResult: "",
@@ -63,10 +62,10 @@ const initialState: memorialBookState = {
         }
     }
 */
-}
+};
 
 export const memorialBookSlice = createSlice({
-  name: "memorialBook",
+  name: 'memorialBook',
   initialState,
   reducers: {
     /*
@@ -91,15 +90,15 @@ export const memorialBookSlice = createSlice({
     },
     */
   },
-})
+});
 
-export const { 
-  /* 
+// export const {
+/* 
   SetMemorialBook,
   SetUserInfo,
   DeleteMemorialBook,
   DeleteUserInfo
   */
-  } = memorialBookSlice.actions
+// } = memorialBookSlice.actions;
 
-export default memorialBookSlice.reducer
+export default memorialBookSlice.reducer;

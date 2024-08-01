@@ -9,7 +9,15 @@ import { ReactComponent as VioletRainbow } from 'assets/symbols/rainbow-violet.s
 import { ReactComponent as RedRainbow } from 'assets/symbols/rainbow-red.svg';
 
 interface Props {
-  color: 'none' | 'yellow' | 'violet' | 'blue' | 'green' | 'orange' | 'red' | 'indigo';
+  color:
+    | 'none'
+    | 'yellow'
+    | 'violet'
+    | 'blue'
+    | 'green'
+    | 'orange'
+    | 'red'
+    | 'indigo';
   className?: string;
 }
 
@@ -17,34 +25,49 @@ export const Rainbow: React.FC<Props> = ({ color, className }): JSX.Element => {
   return (
     <div className={`w-[1440px] h-[1024px] relative ${className}`}>
       {color === 'yellow' && (
-        <YellowRainbow className="w-[1243px] left-0 top-0 object-cover h-[1024px] absolute" />
+        <YellowRainbow className='w-[1243px] left-0 top-0 object-cover h-[1024px] absolute' />
       )}
       {color === 'orange' && (
-        <OrangeRainbow className="w-[1243px] left-0 top-0 object-cover h-[1024px] absolute" />
+        <OrangeRainbow className='w-[1243px] left-0 top-0 object-cover h-[1024px] absolute' />
       )}
       {color === 'green' && (
-        <GreenRainbow className="w-[1243px] left-0 top-0 object-cover h-[1024px] absolute" />
+        <GreenRainbow className='w-[1243px] left-0 top-0 object-cover h-[1024px] absolute' />
       )}
       {color === 'blue' && (
-        <BlueRainbow className="w-[1243px] left-0 top-0 object-cover h-[1024px] absolute" />
+        <BlueRainbow className='w-[1243px] left-0 top-0 object-cover h-[1024px] absolute' />
       )}
       {color === 'indigo' && (
-        <IndigoRainbow className="w-[1243px] left-0 top-0 object-cover h-[1024px] absolute" />
+        <IndigoRainbow className='w-[1243px] left-0 top-0 object-cover h-[1024px] absolute' />
       )}
       {color === 'violet' && (
-        <VioletRainbow className="w-[1243px] left-0 top-0 object-cover h-[1024px] absolute" />
+        <VioletRainbow className='w-[1243px] left-0 top-0 object-cover h-[1024px] absolute' />
       )}
       {color === 'red' && (
-        <RedRainbow className="w-[1243px] left-0 top-0 object-cover h-[1024px] absolute" />
+        <RedRainbow className='w-[1243px] left-0 top-0 object-cover h-[1024px] absolute' />
       )}
     </div>
   );
 };
 
 Rainbow.propTypes = {
-  color: PropTypes.oneOf(['none', 'yellow', 'violet', 'blue', 'green', 'orange', 'red', 'indigo'])
-    .isRequired as PropTypes.Validator<
-    'none' | 'yellow' | 'violet' | 'blue' | 'green' | 'orange' | 'red' | 'indigo'
+  color: PropTypes.oneOf([
+    'none',
+    'yellow',
+    'violet',
+    'blue',
+    'green',
+    'orange',
+    'red',
+    'indigo',
+  ]).isRequired as PropTypes.Validator<
+    | 'none'
+    | 'yellow'
+    | 'violet'
+    | 'blue'
+    | 'green'
+    | 'orange'
+    | 'red'
+    | 'indigo'
   >,
   className: PropTypes.string,
 };

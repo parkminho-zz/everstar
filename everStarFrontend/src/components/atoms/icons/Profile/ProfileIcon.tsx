@@ -6,7 +6,10 @@ interface ProfileIconProps {
   color?: 'black' | 'gray' | 'white' | 'orange';
 }
 
-export const ProfileIcon: React.FC<ProfileIconProps> = ({ size, color = 'black' }) => {
+export const ProfileIcon: React.FC<ProfileIconProps> = ({
+  size,
+  color = 'black',
+}) => {
   const sizeClasses = size === 16 ? 'w-4 h-4' : 'w-6 h-6';
   const colorClasses = {
     black: 'text-greyscaleblack-100',

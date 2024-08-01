@@ -6,7 +6,10 @@ interface SettingsIconProps {
   color?: 'black' | 'gray' | 'white' | 'orange';
 }
 
-export const SettingsIcon: React.FC<SettingsIconProps> = ({ size, color = 'black' }) => {
+export const SettingsIcon: React.FC<SettingsIconProps> = ({
+  size,
+  color = 'black',
+}) => {
   const sizeClasses = size === 16 ? 'w-4 h-4' : 'w-6 h-6';
   const colorClasses = {
     black: 'text-greyscaleblack-100',
@@ -15,7 +18,9 @@ export const SettingsIcon: React.FC<SettingsIconProps> = ({ size, color = 'black
     orange: 'text-mainprimary',
   };
 
-  return <SettingsIconSVG className={`${sizeClasses} ${colorClasses[color]}`} />;
+  return (
+    <SettingsIconSVG className={`${sizeClasses} ${colorClasses[color]}`} />
+  );
 };
 
 export type { SettingsIconProps };

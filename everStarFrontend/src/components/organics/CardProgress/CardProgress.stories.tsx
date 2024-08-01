@@ -53,7 +53,8 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: '기본 CardProgress 컴포넌트입니다. `fill` 값을 0으로 설정했습니다.',
+        story:
+          '기본 CardProgress 컴포넌트입니다. `fill` 값을 0으로 설정했습니다.',
       },
     },
   },

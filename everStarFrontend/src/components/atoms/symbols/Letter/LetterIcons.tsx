@@ -8,7 +8,13 @@ interface LetterIconsProps {
 
 export const LetterIcons: React.FC<LetterIconsProps> = ({ variant, text }) => {
   return (
-    <div style={{ position: 'relative', display: 'inline-block', textAlign: 'center' }}>
+    <div
+      style={{
+        position: 'relative',
+        display: 'inline-block',
+        textAlign: 'center',
+      }}
+    >
       {variant === 'letter-text' ? (
         <div
           style={{
@@ -30,7 +36,7 @@ export const LetterIcons: React.FC<LetterIconsProps> = ({ variant, text }) => {
           {text || '편지쓰기'}
         </div>
       ) : (
-        <LetterIcon className="w-6 h-6" />
+        <LetterIcon className='w-6 h-6' />
       )}
     </div>
   );

@@ -1,6 +1,5 @@
-
-import { fn } from "@storybook/test";
-import {InputBox} from './Inputbox';
+import { fn } from '@storybook/test';
+import { InputBox } from './Inputbox';
 
 export const ActionsData = {
   onArchiveTask: fn(),
@@ -45,4 +44,3 @@ export const Archived = {
     },
   },
 };
-

@@ -6,7 +6,10 @@ interface CloseCircleIconProps {
   color?: 'black' | 'gray' | 'white' | 'orange';
 }
 
-export const CloseCircleIcon: React.FC<CloseCircleIconProps> = ({ size, color = 'black' }) => {
+export const CloseCircleIcon: React.FC<CloseCircleIconProps> = ({
+  size,
+  color = 'black',
+}) => {
   const sizeClasses = size === 16 ? 'w-4 h-4' : 'w-6 h-6';
   const colorClasses = {
     black: 'text-greyscaleblack-100',
@@ -15,7 +18,9 @@ export const CloseCircleIcon: React.FC<CloseCircleIconProps> = ({ size, color = 
     orange: 'text-mainprimary',
   };
 
-  return <CloseCircleIconSVG className={`${sizeClasses} ${colorClasses[color]}`} />;
+  return (
+    <CloseCircleIconSVG className={`${sizeClasses} ${colorClasses[color]}`} />
+  );
 };
 
 export type { CloseCircleIconProps };

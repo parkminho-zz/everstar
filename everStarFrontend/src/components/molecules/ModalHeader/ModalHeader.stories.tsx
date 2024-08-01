@@ -9,9 +9,15 @@ export default {
     text: { control: 'text', defaultValue: '오늘의 질문' },
     showLeftIcon: { control: 'boolean', defaultValue: true },
     showRightIcon: { control: 'boolean', defaultValue: false },
-    iconSize: { control: { type: 'select', options: [16, 24] }, defaultValue: 24 },
+    iconSize: {
+      control: { type: 'select', options: [16, 24] },
+      defaultValue: 24,
+    },
     iconColor: {
-      control: { type: 'select', options: ['black', 'gray', 'white', 'orange'] },
+      control: {
+        type: 'select',
+        options: ['black', 'gray', 'white', 'orange'],
+      },
       defaultValue: 'black',
     },
     iconHover: { control: 'boolean', defaultValue: true },

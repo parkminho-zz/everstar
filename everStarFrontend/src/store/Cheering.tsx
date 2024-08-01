@@ -1,17 +1,17 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice } from '@reduxjs/toolkit';
 
 interface cheeringState {
-  cheeringInfo: CheeringInfo
+  cheeringInfo: CheeringInfo;
 }
 
 const initialState: cheeringState = {
   cheeringInfo: {
     //threeJs 고려 후 작성
   },
-}
+};
 
 export interface CheeringInfo {
-    //threeJs 고려 후 작성
+  //threeJs 고려 후 작성
 }
 
 export const cheeringSlice = createSlice({
@@ -19,12 +19,10 @@ export const cheeringSlice = createSlice({
   initialState,
   reducers: {
     //  응메 정보 저장 액션 (편지 읽기 : SetLetter)
-
     //응메 삭제 액션 (DeleteLetter)
-
   },
-})
+});
 
-export const {  } = cheeringSlice.actions
+// export const {} = cheeringSlice.actions;
 
-export default cheeringSlice.reducer
+export default cheeringSlice.reducer;

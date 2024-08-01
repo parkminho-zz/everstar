@@ -3,14 +3,14 @@ import CircleWhite from 'assets/images/circle-white.svg';
 import CircleDisabled from 'assets/images/circle-disabled.svg';
 import CircleHover from 'assets/images/circle-hover.svg';
 import CircleFocus from 'assets/images/circle-focus.svg';
-import {PlusIcon} from 'components/atoms/icons/Plus/PlusIcon';
-import {MicrophoneIcon} from 'components/atoms/icons/Microphone/MicrophoneIcon';
-import {PhoneStopIcon} from 'components/atoms/icons/PhoneStop/PhoneStopIcon';
-import {PhoneIcon} from 'components/atoms/icons/Phone/PhoneIcon';
-import {VideoIcon} from 'components/atoms/icons/Video/VideoIcon';
-import {SettingsIcon} from 'components/atoms/icons/Settings/SettingsIcon';
-import {ChatIcon} from 'components/atoms/icons/Chat/ChatIcon';
-import {ShareIcon} from 'components/atoms/icons/Share/ShareIcon';
+import { PlusIcon } from 'components/atoms/icons/Plus/PlusIcon';
+import { MicrophoneIcon } from 'components/atoms/icons/Microphone/MicrophoneIcon';
+import { PhoneStopIcon } from 'components/atoms/icons/PhoneStop/PhoneStopIcon';
+import { PhoneIcon } from 'components/atoms/icons/Phone/PhoneIcon';
+import { VideoIcon } from 'components/atoms/icons/Video/VideoIcon';
+import { SettingsIcon } from 'components/atoms/icons/Settings/SettingsIcon';
+import { ChatIcon } from 'components/atoms/icons/Chat/ChatIcon';
+import { ShareIcon } from 'components/atoms/icons/Share/ShareIcon';
 
 type CircleButtonTheme = 'focus' | 'hover' | 'white';
 type RtcIconTheme =
@@ -42,7 +42,12 @@ const iconMap: Record<RtcIconTheme, React.ComponentType<any>> = {
   share: ShareIcon,
 };
 
-export function CircleButton({ theme, icon, onClick, disabled }: ICircleButtonProps) {
+export function CircleButton({
+  theme,
+  icon,
+  onClick,
+  disabled,
+}: ICircleButtonProps) {
   const getBgPath = () => {
     if (disabled) return CircleDisabled;
     switch (theme) {
@@ -66,17 +71,20 @@ export function CircleButton({ theme, icon, onClick, disabled }: ICircleButtonPr
 
   return (
     <button
-      className="relative flex items-center justify-center rounded-lg px-4 w-[120px] h-[120px]"
+      className='relative flex items-center justify-center rounded-lg px-4 w-[120px] h-[120px]'
       disabled={disabled}
       onClick={onClick}
     >
       <img
         src={getBgPath()}
-        alt="circle button background"
-        className="absolute inset-0 w-full h-full"
+        alt='circle button background'
+        className='absolute inset-0 w-full h-full'
         style={{ zIndex: 0 }}
       />
-      <div className="relative flex items-center justify-center" style={{ zIndex: 1 }}>
+      <div
+        className='relative flex items-center justify-center'
+        style={{ zIndex: 1 }}
+      >
         <IconComponent size={24} color={getColor()} />
       </div>
     </button>

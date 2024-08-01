@@ -5,9 +5,14 @@ interface Props {
   className?: string;
 }
 
-export const Pagination: React.FC<Props> = ({ type, className }): JSX.Element => {
+export const Pagination: React.FC<Props> = ({
+  type,
+  className,
+}): JSX.Element => {
   return (
-    <div className={`inline-flex items-center gap-2 px-1 py-0 relative ${className}`}>
+    <div
+      className={`inline-flex items-center gap-2 px-1 py-0 relative ${className}`}
+    >
       <div
         className={`relative ${type === 'one' ? 'w-2.5' : 'w-1.5'} ${type === 'one' ? 'h-2.5' : 'h-1.5'} ${
           type === 'one' ? 'rounded-[5px]' : 'rounded-[3px]'

@@ -18,6 +18,6 @@ export const Default: Story = {
     myAnswer: '이것은 나의 그림입니다.',
     petImage: 'https://via.placeholder.com/180x135',
     petAnswer: '이것은 반려동물의 그림입니다.',
-    petName : '뚜뚜',
+    petName: '뚜뚜',
   },
 };

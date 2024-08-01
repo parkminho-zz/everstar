@@ -6,7 +6,10 @@ interface VideoIconProps {
   color?: 'black' | 'gray' | 'white' | 'orange';
 }
 
-export const VideoIcon: React.FC<VideoIconProps> = ({ size, color = 'black' }) => {
+export const VideoIcon: React.FC<VideoIconProps> = ({
+  size,
+  color = 'black',
+}) => {
   const sizeClasses = size === 16 ? 'w-4 h-4' : 'w-6 h-6';
   const colorClasses = {
     black: 'text-greyscaleblack-100',
