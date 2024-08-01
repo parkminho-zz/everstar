@@ -19,9 +19,9 @@ public class PetLetterScheduler {
 	private final PetLetterService petLetterService;
 
 	public void schedulePetLetter(UserLetter userLetter){
-		LocalDateTime nextDayWritePetLetterTime = userLetter.getCreatedTime().plusDays(1);
+		LocalDateTime nextDayWritePetLetterTime = userLetter.getCreatedTime().plusMinutes(1);
 		Date nextDayWritePetLetterDate = Date.from(nextDayWritePetLetterTime.atZone(ZoneId.systemDefault()).toInstant());
 
-
+		taskScheduler.schedule(() -> petLetterService.writePetLetter(userLetter), nextDayWritePetLetterDate);
 	}
 }
