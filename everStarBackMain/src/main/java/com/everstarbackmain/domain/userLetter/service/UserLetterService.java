@@ -38,6 +38,7 @@ public class UserLetterService {
 		if(requestDto.getImageUrl() == null){
 			UserLetter userLetter = UserLetter.writeLetterHasNotImage(pet,requestDto);
 			userLetterRepository.save(userLetter);
+			petLetterScheduler.schedulePetLetter(userLetter);
 			return;
 		}
 		UserLetter userLetter = UserLetter.writeLetterHasImage(pet,requestDto);
