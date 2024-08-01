@@ -48,7 +48,7 @@ public class QuestAnswerService {
 	}
 
 	private void plusPetQuestIndex(User user, Long petId) {
-		Optional<Pet> findPet = petRepository.findById(petId);
+		Optional<Pet> findPet = petRepository.findByIdAndIsDeleted(petId, false);
 		Pet pet = findPet
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
@@ -66,8 +66,8 @@ public class QuestAnswerService {
 	}
 
 	private void analyseWeeklyQuestAnswer(Long petId, int petQuestIndex) {
-		List<String> answerContents = questAnswerRepository.findContentByPetIdAndSpecificQuestIds(petId,
-			petQuestIndex - 3, petQuestIndex);
+		List<String> answerContents = questAnswerRepository.findContentByPetIdAndSpecificQuestIdsAndIsDeleted(petId,
+			petQuestIndex - 3, petQuestIndex, false);
 
 		String weeklyAnswerContent = answerContents.parallelStream()
 			.collect(Collectors.joining(""));

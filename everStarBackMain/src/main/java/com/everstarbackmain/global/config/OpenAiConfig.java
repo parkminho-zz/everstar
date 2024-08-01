@@ -5,8 +5,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
+import lombok.Getter;
+
 @Configuration
+@Getter
 public class OpenAiConfig {
+
+	@Value("${openai.model}")
+	private String model;
+
+	@Value("${openai.api.url}")
+	private String apiUrl;
 
 	@Value("${openai.api.key}")
 	private String openAiKey;
