@@ -1,10 +1,12 @@
 import { CloseIcon } from 'components/atoms/icons/Close/CloseIcon';
+
 type ColorKey = 'pink' | 'green' | 'blue' | 'purple' | 'gray' | 'yellow';
 
 interface IPostItCard {
   contents: string;
   name: string;
   color: ColorKey;
+  onDelete: () => void; // Add onDelete prop
 }
 
 const colors: Record<ColorKey, string> = {
@@ -16,16 +18,23 @@ const colors: Record<ColorKey, string> = {
   yellow: '#FFFBB0',
 };
 
-export const PostItCard = ({ contents, name, color }: IPostItCard) => {
+export const PostItCard = ({
+  contents,
+  name,
+  color,
+  onDelete,
+}: IPostItCard) => {
   const colorValue = colors[color];
 
   return (
     <div
-      className={`flex flex-col w-[142px] h-[152px] absolute shadow-md p-2`}
+      className={`flex flex-col w-[142px] h-[152px] shadow-md p-2`}
       style={{ backgroundColor: colorValue }}
     >
       <div className='flex items-end justify-end '>
-        <CloseIcon size={24} color='black' />
+        <button onClick={onDelete}>
+          <CloseIcon size={24} color='black' />
+        </button>
       </div>
       <div className='flex flex-col justify-between flex-1 w-full'>
         <label className='max-w-full max-h-[82px] text-greyscaleblack-100 kor-p-p2 line-clamp-4 break-words '>
