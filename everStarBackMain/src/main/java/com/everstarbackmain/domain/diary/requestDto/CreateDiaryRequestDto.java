@@ -16,6 +16,4 @@ public class CreateDiaryRequestDto {
 
 	@NotBlank
 	private String content;
-
-	private String imageUrl;
 }
