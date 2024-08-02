@@ -114,5 +114,18 @@ public class GetLetterDetailServiceTest {
 			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_FOUND_PET_EXCEPTION);
 	}
 
+	@Test
+	@DisplayName("편지 개별 보기 pet이 보낸 편지 존재하지 않음 실패 테스트")
+	public void 편지_개별_보기_펫이보낸_편지_존재하지_않음_실패_테스트(){
+		//given
+		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
+		BDDMockito.given(principalDetails.getUser()).willReturn(user);
+		BDDMockito.given(petRepository.findByIdAndUserAndIsDeleted(1L,user,false)).willReturn(Optional.of(pet));
+
+		//when then
+		Assertions.assertThatThrownBy(() -> petLetterService.getLetter(authentication,1L,1L))
+			.isInstanceOf(ExceptionResponse.class)
+			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_FOUND_PETLETTER_EXCEPTION);
+	}
 
 }
