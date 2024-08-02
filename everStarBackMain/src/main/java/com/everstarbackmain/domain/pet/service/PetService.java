@@ -75,13 +75,11 @@ public class PetService {
 	}
 
 	public List<EnrolledPetsResponseDto> getAllUserPets(Authentication authentication) {
-		Long userId = ((PrincipalDetails) authentication.getPrincipal()).getUser().getId();
-		List<Pet> pets = petRepository.findAllByUserIdAndIsDeleted(userId,false);
+		Long userId = ((PrincipalDetails)authentication.getPrincipal()).getUser().getId();
+		List<Pet> pets = petRepository.findAllByUserIdAndIsDeleted(userId, false);
 		return pets.stream()
 			.map(EnrolledPetsResponseDto::createEnrolledResponseDto)
 			.collect(Collectors.toList());
 	}
-
-
 
 }

@@ -59,7 +59,7 @@ public class PetController {
 	@GetMapping
 	public ResponseEntity<Map<String, Object>> getAllUserPets(Authentication authentication) {
 		List<EnrolledPetsResponseDto> responseDto = petService.getAllUserPets(authentication);
-		ResponseEntity<Map<String,Object>> response = responseUtil.createResponse(responseDto);
+		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
 		log.info("main server - request : user {},", authentication);
 		log.info("main server - response : 유저 반려동물 목록{}", responseDto);
 		return response;

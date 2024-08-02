@@ -65,7 +65,6 @@ class QuestAnswerServiceTest {
 	@Mock
 	private TaskScheduler taskScheduler;
 
-
 	@Mock
 	private Authentication authentication;
 
@@ -114,14 +113,15 @@ class QuestAnswerServiceTest {
 	@DisplayName("퀘스트_답변_분석_메서드_호출_테스트")
 	public void 퀘스트_답변_분석_메서드_호출_테스트() {
 		// given
-		for (int i = 0 ; i < 6; i++) {
+		for (int i = 0; i < 6; i++) {
 			pet.plusQuestIndex();
 		}
 		SentimentAnalysis sentimentAnalysis = mock(SentimentAnalysis.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
-		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIdsAndIsDeleted(anyLong(), anyInt(), anyInt(), anyBoolean()))
+		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIdsAndIsDeleted(anyLong(), anyInt(), anyInt(),
+			anyBoolean()))
 			.willReturn(List.of("answer1", "answer2", "answer3", "answer4", "answer5", "answer6", "answer7"));
 		given(naverCloudClient.analyseSentiment(anyString()))
 			.willReturn(SentimentAnalysisResult.createSentimentAnalysisResult(0.1, 0.2, 0.7));
@@ -149,7 +149,8 @@ class QuestAnswerServiceTest {
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
-		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIdsAndIsDeleted(anyLong(), anyInt(), anyInt(), anyBoolean()))
+		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIdsAndIsDeleted(anyLong(), anyInt(), anyInt(),
+			anyBoolean()))
 			.willReturn(List.of("answer1", "answer2", "answer3", "answer4", "answer5", "answer6", "answer7"));
 		given(naverCloudClient.analyseSentiment(anyString()))
 			.willThrow(new ExceptionResponse(CustomException.NAVER_SENTIMENT_API_EXCEPTION));
@@ -174,7 +175,8 @@ class QuestAnswerServiceTest {
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
-		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIdsAndIsDeleted(anyLong(), anyInt(), anyInt(), anyBoolean()))
+		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIdsAndIsDeleted(anyLong(), anyInt(), anyInt(),
+			anyBoolean()))
 			.willReturn(List.of("answer1", "answer2", "answer3", "answer4", "answer5", "answer6", "answer7"));
 		given(naverCloudClient.analyseSentiment(anyString()))
 			.willReturn(SentimentAnalysisResult.createSentimentAnalysisResult(0.1, 0.2, 0.7));
