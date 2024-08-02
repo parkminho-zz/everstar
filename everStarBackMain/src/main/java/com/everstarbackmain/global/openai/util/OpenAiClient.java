@@ -1,10 +1,10 @@
-package com.everstarbackmain.domain.openai.util;
+package com.everstarbackmain.global.openai.util;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import com.everstarbackmain.domain.openai.model.ChatGPTRequest;
-import com.everstarbackmain.domain.openai.model.ChatGPTResponse;
+import com.everstarbackmain.global.openai.model.ChatGPTRequest;
+import com.everstarbackmain.global.openai.model.ChatGPTResponse;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;
 import com.everstarbackmain.domain.user.model.User;

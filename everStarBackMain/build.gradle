@@ -68,6 +68,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.json/json
 	implementation group: 'org.json', name: 'json', version: '20231013'
 
+	// aws
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 	// coolsms nurigo 문자인증
 	implementation 'net.nurigo:sdk:4.3.0'
 }

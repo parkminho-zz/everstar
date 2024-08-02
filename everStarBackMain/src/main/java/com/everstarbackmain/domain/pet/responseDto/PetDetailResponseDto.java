@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.everstarbackmain.domain.pet.model.Pet;
+import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.user.model.Gender;
 
 import lombok.AccessLevel;
@@ -17,16 +18,16 @@ import lombok.Getter;
 public class PetDetailResponseDto {
 
 	private Long id;
-	private long userId;
+	private Long userId;
 	private String name;
-	private int age;
+	private Integer age;
 	private LocalDate memorialDate;
 	private String species;
-	private Gender gender;
+	private PetGender gender;
 	private String relationship;
 	private String profileImageUrl;
 	private String introduction;
-	private int questIndex;
+	private Integer questIndex;
 	private LocalDateTime lastAccessTime;
 
 	public static PetDetailResponseDto createPetDetailResponseDto(Pet pet) {

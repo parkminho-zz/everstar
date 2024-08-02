@@ -3,7 +3,7 @@ package com.everstarbackmain.domain.pet.requestDto;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.everstarbackmain.domain.user.model.Gender;
+import com.everstarbackmain.domain.pet.model.PetGender;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -30,7 +30,7 @@ public class CreatePetRequestDto {
 	private String species;
 
 	@NotNull
-	private Gender gender;
+	private PetGender gender;
 
 	@NotBlank
 	private String relationship;

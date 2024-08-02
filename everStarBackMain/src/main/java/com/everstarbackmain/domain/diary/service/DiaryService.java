@@ -1,8 +1,11 @@
 package com.everstarbackmain.domain.diary.service;
 
+import java.io.IOException;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.everstarbackmain.domain.diary.model.Diary;
 import com.everstarbackmain.domain.diary.repository.DiaryRepository;
@@ -13,6 +16,7 @@ import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
+import com.everstarbackmain.global.util.S3UploadUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +29,11 @@ public class DiaryService {
 
 	private final DiaryRepository diaryRepository;
 	private final MemorialBookRepository memorialBookRepository;
+	private final S3UploadUtil s3UploadUtil;
 
 	@Transactional
 	public void createDiary(Authentication authentication, Long memorialBookId,
-		CreateDiaryRequestDto createDiaryRequestDto) {
+		CreateDiaryRequestDto createDiaryRequestDto, MultipartFile imageFile) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 		MemorialBook memorialBook = memorialBookRepository.findByIdAndIsDeleted(memorialBookId, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
@@ -41,7 +46,14 @@ public class DiaryService {
 			throw new ExceptionResponse(CustomException.NOT_ACTIVATED_MEMORIAL_BOOK_EXCEPTION);
 		}
 
-		Diary diary = Diary.createDiary(memorialBook, createDiaryRequestDto);
+		if (imageFile != null && !imageFile.isEmpty()) {
+			String imageUrl = s3UploadUtil.saveFile(imageFile);
+			Diary diary = Diary.createDiaryHasImage(memorialBook, createDiaryRequestDto, imageUrl);
+			diaryRepository.save(diary);
+			return;
+		}
+
+		Diary diary = Diary.createDiaryHasNotImage(memorialBook, createDiaryRequestDto);
 		diaryRepository.save(diary);
 	}
 }

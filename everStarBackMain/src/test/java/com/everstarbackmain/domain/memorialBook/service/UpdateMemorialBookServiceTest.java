@@ -24,6 +24,7 @@ import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 import com.everstarbackmain.domain.memorialBook.repository.MemorialBookRepository;
 import com.everstarbackmain.domain.memorialBook.requestDto.MemorialBookTestResultRequestDto;
 import com.everstarbackmain.domain.pet.model.Pet;
+import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.user.model.Gender;
@@ -61,12 +62,12 @@ class UpdateMemorialBookServiceTest {
 		user = User.signUpUser(new JoinRequestDto("email", "password", "name", "010-1111-1111",
 			LocalDate.now(), Gender.MALE, LocalTime.now(), Role.ROLE_USER));
 		pet = Pet.createPet(user, new CreatePetRequestDto("petName", 10,
-			LocalDate.of(1990, 1, 1), "species", Gender.MALE,
+			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
 		memorialBook = MemorialBook.createMemorialBook(pet);
 		memorialBook.changeActiveStatus();
 
-		ReflectionTestUtils.setField(user, "id", 1);
+		ReflectionTestUtils.setField(user, "id", 1L);
 		ReflectionTestUtils.setField(pet, "id", 1L);
 	}
 
@@ -167,7 +168,7 @@ class UpdateMemorialBookServiceTest {
 		User otherUser = User.signUpUser(new JoinRequestDto("otherEmail", "password", "name", "010-1111-1111",
 			LocalDate.now(), Gender.MALE, LocalTime.now(), Role.ROLE_USER));
 		Pet otherPet = Pet.createPet(otherUser, new CreatePetRequestDto("otherPetName", 10,
-			LocalDate.of(1990, 1, 1), "species", Gender.MALE,
+			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
 		MemorialBook otherMemorialBook = MemorialBook.createMemorialBook(otherPet);
 		MemorialBookTestResultRequestDto requestDto = new MemorialBookTestResultRequestDto(10);

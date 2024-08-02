@@ -1,8 +1,8 @@
 package com.everstarbackmain.domain.pet.repository;
 
+import java.util.List;
 import java.util.Optional;
 
-import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -18,4 +18,5 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
 	Optional<Pet> findByIdAndUserAndIsDeleted(Long id, User user, boolean isDeleted);
 
 	boolean existsByIdAndUserAndIsDeleted(Long id, User user, Boolean isDelete);
+	List<Pet> findAllByUserIdAndIsDeleted(Long id, boolean isDeleted);
 }

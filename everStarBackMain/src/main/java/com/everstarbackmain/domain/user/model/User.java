@@ -27,13 +27,14 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
 @Getter
 public class User extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id", nullable = false)
-	private long id;
+	private Long id;
 
 	@Column(name = "email", nullable = false, unique = true)
 	private String email;
@@ -81,6 +82,7 @@ public class User extends BaseTimeEntity {
 		this.birthDate = birthDate;
 		this.gender = gender;
 		this.questReceptionTime = questReceptionTime;
+		isDeleted = false;
 		this.role = role;
 	}
 

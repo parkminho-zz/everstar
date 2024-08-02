@@ -30,6 +30,7 @@ import com.everstarbackmain.domain.memorialBook.repository.MemorialBookRepositor
 import com.everstarbackmain.domain.memorialBook.responseDto.MemorialBookDetailResponseDto;
 import com.everstarbackmain.domain.memorialBook.responseDto.MemorialBookInfoResponseDto;
 import com.everstarbackmain.domain.pet.model.Pet;
+import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.quest.model.Quest;
@@ -95,16 +96,16 @@ public class GetMemorialBookServiceTest {
 		user = User.signUpUser(new JoinRequestDto("email", "password", "name", "010-1111-1111",
 			LocalDate.now(), Gender.MALE, LocalTime.now(), Role.ROLE_USER));
 		pet = Pet.createPet(user, new CreatePetRequestDto("petName", 10,
-			LocalDate.of(1990, 1, 1), "species", Gender.MALE,
+			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
 		memorialBook = MemorialBook.createMemorialBook(pet);
 		sentimentAnalysis = SentimentAnalysis.createSentimentAnalysis(pet);
 		quest = new Quest("quest content", QuestType.TEXT);
 		questAnswer = QuestAnswer.createQuestAnswer(pet, quest, new CreateAnswerRequestDto("content", "url", "TEXT"));
 		aiAnswer = AiAnswer.createAiAnswer(pet, quest, new CreateAiAnswerRequestDto("content", "url", "TEXT"));
-		diary = Diary.createDiary(memorialBook, new CreateDiaryRequestDto("title", "content", "url"));
+		diary = Diary.createDiaryHasImage(memorialBook, new CreateDiaryRequestDto("title", "content"), "testUrl");
 
-		ReflectionTestUtils.setField(user, "id", 1);
+		ReflectionTestUtils.setField(user, "id", 1L);
 		ReflectionTestUtils.setField(pet, "id", 1L);
 	}
 

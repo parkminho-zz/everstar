@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum CustomException {
 
 	WRONG_TYPE_EXCEPTION(400, "WrongTypeException", "잘못된 형식의 데이터입니다."),
+	S3_UPLOAD_EXCEPTION(400, "S3UploadException", "파일 업로드를 실패했습니다."),
 
 	NOT_EMPTY_ROLE_EXCEPTION(403, "NotEmptyRoleException", "권한이 존재하지 않습니다."),
 	NOT_FOUND_USER_EXCEPTION(404, "NotFoundUserException", "유저가 존재하지 않습니다."),
