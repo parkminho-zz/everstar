@@ -17,6 +17,7 @@ import com.everstarbackmain.domain.pet.message.SuccessPetMessage;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.pet.requestDto.UpdatePetIntroductionDto;
 import com.everstarbackmain.domain.pet.responseDto.EnrolledPetsResponseDto;
+import com.everstarbackmain.domain.pet.responseDto.PetDetailResponseDto;
 import com.everstarbackmain.domain.pet.service.PetService;
 import com.everstarbackmain.global.util.HttpResponseUtil;
 
@@ -59,7 +60,7 @@ public class PetController {
 	@GetMapping
 	public ResponseEntity<Map<String, Object>> getAllUserPets(Authentication authentication) {
 		List<EnrolledPetsResponseDto> responseDto = petService.getAllUserPets(authentication);
-		ResponseEntity<Map<String,Object>> response = responseUtil.createResponse(SuccessPetMessage.SUCESS_GET_ALL_ENROLLED_PET);
+		ResponseEntity<Map<String,Object>> response = responseUtil.createResponse(responseDto);
 		log.info("main server - request : user {},", authentication);
 		log.info("main server - response : 유저 반려동물 목록{}", responseDto);
 		return response;
