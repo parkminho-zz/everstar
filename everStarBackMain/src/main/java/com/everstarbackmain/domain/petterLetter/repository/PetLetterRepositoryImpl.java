@@ -28,7 +28,7 @@ public class PetLetterRepositoryImpl implements PetLetterRepositoryCustom {
 		Pageable pageable) {
 		List<PetLetterResponseDto> petLetters = jpaQueryFactory
 			.select(Projections.constructor(PetLetterResponseDto.class, petLetter.id,
-				petLetter.isRead))  // Assuming QPetLetterResponseDto is a QueryDSL projection class
+				petLetter.isRead, petLetter.pet.name, petLetter.content,petLetter.createdTime))  // Assuming QPetLetterResponseDto is a QueryDSL projection class
 			.from(petLetter)
 			.where(petLetter.isDeleted.isFalse().and(petLetter.pet.id.eq(petId).and(petLetter.pet.user.eq(user))))
 			.offset(pageable.getOffset())
