@@ -15,6 +15,7 @@ import com.everstarbackauth.domain.user.responseDto.JoinResponseMessage;
 import com.everstarbackauth.domain.user.service.JoinService;
 import com.everstarbackauth.global.util.HttpResponseUtil;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +38,9 @@ public class JoinController {
 	}
 
 	@PutMapping("/oauth/join")
-	public ResponseEntity<?> authUser(@RequestBody @Valid AuthenticateUserRequestDto requestDto) {
-		joinService.authenticateUser(requestDto);
+	public ResponseEntity<?> authUser(@RequestBody @Valid AuthenticateUserRequestDto requestDto,
+		HttpServletResponse servletResponse) {
+		joinService.authenticateUser(requestDto, servletResponse);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(JoinResponseMessage.SUCCESS_SIGNUP);
 
 		log.info("auth server - request {}", requestDto);

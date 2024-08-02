@@ -11,7 +11,9 @@ import com.everstarbackauth.domain.user.requestDto.AuthenticateUserRequestDto;
 import com.everstarbackauth.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackauth.global.exception.CustomException;
 import com.everstarbackauth.global.exception.ExceptionResponse;
+import com.everstarbackauth.global.security.jwt.JwtUtil;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +26,7 @@ public class JoinService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final SmsCertificationRepository smsCertificationRepository;
+	private final JwtUtil jwtUtil;
 
 	@Transactional
 	public void signup(JoinRequestDto requestDto) {
@@ -33,7 +36,7 @@ public class JoinService {
 	}
 
 	@Transactional
-	public void authenticateUser(AuthenticateUserRequestDto requestDto) {
+	public void authenticateUser(AuthenticateUserRequestDto requestDto, HttpServletResponse response) {
 		User user = userRepository.findUserByEmailAndIsDeleted(requestDto.getEmail(), false)
 			.orElseThrow(() -> new ExceptionResponse(
 				CustomException.NOT_FOUND_USER_EXCEPTION));
@@ -43,5 +46,11 @@ public class JoinService {
 		}
 
 		user.authenticateUser(requestDto);
+
+		String accessToken = jwtUtil.getAccessToken(user);
+		log.info("accessToken: {}", accessToken);
+
+		response.addHeader("Authorization", "Bearer " + accessToken);
+		response.setContentType("application/json;charset=UTF-8");
 	}
 }
