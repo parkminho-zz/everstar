@@ -76,7 +76,7 @@ public class CreateDiaryServiceTest {
 		memorialBook = MemorialBook.createMemorialBook(pet);
 		createDiaryRequestDto = new CreateDiaryRequestDto("title", "content");
 
-		ReflectionTestUtils.setField(user, "id", 1);
+		ReflectionTestUtils.setField(user, "id", 1L);
 		ReflectionTestUtils.setField(pet, "id", 1L);
 		ReflectionTestUtils.setField(memorialBook, "id", 1L);
 	}
@@ -120,7 +120,7 @@ public class CreateDiaryServiceTest {
 		// given
 		User anotherUser = User.signUpUser(new JoinRequestDto("email2", "password", "name2", "010-2222-2222",
 			LocalDate.now(), Gender.MALE, LocalTime.now(), Role.ROLE_USER));
-		ReflectionTestUtils.setField(anotherUser, "id", 2);
+		ReflectionTestUtils.setField(anotherUser, "id", 2L);
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 
 		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
