@@ -95,7 +95,7 @@ public class GetPetLetterServiceTest {
 		Page<PetLetterResponseDto> expectedPage = new PageImpl<>(
 			Collections.singletonList(new PetLetterResponseDto(1L, false, "test", "test", LocalDateTime.now()))
 		);
-		BDDMockito.given(petLetterRepository.findPetLettersByPetIdAndIsDelete(user, 1L, pageable))
+		BDDMockito.given(petLetterRepository.findPetLettersByPetId(user, 1L, pageable))
 			.willReturn(expectedPage);
 
 		// when

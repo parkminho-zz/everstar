@@ -29,7 +29,7 @@ public class QPet extends EntityPathBase<Pet> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdTime = _super.createdTime;
 
-    public final EnumPath<com.everstarbackmain.domain.user.model.Gender> gender = createEnum("gender", com.everstarbackmain.domain.user.model.Gender.class);
+    public final EnumPath<PetGender> gender = createEnum("gender", PetGender.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
