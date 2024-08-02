@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.everstarbackmain.domain.petterLetter.util.PetLetterScheduler;
 import com.everstarbackmain.domain.userLetter.model.UserLetter;
 import com.everstarbackmain.domain.userLetter.repository.UserLetterRepository;
 import com.everstarbackmain.domain.userLetter.requestDto.WriteLetterRequestDto;
@@ -25,6 +26,7 @@ public class UserLetterService {
 
 	private final UserLetterRepository userLetterRepository;
 	private final PetRepository petRepository;
+	private final PetLetterScheduler petLetterScheduler;
 
 	@Transactional
 	public void writeLetter(Authentication authentication, long petId, WriteLetterRequestDto requestDto) {
@@ -36,9 +38,11 @@ public class UserLetterService {
 		if(requestDto.getImageUrl() == null){
 			UserLetter userLetter = UserLetter.writeLetterHasNotImage(pet,requestDto);
 			userLetterRepository.save(userLetter);
+			petLetterScheduler.schedulePetLetter(userLetter);
 			return;
 		}
 		UserLetter userLetter = UserLetter.writeLetterHasImage(pet,requestDto);
 		userLetterRepository.save(userLetter);
+		petLetterScheduler.schedulePetLetter(userLetter);
 	}
 }
