@@ -24,7 +24,7 @@ public class PetLetterRepositoryImpl implements PetLetterRepositoryCustom {
 	private QPetLetter petLetter = QPetLetter.petLetter;
 
 	@Override
-	public Page<PetLetterResponseDto> findPetLettersByPetIdAndIsDelete(User user, Long petId,
+	public Page<PetLetterResponseDto> findPetLettersByPetId(User user, Long petId,
 		Pageable pageable) {
 		List<PetLetterResponseDto> petLetters = jpaQueryFactory
 			.select(Projections.constructor(PetLetterResponseDto.class, petLetter.id,

@@ -13,5 +13,5 @@ import com.everstarbackmain.domain.user.model.User;
 public interface PetLetterRepository extends JpaRepository<PetLetter, Long>, PetLetterRepositoryCustom {
 
 	@Override
-	Page<PetLetterResponseDto> findPetLettersByPetIdAndIsDelete(User user, Long petId, Pageable pageable);
+	Page<PetLetterResponseDto> findPetLettersByPetId(User user, Long petId, Pageable pageable);
 }

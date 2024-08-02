@@ -8,5 +8,5 @@ import com.everstarbackmain.domain.user.model.User;
 
 public interface PetLetterRepositoryCustom {
 
-	Page<PetLetterResponseDto> findPetLettersByPetIdAndIsDelete(User user, Long petId, Pageable pageable);
+	Page<PetLetterResponseDto> findPetLettersByPetId(User user, Long petId, Pageable pageable);
 }

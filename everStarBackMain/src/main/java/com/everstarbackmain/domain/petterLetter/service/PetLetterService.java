@@ -55,7 +55,7 @@ public class PetLetterService {
 			throw new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION);
 		}
 
-		return petLetterRepository.findPetLettersByPetIdAndIsDelete(user, petId, pageable);
+		return petLetterRepository.findPetLettersByPetId(user, petId, pageable);
 	}
 
 	public void sendSms(UserLetter userLetter) {
