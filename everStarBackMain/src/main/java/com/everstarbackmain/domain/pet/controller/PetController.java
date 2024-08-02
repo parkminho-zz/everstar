@@ -38,7 +38,7 @@ public class PetController {
 		@RequestBody @Valid CreatePetRequestDto requestDto) {
 		petService.createPet(authentication, requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
-			SuccessPetMessage.SUCESS_CREATE_PET);
+			SuccessPetMessage.SUCCESS_CREATE_PET);
 		log.info("main server - request : {}", requestDto);
 		log.info("main server - response : {}", response);
 		return response;
@@ -49,7 +49,7 @@ public class PetController {
 		@PathVariable("pet-id") Long petId, @RequestBody @Valid UpdatePetIntroductionDto requestDto) {
 		petService.updatePetIntroduction(petId, requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
-			SuccessPetMessage.SUCESS_UPDATE_PET_INTRODUCTION);
+			SuccessPetMessage.SUCCESS_UPDATE_PET_INTRODUCTION);
 
 		log.info("main server - request : {}", requestDto);
 		log.info("main-server - response : {}", response);
