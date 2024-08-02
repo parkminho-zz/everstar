@@ -23,7 +23,7 @@ import com.everstarbackmain.domain.memorialBook.repository.MemorialBookRepositor
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
 
-import com.everstarbackmain.domain.pet.repository.PersonalityRepository;
+import com.everstarbackmain.domain.pet.repository.PetPersonalityRepository;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.pet.responseDto.EnrolledPetsResponseDto;
@@ -41,7 +41,7 @@ public class CreatePetServiceTest {
 	private PetRepository petRepository;
 
 	@Mock
-	private PersonalityRepository personalityRepository;
+	private PetPersonalityRepository petPersonalityRepository;
 
 	@Mock
 	private MemorialBookRepository memorialBookRepository;
@@ -58,8 +58,8 @@ public class CreatePetServiceTest {
 	@InjectMocks
 	private PetService petService;
 
-	private CreatePetRequestDto requestDto;
 	private User user;
+	private CreatePetRequestDto requestDto;
 	private Pet pet;
 	private List<Pet> petList;
 
@@ -98,7 +98,7 @@ public class CreatePetServiceTest {
 		Throwable thrown = catchThrowable(() -> petService.createPet(authentication, requestDto));
 
 		// then
-		Assertions.assertThat(thrown).isNull(); // 예외가 발생하지 않았는지 확인
+		Assertions.assertThat(thrown).isNull();
 	}
 
 	@Test

@@ -38,7 +38,7 @@ public class PetController {
 		@RequestBody @Valid CreatePetRequestDto requestDto) {
 		petService.createPet(authentication, requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
-			SuccessPetMessage.SUCCESS_CREATE_PET);
+			SuccessPetMessage.SUCESS_CREATE_PET);
 		log.info("main server - request : {}", requestDto);
 		log.info("main server - response : {}", response);
 		return response;

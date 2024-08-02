@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "pet_personality")
-public class Personality extends BaseTimeEntity {
+public class PetPersonality extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,14 +35,14 @@ public class Personality extends BaseTimeEntity {
 	@Column(nullable = false)
 	private Boolean isDeleted;
 
-	private Personality(Pet pet, String personalityValue) {
+	private PetPersonality(Pet pet, String personalityValue) {
 		this.pet = pet;
 		this.personalityValue = personalityValue;
 		isDeleted = false;
 	}
 
-	public static Personality createPersonality(Pet pet, String personalityValue) {
-		return new Personality(pet, personalityValue);
+	public static PetPersonality createPersonality(Pet pet, String personalityValue) {
+		return new PetPersonality(pet, personalityValue);
 	}
 
 }
