@@ -13,12 +13,11 @@ import lombok.Getter;
 @Builder
 @Getter
 public class PetLetterResponseDto {
-	private long petLetterId;
-	private boolean isRead;
+	private Long petLetterId;
+	private Boolean isRead;
 	private String petName;
 	private String content;
 	private LocalDateTime createAt;
-
 
 	@QueryProjection
 	public PetLetterResponseDto(Long id, Boolean isRead, String petName, String content, LocalDateTime createAt) {
