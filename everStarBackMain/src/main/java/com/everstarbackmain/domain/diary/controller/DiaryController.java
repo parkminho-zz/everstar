@@ -36,7 +36,7 @@ public class DiaryController {
 		diaryService.createDiary(authentication, memorialBookId, requestDto, imageFile);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessDiaryMessage.SUCCESS_CREATE_DIARY);
-		log.info("main server - request : {}", requestDto);
+		log.info("main server - request : requestDto {}", requestDto);
 		log.info("main server - response : {}", response);
 		return response;
 	}

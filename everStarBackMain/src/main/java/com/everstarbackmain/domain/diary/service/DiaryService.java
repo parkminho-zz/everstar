@@ -46,12 +46,14 @@ public class DiaryService {
 			throw new ExceptionResponse(CustomException.NOT_ACTIVATED_MEMORIAL_BOOK_EXCEPTION);
 		}
 
-		String imageUrl = null;
 		if (imageFile != null && !imageFile.isEmpty()) {
-			imageUrl = s3UploadUtil.saveFile(imageFile);
+			String imageUrl = s3UploadUtil.saveFile(imageFile);
+			Diary diary = Diary.createDiaryHasImage(memorialBook, createDiaryRequestDto, imageUrl);
+			diaryRepository.save(diary);
+			return;
 		}
 
-		Diary diary = Diary.createDiary(memorialBook, createDiaryRequestDto, imageUrl);
+		Diary diary = Diary.createDiaryHasNotImage(memorialBook, createDiaryRequestDto);
 		diaryRepository.save(diary);
 	}
 }
