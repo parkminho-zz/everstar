@@ -28,7 +28,7 @@ import com.everstarbackmain.domain.userLetter.requestDto.WriteLetterRequestDto;
 import com.everstarbackmain.global.sms.SmsCertificationUtil;
 
 @ExtendWith(MockitoExtension.class)
-public class WritePetLetterAnswerService {
+public class WritePetLetterAnswerServiceTest {
 
 	@InjectMocks
 	private PetLetterService petLetterService;
