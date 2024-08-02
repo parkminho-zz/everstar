@@ -20,6 +20,7 @@ import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
+import com.everstarbackmain.domain.petterLetter.util.PetLetterScheduler;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;
@@ -40,6 +41,9 @@ public class WriteLetterServiceTest {
 
 	@Mock
 	private PetRepository petRepository;
+
+	@Mock
+	private PetLetterScheduler petLetterScheduler;
 
 	@Mock
 	private Authentication authentication;
