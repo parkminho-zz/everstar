@@ -48,11 +48,7 @@ public class DiaryService {
 
 		String imageUrl = null;
 		if (imageFile != null && !imageFile.isEmpty()) {
-			try {
-				imageUrl = s3UploadUtil.saveFile(imageFile);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+			imageUrl = s3UploadUtil.saveFile(imageFile);
 		}
 
 		Diary diary = Diary.createDiary(memorialBook, createDiaryRequestDto, imageUrl);
