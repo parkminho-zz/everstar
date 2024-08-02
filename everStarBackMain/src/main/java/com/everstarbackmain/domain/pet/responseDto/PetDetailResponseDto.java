@@ -17,16 +17,16 @@ import lombok.Getter;
 public class PetDetailResponseDto {
 
 	private Long id;
-	private Integer userId;
+	private long userId;
 	private String name;
-	private Integer age;
+	private int age;
 	private LocalDate memorialDate;
 	private String species;
 	private Gender gender;
 	private String relationship;
 	private String profileImageUrl;
 	private String introduction;
-	private Integer questIndex;
+	private int questIndex;
 	private LocalDateTime lastAccessTime;
 
 	public static PetDetailResponseDto createPetDetailResponseDto(Pet pet) {

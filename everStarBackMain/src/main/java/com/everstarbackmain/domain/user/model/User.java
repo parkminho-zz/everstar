@@ -33,7 +33,7 @@ public class User extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id", nullable = false)
-	private int id;
+	private long id;
 
 	@Column(name = "email", nullable = false, unique = true)
 	private String email;
