@@ -108,12 +108,7 @@ public class Pet extends BaseTimeEntity {
 	}
 
 	public void updatePetIntroduction(String newIntroduction) {
-		if (newIntroduction != null && !newIntroduction.isEmpty()) {
-			this.introduction = newIntroduction;
-		} else {
-			this.introduction = this.name + " 의 사랑스런 소개글을 작성 해주세요";
-		}
-
+		this.introduction = newIntroduction;
 	}
 
 }
