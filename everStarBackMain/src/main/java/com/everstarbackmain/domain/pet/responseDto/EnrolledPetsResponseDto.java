@@ -19,6 +19,7 @@ public class EnrolledPetsResponseDto {
 
 	public static EnrolledPetsResponseDto createEnrolledResponseDto(Pet pet) {
 		return EnrolledPetsResponseDto.builder()
+			.id(pet.getId())
 			.profileImageUrl(pet.getProfileImageUrl())
 			.name(pet.getName())
 			.build();
