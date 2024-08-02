@@ -49,6 +49,7 @@ public class AuthenticateUserServiceTest {
 
 	private AuthenticateUserRequestDto requestDto;
 	private User user;
+	private String accessToken;
 
 	@BeforeEach
 	public void setUp() {
@@ -57,6 +58,7 @@ public class AuthenticateUserServiceTest {
 			LocalTime.now());
 
 		user = User.oAuthSignUpUser(requestDto.getEmail(), requestDto.getEmail());
+		accessToken = "adfasdfasfdasfdfasdf";
 	}
 
 	@Test
@@ -67,6 +69,7 @@ public class AuthenticateUserServiceTest {
 			.willReturn(Optional.of(user));
 		BDDMockito.given(smsCertificationRepository.existsBySuccessNumber(requestDto.getPhoneNumber()))
 			.willReturn(true);
+		BDDMockito.given(jwtUtil.getAccessToken(user)).willReturn(accessToken);
 
 		//when
 		joinService.authenticateUser(requestDto, httpServletResponse);

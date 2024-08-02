@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,6 +34,8 @@ import com.everstarbackauth.global.config.SecurityConfig;
 import com.everstarbackauth.global.util.HttpResponseUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @WebMvcTest(
 	controllers = JoinController.class,
 	excludeFilters = {
@@ -54,6 +57,9 @@ public class AuthenticateUserControllerTest {
 	@MockBean
 	private HttpResponseUtil httpResponseUtil;
 
+	@Mock
+	private HttpServletResponse httpServletResponse;
+
 	private AuthenticateUserRequestDto requestDto;
 
 	@BeforeEach
@@ -72,7 +78,7 @@ public class AuthenticateUserControllerTest {
 		String requestBody = objectMapper.writeValueAsString(requestDto);
 		Map<String, Object> mockResponseData = new HashMap<>();
 
-		BDDMockito.doNothing().when(joinService).authenticateUser(requestDto);
+		BDDMockito.doNothing().when(joinService).authenticateUser(requestDto, httpServletResponse);
 		BDDMockito.given(httpResponseUtil.createResponse(equals(JoinResponseMessage.SUCCESS_SIGNUP)))
 			.willReturn(ResponseEntity.ok().body(mockResponseData));
 
