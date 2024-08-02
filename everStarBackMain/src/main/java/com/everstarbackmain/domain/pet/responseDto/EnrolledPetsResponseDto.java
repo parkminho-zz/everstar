@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class EnrolledPetsResponseDto {
 
+	private Long id;
 	private String profileImageUrl;
 	private String name;
 
