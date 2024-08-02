@@ -32,7 +32,7 @@ public class PetLetterController {
 
 	@GetMapping
 	public ResponseEntity<Map<String, Object>> getPetLetters(Authentication authentication,
-		@PathVariable("pet-id") long petId, Pageable pageable) {
+		@PathVariable("pet-id") Long petId, Pageable pageable) {
 		Page<PetLetterResponseDto> responseDto = petLetterService.getPetLetters(authentication, petId, pageable);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
 		return response;

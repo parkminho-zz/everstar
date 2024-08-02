@@ -1,5 +1,7 @@
 package com.everstarbackmain.domain.petterLetter.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -18,5 +20,5 @@ public interface PetLetterRepository extends JpaRepository<PetLetter, Long>, Pet
 	Page<PetLetterResponseDto> findPetLettersByPetId(User user, Long petId, Pageable pageable);
 
 	@EntityGraph(attributePaths = {"userLetter", "pet"})
-	PetLetter findPetLetterByIdAndPetAndIsDeleted(Long petLetterId, Pet pet, boolean isDeleted);
+	Optional<PetLetter> findPetLetterByIdAndPetAndIsDeleted(Long petLetterId, Pet pet, boolean isDeleted);
 }
