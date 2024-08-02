@@ -1,6 +1,12 @@
 package com.everstarbackmain.domain.petterLetter.service;
 
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,8 +14,10 @@ import com.everstarbackmain.domain.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;
 import com.everstarbackmain.domain.petterLetter.repository.PetLetterRepository;
+import com.everstarbackmain.domain.petterLetter.responseDto.PetLetterResponseDto;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.userLetter.model.UserLetter;
+import com.everstarbackmain.global.security.auth.PrincipalDetails;
 import com.everstarbackmain.global.sms.SmsCertificationUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -34,6 +42,12 @@ public class PetLetterService {
 		petLetterRepository.save(petLetter);
 
 		sendSms(userLetter);
+	}
+
+	public Page<PetLetterResponseDto> getPetLetters(@NotNull Authentication authentication, long petId, Pageable pageable) {
+		User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
+
+		return petLetterRepository.findPetLettersByPetIdAndIsDelete(user,petId,pageable);
 	}
 
 	public void sendSms(UserLetter userLetter) {
