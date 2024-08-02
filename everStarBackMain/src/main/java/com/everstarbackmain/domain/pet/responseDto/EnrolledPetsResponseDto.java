@@ -2,14 +2,14 @@ package com.everstarbackmain.domain.pet.responseDto;
 
 import com.everstarbackmain.domain.pet.model.Pet;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class EnrolledPetsResponseDto {
 
