@@ -12,11 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.everstarbackmain.domain.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
+import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;
 import com.everstarbackmain.domain.petterLetter.repository.PetLetterRepository;
 import com.everstarbackmain.domain.petterLetter.responseDto.PetLetterResponseDto;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.userLetter.model.UserLetter;
+import com.everstarbackmain.global.exception.CustomException;
+import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
 import com.everstarbackmain.global.sms.SmsCertificationUtil;
 
@@ -30,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PetLetterService {
 
 	private final PetLetterRepository petLetterRepository;
+	private final PetRepository petRepository;
 	private final OpenAiClient openAiClient;
 	private final SmsCertificationUtil smsCertificationUtil;
 
@@ -46,6 +50,9 @@ public class PetLetterService {
 
 	public Page<PetLetterResponseDto> getPetLetters(@NotNull Authentication authentication, long petId, Pageable pageable) {
 		User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
+		if(!petRepository.existsByIdAndUserAndIsDeleted(petId,user,false)){
+			throw new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION);
+		}
 
 		return petLetterRepository.findPetLettersByPetIdAndIsDelete(user,petId,pageable);
 	}
