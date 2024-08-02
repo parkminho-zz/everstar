@@ -31,6 +31,8 @@ import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackmain.domain.userLetter.model.UserLetter;
 import com.everstarbackmain.domain.userLetter.requestDto.WriteLetterRequestDto;
+import com.everstarbackmain.global.exception.CustomException;
+import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
 import com.everstarbackmain.global.sms.SmsCertificationUtil;
@@ -97,4 +99,20 @@ public class GetLetterDetailServiceTest {
 		//then
 		Assertions.assertThat(responseDto.getPetLetter().getContent()).isEqualTo(petLetter.getContent());
 	}
+
+	@Test
+	@DisplayName("편지 개별 보기 pet 존재하지 않음 실패 테스트")
+	public void 편지_개별_보기_펫_존재하지_않음_실패_테스트(){
+		//given
+		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
+		BDDMockito.given(principalDetails.getUser()).willReturn(user);
+
+
+		//when then
+		Assertions.assertThatThrownBy(() -> petLetterService.getLetter(authentication,1L,1L))
+			.isInstanceOf(ExceptionResponse.class)
+			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_FOUND_PET_EXCEPTION);
+	}
+
+
 }
