@@ -48,13 +48,14 @@ public class PetLetterService {
 		sendSms(userLetter);
 	}
 
-	public Page<PetLetterResponseDto> getPetLetters(@NotNull Authentication authentication, long petId, Pageable pageable) {
-		User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
-		if(!petRepository.existsByIdAndUserAndIsDeleted(petId,user,false)){
+	public Page<PetLetterResponseDto> getPetLetters(@NotNull Authentication authentication, long petId,
+		Pageable pageable) {
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
+		if (!petRepository.existsByIdAndUserAndIsDeleted(petId, user, false)) {
 			throw new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION);
 		}
 
-		return petLetterRepository.findPetLettersByPetIdAndIsDelete(user,petId,pageable);
+		return petLetterRepository.findPetLettersByPetIdAndIsDelete(user, petId, pageable);
 	}
 
 	public void sendSms(UserLetter userLetter) {
