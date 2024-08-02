@@ -1,8 +1,5 @@
 package com.everstarbackmain.domain.userLetter.service;
 
-import static org.mockito.ArgumentMatchers.*;
-
-import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -20,8 +17,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 
 import com.everstarbackmain.domain.pet.model.Pet;
+import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
+import com.everstarbackmain.domain.petterLetter.util.PetLetterScheduler;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;
@@ -44,6 +43,9 @@ public class WriteLetterServiceTest {
 	private PetRepository petRepository;
 
 	@Mock
+	private PetLetterScheduler petLetterScheduler;
+
+	@Mock
 	private Authentication authentication;
 
 	@Mock
@@ -61,7 +63,7 @@ public class WriteLetterServiceTest {
 			LocalDate.now(), Gender.MALE, LocalTime.now(), Role.ROLE_USER));
 
 		pet = Pet.createPet(user, new CreatePetRequestDto("petName", 10,
-			LocalDate.of(1990, 1, 1), "species", Gender.MALE,
+			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
 
 		requestDto = new WriteLetterRequestDto("dd", "dd");

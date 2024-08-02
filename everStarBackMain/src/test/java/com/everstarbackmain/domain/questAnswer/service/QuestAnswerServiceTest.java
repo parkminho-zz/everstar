@@ -22,6 +22,7 @@ import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 import com.everstarbackmain.domain.memorialBook.util.MemorialBookScheduler;
 import com.everstarbackmain.domain.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
+import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;
@@ -64,7 +65,6 @@ class QuestAnswerServiceTest {
 	@Mock
 	private TaskScheduler taskScheduler;
 
-
 	@Mock
 	private Authentication authentication;
 
@@ -82,7 +82,7 @@ class QuestAnswerServiceTest {
 		user = User.signUpUser(new JoinRequestDto("email", "password", "name", "010-1111-1111",
 			LocalDate.now(), Gender.MALE, LocalTime.now(), Role.ROLE_USER));
 		pet = Pet.createPet(user, new CreatePetRequestDto("petName", 10,
-			LocalDate.of(1990, 1, 1), "species", Gender.MALE,
+			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
 		memorialBook = MemorialBook.createMemorialBook(pet);
 		sentimentAnalysis = SentimentAnalysis.createSentimentAnalysis(pet);
@@ -113,14 +113,15 @@ class QuestAnswerServiceTest {
 	@DisplayName("퀘스트_답변_분석_메서드_호출_테스트")
 	public void 퀘스트_답변_분석_메서드_호출_테스트() {
 		// given
-		for (int i = 0 ; i < 6; i++) {
+		for (int i = 0; i < 6; i++) {
 			pet.plusQuestIndex();
 		}
 		SentimentAnalysis sentimentAnalysis = mock(SentimentAnalysis.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
-		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIdsAndIsDeleted(anyLong(), anyInt(), anyInt(), anyBoolean()))
+		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIdsAndIsDeleted(anyLong(), anyInt(), anyInt(),
+			anyBoolean()))
 			.willReturn(List.of("answer1", "answer2", "answer3", "answer4", "answer5", "answer6", "answer7"));
 		given(naverCloudClient.analyseSentiment(anyString()))
 			.willReturn(SentimentAnalysisResult.createSentimentAnalysisResult(0.1, 0.2, 0.7));
@@ -148,7 +149,8 @@ class QuestAnswerServiceTest {
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
-		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIdsAndIsDeleted(anyLong(), anyInt(), anyInt(), anyBoolean()))
+		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIdsAndIsDeleted(anyLong(), anyInt(), anyInt(),
+			anyBoolean()))
 			.willReturn(List.of("answer1", "answer2", "answer3", "answer4", "answer5", "answer6", "answer7"));
 		given(naverCloudClient.analyseSentiment(anyString()))
 			.willThrow(new ExceptionResponse(CustomException.NAVER_SENTIMENT_API_EXCEPTION));
@@ -173,7 +175,8 @@ class QuestAnswerServiceTest {
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
-		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIdsAndIsDeleted(anyLong(), anyInt(), anyInt(), anyBoolean()))
+		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIdsAndIsDeleted(anyLong(), anyInt(), anyInt(),
+			anyBoolean()))
 			.willReturn(List.of("answer1", "answer2", "answer3", "answer4", "answer5", "answer6", "answer7"));
 		given(naverCloudClient.analyseSentiment(anyString()))
 			.willReturn(SentimentAnalysisResult.createSentimentAnalysisResult(0.1, 0.2, 0.7));
