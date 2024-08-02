@@ -37,7 +37,7 @@ public class PetLetterRepositoryImpl implements PetLetterRepositoryCustom {
 
 		long total = jpaQueryFactory
 			.selectFrom(petLetter)
-			.where(petLetter.isDeleted.isFalse())
+			.where(petLetter.isDeleted.isFalse().and(petLetter.pet.id.eq(petId).and(petLetter.pet.user.eq(user))))
 			.fetchCount();
 
 		return new PageImpl<>(petLetters, pageable, total);
