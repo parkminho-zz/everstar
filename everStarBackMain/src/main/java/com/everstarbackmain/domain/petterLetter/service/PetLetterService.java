@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.everstarbackmain.domain.petterLetter.responseDto.getLetterResponseDto.GetPetLetterResponseDto;
+import com.everstarbackmain.domain.petterLetter.responseDto.getLetterResponseDto.GetLetterResponseDto;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
@@ -55,7 +55,7 @@ public class PetLetterService {
 		return petLetterRepository.findPetLettersByPetId(user, petId, pageable);
 	}
 
-	public GetPetLetterResponseDto getPetLetter(Authentication authentication, Long petId, Long petLetterId) {
+	public GetLetterResponseDto getLetter(Authentication authentication, Long petId, Long petLetterId) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 
 		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
@@ -64,7 +64,8 @@ public class PetLetterService {
 		PetLetter petLetter = petLetterRepository.findPetLetterByIdAndPetAndIsDeleted(petLetterId, pet, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PETLETTER_EXCEPTION));
 
-
+		GetLetterResponseDto getLetterResponseDto = GetLetterResponseDto.createGetLetterResponseDto(petLetter);
+		return getLetterResponseDto;
 	}
 
 	private void sendSms(UserLetter userLetter) {
