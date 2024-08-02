@@ -22,6 +22,9 @@ import com.everstarbackauth.domain.user.repository.UserRepository;
 import com.everstarbackauth.domain.user.requestDto.AuthenticateUserRequestDto;
 import com.everstarbackauth.global.exception.CustomException;
 import com.everstarbackauth.global.exception.ExceptionResponse;
+import com.everstarbackauth.global.security.jwt.JwtUtil;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthenticateUserServiceTest {
@@ -37,6 +40,12 @@ public class AuthenticateUserServiceTest {
 
 	@Mock
 	private SmsCertificationRepository smsCertificationRepository;
+
+	@Mock
+	private JwtUtil jwtUtil;
+
+	@Mock
+	private HttpServletResponse httpServletResponse;
 
 	private AuthenticateUserRequestDto requestDto;
 	private User user;
@@ -60,17 +69,17 @@ public class AuthenticateUserServiceTest {
 			.willReturn(true);
 
 		//when
-		joinService.authenticateUser(requestDto);
+		joinService.authenticateUser(requestDto, httpServletResponse);
 
 		//then
-		Assertions.assertThatNoException().isThrownBy(() -> joinService.authenticateUser(requestDto));
+		Assertions.assertThatNoException().isThrownBy(() -> joinService.authenticateUser(requestDto, httpServletResponse));
 	}
 
 	@Test
 	@DisplayName("OAuth 회원가입 테스트 실패 테스트 유저 존재하지 않음")
 	public void OAuth_회원가입_유저_존재하지않음_실패_테스트() {
 
-		Assertions.assertThatThrownBy(() -> joinService.authenticateUser(requestDto))
+		Assertions.assertThatThrownBy(() -> joinService.authenticateUser(requestDto, httpServletResponse))
 			.isInstanceOf(ExceptionResponse.class)
 			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_FOUND_USER_EXCEPTION);
 	}
@@ -85,7 +94,7 @@ public class AuthenticateUserServiceTest {
 			.willReturn(false);
 
 		//then
-		Assertions.assertThatThrownBy(() -> joinService.authenticateUser(requestDto))
+		Assertions.assertThatThrownBy(() -> joinService.authenticateUser(requestDto, httpServletResponse))
 			.isInstanceOf(ExceptionResponse.class)
 			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_AUTH_PHONE_NUMBER);
 	}
