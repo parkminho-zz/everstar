@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
+import com.everstarbackmain.domain.user.model.Gender;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
