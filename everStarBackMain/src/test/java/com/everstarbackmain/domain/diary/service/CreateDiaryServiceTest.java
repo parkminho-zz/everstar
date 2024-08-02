@@ -82,7 +82,7 @@ public class CreateDiaryServiceTest {
 
 	@Test
 	@DisplayName("다이어리_생성_성공_테스트")
-	public void 다이어리_생성_성공_테스트() throws IOException {
+	public void 다이어리_생성_성공_테스트() {
 		// given
 		memorialBook.changeActiveStatus();
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
@@ -100,7 +100,7 @@ public class CreateDiaryServiceTest {
 
 	@Test
 	@DisplayName("다이어리_생성_실패_존재하지_않는_메모리얼북_테스트")
-	public void 다이어리_생성_실패_존재하지_않는_메모리얼북_테스트() throws IOException {
+	public void 다이어리_생성_실패_존재하지_않는_메모리얼북_테스트() {
 		// given
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.empty());
@@ -115,7 +115,7 @@ public class CreateDiaryServiceTest {
 
 	@Test
 	@DisplayName("다이어리_생성_실패_작성자가_메모리얼북_소유자가_아닌_경우_테스트")
-	public void 다이어리_생성_실패_작성자가_메모리얼북_소유자가_아닌_경우_테스트() throws IOException {
+	public void 다이어리_생성_실패_작성자가_메모리얼북_소유자가_아닌_경우_테스트() {
 		// given
 		User anotherUser = User.signUpUser(new JoinRequestDto("email2", "password", "name2", "010-2222-2222",
 			LocalDate.now(), Gender.MALE, LocalTime.now(), Role.ROLE_USER));
@@ -134,7 +134,7 @@ public class CreateDiaryServiceTest {
 
 	@Test
 	@DisplayName("다이어리_생성_실패_비활성화된_메모리얼북_테스트")
-	public void 다이어리_생성_실패_비활성화된_메모리얼북_테스트() throws IOException {
+	public void 다이어리_생성_실패_비활성화된_메모리얼북_테스트() {
 		// given
 		ReflectionTestUtils.setField(memorialBook, "isActive", false);
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
