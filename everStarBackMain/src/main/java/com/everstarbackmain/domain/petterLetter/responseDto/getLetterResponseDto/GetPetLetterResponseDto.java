@@ -17,6 +17,7 @@ public class GetPetLetterResponseDto {
 
 	private String relationship;
 	private String content;
+	private LocalDateTime createdAt;
 
 	public static GetPetLetterResponseDto createGetPetLetterResponseDto(PetLetter petLetter) {
 		Pet pet = petLetter.getPet();
