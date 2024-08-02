@@ -17,6 +17,6 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
 	@EntityGraph(attributePaths = "user")
 	Optional<Pet> findByIdAndUserAndIsDeleted(Long id, User user, boolean isDeleted);
 
-	boolean existsByIdAndUserAndIsDeleted(Long id, User user, Boolean isDelete);
+	boolean existsByIdAndUserAndIsDeleted(Long id, User user, boolean isDeleted);
 	List<Pet> findAllByUserIdAndIsDeleted(Long id, boolean isDeleted);
 }
