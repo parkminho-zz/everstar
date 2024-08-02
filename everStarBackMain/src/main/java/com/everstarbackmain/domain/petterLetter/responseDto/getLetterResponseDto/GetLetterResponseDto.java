@@ -17,8 +17,9 @@ public class GetLetterResponseDto {
 	private GetUserLetterResponseDto userLetter;
 	private GetPetLetterResponseDto petLetter;
 
-	public static GetLetterResponseDto createGetLetterResponseDto(PetLetter petLetter){
-		GetUserLetterResponseDto userLetterResponseDto = GetUserLetterResponseDto.createUserLetterResponseDto(petLetter);
+	public static GetLetterResponseDto createGetLetterResponseDto(PetLetter petLetter) {
+		GetUserLetterResponseDto userLetterResponseDto = GetUserLetterResponseDto.createUserLetterResponseDto(
+			petLetter);
 		GetPetLetterResponseDto petLetterResponseDto = GetPetLetterResponseDto.createGetPetLetterResponseDto(petLetter);
 		return new GetLetterResponseDto(userLetterResponseDto, petLetterResponseDto);
 	}
