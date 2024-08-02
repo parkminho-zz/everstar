@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.everstarbackmain.domain.memorialBook.util.MemorialBookScheduler;
-import com.everstarbackmain.domain.openai.util.OpenAiClient;
+import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;

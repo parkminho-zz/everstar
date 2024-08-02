@@ -4,7 +4,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.everstarbackmain.domain.openai.util.OpenAiClient;
+import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;
 import com.everstarbackmain.domain.petterLetter.repository.PetLetterRepository;
