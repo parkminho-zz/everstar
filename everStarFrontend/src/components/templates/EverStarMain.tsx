@@ -21,7 +21,6 @@ interface EverStarMainProps {
   buttonSize: ViewMemorialBookSize;
   buttonDisabled: boolean;
   buttonText: string;
-  buttonIcon: 'SmallStarimg' | 'SmallEarthImg';
   onButtonClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -63,8 +62,7 @@ const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
   const focus = 'bg-mainprimary text-greyscalewhite hover:bg-bgorange';
   const white = 'bg-white text-mainsecondary hover:bg-bgorange';
   const hover = 'bg-bgorange text-mainsecondary hover:bg-mainprimary';
-  const disabledStyle =
-    'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
+  const disabledStyle = 'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
 
   const color: Record<ViewMemorialBookTheme, string> = {
     focus,
@@ -110,9 +108,7 @@ const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
       disabled={disabled}
       onClick={onClick}
     >
-      <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>
-        {children}
-      </span>
+      <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>{children}</span>
     </button>
   );
 };
@@ -125,7 +121,6 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   buttonDisabled,
   buttonText,
   onButtonClick,
-  buttonIcon = <LogoIcons variant='small-earth-img' />,
   className,
 }) => {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
@@ -137,11 +132,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
       ? 'tablet-everstar'
       : 'everstar';
 
-  const footerType = isMobile
-    ? 'mobile'
-    : isTabletOrMobile
-      ? 'tablet'
-      : 'desktop';
+  const footerType = isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop';
 
   const isDisabled = fill < 49;
   const progressButtonText = isDisabled
@@ -161,7 +152,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
         >
           <div className='flex w-64 items-center justify-center gap-6 relative flex-[0_0_auto]'>
             <div className='relative w-fit mt-[-1.00px] font-kor-h-h2 font-[number:var(--kor-h-h2-font-weight)] text-greyscaleblack-100 text-[length:var(--kor-h-h2-font-size)] tracking-[var(--kor-h-h2-letter-spacing)] leading-[var(--kor-h-h2-line-height)] [font-style:var(--kor-h-h2-font-style)]'>
-              <CurrentLocation title={title} />
+              <CurrentLocation title={title} type='everstar' />
             </div>
           </div>
 
@@ -171,7 +162,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
               size={buttonSize}
               disabled={buttonDisabled}
               onClick={onButtonClick}
-              icon={buttonIcon}
+              icon={<LogoIcons variant='small-earth-img' />}
             >
               {buttonText}
             </PrimaryButton>

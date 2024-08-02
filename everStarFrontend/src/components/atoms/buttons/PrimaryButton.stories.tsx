@@ -51,44 +51,44 @@ type Story = StoryObj<typeof PrimaryButton>;
 
 export const Default: Story = {
   args: {
-    theme: 'focus',
+    theme: 'white',
     size: 'large',
     disabled: false,
     children: '클릭하세요',
-    icon: 'ArrowIcon',
+    icon: iconOptions.ArrowIcon,
     hug: false,
   },
 };
 
 export const WithSmallStarImg: Story = {
   args: {
-    theme: 'focus',
+    theme: 'white',
     size: 'large',
     disabled: false,
     children: '클릭하세요',
-    icon: 'SmallStarImg',
+    icon: iconOptions.SmallStarImg,
     hug: false,
   },
 };
 
 export const WithSmallEarthImg: Story = {
   args: {
-    theme: 'focus',
+    theme: 'white',
     size: 'large',
     disabled: false,
     children: '클릭하세요',
-    icon: 'SmallEarthImg',
+    icon: iconOptions.SmallEarthImg,
     hug: false,
   },
 };
 
 export const HugButton: Story = {
   args: {
-    theme: 'focus',
+    theme: 'white',
     size: 'large',
     disabled: false,
     children: '클릭하세요',
-    icon: 'ArrowIcon',
+    icon: iconOptions.ArrowIcon,
     hug: true,
   },
 };
