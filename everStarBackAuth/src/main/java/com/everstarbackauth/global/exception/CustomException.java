@@ -7,8 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum CustomException {
 	NOT_EMPTY_ROLE_EXCEPTION(400, "NotEmptyRoleException", "권한이 존재하지 않습니다."),
-	NOT_FOUND_USER_EXCEPTION(400, "NotFoundUserException", "유저가 존재하지 않습니다."),
-	NOT_EXIST_EMAIL(400, "NotExistMemberByEmail", "해당 이메일에 존재하는 유저가 없습니다."),
+	NOT_FOUND_USER_EXCEPTION(404, "NotFoundUserException", "유저가 존재하지 않습니다."),
+	NOT_EXIST_EMAIL(404, "NotExistMemberByEmail", "해당 이메일에 존재하는 유저가 없습니다."),
 	NOT_EXIST_REGISTRATIONID(400, "NotExistRegistrationId", "연동되지 않은 간편 회원가입 입니다."),
 	NOT_MATCH_AUTH_CODE_EXCEPTION(400, "NotMatchAuthCodeException", "인증번호가 일치하지 않습니다."),
 	NOT_AUTH_PHONE_NUMBER(400, "NotExistAuthPhoneNumber", "인증된 번호가 아닙니다"),
