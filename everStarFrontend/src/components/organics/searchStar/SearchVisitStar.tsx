@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Modal } from 'components/molecules/Modal/Modal';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { Select } from 'components/molecules/input/Select';
+import { Textbox } from 'components/molecules/input/Textbox';
 
-interface CheerColorSelectProps {
+interface SearchVisitStarProps {
   isOpen: boolean;
   onClose: () => void;
   onResend: () => void;
@@ -12,7 +13,7 @@ interface CheerColorSelectProps {
   height?: string;
 }
 
-export const CheerColorSelect: React.FC<CheerColorSelectProps> = ({
+export const SearchVisitStar: React.FC<SearchVisitStarProps> = ({
   isOpen,
   onClose,
   onVerify,
@@ -20,32 +21,32 @@ export const CheerColorSelect: React.FC<CheerColorSelectProps> = ({
 }) => {
   const [verificationCode] = useState('');
 
-  const colorOptions = [
-    '빨간색',
-    '주황색',
-    '노란색',
-    '초록색',
-    '파란색',
-    '남색',
-    '보라색',
-  ];
+  const colorOptions = ['11', '2', '33', '44', '55', '6', '77'];
 
   const handleVerify = () => {
     onVerify(verificationCode);
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} text='색상 정보 선택'>
+    <Modal isOpen={isOpen} onClose={onClose} text='방문할 영원별 찾기'>
       <div className='flex flex-col justify-between w-full h-full'>
         <div className='flex flex-col'>
           <div
             className="left-0 [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal] "
             dangerouslySetInnerHTML={{ __html: text }}
           />
+          <div className="[font-family:'Noto_Sans_KR-Bold'] font-bold text-[#1f2329] text-sm tracking-[-1.12px] leading-[normal]">
+            <Textbox
+              type={'small'}
+              label={'반려동물 이름을 검색해주세요'}
+              showInfoText={false}
+              showStar={false}
+            />
+          </div>
           <div className='mt-6'>
             <Select
               options={colorOptions}
-              title={'포스트잇 색깔을 선택해주세요'}
+              title={''}
               showLabel={false}
               onOptionSelect={function (): void {}}
               infoText={''}
@@ -60,7 +61,7 @@ export const CheerColorSelect: React.FC<CheerColorSelectProps> = ({
             disabled={false}
             icon={null}
           >
-            선택 완료
+            작성 완료
           </PrimaryButton>
         </div>
       </div>
@@ -68,4 +69,4 @@ export const CheerColorSelect: React.FC<CheerColorSelectProps> = ({
   );
 };
 
-export type { CheerColorSelectProps };
+export type { SearchVisitStarProps };

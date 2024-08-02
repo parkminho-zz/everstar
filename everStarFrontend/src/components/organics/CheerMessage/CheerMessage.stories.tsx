@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Meta, StoryFn } from '@storybook/react';
-import CheerMessage from './CheerMessage';
+import { CheerMessage } from './CheerMessage';
 
 export default {
   title: 'Organics/CheerMessage/CheerMessage',
