@@ -12,11 +12,11 @@ import com.everstarbackmain.domain.user.model.User;
 public interface PetRepository extends JpaRepository<Pet, Long> {
 
 	@EntityGraph(attributePaths = "user")
-	Optional<Pet> findByIdAndIsDeleted(Long id, boolean isDeleted);
+	Optional<Pet> findByIdAndIsDeleted(Long id, Boolean isDeleted);
 
 	@EntityGraph(attributePaths = "user")
-	Optional<Pet> findByIdAndUserAndIsDeleted(Long id, User user, boolean isDeleted);
+	Optional<Pet> findByIdAndUserAndIsDeleted(Long id, User user, Boolean isDeleted);
 
-	boolean existsByIdAndUserAndIsDeleted(Long id, User user, boolean isDeleted);
-	List<Pet> findAllByUserIdAndIsDeleted(Long id, boolean isDeleted);
+	boolean existsByIdAndUserAndIsDeleted(Long id, User user, Boolean isDeleted);
+	List<Pet> findAllByUserIdAndIsDeleted(Long id, Boolean isDeleted);
 }

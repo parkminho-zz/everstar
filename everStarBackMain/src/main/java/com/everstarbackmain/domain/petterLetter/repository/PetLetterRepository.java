@@ -20,5 +20,5 @@ public interface PetLetterRepository extends JpaRepository<PetLetter, Long>, Pet
 	Page<PetLetterResponseDto> findPetLettersByPetId(User user, Long petId, Pageable pageable);
 
 	@EntityGraph(attributePaths = {"userLetter", "pet"})
-	Optional<PetLetter> findPetLetterByIdAndPetAndIsDeleted(Long petLetterId, Pet pet, boolean isDeleted);
+	Optional<PetLetter> findPetLetterByIdAndPetAndIsDeleted(Long petLetterId, Pet pet, Boolean isDeleted);
 }

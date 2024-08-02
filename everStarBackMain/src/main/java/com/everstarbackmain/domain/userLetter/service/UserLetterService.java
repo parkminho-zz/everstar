@@ -29,7 +29,7 @@ public class UserLetterService {
 	private final PetLetterScheduler petLetterScheduler;
 
 	@Transactional
-	public void writeLetter(Authentication authentication, long petId, WriteLetterRequestDto requestDto) {
+	public void writeLetter(Authentication authentication, Long petId, WriteLetterRequestDto requestDto) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 
 		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)

@@ -1,5 +1,7 @@
 package com.everstarbackmain.domain.petterLetter.responseDto.getLetterResponseDto;
 
+import java.time.LocalDateTime;
+
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;
 
@@ -18,6 +20,6 @@ public class GetPetLetterResponseDto {
 
 	public static GetPetLetterResponseDto createGetPetLetterResponseDto(PetLetter petLetter) {
 		Pet pet = petLetter.getPet();
-		return new GetPetLetterResponseDto(pet.getRelationship(), petLetter.getContent());
+		return new GetPetLetterResponseDto(pet.getRelationship(), petLetter.getContent(), petLetter.getCreatedTime());
 	}
 }
