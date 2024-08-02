@@ -17,7 +17,6 @@ import com.everstarbackmain.domain.pet.message.SuccessPetMessage;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.pet.requestDto.UpdatePetIntroductionDto;
 import com.everstarbackmain.domain.pet.responseDto.EnrolledPetsResponseDto;
-import com.everstarbackmain.domain.pet.responseDto.PetDetailResponseDto;
 import com.everstarbackmain.domain.pet.service.PetService;
 import com.everstarbackmain.global.util.HttpResponseUtil;
 
