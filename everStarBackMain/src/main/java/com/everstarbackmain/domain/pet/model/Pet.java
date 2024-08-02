@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
-import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
 
@@ -32,48 +31,49 @@ public class Pet extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@Column(nullable = false)
+	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(nullable = false)
+	@Column(name = "age", nullable = false)
 	private Integer age;
 
-	@Column(nullable = false)
+	@Column(name = "memorial_date", nullable = false)
 	private LocalDate memorialDate;
 
-	@Column(nullable = false)
+	@Column(name = "species", nullable = false)
 	private String species;
 
-	@Column(nullable = false)
+	@Column(name = "gender", nullable = false)
 	@Enumerated(EnumType.STRING)
-	private Gender gender;
+	private PetGender gender;
 
-	@Column(nullable = false)
+	@Column(name = "relationship", nullable = false)
 	private String relationship;
 
-	@Column(nullable = false)
+	@Column(name = "profile_image_url", nullable = false)
 	private String profileImageUrl;
 
-	@Column(nullable = false)
+	@Column(name = "introduction", nullable = false)
 	private String introduction;
 
-	@Column(nullable = false)
+	@Column(name = "quest_index", nullable = false)
 	private Integer questIndex;
 
-	@Column(nullable = false)
+	@Column(name = "is_deleted", nullable = false)
 	private Boolean isDeleted;
 
-	@Column(nullable = false)
+	@Column(name = "last_access_time", nullable = false)
 	private LocalDateTime lastAccessTime;
 
 	@Builder
-	private Pet(User user, String name, Integer age, LocalDate memorialDate, String species, Gender gender,
+	private Pet(User user, String name, Integer age, LocalDate memorialDate, String species, PetGender gender,
 		String relationship, String profileImageUrl, String introduction) {
 		this.user = user;
 		this.name = name;
@@ -83,7 +83,8 @@ public class Pet extends BaseTimeEntity {
 		this.gender = gender;
 		this.relationship = relationship;
 		this.profileImageUrl = profileImageUrl;
-		this.introduction = (introduction != null && !introduction.isEmpty()) ? introduction : name + " 의 사랑스런 소개글을 작성 해주세요";
+		this.introduction =
+			(introduction != null && !introduction.isEmpty()) ? introduction : name + " 의 사랑스런 소개글을 작성 해주세요";
 		questIndex = 0;
 		isDeleted = false;
 		lastAccessTime = LocalDateTime.now();
@@ -107,10 +108,7 @@ public class Pet extends BaseTimeEntity {
 	}
 
 	public void updatePetIntroduction(String newIntroduction) {
-		if (newIntroduction != null && !newIntroduction.isEmpty()) {
-			this.introduction = newIntroduction;
-		}
-
+		this.introduction = newIntroduction;
 	}
 
 }

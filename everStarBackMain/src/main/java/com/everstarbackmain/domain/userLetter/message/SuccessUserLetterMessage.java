@@ -9,5 +9,5 @@ import lombok.Getter;
 public enum SuccessUserLetterMessage {
 	SUCCESS_WRITE_LETTER("편지 쓰기가 성공하였습니다.");
 
-	private String message;
+	private final String message;
 }
