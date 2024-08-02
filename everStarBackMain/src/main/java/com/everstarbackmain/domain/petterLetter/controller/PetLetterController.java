@@ -37,6 +37,9 @@ public class PetLetterController {
 
 		Page<PetLetterResponseDto> responseDto = petLetterService.getPetLetters(authentication, petId, pageable);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
+
+		log.info("main server - response : {}", response);
+
 		return response;
 	}
 
@@ -46,6 +49,9 @@ public class PetLetterController {
 
 		GetLetterResponseDto responseDto = petLetterService.getLetter(authentication, petId, letterId);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
+
+		log.info("main server - response : {}", response);
+
 		return response;
 	}
 }
