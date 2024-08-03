@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ public class PetLetterScheduler {
 
 	private final TaskScheduler taskScheduler;
 	private final PetLetterService petLetterService;
+	private final ApplicationEventPublisher eventPublisher;
 
 	public void schedulePetLetter(UserLetter userLetter) {
 		LocalDateTime nextDayWritePetLetterTime = userLetter.getCreatedTime().plusMinutes(1);
