@@ -20,14 +20,15 @@ public class PetLetterScheduler {
 	private final TaskScheduler taskScheduler;
 	private final PetLetterService petLetterService;
 
-	public void schedulePetLetter(UserLetter userLetter){
+	public void schedulePetLetter(UserLetter userLetter) {
 		LocalDateTime nextDayWritePetLetterTime = userLetter.getCreatedTime().plusMinutes(1);
-		Date nextDayWritePetLetterDate = Date.from(nextDayWritePetLetterTime.atZone(ZoneId.systemDefault()).toInstant());
+		Date nextDayWritePetLetterDate = Date.from(
+			nextDayWritePetLetterTime.atZone(ZoneId.systemDefault()).toInstant());
 
 		taskScheduler.schedule(() -> petLetterService.writePetLetterAnswer(userLetter), nextDayWritePetLetterDate);
 	}
 
-	public void scheduleSendPetLetter(Pet pet){
-
+	public void scheduleSendPetLetter(Pet pet) {
+		taskScheduler.schedule(() -> petLetterService)
 	}
 }
