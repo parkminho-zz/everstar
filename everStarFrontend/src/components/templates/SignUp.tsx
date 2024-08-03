@@ -216,7 +216,7 @@ export const SignUp: React.FC = () => {
       console.log('User joined successfully');
       dispatch(SetToken(data.token)); // 토큰 저장
       dispatch(SetUser(data.user));
-      navigate('/earth');
+      navigate('/profile');
     },
     onError: (error: unknown) => {
       const err = error as Error;
