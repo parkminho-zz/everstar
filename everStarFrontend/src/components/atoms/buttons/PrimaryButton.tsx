@@ -39,11 +39,11 @@ const sizeStyle: Record<PrimaryButtonSize, string> = {
 export function PrimaryButton({
   theme,
   size,
-  children = '', // Default to empty string
+  children = '',
   onClick,
   disabled,
-  icon = <ArrowIcon color='black' direction='right' size={24} />, // 기본 아이콘 설정
-  hug = false, // 기본값을 false로 설정
+  icon = <ArrowIcon color='black' direction='right' size={24} />,
+  hug = false,
 }: IPrimaryButtonProps) {
   const getTextStyle = () => {
     switch (size) {
@@ -88,14 +88,6 @@ export function PrimaryButton({
   return (
     <button className={`${getButtonClasses()} group`} disabled={disabled} onClick={onClick}>
       <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>{children}</span>
-      {/* {icon && (
-        <span className='ml-auto'>
-          <ArrowIcon size={24} direction='right' color={iconColor} hover={false} />
-        </span>
-      )} */}
-
-      {/* {icon && <span className='ml-auto'>{icon}</span>} */}
-      {/* {icon && <span className='ml-auto'>{React.cloneElement(icon, { color: iconColor })}</span>} */}
       {icon && <span className='ml-auto'>{renderIcon()}</span>}
     </button>
   );
