@@ -40,21 +40,29 @@ interface UserInfo {
   questReceptionTime: string;
 }
 
-const sendVerificationCode = async (phoneNumber: string): Promise<SendCodeResponse> => {
-  const response = await fetch('https://i11b101.p.ssafy.io/api/auth/users/send-code', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+const sendVerificationCode = async (
+  phone: string,
+): Promise<SendCodeResponse> => {
+  // phoneNumber를 phone으로 변경
+  const response = await fetch(
+    'https://i11b101.p.ssafy.io/api/auth/users/send-code',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ phone }), // phoneNumber를 phone으로 변경
     },
-    body: JSON.stringify({ phoneNumber }),
-  });
+  );
 
   if (!response.ok) {
     const errorResponse = await response.json();
     if (response.status === 400) {
       alert('잘못된 전화번호입니다. 다시 확인해주세요.');
     } else {
-      throw new Error(errorResponse.message || 'Failed to send verification code');
+      throw new Error(
+        errorResponse.message || 'Failed to send verification code',
+      );
     }
   }
 
@@ -68,13 +76,16 @@ const verifyAuthCode = async ({
   phone: string;
   certificationNumber: string;
 }): Promise<VerifyCodeResponse> => {
-  const response = await fetch('https://i11b101.p.ssafy.io/api/auth/users/check-code', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  const response = await fetch(
+    'https://i11b101.p.ssafy.io/api/auth/users/check-code',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ phone, certificationNumber }),
     },
-    body: JSON.stringify({ phone, certificationNumber }),
-  });
+  );
 
   if (!response.ok) {
     const errorResponse = await response.json();
@@ -90,16 +101,20 @@ const verifyAuthCode = async ({
 
 const joinUser = async (userData: UserInfo): Promise<JoinResponse> => {
   console.log('전송 데이터:', userData); // 전송하는 데이터 출력
-  const response = await fetch('https://i11b101.p.ssafy.io/api/auth/oauth/join', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
+  const response = await fetch(
+    'https://i11b101.p.ssafy.io/api/auth/oauth/join',
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
     },
-    body: JSON.stringify(userData),
-  });
+  );
 
   if (!response.ok) {
     const errorResponse = await response.json();
+    console.error('회원가입 실패:', errorResponse); // 오류 메시지 출력
     throw new Error(errorResponse.message || 'Failed to join user');
   }
 
@@ -111,7 +126,11 @@ export const SignUp: React.FC = () => {
   const navigate = useNavigate();
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
-  const footerType = isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop';
+  const footerType = isMobile
+    ? 'mobile'
+    : isTabletOrMobile
+      ? 'tablet'
+      : 'desktop';
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [phone, setPhone] = useState('');
@@ -142,15 +161,8 @@ export const SignUp: React.FC = () => {
       questReceptionTime,
     });
 
-    if (process.env.NODE_ENV === 'development') {
-      // 개발 환경에서는 휴대폰 인증 생략
-      handleJoinUser({
-        ...formData,
-        phoneNumber,
-      });
-    } else {
-      setModalOpen(true);
-    }
+    setModalOpen(true); // 모달 열기
+    mutateSendCode(phoneNumber); // 인증 코드 전송
   };
 
   const handleCloseModal = () => {
@@ -166,9 +178,10 @@ export const SignUp: React.FC = () => {
     onSuccess: () => {
       console.log('Verification code sent successfully');
     },
-    onError: (error: Error) => {
-      console.error('Error sending verification code:', error.message);
-      if (error.message.includes('400')) {
+    onError: (error: unknown) => {
+      const err = error as Error;
+      console.error('Error sending verification code:', err.message);
+      if (err.message.includes('400')) {
         alert('잘못된 전화번호입니다. 다시 확인해주세요.');
       } else {
         navigate('/login');
@@ -176,25 +189,27 @@ export const SignUp: React.FC = () => {
     },
   });
 
-  const handleJoinUser = (userInfo: UserInfo) => {
-    console.log('회원가입 데이터:', userInfo); // 회원가입 데이터 출력
-    mutateJoinUser(userInfo);
+  const handleVerifyAndJoin = (certificationNumber: string) => {
+    mutateVerifyCode(
+      { phone, certificationNumber },
+      {
+        onSuccess: () => {
+          console.log('Auth code verified successfully');
+          // 인증이 성공하면 회원가입 진행
+          mutateJoinUser(formData);
+        },
+        onError: (error: unknown) => {
+          const err = error as Error;
+          console.error('Error verifying auth code:', err.message);
+          if (err.message.includes('400')) {
+            alert('잘못된 인증번호입니다. 다시 확인해주세요.');
+          } else {
+            navigate('/login');
+          }
+        },
+      },
+    );
   };
-
-  const { mutate: mutateVerifyCode } = useMutation(verifyAuthCode, {
-    onSuccess: () => {
-      console.log('Auth code verified successfully');
-      handleJoinUser(formData);
-    },
-    onError: (error: Error) => {
-      console.error('Error verifying auth code:', error.message);
-      if (error.message.includes('400')) {
-        alert('잘못된 인증번호입니다. 다시 확인해주세요.');
-      } else {
-        navigate('/login');
-      }
-    },
-  });
 
   const { mutate: mutateJoinUser } = useMutation(joinUser, {
     onSuccess: (data) => {
@@ -203,27 +218,26 @@ export const SignUp: React.FC = () => {
       dispatch(SetUser(data.user));
       navigate('/earth');
     },
-    onError: (error: Error) => {
-      console.error('Error joining user:', error.message);
+    onError: (error: unknown) => {
+      const err = error as Error;
+      console.error('Error joining user:', err.message);
       navigate('/login');
     },
   });
 
-  const handleVerify = (certificationNumber: string) => {
-    mutateVerifyCode({ phone, certificationNumber });
-  };
+  const { mutate: mutateVerifyCode } = useMutation(verifyAuthCode);
 
   return (
     <div
-      className="flex flex-col min-h-screen bg-center bg-cover"
+      className='flex flex-col min-h-screen bg-center bg-cover'
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <div className="flex items-center justify-center flex-grow">
+      <div className='flex items-center justify-center flex-grow'>
         <SignUpForm
-          headerText="회원가입"
-          smallButtonText="" // 절대 채우면 안됨
+          headerText='회원가입'
+          smallButtonText='' // 절대 채우면 안됨
           showPrimaryButton={true}
-          text="회원가입을 위해 정보를 입력해주세요."
+          text='회원가입을 위해 정보를 입력해주세요.'
           onButtonClick={(
             phoneNumber: string,
             email: string,
@@ -240,22 +254,17 @@ export const SignUp: React.FC = () => {
               gender,
               questReceptionTime,
             );
-            if (process.env.NODE_ENV !== 'development') {
-              mutateSendCode(phoneNumber);
-            }
           }}
         />
-        {process.env.NODE_ENV !== 'development' && (
-          <PhoneNumberModal
-            isOpen={isModalOpen}
-            onClose={handleCloseModal}
-            onResend={handleResend}
-            onVerify={handleVerify}
-            text="인증번호를 <br /> 입력해 주세요"
-          />
-        )}
+        <PhoneNumberModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onResend={handleResend}
+          onVerify={handleVerifyAndJoin}
+          text='인증번호를 <br /> 입력해 주세요'
+        />
       </div>
-      <Footer type={footerType} className="mt-auto" /> {/* 푸터 */}
+      <Footer type={footerType} className='mt-auto' /> {/* 푸터 */}
     </div>
   );
 };
