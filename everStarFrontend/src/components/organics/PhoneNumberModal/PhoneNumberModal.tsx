@@ -41,16 +41,16 @@ export const PhoneNumberModal: React.FC<PhoneNumberModalProps> = ({
           <InputField
             label="인증번호 입력"
             showLabel={true}
-            showValidationText={true}
+            showValidationText={false}
             starshow={false}
             state="focus"
             text={verificationCode}
             showCheckIcon={true}
-            className="my-10"
+            className="mt-4"
             placeholder="인증번호를 입력해 주세요"
             onChange={handleChange}
           />
-          <div className="mt-8 text-right text-blue-500 cursor-pointer" onClick={onResend}>
+          <div className="mt-4 text-right text-blue-500 cursor-pointer" onClick={onResend}>
             인증번호 재전송
           </div>
         </div>

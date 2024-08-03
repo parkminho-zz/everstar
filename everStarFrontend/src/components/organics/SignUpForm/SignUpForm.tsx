@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { InputField } from 'components/organics/input/InputFields';
@@ -10,6 +11,14 @@ export interface SignUpFormProps {
   smallButtonText: string;
   showPrimaryButton?: boolean;
   text: string;
+  onButtonClick?: (
+    phone: string,
+    email: string,
+    userName: string,
+    birthDate: string,
+    gender: string,
+    questReceptionTime: string, // 추가된 부분
+  ) => void;
 }
 
 export const SignUpForm: React.FC<SignUpFormProps> = ({
@@ -17,24 +26,50 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
   smallButtonText,
   showPrimaryButton = true,
   text,
+  onButtonClick,
 }) => {
+  const { userEmail } = useParams<{ userEmail: string }>();
+
   const [formData, setFormData] = useState({
     name: '',
     birthdate: new Date(),
     gender: '',
-    email: '',
+    email: userEmail || '',
     phone: '',
+    questReceptionTime: '', // 추가된 부분
   });
 
-  const handleButtonClick = () => {
-    console.log('Form Submitted', formData);
-  };
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
+  useEffect(() => {
+    setFormData((prevFormData) => ({ ...prevFormData, email: userEmail || '' }));
+  }, [userEmail]);
 
   const handleInputChange = (field: keyof typeof formData, value: string | Date | null) => {
     setFormData({
       ...formData,
       [field]: value,
     });
+  };
+
+  useEffect(() => {
+    const allFieldsFilled = Object.values(formData).every(
+      (value) => value !== '' && value !== null,
+    );
+    setIsButtonDisabled(!allFieldsFilled);
+  }, [formData]);
+
+  const handleSubmit = () => {
+    if (onButtonClick) {
+      onButtonClick(
+        formData.phone,
+        formData.email,
+        formData.name,
+        formData.birthdate.toISOString(),
+        formData.gender,
+        formData.questReceptionTime, // 추가된 부분
+      );
+    }
   };
 
   return (
@@ -47,6 +82,16 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
             dangerouslySetInnerHTML={{ __html: text.replace(/\n/g, '<br />') }}
           />
         </div>
+        <InputField
+          label="이메일"
+          showLabel={true}
+          showValidationText={false}
+          starshow={true}
+          state="disable"
+          text={formData.email}
+          showCheckIcon={false}
+          className=""
+        />
         <InputField
           label="이름"
           showLabel={true}
@@ -71,6 +116,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
         />
 
         <Select
+          label="성별"
           className=""
           options={['남성', '여성']}
           title="성별을 선택하세요"
@@ -81,18 +127,17 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
           showIcon={true}
         />
 
-        <InputField
-          label="이메일"
-          showLabel={true}
-          showValidationText={false}
-          starshow={true}
-          state="default"
-          text={formData.email}
-          showCheckIcon={false}
+        <Select
+          label="질문 받을 시간"
           className=""
-          onChange={(e) => handleInputChange('email', e.target.value)}
+          options={Array.from({ length: 17 }, (_, i) => `${String(i + 6).padStart(2, '0')}:00`)}
+          title="질문을 받고 싶은 시간을 선택하세요"
+          showLabel={true}
+          starshow={true}
+          onOptionSelect={(option) => handleInputChange('questReceptionTime', option as string)}
+          infoText="06시부터 22시까지 가능해요"
+          showIcon={true}
         />
-
         <InputField
           label="전화번호"
           showLabel={true}
@@ -111,8 +156,8 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
             <PrimaryButton
               theme="white"
               size="small"
-              onClick={handleButtonClick}
-              disabled={false}
+              onClick={handleSubmit}
+              disabled={isButtonDisabled}
               icon={true}
               hug={true}
             >
