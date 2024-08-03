@@ -1,14 +1,14 @@
 import React from 'react';
-import { Login as LoginContainer } from 'components/organics/Login/Login';
+import { LoginContainer } from 'components/organics/Login/LoginContainer';
 import bgImage from 'assets/images/bg-login.png';
 
 export const Login: React.FC = () => {
   return (
     <div
-      className="relative flex flex-col min-h-screen bg-center bg-cover"
+      className="relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <div className="relative z-10 flex items-center justify-center flex-1 my-4">
+      <div className="relative z-10 flex items-center justify-center w-full h-full">
         <LoginContainer />
       </div>
     </div>
