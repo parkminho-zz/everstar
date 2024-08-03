@@ -6,6 +6,8 @@ import com.everstarbackmain.global.entity.BaseTimeEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -48,13 +50,18 @@ public class PetLetter extends BaseTimeEntity {
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String content;
 
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private SendType sendType;
+
 	@Builder
-	private PetLetter(Pet pet, UserLetter userLetter, Boolean isRead, String content) {
+	private PetLetter(Pet pet, UserLetter userLetter, Boolean isRead, String content, SendType sendType) {
 		this.pet = pet;
 		this.userLetter = userLetter;
 		this.isRead = isRead;
 		this.isDeleted = false;
 		this.content = content;
+		this.sendType = sendType;
 	}
 
 	public static PetLetter writePetLetterAnswer(UserLetter userLetter, String content) {
@@ -63,6 +70,7 @@ public class PetLetter extends BaseTimeEntity {
 			.userLetter(userLetter)
 			.isRead(false)
 			.content(content)
+			.sendType(SendType.USER)
 			.build();
 	}
 
@@ -71,6 +79,7 @@ public class PetLetter extends BaseTimeEntity {
 			.pet(pet)
 			.isRead(false)
 			.content(content)
+			.sendType(SendType.PET)
 			.build();
 	}
 }
