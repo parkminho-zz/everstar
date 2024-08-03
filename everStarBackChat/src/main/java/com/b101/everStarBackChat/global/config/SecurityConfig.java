@@ -39,8 +39,6 @@ public class SecurityConfig {
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		);
 		http.authorizeHttpRequests((auth) -> auth
-			.requestMatchers("/api/pets/**").hasRole("USER")
-			.requestMatchers("/api/accounts/users/**").hasRole("USER")
 			.anyRequest().authenticated()
 		);
 		http.exceptionHandling((handle) -> handle.authenticationEntryPoint(customExceptionHandler));
