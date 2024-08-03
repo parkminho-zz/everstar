@@ -9,6 +9,7 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
 
 import com.everstarbackmain.domain.pet.model.Pet;
+import com.everstarbackmain.domain.petterLetter.evnet.sendPetLetterEvent.SendPetLetterEvent;
 import com.everstarbackmain.domain.petterLetter.service.PetLetterService;
 import com.everstarbackmain.domain.userLetter.model.UserLetter;
 
@@ -34,6 +35,6 @@ public class PetLetterScheduler {
 		LocalDateTime sendLetterTime = pet.getSendLetterTime();
 		Date sendPetLetterDate = Date.from(
 			sendLetterTime.atZone(ZoneId.systemDefault()).toInstant());
-		taskScheduler.schedule(() -> petLetterService.writePetLetter(pet), sendPetLetterDate);
+		taskScheduler.schedule(() -> eventPublisher.publishEvent(new SendPetLetterEvent(pet)), sendPetLetterDate);
 	}
 }

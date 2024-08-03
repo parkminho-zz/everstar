@@ -46,12 +46,6 @@ public class PetLetterService {
 		sendSms(userLetter);
 	}
 
-	@Transactional
-	@Async
-	public void writePetLetter(Pet pet){
-
-	}
-
 	public Page<PetLetterResponseDto> getPetLetters(Authentication authentication, Long petId, Pageable pageable) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 		if (!petRepository.existsByIdAndUserAndIsDeleted(petId, user, false)) {
