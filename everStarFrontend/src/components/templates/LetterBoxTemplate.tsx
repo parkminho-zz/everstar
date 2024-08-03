@@ -54,7 +54,7 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
       <div className={`absolute inset-0 flex flex-col items-center ${isMobile ? '' : 'p-8'} `}>
         <ModalHeader text={headerText} />
         <div
-          className={`flex flex-col items-center w-full max-w-5xl  ${isMobile ? '' : 'p-8 mt-20'} `}
+          className={`flex flex-col items-center w-full max-w-5xl  ${isMobile ? 'mt-9' : 'p-8 mt-20'} `}
         >
           <LetterBox
             letters={letters}
