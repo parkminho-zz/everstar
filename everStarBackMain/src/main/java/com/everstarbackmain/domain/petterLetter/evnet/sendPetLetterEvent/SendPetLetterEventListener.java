@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;
+import com.everstarbackmain.domain.petterLetter.repository.PetLetterRepository;
 import com.everstarbackmain.domain.userLetter.model.UserLetter;
 import com.everstarbackmain.domain.userLetter.repository.UserLetterRepository;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
@@ -24,6 +25,7 @@ public class SendPetLetterEventListener {
 
 	private final OpenAiClient openAiClient;
 	private final UserLetterRepository userLetterRepository;
+	private final PetLetterRepository petLetterRepository;
 
 	@EventListener
 	@Transactional
@@ -32,7 +34,10 @@ public class SendPetLetterEventListener {
 		Pet pet = event.getPet();
 		List<UserLetter> userLetters = userLetterRepository.getUserLettersWithTimeRange(pet);
 		String content = openAiClient.writePetLetter(userLetters, pet);
-		PetLetter petLetter = PetLetter.writePetLetter(pet,)
+
+		PetLetter petLetter = PetLetter.writePetLetter(pet, content);
+		petLetterRepository.save(petLetter);
+
 
 	}
 }
