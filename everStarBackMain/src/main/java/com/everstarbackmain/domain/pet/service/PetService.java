@@ -16,7 +16,7 @@ import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.pet.requestDto.UpdatePetIntroductionDto;
 import com.everstarbackmain.domain.pet.responseDto.EnrolledPetsResponseDto;
-import com.everstarbackmain.domain.pet.responseDto.PetDetailResponseDto;
+import com.everstarbackmain.domain.pet.responseDto.MyPagePetInfoResponseDto;
 import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;
 import com.everstarbackmain.domain.sentimentAnalysis.repository.SentimentAnalysisRepository;
 import com.everstarbackmain.domain.user.model.User;
@@ -58,10 +58,15 @@ public class PetService {
 	}
 
 	@Transactional
-	public void updatePetIntroduction(Long petId, UpdatePetIntroductionDto requestDto) {
+	public void updatePetIntroduction(Authentication authentication, Long petId, UpdatePetIntroductionDto requestDto) {
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 		String newIntroduction = requestDto.getIntroduction();
 		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+
+		if (user != pet.getUser()) {
+			throw new ExceptionResponse(CustomException.ACCESS_DENIED_EXCEPTION);
+		}
 
 		if (newIntroduction != null && !newIntroduction.isEmpty()) {
 			pet.updatePetIntroduction(newIntroduction);
