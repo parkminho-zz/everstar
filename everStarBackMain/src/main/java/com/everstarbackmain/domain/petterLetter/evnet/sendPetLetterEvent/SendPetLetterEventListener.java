@@ -10,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;
 import com.everstarbackmain.domain.petterLetter.repository.PetLetterRepository;
+import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.userLetter.model.UserLetter;
 import com.everstarbackmain.domain.userLetter.repository.UserLetterRepository;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
+import com.everstarbackmain.global.sms.SmsCertificationUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,7 @@ public class SendPetLetterEventListener {
 	private final OpenAiClient openAiClient;
 	private final UserLetterRepository userLetterRepository;
 	private final PetLetterRepository petLetterRepository;
+	private final SmsCertificationUtil smsCertificationUtil;
 
 	@EventListener
 	@Transactional
@@ -38,6 +41,11 @@ public class SendPetLetterEventListener {
 		PetLetter petLetter = PetLetter.writePetLetter(pet, content);
 		petLetterRepository.save(petLetter);
 
+		sendSms(pet);
+	}
 
+	private void sendSms(Pet pet) {
+		User user = pet.getUser();
+		smsCertificationUtil.sendSms(user.getPhoneNumber(), pet.getName());
 	}
 }
