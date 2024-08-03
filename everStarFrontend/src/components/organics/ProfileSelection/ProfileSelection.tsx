@@ -2,11 +2,17 @@ import React from 'react';
 import { Avatar } from 'components/atoms/symbols/Avatar/Avatar';
 import { CircleButton } from 'components/atoms/buttons/CircleButton';
 
-export interface ProfileSelectionProps {
-  avatars: { src?: string; size: 'small' | 'medium' | 'large' }[];
+export interface AvatarData {
+  src?: string;
+  size: 'small' | 'medium' | 'large';
 }
 
-export const ProfileSelection: React.FC<ProfileSelectionProps> = ({ avatars }) => {
+export interface ProfileSelectionProps {
+  avatars: AvatarData[];
+  onAddAvatar: () => void;
+}
+
+export const ProfileSelection: React.FC<ProfileSelectionProps> = ({ avatars, onAddAvatar }) => {
   return (
     <div className="flex flex-col w-[832px] items-center justify-center gap-8 p-8 relative bg-white">
       <div className="inline-flex flex-col items-start gap-2 relative flex-[0_0_auto]">
@@ -20,12 +26,7 @@ export const ProfileSelection: React.FC<ProfileSelectionProps> = ({ avatars }) =
         ))}
         <div className="relative w-[120px] h-[120px]">
           <div className="flex flex-col w-[120px] h-[156px] items-center justify-center gap-1 pt-0 pb-[26px] px-0 relative">
-            <CircleButton
-              theme="white"
-              icon="plus"
-              disabled={false}
-              onClick={() => console.log('Button clicked')}
-            />
+            <CircleButton theme="white" icon="plus" disabled={false} onClick={onAddAvatar} />
             <div className="relative self-stretch w-full h-8 mb-[-13.00px]" />
           </div>
         </div>

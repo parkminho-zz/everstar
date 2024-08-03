@@ -11,6 +11,7 @@ const meta: Meta<ProfileSelectionProps> = {
       { src: '', size: 'medium' },
       { src: '', size: 'medium' },
     ],
+    onAddAvatar: () => alert('Add Avatar button clicked!'),
   },
 };
 
