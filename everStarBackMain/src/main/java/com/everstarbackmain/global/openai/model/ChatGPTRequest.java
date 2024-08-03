@@ -1,4 +1,4 @@
-package com.everstarbackmain.domain.openai.model;
+package com.everstarbackmain.global.openai.model;
 
 import java.util.ArrayList;
 import java.util.List;

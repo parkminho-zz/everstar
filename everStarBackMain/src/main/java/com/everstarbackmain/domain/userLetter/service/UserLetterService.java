@@ -32,16 +32,16 @@ public class UserLetterService {
 	public void writeLetter(Authentication authentication, long petId, WriteLetterRequestDto requestDto) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 
-		Pet pet = petRepository.findByIdAndIsDeleted(petId,false)
+		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
-		if(requestDto.getImageUrl() == null){
-			UserLetter userLetter = UserLetter.writeLetterHasNotImage(pet,requestDto);
+		if (requestDto.getImageUrl() == null) {
+			UserLetter userLetter = UserLetter.writeLetterHasNotImage(pet, requestDto);
 			userLetterRepository.save(userLetter);
 			petLetterScheduler.schedulePetLetter(userLetter);
 			return;
 		}
-		UserLetter userLetter = UserLetter.writeLetterHasImage(pet,requestDto);
+		UserLetter userLetter = UserLetter.writeLetterHasImage(pet, requestDto);
 		userLetterRepository.save(userLetter);
 		petLetterScheduler.schedulePetLetter(userLetter);
 	}

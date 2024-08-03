@@ -14,8 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.everstarbackmain.domain.openai.util.OpenAiClient;
+import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
+import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.petterLetter.repository.PetLetterRepository;
@@ -36,6 +37,9 @@ public class WritePetLetterAnswerServiceTest {
 
 	@Mock
 	private PetLetterRepository petLetterRepository;
+
+	@Mock
+	private PetRepository petRepository;
 
 	@Mock
 	private OpenAiClient openAiClient;
@@ -65,6 +69,7 @@ public class WritePetLetterAnswerServiceTest {
 	@DisplayName("애완동물_편지_답장_성공_테스트")
 	public void 애완동물_편지_답장_성공_테스트(){
 		BDDMockito.given(openAiClient.writePetLetter(userLetter)).willReturn("content");
+
 		Assertions.assertThatNoException()
 			.isThrownBy(() -> petLetterService.writePetLetterAnswer(userLetter));
 	}

@@ -3,6 +3,7 @@ package com.everstarbackmain.domain.diary.service;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -16,9 +17,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.everstarbackmain.domain.diary.model.Diary;
 import com.everstarbackmain.domain.diary.repository.DiaryRepository;
@@ -35,6 +38,7 @@ import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
+import com.everstarbackmain.global.util.S3UploadUtil;
 
 @ExtendWith(MockitoExtension.class)
 public class CreateDiaryServiceTest {
@@ -47,6 +51,9 @@ public class CreateDiaryServiceTest {
 
 	@Mock
 	private MemorialBookRepository memorialBookRepository;
+
+	@Mock
+	private S3UploadUtil s3UploadUtil;
 
 	@Mock
 	private Authentication authentication;
@@ -67,7 +74,7 @@ public class CreateDiaryServiceTest {
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
 		memorialBook = MemorialBook.createMemorialBook(pet);
-		createDiaryRequestDto = new CreateDiaryRequestDto("title", "content", "url");
+		createDiaryRequestDto = new CreateDiaryRequestDto("title", "content");
 
 		ReflectionTestUtils.setField(user, "id", 1L);
 		ReflectionTestUtils.setField(pet, "id", 1L);
@@ -79,27 +86,30 @@ public class CreateDiaryServiceTest {
 	public void 다이어리_생성_성공_테스트() {
 		// given
 		memorialBook.changeActiveStatus();
+		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
 
 		// when
-		diaryService.createDiary(authentication, 1L, createDiaryRequestDto);
+		diaryService.createDiary(authentication, 1L, createDiaryRequestDto, imageFile);
 
 		// then
 		BDDMockito.then(diaryRepository).should(times(1)).save(any(Diary.class));
+		BDDMockito.then(s3UploadUtil).should(times(1)).saveFile(imageFile);
 	}
 
 	@Test
 	@DisplayName("다이어리_생성_실패_존재하지_않는_메모리얼북_테스트")
 	public void 다이어리_생성_실패_존재하지_않는_메모리얼북_테스트() {
 		// given
+		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.empty());
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
 
 		// when then
-		Assertions.assertThatThrownBy(() -> diaryService.createDiary(authentication, 1L, createDiaryRequestDto))
+		Assertions.assertThatThrownBy(() -> diaryService.createDiary(authentication, 1L, createDiaryRequestDto, imageFile))
 			.isInstanceOf(ExceptionResponse.class)
 			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION);
 	}
@@ -111,13 +121,14 @@ public class CreateDiaryServiceTest {
 		User anotherUser = User.signUpUser(new JoinRequestDto("email2", "password", "name2", "010-2222-2222",
 			LocalDate.now(), Gender.MALE, LocalTime.now(), Role.ROLE_USER));
 		ReflectionTestUtils.setField(anotherUser, "id", 2L);
+		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 
 		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(anotherUser);
 
 		// when then
-		Assertions.assertThatThrownBy(() -> diaryService.createDiary(authentication, 1L, createDiaryRequestDto))
+		Assertions.assertThatThrownBy(() -> diaryService.createDiary(authentication, 1L, createDiaryRequestDto, imageFile))
 			.isInstanceOf(ExceptionResponse.class)
 			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_MY_MEMORIAL_BOOK_EXCEPTION);
 	}
@@ -127,13 +138,14 @@ public class CreateDiaryServiceTest {
 	public void 다이어리_생성_실패_비활성화된_메모리얼북_테스트() {
 		// given
 		ReflectionTestUtils.setField(memorialBook, "isActive", false);
+		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 
 		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
 
 		// when then
-		Assertions.assertThatThrownBy(() -> diaryService.createDiary(authentication, 1L, createDiaryRequestDto))
+		Assertions.assertThatThrownBy(() -> diaryService.createDiary(authentication, 1L, createDiaryRequestDto, imageFile))
 			.isInstanceOf(ExceptionResponse.class)
 			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_ACTIVATED_MEMORIAL_BOOK_EXCEPTION);
 	}
