@@ -9,21 +9,21 @@ import { ReactComponent as VioletRainbow } from 'assets/symbols/rainbow-violet.s
 import { ReactComponent as RedRainbow } from 'assets/symbols/rainbow-red.svg';
 
 interface Props {
-  color:
-    | 'none'
-    | 'yellow'
-    | 'violet'
-    | 'blue'
-    | 'green'
-    | 'orange'
-    | 'red'
-    | 'indigo';
+  color: 'none' | 'yellow' | 'violet' | 'blue' | 'green' | 'orange' | 'red' | 'indigo';
   className?: string;
+  // size: string;
 }
 
 export const Rainbow: React.FC<Props> = ({ color, className }): JSX.Element => {
+  // const getSize = () => {
+  //   if (size === 'mobile') {
+  //     return 'w-[375px] !h-[667px]';
+  //   } else if (size === 'tablet') {
+  //     return 'w-[375px] !h-[667px]';
+  //   }
+  // };
   return (
-    <div className={`w-[1440px] h-[1024px] relative ${className}`}>
+    <div className={`w-[1440px] h-[1024px] ${className}`}>
       {color === 'yellow' && (
         <YellowRainbow className='w-[1243px] left-0 top-0 object-cover h-[1024px] absolute' />
       )}
@@ -50,24 +50,9 @@ export const Rainbow: React.FC<Props> = ({ color, className }): JSX.Element => {
 };
 
 Rainbow.propTypes = {
-  color: PropTypes.oneOf([
-    'none',
-    'yellow',
-    'violet',
-    'blue',
-    'green',
-    'orange',
-    'red',
-    'indigo',
-  ]).isRequired as PropTypes.Validator<
-    | 'none'
-    | 'yellow'
-    | 'violet'
-    | 'blue'
-    | 'green'
-    | 'orange'
-    | 'red'
-    | 'indigo'
+  color: PropTypes.oneOf(['none', 'yellow', 'violet', 'blue', 'green', 'orange', 'red', 'indigo'])
+    .isRequired as PropTypes.Validator<
+    'none' | 'yellow' | 'violet' | 'blue' | 'green' | 'orange' | 'red' | 'indigo'
   >,
   className: PropTypes.string,
 };

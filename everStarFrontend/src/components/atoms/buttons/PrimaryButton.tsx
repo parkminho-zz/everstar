@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowIcon } from 'components/atoms/icons/Arrow/ArrowIcon';
+import { ArrowIcon, ArrowIconProps } from 'components/atoms/icons/Arrow/ArrowIcon';
 
 type PrimaryButtonTheme = 'focus' | 'hover' | 'white';
 type PrimaryButtonSize = 'large' | 'medium' | 'small';
@@ -10,15 +10,14 @@ interface IPrimaryButtonProps {
   disabled: boolean;
   children?: string; // Optional children prop
   onClick: React.MouseEventHandler<HTMLButtonElement>;
-  icon?: React.ReactNode | null;
+  icon?: React.ReactElement | null;
   hug?: boolean;
 }
 
 const focus = 'bg-mainprimary text-greyscalewhite hover:bg-bgorange';
 const white = 'bg-white text-mainsecondary hover:bg-bgorange';
 const hover = 'bg-bgorange text-mainsecondary hover:bg-mainprimary';
-const disabledStyle =
-  'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
+const disabledStyle = 'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
 const shadowStyle = 'shadow-[0px_4px_8px_#dbe5ec99,0px_0px_1px_1px_#dbe5ec99]';
 
 const color: Record<PrimaryButtonTheme, string> = {
@@ -40,11 +39,11 @@ const sizeStyle: Record<PrimaryButtonSize, string> = {
 export function PrimaryButton({
   theme,
   size,
-  children = '', // Default to empty string
+  children = '',
   onClick,
   disabled,
-  icon = <ArrowIcon color='black' direction='right' size={24} />, // 기본 아이콘 설정
-  hug = false, // 기본값을 false로 설정
+  icon = <ArrowIcon color='black' direction='right' size={24} />,
+  hug = false,
 }: IPrimaryButtonProps) {
   const getTextStyle = () => {
     switch (size) {
@@ -78,27 +77,18 @@ export function PrimaryButton({
     return classes;
   };
 
-  const iconColor = theme === 'focus' ? 'white' : 'black';
+  const iconColor = disabled ? 'gray' : theme === 'focus' ? 'white' : 'black';
+  const renderIcon = () => {
+    if (React.isValidElement(icon) && icon.type === ArrowIcon) {
+      return React.cloneElement(icon, { color: iconColor } as ArrowIconProps);
+    }
+    return icon;
+  };
 
   return (
-    <button
-      className={`${getButtonClasses()} group`}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>
-        {children}
-      </span>
-      {icon && (
-        <span className='ml-auto'>
-          <ArrowIcon
-            size={24}
-            direction='right'
-            color={iconColor}
-            hover={false}
-          />
-        </span>
-      )}
+    <button className={`${getButtonClasses()} group`} disabled={disabled} onClick={onClick}>
+      <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>{children}</span>
+      {icon && <span className='ml-auto'>{renderIcon()}</span>}
     </button>
   );
 }

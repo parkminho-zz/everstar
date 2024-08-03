@@ -8,8 +8,7 @@ const meta: Meta<typeof InputContainer> = {
   parameters: {
     docs: {
       description: {
-        component:
-          'InputContainer 컴포넌트는 다양한 입력 요소들을 포함한 컨테이너입니다.',
+        component: 'InputContainer 컴포넌트는 다양한 입력 요소들을 포함한 컨테이너입니다.',
       },
     },
   },
@@ -48,6 +47,11 @@ const meta: Meta<typeof InputContainer> = {
       description: 'LetterCard의 메시지',
       defaultValue: '뚜뚜의 생김새를 묘사해주세요',
     },
+    myMessage: {
+      control: 'text',
+      description: '내가 보낸 메시지',
+      defaultValue: '안녕안녕 뚜뚜야 보고싶어!',
+    },
     letterCardClassName: {
       control: 'text',
       description: 'LetterCard의 폰트 클래스',
@@ -57,6 +61,21 @@ const meta: Meta<typeof InputContainer> = {
       control: 'boolean',
       description: 'LetterCard의 중앙 정렬 여부',
       defaultValue: true,
+    },
+    dateTime: {
+      control: 'text',
+      description: 'LetterCard의 보낸 날짜와 시간',
+      defaultValue: '2024-07-24 10:00:00',
+    },
+    petName: {
+      control: 'text',
+      description: '반려동물 이름',
+      defaultValue: '뚜뚜',
+    },
+    myName: {
+      control: 'text',
+      description: '내 이름',
+      defaultValue: '김싸피',
     },
     customText: {
       control: 'text',
@@ -99,6 +118,7 @@ export const Default: Story = {
     letterCardMessage: '뚜뚜의 생김새를 묘사해주세요',
     letterCardClassName: 'font-body !kor-subtitle-subtitle3', // 기본 폰트 설정
     centered: true,
+    dateTime: '2024-07-24 10:00:00',
     customText: '사랑하는 반려동물에게 <br /> 편지를 보내보세요', // 기본 커스텀 텍스트 설정
     textboxLabel: '내용',
     largeButtonText: '이미지 추가',
@@ -114,6 +134,26 @@ export const CustomText: Story = {
     textboxLabel: '내용',
     largeButtonText: '이미지 추가',
     smallButtonText: '작성완료',
+    showPrimaryButton: true,
+  },
+};
+
+export const ReceiveCard: Story = {
+  args: {
+    headerText: '오늘의 답장',
+    letterCardType: 'receive',
+    letterCardColor: 'gray',
+    letterCardState: 'received',
+    myName: '김싸피',
+    petName: '뚜뚜',
+    letterCardMessage: '감사합니다. 좋은 하루 되세요!',
+    myMessage: '뚜뚜 좋은 하루 되었으면 해!',
+    letterCardClassName: '',
+    centered: true,
+    dateTime: '2024-07-24 10:00:00',
+    textboxLabel: '답장 내용',
+    largeButtonText: '이미지 추가',
+    smallButtonText: '답장 완료',
     showPrimaryButton: true,
   },
 };
