@@ -17,7 +17,7 @@ import com.everstarbackmain.domain.pet.message.SuccessPetMessage;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.pet.requestDto.UpdatePetIntroductionDto;
 import com.everstarbackmain.domain.pet.responseDto.EnrolledPetsResponseDto;
-import com.everstarbackmain.domain.pet.responseDto.PetDetailResponseDto;
+import com.everstarbackmain.domain.pet.responseDto.MyPagePetInfoResponseDto;
 import com.everstarbackmain.domain.pet.service.PetService;
 import com.everstarbackmain.global.util.HttpResponseUtil;
 
@@ -48,7 +48,7 @@ public class PetController {
 	@PutMapping("/{pet-id}")
 	public ResponseEntity<Map<String, Object>> updatePetIntroduction(Authentication authentication,
 		@PathVariable("pet-id") Long petId, @RequestBody @Valid UpdatePetIntroductionDto requestDto) {
-		petService.updatePetIntroduction(petId, requestDto);
+		petService.updatePetIntroduction(authentication, petId, requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessPetMessage.SUCCESS_UPDATE_PET_INTRODUCTION);
 
@@ -63,6 +63,14 @@ public class PetController {
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDtos);
 		log.info("main server - request : user {},", authentication);
 		log.info("main server - response : 유저 반려동물 목록{}", responseDtos);
+		return response;
+	}
+
+	@GetMapping("/{pet-id}")
+	public ResponseEntity<Map<String, Object>> getMyPetInfo(Authentication authentication,
+		@PathVariable("pet-id") Long petId) {
+		MyPagePetInfoResponseDto responseDto = petService.getMyPetInfo(authentication, petId);
+		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
 		return response;
 	}
 
