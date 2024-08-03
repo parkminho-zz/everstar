@@ -1,10 +1,10 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { CheerColorSelect, CheerColorSelectProps } from './CheerColorSelect';
+import { SearchVisitStar, SearchVisitStarProps } from './SearchVisitStar';
 
-const meta: Meta<CheerColorSelectProps> = {
-  title: 'Organics/CheerMessage/CheerColorSelect',
+const meta: Meta<SearchVisitStarProps> = {
+  title: 'Organics/SearchStar/SearchVisitStar',
   tags: ['autodocs'],
-  component: CheerColorSelect,
+  component: SearchVisitStar,
   argTypes: {
     isOpen: { control: 'boolean', defaultValue: true },
     onClose: { action: 'closed' },
@@ -17,12 +17,12 @@ const meta: Meta<CheerColorSelectProps> = {
 
 export default meta;
 
-type Story = StoryObj<CheerColorSelectProps>;
+type Story = StoryObj<SearchVisitStarProps>;
 
 export const Default: Story = {
   args: {
     isOpen: true,
-    text: '색상을 선택하세요.',
+    text: '',
     height: '800px',
   },
 };
