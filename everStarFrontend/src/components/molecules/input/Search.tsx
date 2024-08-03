@@ -1,50 +1,141 @@
-// Search.tsx 파일
-
 import PropTypes from 'prop-types';
-import React from 'react';
-import { Placeholder } from './Placeholder';
-import './Search.css';
+import React, { useState, useEffect, useRef } from 'react';
+import { SearchIcon } from 'components/atoms/icons/Search/SearchIcon';
+import { DropdownMenu } from 'components/atoms/DropdownMenu/DropdownMenu';
+
 interface SearchProps {
-  state: 'done' | 'focus' | 'default';
-  className: string;
+  initialState: 'disable' | 'focus' | 'default';
+  className?: string;
+  placeholderButtonTextIcon?: JSX.Element;
+  options: (string | number)[];
+  onOptionSelect: (option: string | number) => void;
+  moveToTopOnClick?: boolean;
 }
 
-export const Search = ({ state, className }: SearchProps): JSX.Element => {
-  // buttonTextProp를 state에 따라 동적으로 설정
+export const Search = ({
+  initialState,
+  className = '',
+  placeholderButtonTextIcon = <SearchIcon size={24} color='black' />,
+  options = [],
+  onOptionSelect,
+  moveToTopOnClick = true,
+}: SearchProps): JSX.Element => {
+  const [state, setState] = useState<'disable' | 'focus' | 'default'>(
+    initialState,
+  );
+  const [inputValue, setInputValue] = useState('');
+  const [filteredOptions, setFilteredOptions] = useState<(string | number)[]>(
+    [],
+  );
+  const searchRef = useRef<HTMLDivElement>(null);
+
   const buttonTextProp =
     state === 'focus'
-      ? 'l'
-      : state === 'done'
+      ? ''
+      : state === 'disable'
         ? '검색 결과'
         : '검색어를 입력하세요';
 
+  useEffect(() => {
+    if (state === 'focus') {
+      setFilteredOptions(
+        options.filter((option) =>
+          option.toString().toLowerCase().includes(inputValue.toLowerCase()),
+        ),
+      );
+    } else {
+      setFilteredOptions([]);
+    }
+  }, [inputValue, state, options]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
+        setState('default');
+      }
+    };
+
+    if (state === 'focus') {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [state]);
+
+  const handleFocus = () => {
+    if (state !== 'disable') {
+      setState('focus');
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleOptionSelect = (option: string | number) => {
+    if (moveToTopOnClick) {
+      setInputValue(option.toString());
+    }
+    setState('default');
+    onOptionSelect(option);
+  };
+
+  useEffect(() => {
+    setState(initialState);
+  }, [initialState]);
+
   return (
-    <div className={`w-80 flex flex-col items-start relative ${className}`}>
+    <div
+      className={`w-80 flex flex-col items-start relative ${className}`}
+      ref={searchRef}
+    >
       <div className='w-full flex self-stretch flex-col items-start gap-2 flex-[0_0_auto] relative'>
         <div
-          className={`flex items-center px-4 py-2 relative w-full flex-col rounded-xl gap-2 bg-white self-stretch h-14 overflow-hidden justify-center 
-          ${state === 'focus' ? 'border-[#ff9078]' : ''} 
-          ${state === 'focus' ? 'shadow-[0px_0px_24px_#ff90784c]' : 'shadow-[0px_4px_8px_#dbe5ec99,0px_0px_1px_1px_#dbe5ec99]'}
-          ${state === 'focus' ? 'border-2 border-solid' : ''}`}
+          className={`flex items-center px-4 py-2 relative w-full rounded-xl bg-white self-stretch h-14 overflow-hidden
+          ${state === 'focus' ? 'border-[#ff9078] border-2 border-solid' : ''}
+          ${state === 'focus' ? 'shadow-[0px_0px_24px_#ff90784c]' : 'shadow-[0px_4px_8px_#dbe5ec99,0px_0px_1px_1px_#dbe5ec99]'}`}
+          onClick={handleFocus}
         >
-          <Placeholder
-            showLeftIcon={true} // showLeftIcon을 필요에 따라 true 또는 false 설정
-            className='!self-stretch !flex-[0_0_auto] !w-full'
-            state={state === 'default' ? 'default' : 'focus'}
-            show
-            showIcon
-            color='black'
-            prop={buttonTextProp}
-            size='medium'
-          />
+          <div className='flex items-center w-full'>
+            <div className='flex-none'>{placeholderButtonTextIcon}</div>
+            <input
+              type='text'
+              value={inputValue}
+              onChange={handleInputChange}
+              className='flex-grow ml-2 outline-none'
+              placeholder={buttonTextProp}
+            />
+          </div>
         </div>
+        {state === 'focus' && filteredOptions.length > 0 && (
+          <div className='absolute top-full left-0 z-10 w-full bg-white rounded-md shadow-lg mt-1'>
+            <DropdownMenu
+              options={filteredOptions}
+              onOptionSelect={handleOptionSelect}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 Search.propTypes = {
-  state: PropTypes.oneOf(['done', 'focus', 'default']),
+  initialState: PropTypes.oneOf(['disable', 'focus', 'default']).isRequired,
+  className: PropTypes.string,
+  placeholderButtonTextIcon: PropTypes.element,
+  options: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  ).isRequired,
+  onOptionSelect: PropTypes.func.isRequired,
+  moveToTopOnClick: PropTypes.bool,
 };
 
 export type { SearchProps };
