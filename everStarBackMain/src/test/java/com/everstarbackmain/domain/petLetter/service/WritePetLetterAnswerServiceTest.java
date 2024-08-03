@@ -68,7 +68,7 @@ public class WritePetLetterAnswerServiceTest {
 	@Test
 	@DisplayName("애완동물_편지_답장_성공_테스트")
 	public void 애완동물_편지_답장_성공_테스트() {
-		BDDMockito.given(openAiClient.writePetLetter(userLetter)).willReturn("content");
+		BDDMockito.given(openAiClient.writePetLetterAnswer(userLetter)).willReturn("content");
 
 		Assertions.assertThatNoException()
 			.isThrownBy(() -> petLetterService.writePetLetterAnswer(userLetter));

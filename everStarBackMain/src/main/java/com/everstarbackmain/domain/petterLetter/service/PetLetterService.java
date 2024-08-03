@@ -38,7 +38,7 @@ public class PetLetterService {
 	@Transactional
 	@Async
 	public void writePetLetterAnswer(UserLetter userLetter) {
-		String content = openAiClient.writePetLetter(userLetter);
+		String content = openAiClient.writePetLetterAnswer(userLetter);
 		PetLetter petLetter = PetLetter.writePetLetterAnswer(userLetter, content);
 
 		petLetterRepository.save(petLetter);

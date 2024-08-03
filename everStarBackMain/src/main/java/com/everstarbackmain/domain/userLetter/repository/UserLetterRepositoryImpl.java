@@ -3,6 +3,7 @@ package com.everstarbackmain.domain.userLetter.repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.userLetter.model.QUserLetter;
 import com.everstarbackmain.domain.userLetter.model.UserLetter;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -16,9 +17,10 @@ public class UserLetterRepositoryImpl implements UserLetterRepositoryCustom {
 	private QUserLetter userLetter;
 
 	@Override
-	public List<UserLetter> getUserLettersWithTimeRange(LocalDateTime startTime, LocalDateTime lastTime) {
+	public List<UserLetter> getUserLettersWithTimeRange(Pet pet) {
 		return queryFactory.select(userLetter)
-			.where(userLetter.createdTime.between(startTime, lastTime))
+			.where(userLetter.createdTime.between(pet.getLastAccessTime(), pet.getSendLetterTime())
+				.and(userLetter.pet.eq(pet)))
 			.fetch();
 	}
 }
