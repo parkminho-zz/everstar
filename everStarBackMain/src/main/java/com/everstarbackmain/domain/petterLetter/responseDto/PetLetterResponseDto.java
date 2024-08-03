@@ -31,7 +31,7 @@ public class PetLetterResponseDto {
 	public static PetLetterResponseDto fromPetLetter(PetLetter petLetter) {
 		return PetLetterResponseDto.builder()
 			.petLetterId(petLetter.getId())
-			.isRead(petLetter.isRead())
+			.isRead(petLetter.getIsRead())
 			.build();
 	}
 }

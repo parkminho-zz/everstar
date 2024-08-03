@@ -33,7 +33,7 @@ public class UserLetter extends BaseTimeEntity {
 	private Pet pet;
 
 	@Column(nullable = false)
-	private boolean is_deleted;
+	private Boolean is_deleted;
 
 	@Column(nullable = false)
 	private String content;

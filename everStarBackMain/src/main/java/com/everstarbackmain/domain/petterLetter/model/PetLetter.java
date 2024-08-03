@@ -39,17 +39,17 @@ public class PetLetter extends BaseTimeEntity {
 	private UserLetter userLetter;
 
 	@Column(nullable = false)
-	private boolean isRead;
+	private Boolean isRead;
 
 	@Column(nullable = false)
-	private boolean isDeleted;
+	private Boolean isDeleted;
 
 	@Lob
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String content;
 
 	@Builder
-	private PetLetter(Pet pet, UserLetter userLetter, boolean isRead, String content) {
+	private PetLetter(Pet pet, UserLetter userLetter, Boolean isRead, String content) {
 		this.pet = pet;
 		this.userLetter = userLetter;
 		this.isRead = isRead;
