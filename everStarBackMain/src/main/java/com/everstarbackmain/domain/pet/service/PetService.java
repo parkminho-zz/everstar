@@ -49,6 +49,8 @@ public class PetService {
 		addPersonalities(pet, createPetRequestDto);
 		createMemorialBook(pet);
 		createSentimentAnalysis(pet);
+
+		petLetterScheduler.scheduleSendPetLetter(pet);
 	}
 
 	private void addPersonalities(Pet pet, CreatePetRequestDto createPetRequestDto) {

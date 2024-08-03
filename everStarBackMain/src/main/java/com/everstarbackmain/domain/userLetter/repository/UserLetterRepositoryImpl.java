@@ -14,11 +14,12 @@ import lombok.RequiredArgsConstructor;
 public class UserLetterRepositoryImpl implements UserLetterRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
-	private QUserLetter userLetter;
+	private QUserLetter userLetter = QUserLetter.userLetter;
 
 	@Override
 	public List<UserLetter> getUserLettersWithTimeRange(Pet pet) {
 		return queryFactory.select(userLetter)
+			.from(userLetter)
 			.where(userLetter.createdTime.between(pet.getLastAccessTime(), pet.getSendLetterTime())
 				.and(userLetter.pet.eq(pet)))
 			.fetch();

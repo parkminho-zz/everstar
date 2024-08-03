@@ -8,8 +8,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.everstarbackmain.domain.pet.model.Pet;
+import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;
 import com.everstarbackmain.domain.petterLetter.repository.PetLetterRepository;
+import com.everstarbackmain.domain.petterLetter.util.PetLetterScheduler;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.userLetter.model.UserLetter;
 import com.everstarbackmain.domain.userLetter.repository.UserLetterRepository;
@@ -28,7 +30,9 @@ public class SendPetLetterEventListener {
 	private final OpenAiClient openAiClient;
 	private final UserLetterRepository userLetterRepository;
 	private final PetLetterRepository petLetterRepository;
+	private final PetRepository petRepository;
 	private final SmsCertificationUtil smsCertificationUtil;
+	private final PetLetterScheduler petLetterScheduler;
 
 	@EventListener
 	@Transactional
@@ -40,8 +44,11 @@ public class SendPetLetterEventListener {
 
 		PetLetter petLetter = PetLetter.writePetLetter(pet, content);
 		petLetterRepository.save(petLetter);
-
 		sendSms(pet);
+
+		pet.updatePetSendTime();
+		petRepository.save(pet);
+		petLetterScheduler.scheduleSendPetLetter(pet);
 	}
 
 	private void sendSms(Pet pet) {

@@ -120,6 +120,12 @@ public class Pet extends BaseTimeEntity {
 		this.introduction = newIntroduction;
 	}
 
+	public void updatePetSendTime(){
+		this.lastSendLetterTime = LocalDateTime.now();
+		this.sendLetterTime = randomTime();
+	}
+
+
 	private LocalDateTime randomTime() {
 		Random random = new Random();
 		int randomMinutes = 1 + random.nextInt(5);
