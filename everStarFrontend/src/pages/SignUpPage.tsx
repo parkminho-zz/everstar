@@ -1,3 +1,6 @@
-export const SignUpPage = () => {
-  return <div>SignUpPage</div>;
+import React from 'react';
+import { SignUp as SignupTemplates } from 'components/templates/SignUp';
+
+export const SignUpPage: React.FC = () => {
+  return <SignupTemplates />;
 };
