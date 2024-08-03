@@ -41,6 +41,14 @@ const meta: Meta<typeof PrimaryButton> = {
       control: 'boolean',
       description: 'hug 여부를 설정합니다.',
     },
+    label: {
+      control: 'text',
+      description: '라벨 텍스트를 설정합니다.',
+    },
+    showLabelStar: {
+      control: 'boolean',
+      description: '라벨 옆에 별표를 표시할지 여부를 설정합니다.',
+    },
     onClick: { action: 'clicked' },
   },
 };
@@ -57,6 +65,8 @@ export const Default: Story = {
     children: '클릭하세요',
     icon: iconOptions.ArrowIcon,
     hug: false,
+    label: '라벨 텍스트',
+    showLabelStar: true,
   },
 };
 
@@ -68,6 +78,8 @@ export const WithSmallStarImg: Story = {
     children: '클릭하세요',
     icon: iconOptions.SmallStarImg,
     hug: false,
+    label: '라벨 텍스트',
+    showLabelStar: true,
   },
 };
 
@@ -79,6 +91,8 @@ export const WithSmallEarthImg: Story = {
     children: '클릭하세요',
     icon: iconOptions.SmallEarthImg,
     hug: false,
+    label: '라벨 텍스트',
+    showLabelStar: true,
   },
 };
 
@@ -90,5 +104,7 @@ export const HugButton: Story = {
     children: '클릭하세요',
     icon: iconOptions.ArrowIcon,
     hug: true,
+    label: '라벨 텍스트',
+    showLabelStar: true,
   },
 };
