@@ -6,6 +6,8 @@ import java.util.Date;
 
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
+
+import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.petterLetter.service.PetLetterService;
 import com.everstarbackmain.domain.userLetter.model.UserLetter;
 
@@ -23,5 +25,9 @@ public class PetLetterScheduler {
 		Date nextDayWritePetLetterDate = Date.from(nextDayWritePetLetterTime.atZone(ZoneId.systemDefault()).toInstant());
 
 		taskScheduler.schedule(() -> petLetterService.writePetLetterAnswer(userLetter), nextDayWritePetLetterDate);
+	}
+
+	public void scheduleSendPetLetter(Pet pet){
+
 	}
 }
