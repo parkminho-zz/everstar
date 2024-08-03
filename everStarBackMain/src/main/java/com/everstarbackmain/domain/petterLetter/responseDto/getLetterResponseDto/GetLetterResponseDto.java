@@ -2,6 +2,7 @@ package com.everstarbackmain.domain.petterLetter.responseDto.getLetterResponseDt
 
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;
+import com.everstarbackmain.domain.petterLetter.model.SendType;
 import com.everstarbackmain.domain.userLetter.model.UserLetter;
 
 import lombok.AccessLevel;
@@ -17,10 +18,18 @@ public class GetLetterResponseDto {
 	private GetUserLetterResponseDto userLetter;
 	private GetPetLetterResponseDto petLetter;
 
+	private GetLetterResponseDto(GetPetLetterResponseDto petLetter) {
+		this.petLetter = petLetter;
+	}
+
 	public static GetLetterResponseDto createGetLetterResponseDto(PetLetter petLetter) {
-		GetUserLetterResponseDto userLetterResponseDto = GetUserLetterResponseDto.createUserLetterResponseDto(
-			petLetter);
+		if(petLetter.getSendType().equals(SendType.USER)){
+			GetUserLetterResponseDto userLetterResponseDto = GetUserLetterResponseDto.createUserLetterResponseDto(
+				petLetter);
+			GetPetLetterResponseDto petLetterResponseDto = GetPetLetterResponseDto.createGetPetLetterResponseDto(petLetter);
+			return new GetLetterResponseDto(userLetterResponseDto, petLetterResponseDto);
+		}
 		GetPetLetterResponseDto petLetterResponseDto = GetPetLetterResponseDto.createGetPetLetterResponseDto(petLetter);
-		return new GetLetterResponseDto(userLetterResponseDto, petLetterResponseDto);
+		return new GetLetterResponseDto(petLetterResponseDto);
 	}
 }
