@@ -13,6 +13,14 @@ type Story = StoryObj<typeof CurrentLocation>;
 
 export const Default: Story = {
   args: {
-    title: '뚜뚜1',
+    title: '뚜뚜',
+    type: 'everstar',
+  },
+};
+
+export const Earth: Story = {
+  args: {
+    title: '현재위치',
+    type: 'earth',
   },
 };

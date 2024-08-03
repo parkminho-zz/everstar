@@ -16,7 +16,6 @@ interface EverStarMainProps {
   buttonSize: 'large' | 'medium' | 'small';
   buttonDisabled: boolean;
   buttonText: string;
-  buttonIcon: 'SmallStarimg' | 'SmallEarthImg';
   onButtonClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -58,8 +57,7 @@ const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
   const focus = 'bg-mainprimary text-greyscalewhite hover:bg-bgorange';
   const white = 'bg-white text-mainsecondary hover:bg-bgorange';
   const hover = 'bg-bgorange text-mainsecondary hover:bg-mainprimary';
-  const disabledStyle =
-    'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
+  const disabledStyle = 'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
 
   const color: Record<ViewMemorialBookTheme, string> = {
     focus,
@@ -105,9 +103,7 @@ const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
       disabled={disabled}
       onClick={onClick}
     >
-      <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>
-        {children}
-      </span>
+      <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>{children}</span>
     </button>
   );
 };
@@ -119,7 +115,6 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   buttonSize,
   buttonDisabled,
   buttonText,
-  buttonIcon = <LogoIcons variant='small-earth-img' />,
   onButtonClick,
   className,
 }) => {
@@ -136,7 +131,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
       >
         <div className='flex w-72 items-center justify-center gap-8 relative flex-[0_0_auto]'>
           <div className='relative w-fit mt-[-1.00px] font-kor-h-h1 font-[number:var(--kor-h-h1-font-weight)] text-greyscaleblack-100 text-[length:var(--kor-h-h1-font-size)] tracking-[var(--kor-h-h1-letter-spacing)] leading-[var(--kor-h-h1-line-height)] [font-style:var(--kor-h-h1-font-style)]'>
-            <CurrentLocation title={title} />
+            <CurrentLocation title={title} type='everstar' />
           </div>
         </div>
 
@@ -146,7 +141,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
             size={buttonSize}
             disabled={buttonDisabled}
             onClick={onButtonClick}
-            icon={buttonIcon}
+            icon={<LogoIcons variant='small-earth-img' />}
           >
             {buttonText}
           </PrimaryButton>

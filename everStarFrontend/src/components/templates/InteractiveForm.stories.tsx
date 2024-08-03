@@ -109,6 +109,26 @@ const meta: Meta<typeof InteractiveForm> = {
       description: 'LetterCard 대신 표시될 커스텀 텍스트',
       defaultValue: '',
     },
+    petName: {
+      control: 'text',
+      description: '반려동물 이름',
+      defaultValue: '뚜뚜',
+    },
+    myName: {
+      control: 'text',
+      description: '사용자 이름',
+      defaultValue: '사용자',
+    },
+    myMessage: {
+      control: 'text',
+      description: '사용자가 보낸 메시지',
+      defaultValue: '뚜뚜에게 보낸 메시지입니다.',
+    },
+    dateTime: {
+      control: 'text',
+      description: '보낸 날짜와 시간',
+      defaultValue: '2024-07-24 10:00:00',
+    },
   },
 };
 
@@ -167,5 +187,29 @@ export const Text: Story = {
     smallButtonText: '작성완료',
     showPrimaryButton: false,
     customText: '',
+  },
+};
+
+export const Receive: Story = {
+  args: {
+    currentPage: 1,
+    totalPages: 10,
+    onPageChange: action('pageChanged'),
+    headerText: '답장하기',
+    letterCardType: 'receive',
+    letterCardColor: 'bgorange',
+    letterCardState: 'received',
+    letterCardMessage: '형 안녕! 뚜뚜가 사용자님께 보낸 편지입니다. ',
+    letterCardClassName: '',
+    centered: true,
+    textboxLabel: '내용',
+    largeButtonText: '이미지 추가',
+    smallButtonText: '작성완료',
+    showPrimaryButton: true,
+    customText: '',
+    petName: '뚜뚜',
+    myName: '사용자',
+    myMessage: '뚜뚜에게 보낸 메시지입니다.',
+    dateTime: '2024-07-24 10:00:00',
   },
 };

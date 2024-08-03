@@ -1,11 +1,11 @@
 import { InformationText } from 'components/atoms/texts/InformationText';
 import { LetterText } from 'components/atoms/texts/LetterText';
 
-type LetterType = 'default' | 'send' | 'receive';
-type LetterColor = 'white' | 'bgorange' | 'orange' | 'gray';
-type LetterState = 'received' | 'notReceived';
+export type LetterType = 'default' | 'send' | 'receive';
+export type LetterColor = 'white' | 'bgorange' | 'orange' | 'gray';
+export type LetterState = 'received' | 'notReceived';
 
-interface ILetterProps {
+export interface ILetterProps {
   type: LetterType;
   color: LetterColor;
   state: LetterState;
@@ -15,6 +15,7 @@ interface ILetterProps {
   dateTime?: string;
   className?: string;
   centered?: boolean;
+  onClick?: () => void;
 }
 
 export const LetterCard = ({
@@ -27,10 +28,11 @@ export const LetterCard = ({
   dateTime,
   className,
   centered = false,
+  onClick,
 }: ILetterProps) => {
   const getState = () => {
-    if (state === 'received') return '답장 완료';
-    else return '작성 중';
+    if (state === 'received') return '완료';
+    else return '답장을 쓸 수 있어요!';
   };
 
   const getTextColor = () => {
@@ -51,39 +53,34 @@ export const LetterCard = ({
   };
 
   return (
-    <div
+    <button
+      onClick={onClick}
       className={`${getBgColor()} ${getAlignmentClass()} flex flex-col self-stretch gap-[16px] p-4 rounded-[20px] shadow-md ${type === 'default' ? 'w-[270px]' : 'w-[320px]'}`}
     >
       {name && (
-        <LetterText size='large' color={getTextColor()} className={className}>
+        <LetterText
+          size={type === 'default' ? 'small' : 'large'}
+          color={getTextColor()}
+          className={`${className} !text-start`}
+        >
           {name}
         </LetterText>
       )}
       {type === 'default' && (
-        <div
-          className={`flex flex-col gap-[16px] ${centered ? 'items-center' : ''}`}
-        >
+        <div className={`flex flex-col gap-[16px] ${centered ? 'items-center' : ''}`}>
           <div className='flex flex-row gap-[10px]'>
             <LetterText size='medium' color='black' className={className}>
-              보낸 편지
+              받은 편지
             </LetterText>
-            <LetterText
-              size='small'
-              color={getTextColor()}
-              className={className}
-            >
+            <LetterText size='small' color={getTextColor()} className={className}>
               {sendMessage}
             </LetterText>
           </div>
           <div className='flex flex-row gap-[10px]'>
             <LetterText size='medium' color='black' className={className}>
-              상태
+              답장 여부
             </LetterText>
-            <LetterText
-              size='small'
-              color={getTextColor()}
-              className={className}
-            >
+            <LetterText size='small' color={getTextColor()} className={className}>
               {getState()}
             </LetterText>
           </div>
@@ -91,7 +88,7 @@ export const LetterCard = ({
       )}
       {(type === 'receive' || type === 'send') && (
         <div>
-          <LetterText size='small' color='black' className={className}>
+          <LetterText size='xl' color='black' className={className}>
             {message}
           </LetterText>
         </div>
@@ -109,6 +106,6 @@ export const LetterCard = ({
           </InformationText>
         </div>
       )}
-    </div>
+    </button>
   );
 };

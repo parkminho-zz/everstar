@@ -11,7 +11,7 @@ const meta: Meta<typeof LetterText> = {
     size: {
       control: {
         type: 'select',
-        options: ['large', 'medium', 'small'],
+        options: ['large', 'medium', 'small', 'xl'],
       },
       description: 'Label의 크기',
       defaultValue: 'medium',
@@ -40,6 +40,14 @@ export const Default: Story = {
     size: 'medium',
     color: 'black',
     children: 'Sample Text',
+  },
+};
+
+export const XlBlack: Story = {
+  args: {
+    size: 'xl',
+    color: 'black',
+    children: 'Large Black Text',
   },
 };
 
