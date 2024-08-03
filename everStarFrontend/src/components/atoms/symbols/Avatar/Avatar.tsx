@@ -6,6 +6,7 @@ interface AvatarProps {
   src?: string; // 선택적 prop 추가
   name?: string;
   className?: string; // 추가된 부분
+  onClick?: () => void; // 추가된 클릭 이벤트 핸들러
 }
 
 const sizeMap = {
@@ -14,11 +15,29 @@ const sizeMap = {
   large: '180px',
 };
 
-export const Avatar: React.FC<AvatarProps> = ({ size, src, name, className }) => {
+export const Avatar: React.FC<AvatarProps> = ({
+  size,
+  src,
+  name,
+  className,
+  onClick,
+}) => {
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    }
+  };
+
   return (
     <div
-      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        cursor: onClick ? 'pointer' : 'default',
+      }}
       className={className}
+      onClick={handleClick}
     >
       {size === 'text' ? (
         <div
@@ -41,8 +60,8 @@ export const Avatar: React.FC<AvatarProps> = ({ size, src, name, className }) =>
           마이페이지
         </div>
       ) : size === 'square' ? (
-        <div className="w-[340px] h-[250px] self-stretch">
-          <img src={src || defaultAvatarSrc} alt="avatar" />
+        <div className='w-[340px] h-[250px] self-stretch'>
+          <img src={src || defaultAvatarSrc} alt='avatar' />
         </div>
       ) : (
         <div
@@ -55,7 +74,7 @@ export const Avatar: React.FC<AvatarProps> = ({ size, src, name, className }) =>
         >
           <img
             src={src || defaultAvatarSrc}
-            alt="avatar"
+            alt='avatar'
             style={{ width: '100%', height: '100%' }}
           />
         </div>
