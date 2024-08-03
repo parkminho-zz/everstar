@@ -16,6 +16,7 @@ import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.pet.requestDto.UpdatePetIntroductionDto;
 import com.everstarbackmain.domain.pet.responseDto.EnrolledPetsResponseDto;
+import com.everstarbackmain.domain.pet.responseDto.PetDetailResponseDto;
 import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;
 import com.everstarbackmain.domain.sentimentAnalysis.repository.SentimentAnalysisRepository;
 import com.everstarbackmain.domain.user.model.User;
@@ -86,5 +87,9 @@ public class PetService {
 			.map(EnrolledPetsResponseDto::createEnrolledResponseDto)
 			.collect(Collectors.toList());
 	}
+
+	// public List<PetDetailResponseDto> getMyPetDetails() {
+	//
+	// }
 
 }

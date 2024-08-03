@@ -21,6 +21,8 @@ import com.everstarbackmain.domain.memorialBook.responseDto.MemorialBookDetailRe
 import com.everstarbackmain.domain.memorialBook.responseDto.MemorialBookInfoResponseDto;
 import com.everstarbackmain.domain.memorialBook.util.PsychologicalTestResultMapper;
 import com.everstarbackmain.domain.pet.model.Pet;
+import com.everstarbackmain.domain.pet.model.PetPersonality;
+import com.everstarbackmain.domain.pet.repository.PetPersonalityRepository;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.responseDto.PetDetailResponseDto;
 import com.everstarbackmain.domain.quest.model.Quest;
@@ -53,6 +55,7 @@ public class MemorialBookService {
 	private final QuestAnswerRepository questAnswerRepository;
 	private final AiAnswerRepository aiAnswerRepository;
 	private final DiaryRepository diaryRepository;
+	private final PetPersonalityRepository petPersonalityRepository;
 
 	@Transactional
 	public void changeOpenStatus(Long memorialBookId) {
@@ -127,6 +130,8 @@ public class MemorialBookService {
 		List<QuestAnswer> questAnswers = questAnswerRepository.findByPetIdAndIsDeleted(petId, false);
 		List<AiAnswer> aiAnswers = aiAnswerRepository.findByPetId(petId);
 		List<Diary> diaries = diaryRepository.findByMemorialBookIdAndIsDeleted(memorialBookId, false);
+		// List<PetPersonality> petPersonalities = petPersonalityRepository.findByIdAndIsDeleted();
+		// List<String> petPersonalities
 
 		return convertToMemorialBookDetailDto(memorialBook, pet, sentimentAnalysis, quests, questAnswers, aiAnswers, diaries);
 	}

@@ -2,6 +2,7 @@ package com.everstarbackmain.domain.pet.responseDto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
@@ -28,8 +29,9 @@ public class PetDetailResponseDto {
 	private String introduction;
 	private Integer questIndex;
 	private LocalDateTime lastAccessTime;
+	private List<String> petPersonalities;
 
-	public static PetDetailResponseDto createPetDetailResponseDto(Pet pet) {
+	public static PetDetailResponseDto createPetDetailResponseDto(Pet pet, List<String> petPersonalities) {
 		return PetDetailResponseDto.builder()
 			.id(pet.getId())
 			.userId(pet.getUser().getId())
