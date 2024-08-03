@@ -4,6 +4,7 @@ import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { InputField } from 'components/organics/input/InputFields';
 import { Select } from 'components/molecules/input/Select';
 import { DateInputField } from 'components/organics/input/DateInputField';
+import { ArrowIcon } from 'components/atoms/icons/Arrow/ArrowIcon'; // 화살표 아이콘 임포트
 
 export interface PetInfoFormProps {
   headerText: string;
@@ -61,7 +62,7 @@ export const PetInfoForm: React.FC<PetInfoFormProps> = ({
             size="large"
             onClick={() => document.getElementById('photoInput')?.click()}
             disabled={false}
-            icon={null}
+            icon={null} // 여기 수정됨
             hug={false}
           >
             이미지 추가
@@ -138,7 +139,7 @@ export const PetInfoForm: React.FC<PetInfoFormProps> = ({
               size="small"
               onClick={handleButtonClick}
               disabled={false}
-              icon={true}
+              icon={<ArrowIcon color="black" direction="right" size={24} />} // 여기 수정된 부분
               hug={true}
             >
               {smallButtonText}

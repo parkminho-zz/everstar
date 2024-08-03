@@ -5,6 +5,7 @@ import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { InputField } from 'components/organics/input/InputFields';
 import { Select } from 'components/molecules/input/Select';
 import { DateInputField } from 'components/organics/input/DateInputField';
+import { ArrowIcon } from 'components/atoms/icons/Arrow/ArrowIcon'; // 화살표 아이콘 임포트
 
 export interface SignUpFormProps {
   headerText: string;
@@ -160,7 +161,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
               size="small"
               onClick={handleSubmit}
               disabled={isButtonDisabled}
-              icon={true}
+              icon={<ArrowIcon color="black" direction="right" size={24} />} // 여기 수정된 부분
               hug={true}
             >
               {smallButtonText}
