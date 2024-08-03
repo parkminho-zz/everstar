@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  InputContainer,
-  InputContainerProps,
-} from 'components/organics/input/InputContainer';
+import { InputContainer, InputContainerProps } from 'components/organics/input/InputContainer';
 import { Glass } from 'components/molecules/Glass/Glass';
 import { useMediaQuery } from 'react-responsive';
 
@@ -29,6 +26,10 @@ export const InteractiveForm: React.FC<InteractiveFormProps> = ({
   smallButtonText,
   showPrimaryButton,
   customText, // 커스텀 텍스트 속성 추가
+  petName,
+  myName,
+  myMessage,
+  dateTime,
 }) => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const isTabletOrMobile = useMediaQuery({ maxWidth: 1199 });
@@ -60,6 +61,10 @@ export const InteractiveForm: React.FC<InteractiveFormProps> = ({
           smallButtonText={smallButtonText}
           showPrimaryButton={showPrimaryButton}
           customText={customText} // 커스텀 텍스트 속성 전달
+          petName={petName}
+          myName={myName}
+          myMessage={myMessage}
+          dateTime={dateTime}
         />
       </div>
     </div>
