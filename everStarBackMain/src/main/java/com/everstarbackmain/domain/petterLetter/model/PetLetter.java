@@ -82,4 +82,8 @@ public class PetLetter extends BaseTimeEntity {
 			.sendType(SendType.PET)
 			.build();
 	}
+
+	public void readPetLetter() {
+		this.isRead = true;
+	}
 }
