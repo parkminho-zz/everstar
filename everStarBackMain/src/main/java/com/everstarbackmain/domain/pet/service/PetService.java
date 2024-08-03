@@ -16,6 +16,7 @@ import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.pet.requestDto.UpdatePetIntroductionDto;
 import com.everstarbackmain.domain.pet.responseDto.EnrolledPetsResponseDto;
+import com.everstarbackmain.domain.petterLetter.util.PetLetterScheduler;
 import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;
 import com.everstarbackmain.domain.sentimentAnalysis.repository.SentimentAnalysisRepository;
 import com.everstarbackmain.domain.user.model.User;
@@ -36,6 +37,7 @@ public class PetService {
 	private final PetPersonalityRepository petPersonalityRepository;
 	private final MemorialBookRepository memorialBookRepository;
 	private final SentimentAnalysisRepository sentimentAnalysisRepository;
+	private final PetLetterScheduler petLetterScheduler;
 
 	@Transactional
 	public void createPet(Authentication authentication, CreatePetRequestDto createPetRequestDto) {
@@ -47,6 +49,8 @@ public class PetService {
 		addPersonalities(pet, createPetRequestDto);
 		createMemorialBook(pet);
 		createSentimentAnalysis(pet);
+
+		petLetterScheduler.scheduleSendPetLetter(pet);
 	}
 
 	private void addPersonalities(Pet pet, CreatePetRequestDto createPetRequestDto) {

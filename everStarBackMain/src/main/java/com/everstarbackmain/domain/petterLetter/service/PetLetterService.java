@@ -38,7 +38,7 @@ public class PetLetterService {
 	@Transactional
 	@Async
 	public void writePetLetterAnswer(UserLetter userLetter) {
-		String content = openAiClient.writePetLetter(userLetter);
+		String content = openAiClient.writePetLetterAnswer(userLetter);
 		PetLetter petLetter = PetLetter.writePetLetterAnswer(userLetter, content);
 
 		petLetterRepository.save(petLetter);
@@ -55,6 +55,7 @@ public class PetLetterService {
 		return petLetterRepository.findPetLettersByPetId(user, petId, pageable);
 	}
 
+	@Transactional
 	public GetLetterResponseDto getLetter(Authentication authentication, Long petId, Long petLetterId) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 
@@ -63,6 +64,8 @@ public class PetLetterService {
 
 		PetLetter petLetter = petLetterRepository.findPetLetterByIdAndPetAndIsDeleted(petLetterId, pet, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PETLETTER_EXCEPTION));
+
+		petLetter.readPetLetter();
 
 		GetLetterResponseDto getLetterResponseDto = GetLetterResponseDto.createGetLetterResponseDto(petLetter);
 		return getLetterResponseDto;

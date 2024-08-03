@@ -42,6 +42,8 @@ public class QPet extends EntityPathBase<Pet> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedTime = _super.lastModifiedTime;
 
+    public final DateTimePath<java.time.LocalDateTime> lastSendLetterTime = createDateTime("lastSendLetterTime", java.time.LocalDateTime.class);
+
     public final DatePath<java.time.LocalDate> memorialDate = createDate("memorialDate", java.time.LocalDate.class);
 
     public final StringPath name = createString("name");
@@ -51,6 +53,8 @@ public class QPet extends EntityPathBase<Pet> {
     public final NumberPath<Integer> questIndex = createNumber("questIndex", Integer.class);
 
     public final StringPath relationship = createString("relationship");
+
+    public final DateTimePath<java.time.LocalDateTime> sendLetterTime = createDateTime("sendLetterTime", java.time.LocalDateTime.class);
 
     public final StringPath species = createString("species");
 

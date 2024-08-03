@@ -2,6 +2,7 @@ package com.everstarbackmain.domain.pet.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Random;
 
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.user.model.User;
@@ -72,6 +73,12 @@ public class Pet extends BaseTimeEntity {
 	@Column(name = "last_access_time", nullable = false)
 	private LocalDateTime lastAccessTime;
 
+	@Column(nullable = false)
+	private LocalDateTime sendLetterTime;
+
+	@Column(nullable = false)
+	private LocalDateTime lastSendLetterTime;
+
 	@Builder
 	private Pet(User user, String name, Integer age, LocalDate memorialDate, String species, PetGender gender,
 		String relationship, String profileImageUrl, String introduction) {
@@ -88,6 +95,8 @@ public class Pet extends BaseTimeEntity {
 		questIndex = 0;
 		isDeleted = false;
 		lastAccessTime = LocalDateTime.now();
+		sendLetterTime = generateRandomTime();
+		lastSendLetterTime = LocalDateTime.now();
 	}
 
 	public static Pet createPet(User user, CreatePetRequestDto createPetRequestDto) {
@@ -111,4 +120,14 @@ public class Pet extends BaseTimeEntity {
 		this.introduction = newIntroduction;
 	}
 
+	public void updatePetSendTime(){
+		this.lastSendLetterTime = LocalDateTime.now();
+		this.sendLetterTime = generateRandomTime();
+	}
+
+	private LocalDateTime generateRandomTime() {
+		Random random = new Random();
+		int randomMinutes = 1 + random.nextInt(5);
+		return LocalDateTime.now().plusMinutes(randomMinutes);
+	}
 }

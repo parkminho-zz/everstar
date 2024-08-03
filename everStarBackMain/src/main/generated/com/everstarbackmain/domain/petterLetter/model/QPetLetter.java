@@ -40,6 +40,8 @@ public class QPetLetter extends EntityPathBase<PetLetter> {
 
     public final com.everstarbackmain.domain.pet.model.QPet pet;
 
+    public final EnumPath<SendType> sendType = createEnum("sendType", SendType.class);
+
     public final com.everstarbackmain.domain.userLetter.model.QUserLetter userLetter;
 
     public QPetLetter(String variable) {
