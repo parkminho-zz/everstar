@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.everstarbackmain.domain.memorialBook.message.SuccessMemorialBookMessage;
-import com.everstarbackmain.domain.memorialBook.requestDto.MemorialBookTestResultRequestDto;
-import com.everstarbackmain.domain.memorialBook.responseDto.MemorialBookDetailResponseDto;
-import com.everstarbackmain.domain.memorialBook.responseDto.MemorialBookInfoResponseDto;
+import com.everstarbackmain.domain.memorialBook.requestdto.MemorialBookTestResultRequestDto;
+import com.everstarbackmain.domain.memorialBook.responsedto.MemorialBookDetailResponseDto;
+import com.everstarbackmain.domain.memorialBook.responsedto.MemorialBookInfoResponseDto;
 import com.everstarbackmain.domain.memorialBook.service.MemorialBookService;
 import com.everstarbackmain.global.util.HttpResponseUtil;
 

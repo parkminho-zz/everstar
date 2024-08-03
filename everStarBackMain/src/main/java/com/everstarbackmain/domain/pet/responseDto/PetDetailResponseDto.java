@@ -30,9 +30,8 @@ public class PetDetailResponseDto {
 	private String introduction;
 	private Integer questIndex;
 	private LocalDateTime lastAccessTime;
-	private List<String> petPersonalities;
 
-	public static PetDetailResponseDto createPetDetailResponseDto(Pet pet, List<String> petPersonalities) {
+	public static PetDetailResponseDto createPetDetailResponseDto(Pet pet) {
 		return PetDetailResponseDto.builder()
 			.id(pet.getId())
 			.userId(pet.getUser().getId())

@@ -1,6 +1,5 @@
-package com.everstarbackmain.domain.memorialBook.requestDto;
+package com.everstarbackmain.domain.memorialBook.requestdto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

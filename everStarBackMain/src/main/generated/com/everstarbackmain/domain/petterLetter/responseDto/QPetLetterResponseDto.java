@@ -1,4 +1,4 @@
-package com.everstarbackmain.domain.petterLetter.responseDto;
+package com.everstarbackmain.domain.petterLetter.responsedto;
 
 import com.querydsl.core.types.dsl.*;
 

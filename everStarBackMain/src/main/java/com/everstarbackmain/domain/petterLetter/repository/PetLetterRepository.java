@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;
-import com.everstarbackmain.domain.petterLetter.responseDto.PetLetterResponseDto;
+import com.everstarbackmain.domain.petterLetter.responsedto.PetLetterResponseDto;
 import com.everstarbackmain.domain.user.model.User;
 
 @Repository

@@ -25,7 +25,7 @@ import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.petterLetter.repository.PetLetterRepository;
-import com.everstarbackmain.domain.petterLetter.responseDto.PetLetterResponseDto;
+import com.everstarbackmain.domain.petterLetter.responsedto.PetLetterResponseDto;
 import com.everstarbackmain.domain.petterLetter.service.PetLetterService;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;

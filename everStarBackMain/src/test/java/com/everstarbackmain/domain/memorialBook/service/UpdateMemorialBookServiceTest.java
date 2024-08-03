@@ -22,7 +22,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import com.everstarbackmain.domain.memorialBook.message.PsychologicalTestResultMessage;
 import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 import com.everstarbackmain.domain.memorialBook.repository.MemorialBookRepository;
-import com.everstarbackmain.domain.memorialBook.requestDto.MemorialBookTestResultRequestDto;
+import com.everstarbackmain.domain.memorialBook.requestdto.MemorialBookTestResultRequestDto;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.repository.PetRepository;

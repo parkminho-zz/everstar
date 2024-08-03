@@ -1,12 +1,10 @@
-package com.everstarbackmain.domain.petterLetter.responseDto;
+package com.everstarbackmain.domain.petterLetter.responsedto;
 
 import java.time.LocalDateTime;
 
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;
 import com.querydsl.core.annotations.QueryProjection;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -1,7 +1,5 @@
 package com.everstarbackmain.domain.petterLetter.service;
 
-import java.util.List;
-
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +13,7 @@ import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;
 import com.everstarbackmain.domain.petterLetter.repository.PetLetterRepository;
-import com.everstarbackmain.domain.petterLetter.responseDto.PetLetterResponseDto;
+import com.everstarbackmain.domain.petterLetter.responsedto.PetLetterResponseDto;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.userLetter.model.UserLetter;
 import com.everstarbackmain.global.exception.CustomException;

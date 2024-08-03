@@ -1,4 +1,4 @@
-package com.everstarbackmain.domain.memorialBook.responseDto;
+package com.everstarbackmain.domain.memorialBook.responsedto;
 
 import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 
