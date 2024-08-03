@@ -76,6 +76,9 @@ public class Pet extends BaseTimeEntity {
 	@Column(nullable = false)
 	private LocalDateTime sendLetterTime;
 
+	@Column(nullable = false)
+	private LocalDateTime lastSendLetterTime;
+
 	@Builder
 	private Pet(User user, String name, Integer age, LocalDate memorialDate, String species, PetGender gender,
 		String relationship, String profileImageUrl, String introduction) {
@@ -93,6 +96,7 @@ public class Pet extends BaseTimeEntity {
 		isDeleted = false;
 		lastAccessTime = LocalDateTime.now();
 		sendLetterTime = randomTime();
+		lastSendLetterTime = LocalDateTime.now();
 	}
 
 	public static Pet createPet(User user, CreatePetRequestDto createPetRequestDto) {

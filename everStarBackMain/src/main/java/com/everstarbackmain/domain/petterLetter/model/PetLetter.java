@@ -65,4 +65,12 @@ public class PetLetter extends BaseTimeEntity {
 			.content(content)
 			.build();
 	}
+
+	public static PetLetter writePetLetter(Pet pet, String content) {
+		return PetLetter.builder()
+			.pet(pet)
+			.isRead(false)
+			.content(content)
+			.build();
+	}
 }
