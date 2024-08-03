@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ProfileSelection, ProfileSelectionProps } from './ProfileSelection';
+import { action } from '@storybook/addon-actions'; // action 헬퍼 임포트
 
 const meta: Meta<ProfileSelectionProps> = {
   title: 'Organics/ProfileSelection',
@@ -12,6 +13,7 @@ const meta: Meta<ProfileSelectionProps> = {
       { src: '', size: 'medium' },
     ],
     onAddAvatar: () => alert('Add Avatar button clicked!'),
+    onAvatarClick: action('onAvatarClick'), // action 헬퍼 사용
   },
 };
 
