@@ -29,6 +29,9 @@ public class PetLetterScheduler {
 	}
 
 	public void scheduleSendPetLetter(Pet pet) {
-		taskScheduler.schedule(() -> petLetterService)
+		LocalDateTime sendLetterTime = pet.getSendLetterTime();
+		Date sendPetLetterDate = Date.from(
+			sendLetterTime.atZone(ZoneId.systemDefault()).toInstant());
+		taskScheduler.schedule(() -> petLetterService.writePetLetter(pet), sendPetLetterDate);
 	}
 }

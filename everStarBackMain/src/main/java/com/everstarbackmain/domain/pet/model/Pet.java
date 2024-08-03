@@ -108,12 +108,6 @@ public class Pet extends BaseTimeEntity {
 			.build();
 	}
 
-	public LocalDateTime randomTime(){
-		Random random = new Random();
-		int randomMinutes = 1 + random.nextInt(5);
-		return LocalDateTime.now().plusMinutes(randomMinutes);
-	}
-
 	public void plusQuestIndex() {
 		questIndex++;
 	}
@@ -122,4 +116,9 @@ public class Pet extends BaseTimeEntity {
 		this.introduction = newIntroduction;
 	}
 
+	private LocalDateTime randomTime() {
+		Random random = new Random();
+		int randomMinutes = 1 + random.nextInt(5);
+		return LocalDateTime.now().plusMinutes(randomMinutes);
+	}
 }
