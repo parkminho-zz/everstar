@@ -17,7 +17,7 @@ export interface SignUpFormProps {
     userName: string,
     birthDate: string,
     gender: string,
-    questReceptionTime: string, // 추가된 부분
+    questReceptionTime: string,
   ) => void;
 }
 
@@ -32,11 +32,11 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 
   const [formData, setFormData] = useState({
     name: '',
-    birthdate: new Date(),
+    birthdate: '',
     gender: '',
     email: userEmail || '',
     phone: '',
-    questReceptionTime: '', // 추가된 부분
+    questReceptionTime: '',
   });
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -45,10 +45,10 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
     setFormData((prevFormData) => ({ ...prevFormData, email: userEmail || '' }));
   }, [userEmail]);
 
-  const handleInputChange = (field: keyof typeof formData, value: string | Date | null) => {
+  const handleInputChange = (field: keyof typeof formData, value: string | null) => {
     setFormData({
       ...formData,
-      [field]: value,
+      [field]: value as string,
     });
   };
 
@@ -65,9 +65,9 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
         formData.phone,
         formData.email,
         formData.name,
-        formData.birthdate.toISOString(),
+        formData.birthdate,
         formData.gender,
-        formData.questReceptionTime, // 추가된 부분
+        formData.questReceptionTime,
       );
     }
   };
@@ -110,9 +110,11 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
           showValidationText={false}
           starshow={true}
           state="default"
-          date={formData.birthdate}
+          date={formData.birthdate ? new Date(formData.birthdate) : null} // 수정된 부분
           placeholder="생년월일을 선택하세요"
-          onChange={(date) => handleInputChange('birthdate', date)}
+          onChange={(date) =>
+            handleInputChange('birthdate', date ? date.toISOString().split('T')[0] : '')
+          }
         />
 
         <Select
