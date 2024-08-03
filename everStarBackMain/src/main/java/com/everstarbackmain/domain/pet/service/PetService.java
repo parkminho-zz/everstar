@@ -93,8 +93,21 @@ public class PetService {
 			.collect(Collectors.toList());
 	}
 
-	// public List<PetDetailResponseDto> getMyPetDetails() {
-	//
-	// }
+	public MyPagePetInfoResponseDto getMyPetInfo(Authentication authentication, Long petId) {
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
+		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+
+		if (user != pet.getUser()) {
+			throw new ExceptionResponse(CustomException.ACCESS_DENIED_EXCEPTION);
+		}
+
+		List<String> petPersonalities = petPersonalityRepository.findAllByPetIdAndIsDeleted(petId, false).stream()
+			.map(PetPersonality::getPersonalityValue)
+			.collect(Collectors.toList());
+
+		return MyPagePetInfoResponseDto.createMyPagePetInfoDto(pet, petPersonalities);
+
+	}
 
 }
