@@ -13,24 +13,21 @@ const persistConfig = {
   storage: sessionStorage,
 };
 
-export const reducers = combineReducers({
-  reducer: {
-    //여기에 리듀서들 추가
-    auth: authReducer,
-    letter: letterReducer,
-    memorialBook: memorialBookReducer,
-    pet: petReducer,
-    cheering: cheeringReducer,
-  },
+export const rootReducer = combineReducers({
+  //현조: 리듀서 추가
+  auth: authReducer,
+  letter: letterReducer,
+  memorialBook: memorialBookReducer,
+  pet: petReducer,
+  cheering: cheeringReducer,
 });
 
-//새로고침 시 state 초기화되지않게 persistReducer 사용
-const persistedReducer = persistReducer(persistConfig, reducers);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const Store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }), // 직렬화 비활성화 (타입)
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }), // 직렬화 비활성화 (타입)
 });
 
 export type RootState = ReturnType<typeof Store.getState>;
+export type AppDispatch = typeof Store.dispatch; //현조: AppDispatch 타입 추가
