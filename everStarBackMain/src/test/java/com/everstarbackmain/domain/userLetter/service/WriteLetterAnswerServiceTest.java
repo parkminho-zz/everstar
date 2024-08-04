@@ -126,6 +126,6 @@ public class WriteLetterAnswerServiceTest {
 		// when then
 		Assertions.assertThatThrownBy(() -> userLetterService.writeLetterAnswer(authentication, 1L, 1L, requestDto))
 			.isInstanceOf(ExceptionResponse.class)
-			.hasFieldOrPropertyWithValue("customException", CustomException.EXIST_SEND_LETTER_ANSWER);
+			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_ACCESS_SEND_LETTER_ANSWER);
 	}
 }

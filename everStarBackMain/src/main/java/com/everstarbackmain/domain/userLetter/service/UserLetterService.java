@@ -57,7 +57,7 @@ public class UserLetterService {
 		}
 
 		if (petLetter.getUserLetter() != null) {
-			throw new ExceptionResponse(CustomException.EXIST_SEND_LETTER_ANSWER);
+			throw new ExceptionResponse(CustomException.NOT_ACCESS_SEND_LETTER_ANSWER);
 		}
 
 		UserLetter userLetter = writeUserLetter(pet, requestDto);
