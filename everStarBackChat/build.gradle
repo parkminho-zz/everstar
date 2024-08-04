@@ -59,6 +59,10 @@ dependencies {
 	// coolsms nurigo 문자인증
 	implementation 'net.nurigo:sdk:4.3.0'
 
+	//kafka
+	implementation 'com.github.danielwegener:logback-kafka-appender:0.1.0'
+	implementation 'net.logstash.logback:logstash-logback-encoder:6.2'
+
 }
 
 tasks.named('test') {
