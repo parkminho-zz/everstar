@@ -101,4 +101,22 @@ public class UserLetterControllerTest {
 
 		result.andExpect(MockMvcResultMatchers.status().isOk());
 	}
+
+	@Test
+	@DisplayName("유저 편지 답장 성공 테스트")
+	@WithMockAuthUser(email = "test@gmail.com", role = Role.ROLE_USER)
+	public void 유저_편지_답장_성공_테스트() throws Exception {
+		String requestBody = objectMapper.writeValueAsString(requestDto);
+		Map<String, Object> response = new HashMap<>();
+		response.put("data", SuccessUserLetterMessage.SUCCESS_WRITE_LETTER_ANSWER);
+
+		BDDMockito.doNothing().when(userLetterService).writeLetterAnswer(authentication, 1L, 1L, requestDto);
+
+		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/api/pets/1/letters/1")
+			.with(SecurityMockMvcRequestPostProcessors.csrf())
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(requestBody));
+
+		result.andExpect(MockMvcResultMatchers.status().isOk());
+	}
 }
