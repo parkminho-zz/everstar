@@ -1,9 +1,6 @@
 package com.everstarbackmain.domain.petterLetter.responseDto.getLetterResponseDto;
 
-import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;
-import com.everstarbackmain.domain.petterLetter.model.SendType;
-import com.everstarbackmain.domain.userLetter.model.UserLetter;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
