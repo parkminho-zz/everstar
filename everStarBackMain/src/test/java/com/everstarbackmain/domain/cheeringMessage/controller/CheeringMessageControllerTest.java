@@ -1,4 +1,4 @@
-package com.everstarbackmain.domain.petLetter.controller;
+package com.everstarbackmain.domain.cheeringMessage.controller;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,11 +16,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,32 +25,30 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import com.everstarbackmain.domain.cheeringMessage.message.SuccessCheeringMessageMessage;
+import com.everstarbackmain.domain.cheeringMessage.requestDto.CreateCheeringMessageRequestDto;
+import com.everstarbackmain.domain.cheeringMessage.service.CheeringMessageService;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
 import com.everstarbackmain.domain.petterLetter.controller.PetLetterController;
-import com.everstarbackmain.domain.petterLetter.model.PetLetter;
-import com.everstarbackmain.domain.petterLetter.responseDto.getLetterResponseDto.GetLetterResponseDto;
-import com.everstarbackmain.domain.petterLetter.service.PetLetterService;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
-import com.everstarbackmain.domain.userLetter.model.UserLetter;
-import com.everstarbackmain.domain.userLetter.requestDto.WriteLetterRequestDto;
 import com.everstarbackmain.global.auth.WithMockAuthUser;
 import com.everstarbackmain.global.config.SecurityConfig;
 import com.everstarbackmain.global.util.HttpResponseUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(
-	controllers = PetLetterController.class,
+	controllers = CheeringMessageController.class,
 	excludeFilters = {
 		@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
 	}
 )
 @MockBean(JpaMetamodelMappingContext.class)
-public class PetLetterControllerTest {
+public class CheeringMessageControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -62,7 +57,7 @@ public class PetLetterControllerTest {
 	private ObjectMapper objectMapper;
 
 	@MockBean
-	private PetLetterService petLetterService;
+	private CheeringMessageService cheeringMessageService;
 
 	@MockBean
 	private HttpResponseUtil responseUtil;
@@ -70,65 +65,38 @@ public class PetLetterControllerTest {
 	@Mock
 	private Authentication authentication;
 
-	@Mock
-	private Pageable pageable;
-
-	@Mock
-	private Page page;
-
 	private User user;
 	private Pet pet;
-	private UserLetter userLetter;
-	private PetLetter petLetter;
-	private WriteLetterRequestDto requestDto;
-	private GetLetterResponseDto getLetterResponseDto;
+	private CreateCheeringMessageRequestDto requestDto;
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		user = User.signUpUser(new JoinRequestDto("email", "password", "name", "010-1111-1111",
-			LocalDate.now(), Gender.MALE, LocalTime.now(), Role.ROLE_USER));
+		user = User.signUpUser(new JoinRequestDto("email", "password", "name", "010-1111-1111", LocalDate.now(),
+			Gender.MALE, LocalTime.now(), Role.ROLE_USER));
 
 		pet = Pet.createPet(user, new CreatePetRequestDto("petName", 10,
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
 
-		requestDto = new WriteLetterRequestDto("dd", "dd");
-		userLetter = UserLetter.writeLetterHasImage(pet, requestDto);
-		petLetter = PetLetter.writePetLetterAnswer(userLetter, "content");
-		getLetterResponseDto = GetLetterResponseDto.createGetLetterResponseDto(petLetter);
+		requestDto = new CreateCheeringMessageRequestDto("content", false);
 	}
 
 	@Test
-	@DisplayName("펫 보낸 편지 보기 성공 테스트")
+	@DisplayName("응원 메시지 성공 테스트")
 	@WithMockAuthUser(email = "test@gmail.com", role = Role.ROLE_USER)
-	public void 펫_보낸_편지_보기_성공_테스트() throws Exception {
+	public void 응원_메시지_성공_테스트() throws Exception {
 		//given
 		Map<String, Object> response = new HashMap<>();
-		BDDMockito.given(petLetterService.getPetLetters(authentication, 1L, pageable)).willReturn(page);
+		BDDMockito.doNothing().when(cheeringMessageService).createCheeringMessage(authentication, 1L, requestDto);
+		String requestBody = objectMapper.writeValueAsString(requestDto);
+		response.put("data", SuccessCheeringMessageMessage.SUCCESS_CREATE_CHEERINGMESSAGE);
 
-		response.put("data", petLetterService.getPetLetters(authentication, 1L, pageable));
-
-		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/api/pets/1/letters?page=0&size=10")
+		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/api/pets/1/cheeringMessages")
 			.with(SecurityMockMvcRequestPostProcessors.csrf())
 			.contentType(MediaType.APPLICATION_JSON)
+			.content(requestBody)
 		);
 
 		result.andExpect(MockMvcResultMatchers.status().isOk());
-	}
-
-	@Test
-	@DisplayName(" 편지 개별 조회 성공 테스트")
-	@WithMockAuthUser(email = "test@gmail.com", role = Role.ROLE_USER)
-	public void 편지_개별_조회_성공_테스트() throws Exception {
-		Map<String, Object> response = new HashMap<>();
-		BDDMockito.given(petLetterService.getLetter(authentication, 1L, 1L)).willReturn(getLetterResponseDto);
-		BDDMockito.given(responseUtil.createResponse(getLetterResponseDto)).willReturn(ResponseEntity.ok().body(response));
-
-		ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/pets/1/letters/1")
-			.with(SecurityMockMvcRequestPostProcessors.csrf())
-			.contentType(MediaType.APPLICATION_JSON)
-		);
-
-		resultActions.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 }
