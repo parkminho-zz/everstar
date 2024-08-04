@@ -26,6 +26,8 @@ import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
+import com.everstarbackmain.global.exception.CustomException;
+import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
 
 @ExtendWith(MockitoExtension.class)
@@ -73,5 +75,16 @@ public class CheeringMessageServiceTest {
 		//then
 		Assertions.assertThatNoException()
 			.isThrownBy(() -> cheeringMessageService.createCheeringMessage(authentication, 1L, requestDto));
+	}
+
+	@Test
+	@DisplayName("응원 메시지 생성 펫 존재하지 않음 실패 테스트")
+	public void 응원_메시지_생성_펫_존재하지_않음_실패_테스트() {
+		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
+		BDDMockito.given(principalDetails.getUser()).willReturn(user);
+
+		Assertions.assertThatThrownBy(() -> cheeringMessageService.createCheeringMessage(authentication, 1L, requestDto))
+			.isInstanceOf(ExceptionResponse.class)
+			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_FOUND_PET_EXCEPTION);
 	}
 }
