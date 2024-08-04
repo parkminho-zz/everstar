@@ -42,5 +42,4 @@ public class MyPagePetInfoResponseDto {
 			.petPersonalities(petPersonalities)
 			.build();
 	}
-
 }

@@ -128,7 +128,6 @@ public class MemorialBookService {
 		List<AiAnswer> aiAnswers = aiAnswerRepository.findByPetId(petId);
 		List<Diary> diaries = diaryRepository.findByMemorialBookIdAndIsDeleted(memorialBookId, false);
 
-
 		return convertToMemorialBookDetailDto(memorialBook, pet, sentimentAnalysis, quests, questAnswers, aiAnswers, diaries);
 	}
 

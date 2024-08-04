@@ -9,6 +9,4 @@ import com.everstarbackmain.domain.pet.model.PetPersonality;
 public interface PetPersonalityRepository extends JpaRepository<PetPersonality, Long> {
 
 	List<PetPersonality> findAllByPetIdAndIsDeleted(Long petId, Boolean isDeleted);
-
-
 }
