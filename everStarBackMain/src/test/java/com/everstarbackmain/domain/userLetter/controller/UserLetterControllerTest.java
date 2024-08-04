@@ -89,18 +89,16 @@ public class UserLetterControllerTest {
 	public void 유저_편지_쓰기_성공_테스트() throws Exception {
 		//given
 		String requestBody = objectMapper.writeValueAsString(requestDto);
-		long petId = 1;
 		Map<String, Object> response = new HashMap<>();
 		response.put("data", SuccessUserLetterMessage.SUCCESS_WRITE_LETTER);
 
-		BDDMockito.doNothing().when(userLetterService).writeLetter(authentication,petId,requestDto);
+		BDDMockito.doNothing().when(userLetterService).writeLetter(authentication, 1L, requestDto);
 
-	    ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/api/pets/1/letters")
+		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/api/pets/1/letters")
 			.with(SecurityMockMvcRequestPostProcessors.csrf())
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(requestBody));
 
 		result.andExpect(MockMvcResultMatchers.status().isOk());
 	}
-
 }

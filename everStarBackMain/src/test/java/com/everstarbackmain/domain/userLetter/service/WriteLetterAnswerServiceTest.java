@@ -26,8 +26,11 @@ import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
+import com.everstarbackmain.domain.userLetter.model.UserLetter;
 import com.everstarbackmain.domain.userLetter.repository.UserLetterRepository;
 import com.everstarbackmain.domain.userLetter.requestDto.WriteLetterRequestDto;
+import com.everstarbackmain.global.exception.CustomException;
+import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,7 +57,10 @@ public class WriteLetterAnswerServiceTest {
 	private User user;
 	private Pet pet;
 	private PetLetter petLetter;
+	private PetLetter petLetterTypeByUser;
+	private UserLetter userLetter;
 	private WriteLetterRequestDto requestDto;
+	private WriteLetterRequestDto writeLetterRequestDto;
 
 	@BeforeEach
 	public void setUp() {
@@ -65,7 +71,10 @@ public class WriteLetterAnswerServiceTest {
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
 
-		petLetter = PetLetter.writePetLetter(pet,"content");
+		writeLetterRequestDto = new WriteLetterRequestDto("content");
+		userLetter = UserLetter.writeLetterHasNotImage(pet, writeLetterRequestDto);
+		petLetter = PetLetter.writePetLetter(pet, "content");
+		petLetterTypeByUser = PetLetter.writePetLetterAnswer(userLetter, "content");
 		requestDto = new WriteLetterRequestDto("dd", "dd");
 	}
 
@@ -83,5 +92,40 @@ public class WriteLetterAnswerServiceTest {
 		// when then
 		Assertions.assertThatNoException()
 			.isThrownBy(() -> userLetterService.writeLetterAnswer(authentication, 1L, 1L, requestDto));
+	}
+
+	@Test
+	@DisplayName("펫이 보낸 편지에 답장쓰기 접근할수 없는 타입 실패 테스트")
+	public void 펫이_보낸_편지_답장_쓰기_접근_불가_타입_실패_테스트() {
+
+		//given
+		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
+		BDDMockito.given(principalDetails.getUser()).willReturn(user);
+		BDDMockito.given(petRepository.findByIdAndUserAndIsDeleted(1L, user, false)).willReturn(Optional.of(pet));
+		BDDMockito.given(petLetterRepository.findPetLetterByIdAndPetAndIsDeleted(1L, pet, false))
+			.willReturn(Optional.of(petLetterTypeByUser));
+
+		// when then
+		Assertions.assertThatThrownBy(() -> userLetterService.writeLetterAnswer(authentication, 1L, 1L, requestDto))
+			.isInstanceOf(ExceptionResponse.class)
+			.hasFieldOrPropertyWithValue("customException", CustomException.ACCESS_LETTER_SEND_TYPE);
+	}
+
+	@Test
+	@DisplayName("펫이 보낸 편지에 답장쓰기 이미 씀 실패 테스트")
+	public void 펫이_보낸_편지_답장_쓰기_이미_씀_실패_테스트() {
+
+		//given
+		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
+		BDDMockito.given(principalDetails.getUser()).willReturn(user);
+		BDDMockito.given(petRepository.findByIdAndUserAndIsDeleted(1L, user, false)).willReturn(Optional.of(pet));
+		petLetter.fetchReplyLetter(userLetter);
+		BDDMockito.given(petLetterRepository.findPetLetterByIdAndPetAndIsDeleted(1L, pet, false))
+			.willReturn(Optional.of(petLetter));
+
+		// when then
+		Assertions.assertThatThrownBy(() -> userLetterService.writeLetterAnswer(authentication, 1L, 1L, requestDto))
+			.isInstanceOf(ExceptionResponse.class)
+			.hasFieldOrPropertyWithValue("customException", CustomException.EXIST_SEND_LETTER_ANSWER);
 	}
 }
