@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/pets/{pet-id}/cheeringMessages")
+@RequestMapping("/api/pets/{pet-id}/find/{find_pet-id}/cheeringMessages")
 @Slf4j(topic = "elk")
 public class CheeringMessageController {
 
@@ -30,8 +30,9 @@ public class CheeringMessageController {
 
 	@PostMapping
 	public ResponseEntity<Map<String, Object>> creatCheeringMessage(Authentication authentication,
-		@PathVariable("pet-id") Long petId, @Valid @RequestBody CreateCheeringMessageRequestDto requestDto) {
-		cheeringMessageService.createCheeringMessage(authentication, petId, requestDto);
+		@PathVariable("pet-id") Long petId, @PathVariable("find_pet-id") Long findPetId,
+		@Valid @RequestBody CreateCheeringMessageRequestDto requestDto) {
+		cheeringMessageService.createCheeringMessage(authentication, petId, findPetId, requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessCheeringMessageMessage.SUCCESS_CREATE_CHEERINGMESSAGE);
 

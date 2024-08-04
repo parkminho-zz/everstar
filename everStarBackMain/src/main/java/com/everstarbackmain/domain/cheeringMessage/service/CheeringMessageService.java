@@ -27,13 +27,22 @@ public class CheeringMessageService {
 	private final PetRepository petRepository;
 
 	@Transactional
-	public void createCheeringMessage(Authentication authentication, Long petId,
+	public void createCheeringMessage(Authentication authentication, Long petId, Long findPetId,
 		CreateCheeringMessageRequestDto requestDto) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
-		Pet pet = petRepository.findByIdAndIsDeleted(petId, false).orElseThrow(() -> new ExceptionResponse(
+		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false).orElseThrow(() -> new ExceptionResponse(
 			CustomException.NOT_FOUND_PET_EXCEPTION));
 
-		CheeringMessage cheeringMessage = CheeringMessage.createCheeringMessage(requestDto, pet);
+		Pet findPet = petRepository.findByIdAndIsDeleted(findPetId, false)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+
+		if(requestDto.getIsAnonymous()){
+			CheeringMessage cheeringMessage = CheeringMessage.createAnonymousCheeringMessage(requestDto, findPet);
+			cheeringMessageRepository.save(cheeringMessage);
+			return;
+		}
+
+		CheeringMessage cheeringMessage = CheeringMessage.createNoAnonymousCheeringMessage(requestDto, findPet, pet);
 		cheeringMessageRepository.save(cheeringMessage);
 	}
 }

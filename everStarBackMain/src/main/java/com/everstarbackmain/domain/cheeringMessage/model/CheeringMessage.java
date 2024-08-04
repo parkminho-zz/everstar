@@ -38,20 +38,38 @@ public class CheeringMessage extends BaseTimeEntity {
 	@Column(nullable = false)
 	private Boolean isAnonymous;
 
-	@Column
+	@Column(nullable = false)
 	private String content;
 
+	@Column
+	private String behindPetName;
+
+	@Column
+	private String behindPetRelationship;
+
 	@Builder
-	private CheeringMessage(Pet pet, Boolean isAnonymous, String content) {
+	private CheeringMessage(Pet pet, Boolean isAnonymous, String content, String behindPetName, String behindPetRelationship) {
 		this.pet = pet;
 		this.isDeleted = false;
 		this.isAnonymous = isAnonymous;
 		this.content = content;
+		this.behindPetName = behindPetName;
+		this.behindPetRelationship = behindPetRelationship;
 	}
 
-	public static CheeringMessage createCheeringMessage(CreateCheeringMessageRequestDto requestDto, Pet pet) {
+	public static CheeringMessage createNoAnonymousCheeringMessage(CreateCheeringMessageRequestDto requestDto, Pet findPet, Pet pet) {
 		return CheeringMessage.builder()
-			.pet(pet)
+			.pet(findPet)
+			.isAnonymous(requestDto.getIsAnonymous())
+			.content(requestDto.getContent())
+			.behindPetName(pet.getName())
+			.behindPetRelationship(pet.getRelationship())
+			.build();
+	}
+
+	public static CheeringMessage createAnonymousCheeringMessage(CreateCheeringMessageRequestDto requestDto, Pet findPet) {
+		return CheeringMessage.builder()
+			.pet(findPet)
 			.isAnonymous(requestDto.getIsAnonymous())
 			.content(requestDto.getContent())
 			.build();

@@ -7,4 +7,5 @@ import com.everstarbackmain.domain.cheeringMessage.model.CheeringMessage;
 
 @Repository
 public interface CheeringMessageRepository extends JpaRepository<CheeringMessage, Long> {
+
 }

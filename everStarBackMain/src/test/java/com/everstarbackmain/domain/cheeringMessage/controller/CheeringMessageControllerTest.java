@@ -78,7 +78,7 @@ public class CheeringMessageControllerTest {
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
 
-		requestDto = new CreateCheeringMessageRequestDto("content", false);
+		requestDto = new CreateCheeringMessageRequestDto("content", true);
 	}
 
 	@Test
@@ -87,11 +87,11 @@ public class CheeringMessageControllerTest {
 	public void 응원_메시지_성공_테스트() throws Exception {
 		//given
 		Map<String, Object> response = new HashMap<>();
-		BDDMockito.doNothing().when(cheeringMessageService).createCheeringMessage(authentication, 1L, requestDto);
+		BDDMockito.doNothing().when(cheeringMessageService).createCheeringMessage(authentication, 1L, 1L, requestDto);
 		String requestBody = objectMapper.writeValueAsString(requestDto);
 		response.put("data", SuccessCheeringMessageMessage.SUCCESS_CREATE_CHEERINGMESSAGE);
 
-		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/api/pets/1/cheeringMessages")
+		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/api/pets/1/find/1/cheeringMessages")
 			.with(SecurityMockMvcRequestPostProcessors.csrf())
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(requestBody)

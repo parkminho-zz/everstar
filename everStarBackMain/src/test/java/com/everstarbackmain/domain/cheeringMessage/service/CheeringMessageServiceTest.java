@@ -61,7 +61,7 @@ public class CheeringMessageServiceTest {
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
 
-		requestDto = new CreateCheeringMessageRequestDto("content", false);
+		requestDto = new CreateCheeringMessageRequestDto("content", true);
 	}
 
 	@Test
@@ -70,11 +70,12 @@ public class CheeringMessageServiceTest {
 		//given
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
+		BDDMockito.given(petRepository.findByIdAndUserAndIsDeleted(1L, user, false)).willReturn(Optional.of(pet));
 		BDDMockito.given(petRepository.findByIdAndIsDeleted(1L, false)).willReturn(Optional.of(pet));
 
 		//then
 		Assertions.assertThatNoException()
-			.isThrownBy(() -> cheeringMessageService.createCheeringMessage(authentication, 1L, requestDto));
+			.isThrownBy(() -> cheeringMessageService.createCheeringMessage(authentication, 1L, 1L, requestDto));
 	}
 
 	@Test
@@ -83,7 +84,8 @@ public class CheeringMessageServiceTest {
 		BDDMockito.given(authentication.getPrincipal()).willReturn(principalDetails);
 		BDDMockito.given(principalDetails.getUser()).willReturn(user);
 
-		Assertions.assertThatThrownBy(() -> cheeringMessageService.createCheeringMessage(authentication, 1L, requestDto))
+		Assertions.assertThatThrownBy(
+				() -> cheeringMessageService.createCheeringMessage(authentication, 1L, 1L, requestDto))
 			.isInstanceOf(ExceptionResponse.class)
 			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_FOUND_PET_EXCEPTION);
 	}

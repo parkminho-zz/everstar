@@ -24,6 +24,10 @@ public class QCheeringMessage extends EntityPathBase<CheeringMessage> {
 
     public final com.everstarbackmain.global.entity.QBaseTimeEntity _super = new com.everstarbackmain.global.entity.QBaseTimeEntity(this);
 
+    public final StringPath behindPetName = createString("behindPetName");
+
+    public final StringPath behindPetRelationship = createString("behindPetRelationship");
+
     public final StringPath content = createString("content");
 
     //inherited
