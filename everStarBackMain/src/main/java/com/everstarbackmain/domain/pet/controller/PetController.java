@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.everstarbackmain.domain.pet.message.SuccessPetMessage;
-import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
-import com.everstarbackmain.domain.pet.requestDto.UpdatePetIntroductionDto;
-import com.everstarbackmain.domain.pet.responseDto.EnrolledPetsResponseDto;
-import com.everstarbackmain.domain.pet.responseDto.MyPagePetInfoResponseDto;
+import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
+import com.everstarbackmain.domain.pet.requestdto.UpdatePetIntroductionDto;
+import com.everstarbackmain.domain.pet.responsedto.EnrolledPetsResponseDto;
+import com.everstarbackmain.domain.pet.responsedto.MyPagePetInfoResponseDto;
 import com.everstarbackmain.domain.pet.service.PetService;
 import com.everstarbackmain.global.util.HttpResponseUtil;
 

@@ -26,7 +26,7 @@ import com.everstarbackmain.domain.memorialBook.requestdto.MemorialBookTestResul
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
-import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
+import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;

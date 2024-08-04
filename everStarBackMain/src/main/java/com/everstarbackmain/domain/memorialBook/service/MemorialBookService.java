@@ -21,9 +21,8 @@ import com.everstarbackmain.domain.memorialBook.responsedto.MemorialBookDetailRe
 import com.everstarbackmain.domain.memorialBook.responsedto.MemorialBookInfoResponseDto;
 import com.everstarbackmain.domain.memorialBook.util.PsychologicalTestResultMapper;
 import com.everstarbackmain.domain.pet.model.Pet;
-import com.everstarbackmain.domain.pet.repository.PetPersonalityRepository;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
-import com.everstarbackmain.domain.pet.responseDto.PetDetailResponseDto;
+import com.everstarbackmain.domain.pet.responsedto.PetDetailResponseDto;
 import com.everstarbackmain.domain.quest.model.Quest;
 import com.everstarbackmain.domain.quest.repository.QuestRepository;
 import com.everstarbackmain.domain.quest.responseDto.QuestDetailResponseDto;

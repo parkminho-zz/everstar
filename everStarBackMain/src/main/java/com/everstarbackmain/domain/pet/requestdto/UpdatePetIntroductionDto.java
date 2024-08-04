@@ -1,4 +1,4 @@
-package com.everstarbackmain.domain.pet.requestDto;
+package com.everstarbackmain.domain.pet.requestdto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;

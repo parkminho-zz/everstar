@@ -25,14 +25,13 @@ import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.model.PetPersonality;
 import com.everstarbackmain.domain.pet.repository.PetPersonalityRepository;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
-import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
-import com.everstarbackmain.domain.pet.responseDto.MyPagePetInfoResponseDto;
+import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
+import com.everstarbackmain.domain.pet.responsedto.MyPagePetInfoResponseDto;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
-
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -75,7 +74,6 @@ public class MyPagePetInfoTest {
 			.profileImageUrl("profileImageUrl")
 			.build();
 		ReflectionTestUtils.setField(pet, "id", 1L);
-
 
 		petPersonalities = List.of(
 			mockPersonality("Friendly"),
@@ -121,8 +119,9 @@ public class MyPagePetInfoTest {
 	@DisplayName("마이페이지에서 펫 정보 조회 실패 - 유저가 소유하지 않은 펫")
 	public void 마이페이지_펫정보_조회실패_테스트_다른유저_펫() {
 		// given
-		User anotherUser = User.signUpUser(new JoinRequestDto("anotheremail", "anotherpassword", "anothername", "010-2222-2222", LocalDate.now(),
-			Gender.FEMALE, LocalTime.now(), Role.ROLE_USER));
+		User anotherUser = User.signUpUser(
+			new JoinRequestDto("anotheremail", "anotherpassword", "anothername", "010-2222-2222", LocalDate.now(),
+				Gender.FEMALE, LocalTime.now(), Role.ROLE_USER));
 
 		Pet anotherPet = Pet.builder()
 			.user(anotherUser)
@@ -141,7 +140,7 @@ public class MyPagePetInfoTest {
 		given(petRepository.findByIdAndIsDeleted(2L, false)).willReturn(java.util.Optional.of(anotherPet));
 
 		// when
-		Throwable thrown = catchThrowable(() -> petService.getMyPetInfo(authentication,1L ));
+		Throwable thrown = catchThrowable(() -> petService.getMyPetInfo(authentication, 1L));
 
 		// then
 		assertThat(thrown).isNotNull();  // 예외가 발생했는지 확인

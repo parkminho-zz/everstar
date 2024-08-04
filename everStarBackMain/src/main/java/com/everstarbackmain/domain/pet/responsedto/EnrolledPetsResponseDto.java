@@ -1,4 +1,4 @@
-package com.everstarbackmain.domain.pet.responseDto;
+package com.everstarbackmain.domain.pet.responsedto;
 
 import com.everstarbackmain.domain.pet.model.Pet;
 

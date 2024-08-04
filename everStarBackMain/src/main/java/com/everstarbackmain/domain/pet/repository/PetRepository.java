@@ -18,5 +18,6 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
 	Optional<Pet> findByIdAndUserAndIsDeleted(Long id, User user, boolean isDeleted);
 
 	boolean existsByIdAndUserAndIsDeleted(Long id, User user, boolean isDeleted);
+
 	List<Pet> findAllByUserIdAndIsDeleted(Long id, boolean isDeleted);
 }

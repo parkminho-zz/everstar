@@ -32,7 +32,7 @@ import com.everstarbackmain.domain.memorialBook.responsedto.MemorialBookInfoResp
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
-import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
+import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
 import com.everstarbackmain.domain.quest.model.Quest;
 import com.everstarbackmain.domain.quest.model.QuestType;
 import com.everstarbackmain.domain.quest.repository.QuestRepository;

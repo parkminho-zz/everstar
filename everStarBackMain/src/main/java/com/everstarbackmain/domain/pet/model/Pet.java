@@ -3,7 +3,7 @@ package com.everstarbackmain.domain.pet.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
+import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
 

@@ -1,4 +1,4 @@
-package com.everstarbackmain.domain.pet.responseDto;
+package com.everstarbackmain.domain.pet.responsedto;
 
 import java.time.LocalDate;
 import java.util.List;
