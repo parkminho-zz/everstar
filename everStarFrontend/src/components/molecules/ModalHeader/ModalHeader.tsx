@@ -25,30 +25,14 @@ export const ModalHeader: React.FC<ModalHeaderProps> = ({
   return (
     <header className='relative flex items-center justify-center w-full py-4'>
       {showLeftIcon && (
-        <div
-          className='absolute cursor-pointer left-4'
-          onClick={onLeftIconClick}
-        >
-          <ArrowIcon
-            size={iconSize}
-            direction='left'
-            color={iconColor}
-            hover={iconHover}
-          />
+        <div className='absolute cursor-pointer left-4' onClick={onLeftIconClick}>
+          <ArrowIcon size={iconSize} direction='left' color={iconColor} hover={iconHover} />
         </div>
       )}
       <h1 className='kor-h-h2'>{text}</h1>
       {showRightIcon && (
-        <div
-          className='absolute cursor-pointer right-4'
-          onClick={onRightIconClick}
-        >
-          <ArrowIcon
-            size={iconSize}
-            direction='right'
-            color={iconColor}
-            hover={iconHover}
-          />
+        <div className='absolute cursor-pointer right-4' onClick={onRightIconClick}>
+          <ArrowIcon size={iconSize} direction='right' color={iconColor} hover={iconHover} />
         </div>
       )}
     </header>

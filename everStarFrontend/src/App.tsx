@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
+import { LoginPage } from 'pages/LoginPage';
 import { MyPage } from 'pages/MyPage';
 import { EverstarPage } from 'pages/EverstarPage';
 import { TutorialPage } from 'pages/TutorialPage';
@@ -11,9 +11,10 @@ import { SignUpPage } from 'pages/SignUpPage';
 function App() {
   return (
     <Router>
-      <div className='container'>
+      <div className='flex flex-col items-center justify-center w-screen h-screen overflow-hidden'>
         <Routes>
-          <Route path='/' element={<SplashPage />} />
+          <Route path='/' element={<LoginPage />} />
+          <Route path='/splash' element={<SplashPage />} />
           <Route path='/signup/*' element={<SignUpPage />} />
           <Route path='/profile/*' element={<ProfilePage />}></Route>
           <Route path='/tutorial' element={<TutorialPage />}></Route>
