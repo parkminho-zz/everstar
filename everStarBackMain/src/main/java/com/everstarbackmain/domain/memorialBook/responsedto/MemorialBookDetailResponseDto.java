@@ -1,10 +1,10 @@
-package com.everstarbackmain.domain.memorialBook.responseDto;
+package com.everstarbackmain.domain.memorialBook.responsedto;
 
 import java.util.List;
 
 import com.everstarbackmain.domain.aiAnswer.responseDto.AiAnswerDetailResponseDto;
 import com.everstarbackmain.domain.diary.responseDto.DiaryDetailResponseDto;
-import com.everstarbackmain.domain.pet.responseDto.PetDetailResponseDto;
+import com.everstarbackmain.domain.pet.responsedto.PetDetailResponseDto;
 import com.everstarbackmain.domain.quest.responseDto.QuestDetailResponseDto;
 import com.everstarbackmain.domain.questAnswer.responseDto.QuestAnswerDetailResponseDto;
 import com.everstarbackmain.domain.sentimentAnalysis.responseDto.SentimentAnalysisDetailResponseDto;

@@ -13,9 +13,10 @@ import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetPersonality;
 import com.everstarbackmain.domain.pet.repository.PetPersonalityRepository;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
-import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
-import com.everstarbackmain.domain.pet.requestDto.UpdatePetIntroductionDto;
-import com.everstarbackmain.domain.pet.responseDto.EnrolledPetsResponseDto;
+import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
+import com.everstarbackmain.domain.pet.requestdto.UpdatePetIntroductionDto;
+import com.everstarbackmain.domain.pet.responsedto.EnrolledPetsResponseDto;
+import com.everstarbackmain.domain.pet.responsedto.MyPagePetInfoResponseDto;
 import com.everstarbackmain.domain.petterLetter.util.PetLetterScheduler;
 import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;
 import com.everstarbackmain.domain.sentimentAnalysis.repository.SentimentAnalysisRepository;
@@ -61,10 +62,14 @@ public class PetService {
 	}
 
 	@Transactional
-	public void updatePetIntroduction(Long petId, UpdatePetIntroductionDto requestDto) {
+	public void updatePetIntroduction(Authentication authentication, Long petId, UpdatePetIntroductionDto requestDto) {
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 		String newIntroduction = requestDto.getIntroduction();
-		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
+		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+		log.info("main server - Logged-in User ID: {}", user.getId());
+		log.info("main server - Pet Owner: {}", pet.getUser().getId());
+		log.info("main server - Pet ID: {}", petId);
 
 		if (newIntroduction != null && !newIntroduction.isEmpty()) {
 			pet.updatePetIntroduction(newIntroduction);
@@ -91,4 +96,18 @@ public class PetService {
 			.collect(Collectors.toList());
 	}
 
+	public MyPagePetInfoResponseDto getMyPetInfo(Authentication authentication, Long petId) {
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
+		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+		log.info("main server - Logged-in User ID: {}", user.getId());
+		log.info("main server - Pet Owner: {}", pet.getUser().getId());
+		log.info("main server - Pet ID: {}", petId);
+
+		List<String> petPersonalities = petPersonalityRepository.findAllByPetIdAndIsDeleted(petId, false).stream()
+			.map(PetPersonality::getPersonalityValue)
+			.collect(Collectors.toList());
+
+		return MyPagePetInfoResponseDto.createMyPagePetInfoDto(pet, petPersonalities);
+	}
 }

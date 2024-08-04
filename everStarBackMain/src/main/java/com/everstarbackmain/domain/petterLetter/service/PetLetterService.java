@@ -7,13 +7,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.everstarbackmain.domain.petterLetter.responseDto.getLetterResponseDto.GetLetterResponseDto;
+import com.everstarbackmain.domain.petterLetter.responsedto.getLetterResponseDto.GetLetterResponseDto;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;
 import com.everstarbackmain.domain.petterLetter.repository.PetLetterRepository;
-import com.everstarbackmain.domain.petterLetter.responseDto.PetLetterResponseDto;
+import com.everstarbackmain.domain.petterLetter.responsedto.PetLetterResponseDto;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.userLetter.model.UserLetter;
 import com.everstarbackmain.global.exception.CustomException;

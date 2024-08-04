@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
-import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
+import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
 import com.everstarbackmain.domain.petterLetter.evnet.sendPetLetterEvent.SendPetLetterEvent;
 import com.everstarbackmain.domain.petterLetter.evnet.sendPetLetterEvent.SendPetLetterEventListener;
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;

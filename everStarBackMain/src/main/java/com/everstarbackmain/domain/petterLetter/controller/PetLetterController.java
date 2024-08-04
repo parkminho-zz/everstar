@@ -8,17 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.everstarbackmain.domain.petterLetter.responseDto.PetLetterResponseDto;
-import com.everstarbackmain.domain.petterLetter.responseDto.getLetterResponseDto.GetLetterResponseDto;
+import com.everstarbackmain.domain.petterLetter.responsedto.PetLetterResponseDto;
+import com.everstarbackmain.domain.petterLetter.responsedto.getLetterResponseDto.GetLetterResponseDto;
 import com.everstarbackmain.domain.petterLetter.service.PetLetterService;
-import com.everstarbackmain.domain.userLetter.requestDto.WriteLetterRequestDto;
 import com.everstarbackmain.global.util.HttpResponseUtil;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,4 +1,4 @@
-package com.everstarbackmain.domain.pet.responseDto;
+package com.everstarbackmain.domain.pet.responsedto;
 
 import com.everstarbackmain.domain.pet.model.Pet;
 
@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

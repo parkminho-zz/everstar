@@ -18,7 +18,7 @@ import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.model.PetGender;
-import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
+import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
 import com.everstarbackmain.domain.petterLetter.repository.PetLetterRepository;
 import com.everstarbackmain.domain.petterLetter.service.PetLetterService;
 import com.everstarbackmain.domain.user.model.Gender;

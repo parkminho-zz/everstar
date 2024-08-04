@@ -3,7 +3,6 @@ package com.everstarbackmain.domain.diary.service;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -30,7 +29,7 @@ import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 import com.everstarbackmain.domain.memorialBook.repository.MemorialBookRepository;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
-import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
+import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;

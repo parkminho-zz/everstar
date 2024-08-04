@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.everstarbackmain.domain.pet.message.SuccessPetMessage;
-import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
-import com.everstarbackmain.domain.pet.requestDto.UpdatePetIntroductionDto;
-import com.everstarbackmain.domain.pet.responseDto.EnrolledPetsResponseDto;
+import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
+import com.everstarbackmain.domain.pet.requestdto.UpdatePetIntroductionDto;
+import com.everstarbackmain.domain.pet.responsedto.EnrolledPetsResponseDto;
+import com.everstarbackmain.domain.pet.responsedto.MyPagePetInfoResponseDto;
 import com.everstarbackmain.domain.pet.service.PetService;
 import com.everstarbackmain.global.util.HttpResponseUtil;
 
@@ -45,9 +46,9 @@ public class PetController {
 	}
 
 	@PutMapping("/{pet-id}")
-	public ResponseEntity<Map<String, Object>> updatePetIntroduction(
+	public ResponseEntity<Map<String, Object>> updatePetIntroduction(Authentication authentication,
 		@PathVariable("pet-id") Long petId, @RequestBody @Valid UpdatePetIntroductionDto requestDto) {
-		petService.updatePetIntroduction(petId, requestDto);
+		petService.updatePetIntroduction(authentication, petId, requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessPetMessage.SUCCESS_UPDATE_PET_INTRODUCTION);
 
@@ -58,10 +59,21 @@ public class PetController {
 
 	@GetMapping
 	public ResponseEntity<Map<String, Object>> getAllUserPets(Authentication authentication) {
-		List<EnrolledPetsResponseDto> responseDto = petService.getAllUserPets(authentication);
-		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
+		List<EnrolledPetsResponseDto> responseDtos = petService.getAllUserPets(authentication);
+		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDtos);
 		log.info("main server - request : user {},", authentication);
-		log.info("main server - response : 유저 반려동물 목록{}", responseDto);
+		log.info("main server - response : 유저 반려동물 목록{}", responseDtos);
 		return response;
 	}
+
+	@GetMapping("/{pet-id}")
+	public ResponseEntity<Map<String, Object>> getMyPetInfo(Authentication authentication,
+		@PathVariable("pet-id") Long petId) {
+		MyPagePetInfoResponseDto responseDto = petService.getMyPetInfo(authentication, petId);
+		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
+		log.info("main server - request : user {},", authentication);
+		log.info("main server - response : 유저 마이페이지 동물정보{}", responseDto);
+		return response;
+	}
+
 }

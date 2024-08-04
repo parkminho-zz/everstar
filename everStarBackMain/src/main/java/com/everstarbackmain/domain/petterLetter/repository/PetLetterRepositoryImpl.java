@@ -5,8 +5,9 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+
 import com.everstarbackmain.domain.petterLetter.model.QPetLetter;
-import com.everstarbackmain.domain.petterLetter.responseDto.PetLetterResponseDto;
+import com.everstarbackmain.domain.petterLetter.responsedto.PetLetterResponseDto;
 import com.everstarbackmain.domain.user.model.User;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;

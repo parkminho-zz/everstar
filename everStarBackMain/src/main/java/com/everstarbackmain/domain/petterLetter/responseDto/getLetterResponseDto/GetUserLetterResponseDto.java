@@ -1,4 +1,4 @@
-package com.everstarbackmain.domain.petterLetter.responseDto.getLetterResponseDto;
+package com.everstarbackmain.domain.petterLetter.responsedto.getLetterResponseDto;
 
 import java.time.LocalDateTime;
 

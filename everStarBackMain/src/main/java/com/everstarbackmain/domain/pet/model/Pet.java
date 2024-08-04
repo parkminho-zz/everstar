@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Random;
 
-import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
+import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
 
@@ -32,45 +32,44 @@ public class Pet extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@Column(name = "name", nullable = false)
+	@Column(nullable = false)
 	private String name;
 
-	@Column(name = "age", nullable = false)
+	@Column(nullable = false)
 	private Integer age;
 
-	@Column(name = "memorial_date", nullable = false)
+	@Column(nullable = false)
 	private LocalDate memorialDate;
 
-	@Column(name = "species", nullable = false)
+	@Column(nullable = false)
 	private String species;
 
-	@Column(name = "gender", nullable = false)
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private PetGender gender;
 
-	@Column(name = "relationship", nullable = false)
+	@Column(nullable = false)
 	private String relationship;
 
-	@Column(name = "profile_image_url", nullable = false)
+	@Column(nullable = false)
 	private String profileImageUrl;
 
-	@Column(name = "introduction", nullable = false)
+	@Column(nullable = false)
 	private String introduction;
 
-	@Column(name = "quest_index", nullable = false)
+	@Column(nullable = false)
 	private Integer questIndex;
 
-	@Column(name = "is_deleted", nullable = false)
+	@Column(nullable = false)
 	private Boolean isDeleted;
 
-	@Column(name = "last_access_time", nullable = false)
+	@Column(nullable = false)
 	private LocalDateTime lastAccessTime;
 
 	@Column(nullable = false)
