@@ -30,7 +30,7 @@ public class CheeringMessageService {
 	public void createCheeringMessage(Authentication authentication, Long petId,
 		CreateCheeringMessageRequestDto requestDto) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
-		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false).orElseThrow(() -> new ExceptionResponse(
+		Pet pet = petRepository.findByIdAndIsDeleted(petId, false).orElseThrow(() -> new ExceptionResponse(
 			CustomException.NOT_FOUND_PET_EXCEPTION));
 
 		CheeringMessage cheeringMessage = CheeringMessage.createCheeringMessage(requestDto, pet);

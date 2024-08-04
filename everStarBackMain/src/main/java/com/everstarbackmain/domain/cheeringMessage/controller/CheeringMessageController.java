@@ -38,4 +38,5 @@ public class CheeringMessageController {
 
 		return response;
 	}
+
 }
