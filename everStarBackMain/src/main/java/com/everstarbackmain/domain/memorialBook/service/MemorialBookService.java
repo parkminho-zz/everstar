@@ -54,7 +54,6 @@ public class MemorialBookService {
 	private final QuestAnswerRepository questAnswerRepository;
 	private final AiAnswerRepository aiAnswerRepository;
 	private final DiaryRepository diaryRepository;
-	private final PetPersonalityRepository petPersonalityRepository;
 
 	@Transactional
 	public void changeOpenStatus(Long memorialBookId) {
@@ -129,8 +128,7 @@ public class MemorialBookService {
 		List<QuestAnswer> questAnswers = questAnswerRepository.findByPetIdAndIsDeleted(petId, false);
 		List<AiAnswer> aiAnswers = aiAnswerRepository.findByPetId(petId);
 		List<Diary> diaries = diaryRepository.findByMemorialBookIdAndIsDeleted(memorialBookId, false);
-		// List<PetPersonality> petPersonalities = petPersonalityRepository.findByIdAndIsDeleted();
-		// List<String> petPersonalities
+
 
 		return convertToMemorialBookDetailDto(memorialBook, pet, sentimentAnalysis, quests, questAnswers, aiAnswers, diaries);
 	}

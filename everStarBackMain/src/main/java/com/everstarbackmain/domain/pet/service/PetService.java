@@ -102,7 +102,6 @@ public class PetService {
 			.collect(Collectors.toList());
 	}
 
-	// 마이페이지 나의 펫 정보 조회
 	public MyPagePetInfoResponseDto getMyPetInfo(Authentication authentication, Long petId) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
@@ -121,7 +120,6 @@ public class PetService {
 			.collect(Collectors.toList());
 
 		return MyPagePetInfoResponseDto.createMyPagePetInfoDto(pet, petPersonalities);
-
 	}
 
 }
