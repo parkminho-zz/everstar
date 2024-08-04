@@ -62,7 +62,7 @@ public class UserLetterService {
 
 		UserLetter userLetter = writeUserLetter(pet, requestDto);
 		userLetterRepository.save(userLetter);
-		petLetterScheduler.schedulePetLetter(userLetter);
+		petLetter.fetchReplyLetter(userLetter);
 	}
 
 	private UserLetter writeUserLetter(Pet pet, WriteLetterRequestDto requestDto) {

@@ -23,13 +23,13 @@ public class GetLetterResponseDto {
 	}
 
 	public static GetLetterResponseDto createGetLetterResponseDto(PetLetter petLetter) {
-		if(petLetter.getSendType().equals(SendType.USER)){
-			GetUserLetterResponseDto userLetterResponseDto = GetUserLetterResponseDto.createUserLetterResponseDto(
-				petLetter);
+		if(petLetter.getUserLetter() == null){
 			GetPetLetterResponseDto petLetterResponseDto = GetPetLetterResponseDto.createGetPetLetterResponseDto(petLetter);
-			return new GetLetterResponseDto(userLetterResponseDto, petLetterResponseDto);
+			return new GetLetterResponseDto(petLetterResponseDto);
 		}
+		GetUserLetterResponseDto userLetterResponseDto = GetUserLetterResponseDto.createUserLetterResponseDto(
+			petLetter);
 		GetPetLetterResponseDto petLetterResponseDto = GetPetLetterResponseDto.createGetPetLetterResponseDto(petLetter);
-		return new GetLetterResponseDto(petLetterResponseDto);
+		return new GetLetterResponseDto(userLetterResponseDto, petLetterResponseDto);
 	}
 }
