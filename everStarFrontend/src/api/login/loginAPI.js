@@ -1,5 +1,5 @@
-import axios from "axios";
-import BASE_URL from "../Apiconfig";
+import axios from 'axios';
+import BASE_URL from '../ApiConfig';
 
 // 로그인 함수 정의
 const login = async (id, password) => {
@@ -10,11 +10,11 @@ const login = async (id, password) => {
     const jwt = res.headers.authorization;
 
     if (jwt) {
-      const ACCESS_TOKEN = "ACCESS_TOKEN";
+      const ACCESS_TOKEN = 'ACCESS_TOKEN';
       localStorage.setItem(ACCESS_TOKEN, jwt);
     }
   } catch (error) {
-    alert("로그인 실패");
+    alert('로그인 실패');
     console.log(error);
   }
 };
