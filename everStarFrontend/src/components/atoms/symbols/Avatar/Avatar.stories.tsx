@@ -7,7 +7,10 @@ const meta: Meta<typeof Avatar> = {
   tags: ['autodocs'],
   argTypes: {
     size: {
-      control: { type: 'radio', options: ['small', 'medium', 'large', 'text', 'square'] },
+      control: {
+        type: 'radio',
+        options: ['small', 'medium', 'large', 'text', 'square'],
+      },
     },
     name: {
       control: { type: 'text' },
@@ -15,10 +18,14 @@ const meta: Meta<typeof Avatar> = {
     src: {
       control: { type: 'text' },
     },
+    onClick: {
+      action: 'onClick', // 클릭 액션 추가
+    },
   },
 };
 
 export default meta;
+
 type Story = StoryObj<typeof Avatar>;
 
 export const Default: Story = {

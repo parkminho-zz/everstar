@@ -1,6 +1,5 @@
 import { fn } from '@storybook/test';
 import { Search } from './Search';
-
 export const ActionsData = {
   onArchiveTask: fn(),
   onPinTask: fn(),
@@ -15,32 +14,48 @@ export default {
   args: {
     ...ActionsData,
   },
+  argTypes: {
+    initialState: {
+      control: 'radio',
+      options: ['disable', 'focus', 'default'],
+    },
+    className: {
+      control: 'text',
+    },
+    placeholderButtonTextIcon: {
+      control: false,
+    },
+    options: {
+      control: 'array',
+    },
+  },
 };
 
 export const Default = {
   args: {
-    task: {
-      id: '8',
-      title: 'Search',
-      state: 'TASK_INBOX',
-    },
+    initialState: 'default',
+    options: ['Option 1', 'Option 2', 'Option 3'],
   },
 };
 
-export const Pinned = {
+export const Focus = {
   args: {
-    task: {
-      ...Default.args.task,
-      state: 'TASK_PINNED',
-    },
+    initialState: 'focus',
+    options: ['Option 1', 'Option 2', 'Option 3'],
   },
 };
 
-export const Archived = {
+export const Disable = {
   args: {
-    task: {
-      ...Default.args.task,
-      state: 'TASK_ARCHIVED',
-    },
+    initialState: 'disable',
+    options: ['Option 1', 'Option 2', 'Option 3'],
+  },
+};
+
+export const WithCustomClass = {
+  args: {
+    initialState: 'default',
+    className: 'custom-class',
+    options: ['Option 1', 'Option 2', 'Option 3'],
   },
 };

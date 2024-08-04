@@ -10,7 +10,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({
   onOptionSelect,
 }) => {
   return (
-    <div className='absolute z-10 w-full mt-2 bg-white rounded-md shadow-lg'>
+    <div className='absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto'>
       <ul className='py-1'>
         {options.map((option, index) => (
           <li
