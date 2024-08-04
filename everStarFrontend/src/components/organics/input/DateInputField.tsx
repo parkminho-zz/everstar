@@ -62,9 +62,16 @@ export const DateInputField: React.FC<DateInputFieldProps> = ({
   }
 
   return (
-    <div className={`w-80 flex flex-col items-start gap-2 relative ${className}`}>
+    <div
+      className={`w-80 flex flex-col items-start gap-2 relative ${className}`}
+    >
       {showLabel && (
-        <Lable className="!flex-[0_0_auto]" prop={label} show={starshow} font="default" />
+        <Lable
+          className='!flex-[0_0_auto]'
+          prop={label}
+          show={starshow}
+          font='default'
+        />
       )}
       <div
         className={`flex items-center px-4 py-2 relative w-full flex-col rounded-xl gap-2 self-stretch h-14 overflow-hidden justify-center
@@ -73,17 +80,18 @@ export const DateInputField: React.FC<DateInputFieldProps> = ({
         ${inputState === 'disable' ? 'bg-[#f0f2f6]' : 'bg-white'}
         ${['error', 'focus'].includes(inputState) ? 'border-2 border-solid' : ''}`}
       >
-        <div className="w-full flex self-stretch items-center gap-1 flex-[0_0_auto] relative">
+        <div className='w-full flex self-stretch items-center gap-1 flex-[0_0_auto] relative'>
           <DatePicker
             selected={selectedDate}
             onChange={handleChange}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            dateFormat="yyyy-MM-dd"
+            dateFormat='yyyy-MM-dd'
             placeholderText={placeholder}
             className={`flex-1 ${inputState === 'disable' ? 'bg-[#f0f2f6] text-[#c3c9d3]' : 'bg-white text-black'} border-none outline-none`}
             disabled={inputState === 'disable'}
-            portalId="root-portal" // portal 속성 추가
+            portalId='root-portal'
+            popperClassName='custom-datepicker-popper' // 커스텀 클래스 추가
           />
         </div>
       </div>
