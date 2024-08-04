@@ -50,7 +50,6 @@ public class PetService {
 		createSentimentAnalysis(pet);
 	}
 
-
 	private void addPersonalities(Pet pet, CreatePetRequestDto createPetRequestDto) {
 		for (String personalityValue : createPetRequestDto.getPersonalities()) {
 			PetPersonality petPersonality = PetPersonality.createPersonality(pet, personalityValue);
@@ -58,21 +57,15 @@ public class PetService {
 		}
 	}
 
-
 	@Transactional
 	public void updatePetIntroduction(Authentication authentication, Long petId, UpdatePetIntroductionDto requestDto) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 		String newIntroduction = requestDto.getIntroduction();
-		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
+		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
-		log.info("Logged-in User ID: {}", user.getId());
-		log.info("Pet Owner: {}", pet.getUser().getId());
-		log.info("Pet ID: {}", petId);
-
-		if (!user.getId().equals(pet.getUser().getId())) {
-			log.warn("Access Denied: User ID {} does not match Pet Owner User ID {}", user.getId(), pet.getUser().getId());
-			throw new ExceptionResponse(CustomException.ACCESS_DENIED_EXCEPTION);
-		}
+		log.info("main server - Logged-in User ID: {}", user.getId());
+		log.info("main server - Pet Owner: {}", pet.getUser().getId());
+		log.info("main server - Pet ID: {}", petId);
 
 		if (newIntroduction != null && !newIntroduction.isEmpty()) {
 			pet.updatePetIntroduction(newIntroduction);
@@ -81,18 +74,15 @@ public class PetService {
 		pet.updatePetIntroduction(pet.getName() + " 의 사랑스런 소개글을 작성 해주세요");
 	}
 
-
 	private void createMemorialBook(Pet pet) {
 		MemorialBook memorialBook = MemorialBook.createMemorialBook(pet);
 		memorialBookRepository.save(memorialBook);
 	}
 
-
 	private void createSentimentAnalysis(Pet pet) {
 		SentimentAnalysis sentimentAnalysis = SentimentAnalysis.createSentimentAnalysis(pet);
 		sentimentAnalysisRepository.save(sentimentAnalysis);
 	}
-
 
 	public List<EnrolledPetsResponseDto> getAllUserPets(Authentication authentication) {
 		Long userId = ((PrincipalDetails)authentication.getPrincipal()).getUser().getId();
@@ -104,16 +94,11 @@ public class PetService {
 
 	public MyPagePetInfoResponseDto getMyPetInfo(Authentication authentication, Long petId) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
-		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
+		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
-		log.info("Logged-in User ID: {}", user.getId());
-		log.info("Pet Owner: {}", pet.getUser().getId());
-		log.info("Pet ID: {}", petId);
-
-		if (!user.getId().equals(pet.getUser().getId())) {
-			log.warn("Access Denied: User ID {} does not match Pet Owner User ID {}", user.getId(), pet.getUser().getId());
-			throw new ExceptionResponse(CustomException.ACCESS_DENIED_EXCEPTION);
-		}
+		log.info("main server - Logged-in User ID: {}", user.getId());
+		log.info("main server - Pet Owner: {}", pet.getUser().getId());
+		log.info("main server - Pet ID: {}", petId);
 
 		List<String> petPersonalities = petPersonalityRepository.findAllByPetIdAndIsDeleted(petId, false).stream()
 			.map(PetPersonality::getPersonalityValue)
@@ -121,5 +106,4 @@ public class PetService {
 
 		return MyPagePetInfoResponseDto.createMyPagePetInfoDto(pet, petPersonalities);
 	}
-
 }
