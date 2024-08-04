@@ -24,6 +24,7 @@ public class CheeringMessageController {
 	@PostMapping
 	public void createCheeringMessage(Authentication authentication, @PathVariable("pet-id") Long petId, @RequestBody CreateCheeringMessageRequestDto requestDto) {
 
+
 	}
 
 }

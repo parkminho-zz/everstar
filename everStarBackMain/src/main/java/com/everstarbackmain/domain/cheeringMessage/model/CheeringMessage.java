@@ -1,5 +1,6 @@
 package com.everstarbackmain.domain.cheeringMessage.model;
 
+import com.everstarbackmain.domain.cheeringMessage.requestDto.CreateCheeringMessageRequestDto;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
 
@@ -41,10 +42,18 @@ public class CheeringMessage extends BaseTimeEntity {
 	private String content;
 
 	@Builder
-	private CheeringMessage(Pet pet, Boolean isDeleted, Boolean isAnonymous, String content) {
+	private CheeringMessage(Pet pet, Boolean isAnonymous, String content) {
 		this.pet = pet;
-		this.isDeleted = isDeleted;
+		this.isDeleted = false;
 		this.isAnonymous = isAnonymous;
 		this.content = content;
+	}
+
+	public static CheeringMessage createCheeringMessage(CreateCheeringMessageRequestDto requestDto, Pet pet) {
+		return CheeringMessage.builder()
+			.pet(pet)
+			.isAnonymous(requestDto.getIsAnonymous())
+			.content(requestDto.getContent())
+			.build();
 	}
 }
