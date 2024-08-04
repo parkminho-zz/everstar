@@ -71,6 +71,8 @@ public class PetController {
 		@PathVariable("pet-id") Long petId) {
 		MyPagePetInfoResponseDto responseDto = petService.getMyPetInfo(authentication, petId);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
+		log.info("main server - request : user {},", authentication);
+		log.info("main server - response : 유저 마이페이지 동물정보{}", responseDto);
 		return response;
 	}
 
