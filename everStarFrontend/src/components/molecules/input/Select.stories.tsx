@@ -42,6 +42,11 @@ const meta: Meta<SelectProps> = {
       description: '아이콘 표시 여부',
       defaultValue: true,
     },
+    label: {
+      control: 'text',
+      description: '레이블 텍스트',
+      defaultValue: '레이블',
+    },
   },
 };
 
@@ -58,6 +63,7 @@ export const GenderSelect: Story = {
     starshow: true,
     infoText: 'Please select your gender',
     showIcon: true,
+    label: 'Gender', // 추가된 부분
   },
 };
 
@@ -70,6 +76,7 @@ export const YearSelect: Story = {
     starshow: true,
     infoText: 'Please select your birth year',
     showIcon: true,
+    label: 'Year', // 추가된 부분
   },
 };
 
@@ -82,5 +89,6 @@ export const NoIconSelect: Story = {
     starshow: true,
     infoText: 'Select an option from the dropdown',
     showIcon: false,
+    label: 'Option', // 추가된 부분
   },
 };

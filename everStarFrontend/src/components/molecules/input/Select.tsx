@@ -29,7 +29,9 @@ export const Select: React.FC<SelectProps> = ({
   label = '레이블', // 추가된 부분
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string | number | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string | number | null>(
+    null,
+  );
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
 
@@ -62,14 +64,22 @@ export const Select: React.FC<SelectProps> = ({
   }, []);
 
   return (
-    <div className={`flex flex-col w-80 items-start relative ${className}`} ref={dropdownRef}>
-      <div className="flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
+    <div
+      className={`flex flex-col w-80 items-start relative ${className}`}
+      ref={dropdownRef}
+    >
+      <div className='flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]'>
         {showLabel && (
-          <Lable className="!flex-[0_0_auto]" prop={label} show={starshow} font="default" />
+          <Lable
+            className='!flex-[0_0_auto]'
+            prop={label}
+            show={starshow}
+            font='default'
+          />
         )}
         <div
           ref={buttonRef}
-          className="relative flex flex-row items-center self-stretch justify-between w-full gap-2 px-4 py-2 overflow-hidden h-14 rounded-xl shadow-small bg-greyscalewhite"
+          className='relative flex flex-row items-center self-stretch justify-between w-full gap-2 px-4 py-2 overflow-hidden h-14 rounded-xl shadow-small bg-greyscalewhite'
           onClick={handleToggle}
         >
           <div
@@ -80,7 +90,7 @@ export const Select: React.FC<SelectProps> = ({
             {selectedOption || title}
           </div>
           {showIcon && (
-            <div className="flex-none">
+            <div className='flex-none'>
               <ArrowIcon
                 size={24}
                 direction={isOpen ? 'up' : 'down'}
@@ -90,11 +100,14 @@ export const Select: React.FC<SelectProps> = ({
           )}
         </div>
         {isOpen && (
-          <div className="absolute z-10 w-full bg-white rounded-md shadow-lg mt-14">
-            <DropdownMenu options={options} onOptionSelect={handleOptionSelect} />
+          <div className='absolute z-10 w-full bg-white rounded-md shadow-lg top-full mt-1'>
+            <DropdownMenu
+              options={options}
+              onOptionSelect={handleOptionSelect}
+            />
           </div>
         )}
-        <InformationText className="" state="default">
+        <InformationText className='' state='default'>
           {infoText}
         </InformationText>
       </div>
@@ -104,8 +117,9 @@ export const Select: React.FC<SelectProps> = ({
 
 Select.propTypes = {
   className: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired)
-    .isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  ).isRequired,
   title: PropTypes.string.isRequired,
   showLabel: PropTypes.bool,
   starshow: PropTypes.bool,
