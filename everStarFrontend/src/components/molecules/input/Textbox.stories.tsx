@@ -1,46 +1,61 @@
-import { fn } from '@storybook/test';
+import { action } from '@storybook/addon-actions';
 import { Textbox } from './Textbox';
-
-export const ActionsData = {
-  onArchiveTask: fn(),
-  onPinTask: fn(),
-};
 
 export default {
   component: Textbox,
   title: 'Molecules/Textbox',
   tags: ['autodocs'],
-  //👇 Our exports that end in "Data" are not stories.
   excludeStories: /.*Data$/,
-  args: {
-    ...ActionsData,
-  },
 };
 
 export const Default = {
   args: {
-    task: {
-      id: '5',
-      title: 'Textbox',
-      state: 'TASK_INBOX',
-    },
+    type: 'large',
+    label: 'Default Label',
+    showInfoText: true,
+    infoText: '0/255',
+    infoTextAlign: 'left',
+    showStar: true,
+    ghostText: '고스트 텍스트',
+    onChangeText: action('onChangeText'),
   },
 };
 
-export const Pinned = {
+export const SmallTextbox = {
   args: {
-    task: {
-      ...Default.args.task,
-      state: 'TASK_PINNED',
-    },
+    type: 'small',
+    label: 'Small Label',
+    showInfoText: true,
+    infoText: '0/255',
+    infoTextAlign: 'left',
+    showStar: true,
+    ghostText: '고스트 텍스트',
+    onChangeText: action('onChangeText'),
   },
 };
 
-export const Archived = {
+export const WithoutInfoText = {
   args: {
-    task: {
-      ...Default.args.task,
-      state: 'TASK_ARCHIVED',
-    },
+    type: 'large',
+    label: 'No Info Label',
+    showInfoText: false,
+    infoText: '',
+    infoTextAlign: 'left',
+    showStar: true,
+    ghostText: '고스트 텍스트',
+    onChangeText: action('onChangeText'),
+  },
+};
+
+export const CenterAlignedInfoText = {
+  args: {
+    type: 'large',
+    label: 'Center Aligned Info',
+    showInfoText: true,
+    infoText: '0/255',
+    infoTextAlign: 'center',
+    showStar: true,
+    ghostText: '고스트 텍스트',
+    onChangeText: action('onChangeText'),
   },
 };

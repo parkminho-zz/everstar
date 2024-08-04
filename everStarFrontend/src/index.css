@@ -6,6 +6,11 @@
   .all-\[unset\] {
     all: unset;
   }
+  /* src/index.css 또는 다른 글로벌 CSS 파일에 추가 */
+
+  .custom-datepicker-popper {
+    z-index: 9999 !important;
+  }
 
   .kor-h-h1 {
     font-family: 'Noto Sans KR', Helvetica;

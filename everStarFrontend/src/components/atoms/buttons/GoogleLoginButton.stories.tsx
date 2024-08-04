@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { GoogleLoginButton } from './GoogleLoginButton';
+import { GoogleLoginButton } from 'components/atoms/buttons/GoogleLoginButton';
 
 const meta: Meta<typeof GoogleLoginButton> = {
   title: 'Atoms/Buttons/GoogleLoginButton',
@@ -7,11 +7,11 @@ const meta: Meta<typeof GoogleLoginButton> = {
   argTypes: {
     shape: {
       control: { type: 'radio', options: ['round', 'square'] },
-      description: 'The shape of the button',
+      description: '버튼의 모양',
     },
     variant: {
       control: { type: 'radio', options: ['ctn', 'na', 'SI', 'SU'] },
-      description: 'The variant of the button',
+      description: '버튼의 종류',
     },
   },
   tags: ['autodocs'],
@@ -79,7 +79,8 @@ export const SquareSU: Story = {
 
 export const Default: Story = {
   args: {
-    shape: 'square',
-    variant: 'ctn',
+    // 기본값 사용, shape와 variant를 설정하지 않음
   },
 };
+
+Default.storyName = 'Default';

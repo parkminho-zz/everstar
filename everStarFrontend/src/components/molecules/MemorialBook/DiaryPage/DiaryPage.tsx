@@ -22,7 +22,7 @@ export const DiaryPage: React.FC<DiaryPageProps> = ({
         {imageUrl && (
           <img
             src={imageUrl}
-            alt='Diary Image'
+            alt='Diary entry'
             className='w-[180px] h-[135px] object-cover'
           />
         )}

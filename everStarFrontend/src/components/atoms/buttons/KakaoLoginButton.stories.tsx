@@ -7,11 +7,11 @@ const meta: Meta<typeof KakaoLoginButton> = {
   argTypes: {
     size: {
       control: { type: 'radio', options: ['large', 'medium'] },
-      description: 'The size of the button',
+      description: '버튼의 크기',
     },
     variant: {
       control: { type: 'radio', options: ['narrow', 'wide'] },
-      description: 'The variant of the button',
+      description: '버튼의 변형',
     },
   },
   tags: ['autodocs'],
@@ -48,3 +48,11 @@ export const MediumWide: Story = {
     variant: 'wide',
   },
 };
+
+export const Default: Story = {
+  args: {
+    // 기본값 사용, size와 variant를 설정하지 않음
+  },
+};
+
+Default.storyName = 'Default';

@@ -1,5 +1,9 @@
 import React from 'react';
-import { ArrowIcon, ArrowIconProps } from 'components/atoms/icons/Arrow/ArrowIcon';
+import {
+  ArrowIcon,
+  ArrowIconProps,
+} from 'components/atoms/icons/Arrow/ArrowIcon';
+import { Lable } from 'components/atoms/texts/Lable';
 
 type PrimaryButtonTheme = 'focus' | 'hover' | 'white';
 type PrimaryButtonSize = 'large' | 'medium' | 'small';
@@ -12,12 +16,15 @@ interface IPrimaryButtonProps {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   icon?: React.ReactElement | null;
   hug?: boolean;
+  label?: string; // Optional label prop
+  showLabelStar?: boolean; // Optional prop to show or hide star in label
 }
 
 const focus = 'bg-mainprimary text-greyscalewhite hover:bg-bgorange';
 const white = 'bg-white text-mainsecondary hover:bg-bgorange';
 const hover = 'bg-bgorange text-mainsecondary hover:bg-mainprimary';
-const disabledStyle = 'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
+const disabledStyle =
+  'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
 const shadowStyle = 'shadow-[0px_4px_8px_#dbe5ec99,0px_0px_1px_1px_#dbe5ec99]';
 
 const color: Record<PrimaryButtonTheme, string> = {
@@ -44,6 +51,8 @@ export function PrimaryButton({
   disabled,
   icon = <ArrowIcon color='black' direction='right' size={24} />,
   hug = false,
+  label, // 추가된 라벨 prop
+  showLabelStar = false, // Optional prop to show or hide star in label
 }: IPrimaryButtonProps) {
   const getTextStyle = () => {
     switch (size) {
@@ -86,9 +95,25 @@ export function PrimaryButton({
   };
 
   return (
-    <button className={`${getButtonClasses()} group`} disabled={disabled} onClick={onClick}>
-      <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>{children}</span>
-      {icon && <span className='ml-auto'>{renderIcon()}</span>}
-    </button>
+    <div className='flex flex-col items-start'>
+      {label && (
+        <Lable
+          prop={label}
+          show={showLabelStar}
+          font='default'
+          className='mb-1 text-left'
+        />
+      )}
+      <button
+        className={`${getButtonClasses()} group`}
+        disabled={disabled}
+        onClick={onClick}
+      >
+        <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>
+          {children}
+        </span>
+        {icon && <span className='ml-auto'>{renderIcon()}</span>}
+      </button>
+    </div>
   );
 }

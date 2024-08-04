@@ -7,14 +7,20 @@ import webNeutralSqCtn from 'assets/symbols/web_neutral_sq_ctn.svg';
 import webNeutralSqNa from 'assets/symbols/web_neutral_sq_na.svg';
 import webNeutralSqSI from 'assets/symbols/web_neutral_sq_SI.svg';
 import webNeutralSqSU from 'assets/symbols/web_neutral_sq_SU.svg';
+import googleButton from 'assets/symbols/google-button.svg';
 
 interface GoogleLoginButtonProps {
-  shape: 'round' | 'square';
-  variant: 'ctn' | 'na' | 'SI' | 'SU';
+  shape?: 'round' | 'square';
+  variant?: 'ctn' | 'na' | 'SI' | 'SU';
+  onClick?: () => void;
 }
 
-export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ shape, variant }) => {
-  let src = '';
+export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
+  shape,
+  variant,
+  onClick,
+}) => {
+  let src = googleButton; // 기본값 설정
 
   if (shape === 'round' && variant === 'ctn') {
     src = webNeutralRdCtn;
@@ -34,7 +40,11 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ shape, var
     src = webNeutralSqSU;
   }
 
-  const style = shape === 'square' && variant === 'ctn' ? { width: '366px', height: '90px' } : {};
-
-  return <img src={src} alt={`google login button ${shape} ${variant}`} style={style} />;
+  return (
+    <img
+      src={src}
+      alt={`google login button ${shape || 'default'} ${variant || 'default'}`}
+      onClick={onClick}
+    />
+  );
 };
