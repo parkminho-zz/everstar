@@ -16,8 +16,10 @@ public enum CustomException {
 	EXPIRED_JWT_EXCEPTION(401, "ExpiredJwtException", "토큰이 만료했습니다."),
 	NOT_VALID_JWT_EXCEPTION(401, "NotValidJwtException", "토큰이 유효하지 않습니다."),
 
+	NOT_ACCESS_SEND_LETTER_ANSWER(403, "sendAnswerAlreadyExistsAtThisLetterException", " 이미 보낸 답장이 존재하는 편지입니다."),
 	NOT_MY_MEMORIAL_BOOK_EXCEPTION(403, "NotMyMemorialBookException", "사용자의 메모리얼북이 아닙니다."),
 	NOT_OPEN_MEMORIAL_BOOK_EXCEPTION(403, "NotOpenMemorialBookException", "메모리얼북이 공개되지 않았습니다."),
+	ACCESS_LETTER_SEND_TYPE(403, "AccessLetterSendTypeException", "접근할 수 없는 타입이에요."),
 	NOT_EMPTY_ROLE_EXCEPTION(403, "NotEmptyRoleException", "권한이 존재하지 않습니다."),
 	ACCESS_DENIED_EXCEPTION(403, "AccessDeniedException", "권한이 없습니다"),
 
