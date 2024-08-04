@@ -43,7 +43,6 @@ interface UserInfo {
 const sendVerificationCode = async (
   phone: string,
 ): Promise<SendCodeResponse> => {
-  // phoneNumber를 phone으로 변경
   const response = await fetch(
     'https://i11b101.p.ssafy.io/api/auth/users/send-code',
     {
@@ -51,7 +50,7 @@ const sendVerificationCode = async (
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ phone }), // phoneNumber를 phone으로 변경
+      body: JSON.stringify({ phone }),
     },
   );
 
@@ -213,9 +212,10 @@ export const SignUp: React.FC = () => {
 
   const { mutate: mutateJoinUser } = useMutation(joinUser, {
     onSuccess: (data) => {
-      console.log('User joined successfully');
+      console.log('User joined successfully', data); // 성공 로그 추가
       dispatch(SetToken(data.token)); // 토큰 저장
       dispatch(SetUser(data.user));
+      console.log('Token and user set in Redux:', data.token, data.user); // 디스패치 후 로그
       navigate('/profile');
     },
     onError: (error: unknown) => {
