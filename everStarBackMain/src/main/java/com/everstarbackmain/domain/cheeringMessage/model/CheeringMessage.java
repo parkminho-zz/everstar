@@ -32,16 +32,16 @@ public class CheeringMessage extends BaseTimeEntity {
 	private Pet pet;
 
 	@Column(nullable = false)
-	private boolean isDeleted;
+	private Boolean isDeleted;
 
 	@Column(nullable = false)
-	private boolean isAnonymous;
+	private Boolean isAnonymous;
 
 	@Column
 	private String content;
 
 	@Builder
-	private CheeringMessage(Pet pet, boolean isDeleted, boolean isAnonymous, String content) {
+	private CheeringMessage(Pet pet, Boolean isDeleted, Boolean isAnonymous, String content) {
 		this.pet = pet;
 		this.isDeleted = isDeleted;
 		this.isAnonymous = isAnonymous;
