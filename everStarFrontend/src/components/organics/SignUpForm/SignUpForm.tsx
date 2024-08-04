@@ -153,7 +153,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
             { length: 17 },
             (_, i) => `${String(i + 6).padStart(2, '0')}:00`,
           )}
-          title='질문을 받고 싶은 시간을 선택하세요'
+          title='질문 받을 시간을 선택하세요'
           showLabel={true}
           starshow={true}
           onOptionSelect={(option) =>
