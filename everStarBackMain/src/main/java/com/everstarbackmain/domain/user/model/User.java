@@ -64,7 +64,7 @@ public class User extends BaseTimeEntity {
 	private Role role;
 
 	@Column(name = "is_deleted", nullable = false)
-	private boolean isDeleted;
+	private Boolean isDeleted;
 
 	public List<Role> getMemberRoles() {
 		if (this.role != null) {

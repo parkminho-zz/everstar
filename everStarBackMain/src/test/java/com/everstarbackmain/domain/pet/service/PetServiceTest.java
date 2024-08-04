@@ -26,6 +26,7 @@ import com.everstarbackmain.domain.pet.repository.PetPersonalityRepository;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
 import com.everstarbackmain.domain.pet.responsedto.EnrolledPetsResponseDto;
+import com.everstarbackmain.domain.petterLetter.util.PetLetterScheduler;
 import com.everstarbackmain.domain.sentimentAnalysis.repository.SentimentAnalysisRepository;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
@@ -47,6 +48,9 @@ public class PetServiceTest {
 
 	@Mock
 	private SentimentAnalysisRepository sentimentAnalysisRepository;
+
+	@Mock
+	private PetLetterScheduler petLetterScheduler;
 
 	@Mock
 	private Authentication authentication;

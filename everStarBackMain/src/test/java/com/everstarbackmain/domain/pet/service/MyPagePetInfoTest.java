@@ -94,7 +94,7 @@ public class MyPagePetInfoTest {
 		// given
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
-		given(petRepository.findByIdAndIsDeleted(1L, false)).willReturn(java.util.Optional.of(pet));
+		given(petRepository.findByIdAndUserAndIsDeleted (1L, user, false)).willReturn(Optional.of(pet));
 		given(petPersonalityRepository.findAllByPetIdAndIsDeleted(1L, false)).willReturn(petPersonalities);
 
 		// when

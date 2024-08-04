@@ -2,11 +2,11 @@ package com.everstarbackmain.domain.petLetter.service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
@@ -14,26 +14,36 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
-import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.model.PetGender;
+import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
+import com.everstarbackmain.domain.petterLetter.evnet.sendPetLetterEvent.SendPetLetterEvent;
+import com.everstarbackmain.domain.petterLetter.evnet.sendPetLetterEvent.SendPetLetterEventListener;
+import com.everstarbackmain.domain.petterLetter.model.PetLetter;
 import com.everstarbackmain.domain.petterLetter.repository.PetLetterRepository;
-import com.everstarbackmain.domain.petterLetter.service.PetLetterService;
+import com.everstarbackmain.domain.petterLetter.util.PetLetterScheduler;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackmain.domain.userLetter.model.UserLetter;
+import com.everstarbackmain.domain.userLetter.repository.UserLetterRepository;
 import com.everstarbackmain.domain.userLetter.requestDto.WriteLetterRequestDto;
+import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.global.sms.SmsCertificationUtil;
 
 @ExtendWith(MockitoExtension.class)
-public class WritePetLetterAnswerServiceTest {
+public class WritePetLetterEventListenerTest {
 
 	@InjectMocks
-	private PetLetterService petLetterService;
+	private SendPetLetterEventListener sendPetLetterEventListener;
+
+	@Mock
+	private OpenAiClient openAiClient;
+
+	@Mock
+	private UserLetterRepository userLetterRepository;
 
 	@Mock
 	private PetLetterRepository petLetterRepository;
@@ -42,15 +52,18 @@ public class WritePetLetterAnswerServiceTest {
 	private PetRepository petRepository;
 
 	@Mock
-	private OpenAiClient openAiClient;
+	private SmsCertificationUtil smsCertificationUtil;
 
 	@Mock
-	private SmsCertificationUtil smsCertificationUtil;
+	private PetLetterScheduler petLetterScheduler;
 
 	private User user;
 	private Pet pet;
 	private WriteLetterRequestDto requestDto;
 	private UserLetter userLetter;
+	private PetLetter petLetter;
+	private List<UserLetter> userLetters;
+	private SendPetLetterEvent event;
 
 	@BeforeEach
 	public void setUp() {
@@ -63,14 +76,25 @@ public class WritePetLetterAnswerServiceTest {
 		requestDto = new WriteLetterRequestDto("dd", "dd");
 		userLetter = UserLetter.writeLetterHasImage(pet, requestDto);
 		userLetter = UserLetter.writeLetterHasNotImage(pet, requestDto);
+		userLetters = Collections.singletonList(userLetter);
+		petLetter = PetLetter.writePetLetterAnswer(userLetter, "content");
 	}
 
 	@Test
-	@DisplayName("애완동물_편지_답장_성공_테스트")
-	public void 애완동물_편지_답장_성공_테스트() {
-		BDDMockito.given(openAiClient.writePetLetterAnswer(userLetter)).willReturn("content");
+	public void 펫_편지_생성_테스트() {
+		// Given
+		BDDMockito.given(userLetterRepository.getUserLettersWithTimeRange(pet)).willReturn(userLetters);
+		BDDMockito.given(openAiClient.writePetLetter(userLetters, pet)).willReturn("content");
 
-		Assertions.assertThatNoException()
-			.isThrownBy(() -> petLetterService.writePetLetterAnswer(userLetter));
+		// When
+		SendPetLetterEvent event = new SendPetLetterEvent(pet);
+		sendPetLetterEventListener.writePetLetter(event);
+
+		// Then
+		BDDMockito.then(smsCertificationUtil).should().sendSms(user.getPhoneNumber(), pet.getName());
+		BDDMockito.then(petRepository).should().save(pet);
+		BDDMockito.then(petLetterScheduler).should().scheduleSendPetLetter(pet);
+
+		Assertions.assertThat(petLetter.getContent()).isEqualTo("content");
 	}
 }

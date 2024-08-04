@@ -1,6 +1,5 @@
 package com.everstarbackmain.domain.petterLetter.service;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
@@ -8,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.everstarbackmain.domain.petterLetter.responsedto.getLetterResponseDto.GetLetterResponseDto;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
@@ -38,7 +38,7 @@ public class PetLetterService {
 	@Transactional
 	@Async
 	public void writePetLetterAnswer(UserLetter userLetter) {
-		String content = openAiClient.writePetLetter(userLetter);
+		String content = openAiClient.writePetLetterAnswer(userLetter);
 		PetLetter petLetter = PetLetter.writePetLetterAnswer(userLetter, content);
 
 		petLetterRepository.save(petLetter);
@@ -46,8 +46,7 @@ public class PetLetterService {
 		sendSms(userLetter);
 	}
 
-	public Page<PetLetterResponseDto> getPetLetters(@NotNull Authentication authentication, long petId,
-		Pageable pageable) {
+	public Page<PetLetterResponseDto> getPetLetters(Authentication authentication, Long petId, Pageable pageable) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 		if (!petRepository.existsByIdAndUserAndIsDeleted(petId, user, false)) {
 			throw new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION);
@@ -56,7 +55,23 @@ public class PetLetterService {
 		return petLetterRepository.findPetLettersByPetId(user, petId, pageable);
 	}
 
-	public void sendSms(UserLetter userLetter) {
+	@Transactional
+	public GetLetterResponseDto getLetter(Authentication authentication, Long petId, Long petLetterId) {
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
+
+		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+
+		PetLetter petLetter = petLetterRepository.findPetLetterByIdAndPetAndIsDeleted(petLetterId, pet, false)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PETLETTER_EXCEPTION));
+
+		petLetter.readPetLetter();
+
+		GetLetterResponseDto getLetterResponseDto = GetLetterResponseDto.createGetLetterResponseDto(petLetter);
+		return getLetterResponseDto;
+	}
+
+	private void sendSms(UserLetter userLetter) {
 		Pet pet = userLetter.getPet();
 		User user = pet.getUser();
 		smsCertificationUtil.sendSms(user.getPhoneNumber(), pet.getName());

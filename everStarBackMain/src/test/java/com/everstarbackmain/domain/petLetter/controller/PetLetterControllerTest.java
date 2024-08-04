@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,6 +32,8 @@ import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
 import com.everstarbackmain.domain.petterLetter.controller.PetLetterController;
+import com.everstarbackmain.domain.petterLetter.model.PetLetter;
+import com.everstarbackmain.domain.petterLetter.responsedto.getLetterResponseDto.GetLetterResponseDto;
 import com.everstarbackmain.domain.petterLetter.service.PetLetterService;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
@@ -76,7 +79,9 @@ public class PetLetterControllerTest {
 	private User user;
 	private Pet pet;
 	private UserLetter userLetter;
+	private PetLetter petLetter;
 	private WriteLetterRequestDto requestDto;
+	private GetLetterResponseDto getLetterResponseDto;
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -89,6 +94,8 @@ public class PetLetterControllerTest {
 
 		requestDto = new WriteLetterRequestDto("dd", "dd");
 		userLetter = UserLetter.writeLetterHasImage(pet, requestDto);
+		petLetter = PetLetter.writePetLetterAnswer(userLetter, "content");
+		getLetterResponseDto = GetLetterResponseDto.createGetLetterResponseDto(petLetter);
 	}
 
 	@Test
@@ -107,5 +114,21 @@ public class PetLetterControllerTest {
 		);
 
 		result.andExpect(MockMvcResultMatchers.status().isOk());
+	}
+
+	@Test
+	@DisplayName(" 편지 개별 조회 성공 테스트")
+	@WithMockAuthUser(email = "test@gmail.com", role = Role.ROLE_USER)
+	public void 편지_개별_조회_성공_테스트() throws Exception {
+		Map<String, Object> response = new HashMap<>();
+		BDDMockito.given(petLetterService.getLetter(authentication, 1L, 1L)).willReturn(getLetterResponseDto);
+		BDDMockito.given(responseUtil.createResponse(getLetterResponseDto)).willReturn(ResponseEntity.ok().body(response));
+
+		ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/pets/1/letters/1")
+			.with(SecurityMockMvcRequestPostProcessors.csrf())
+			.contentType(MediaType.APPLICATION_JSON)
+		);
+
+		resultActions.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 }
