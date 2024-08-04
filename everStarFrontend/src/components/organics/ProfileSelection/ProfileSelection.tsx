@@ -5,18 +5,19 @@ import { CircleButton } from 'components/atoms/buttons/CircleButton';
 export interface AvatarData {
   src?: string;
   size: 'small' | 'medium' | 'large';
+  name?: string; // 이름을 추가하여 아바타마다 이름을 지정할 수 있게 함
 }
 
 export interface ProfileSelectionProps {
   avatars: AvatarData[];
   onAddAvatar: () => void;
-  onAvatarClick?: (index: number) => void; // 추가된 부분
+  onAvatarClick?: (index: number) => void;
 }
 
 export const ProfileSelection: React.FC<ProfileSelectionProps> = ({
   avatars,
   onAddAvatar,
-  onAvatarClick, // 추가된 부분
+  onAvatarClick,
 }) => {
   return (
     <div className='flex flex-col items-center justify-center gap-8 p-8 relative bg-white w-full max-w-[832px] mx-auto'>
@@ -27,12 +28,14 @@ export const ProfileSelection: React.FC<ProfileSelectionProps> = ({
       </div>
       <div className='flex flex-wrap items-center justify-center gap-8 relative self-stretch w-full'>
         {avatars.map((avatar, index) => (
-          <Avatar
-            key={index}
-            src={avatar.src}
-            size={avatar.size}
-            onClick={() => onAvatarClick && onAvatarClick(index)} // 클릭 핸들러 추가
-          />
+          <div key={index} className='flex flex-col items-center'>
+            <Avatar
+              src={avatar.src}
+              size={avatar.size}
+              name={avatar.name} // 이름 속성 추가
+              onClick={() => onAvatarClick && onAvatarClick(index)}
+            />
+          </div>
         ))}
         <div className='relative w-[120px] h-[120px]'>
           <div className='flex flex-col w-[120px] h-[156px] items-center justify-center gap-1 pt-0 pb-[26px] px-0 relative'>
