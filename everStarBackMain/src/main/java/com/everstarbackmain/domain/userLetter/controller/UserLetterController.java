@@ -4,14 +4,12 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.everstarbackmain.domain.petterLetter.responseDto.getLetterResponseDto.GetLetterResponseDto;
 import com.everstarbackmain.domain.questAnswer.message.SuccessQuestAnswerMessage;
 import com.everstarbackmain.domain.userLetter.requestDto.WriteLetterRequestDto;
 import com.everstarbackmain.domain.userLetter.service.UserLetterService;
@@ -31,12 +29,13 @@ public class UserLetterController {
 	private final HttpResponseUtil responseUtil;
 
 	@PostMapping
-	public ResponseEntity<Map<String, Object>> writeLetter(Authentication authentication, @PathVariable("pet-id") long petId, @RequestBody @Valid WriteLetterRequestDto requestDto) {
+	public ResponseEntity<Map<String, Object>> writeLetter(Authentication authentication,
+		@PathVariable("pet-id") long petId, @RequestBody @Valid WriteLetterRequestDto requestDto) {
 		userLetterService.writeLetter(authentication, petId, requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessQuestAnswerMessage.SUCCESS_CREATE_QUEST_ANSWER);
 
-		log.info("main server - request :  requestDto {}", requestDto );
+		log.info("main server - request :  requestDto {}", requestDto);
 		log.info("main server - response : {}", response);
 
 		return response;
@@ -44,13 +43,8 @@ public class UserLetterController {
 
 	@PostMapping("/{letter-id}")
 	public ResponseEntity<Map<String, Object>> writeLetterAnswer(Authentication authentication,
-		@PathVariable("pet-id") Long petId, @PathVariable("letter-id") Long letterId, @RequestBody ) {
+		@PathVariable("pet-id") Long petId, @PathVariable("letter-id") Long letterId, @RequestBody
+	WriteLetterRequestDto requestDto) {
 
-		GetLetterResponseDto responseDto = petLetterService.getLetter(authentication, petId, letterId);
-		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
-
-		log.info("main server - response : {}", response);
-
-		return response;
 	}
 }
