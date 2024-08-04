@@ -1,7 +1,9 @@
 import React from 'react';
+import defaultAvatarSrc from 'assets/symbols/avatar.png'; // 기본 이미지 import
 
 interface AvatarProps {
-  size: 'small' | 'medium' | 'large' | 'text';
+  size: 'small' | 'medium' | 'large' | 'text' | 'square';
+  src?: string; // 선택적 prop 추가
   name?: string;
   className?: string; // 추가된 부분
 }
@@ -12,9 +14,7 @@ const sizeMap = {
   large: '180px',
 };
 
-export const Avatar: React.FC<AvatarProps> = ({ size, name, className }) => {
-  const avatarSrc = require('assets/symbols/avatar.png');
-
+export const Avatar: React.FC<AvatarProps> = ({ size, src, name, className }) => {
   return (
     <div
       style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
@@ -40,6 +40,10 @@ export const Avatar: React.FC<AvatarProps> = ({ size, name, className }) => {
         >
           마이페이지
         </div>
+      ) : size === 'square' ? (
+        <div className="w-[340px] h-[250px] self-stretch">
+          <img src={src || defaultAvatarSrc} alt="avatar" />
+        </div>
       ) : (
         <div
           style={{
@@ -50,8 +54,8 @@ export const Avatar: React.FC<AvatarProps> = ({ size, name, className }) => {
           }}
         >
           <img
-            src={avatarSrc}
-            alt='avatar'
+            src={src || defaultAvatarSrc}
+            alt="avatar"
             style={{ width: '100%', height: '100%' }}
           />
         </div>

@@ -4,7 +4,7 @@ import { ReactComponent as ArrowRight } from 'assets/icons/arrow-right.svg';
 import { ReactComponent as ArrowUp } from 'assets/icons/arrow-up.svg';
 import { ReactComponent as ArrowDown } from 'assets/icons/arrow-down.svg';
 
-interface ArrowIconProps {
+export interface ArrowIconProps {
   size: 16 | 24;
   direction: 'left' | 'right' | 'up' | 'down';
   color?: 'black' | 'gray' | 'white' | 'orange';
@@ -44,11 +44,5 @@ export const ArrowIcon: React.FC<ArrowIconProps> = ({
   };
   const hoverClass = hover ? 'hover:text-mainprimary' : '';
 
-  return (
-    <IconComponent
-      className={`${sizeClasses} ${colorClasses[color]} ${hoverClass}`}
-    />
-  );
+  return <IconComponent className={`${sizeClasses} ${colorClasses[color]} ${hoverClass}`} />;
 };
-
-export type { ArrowIconProps };

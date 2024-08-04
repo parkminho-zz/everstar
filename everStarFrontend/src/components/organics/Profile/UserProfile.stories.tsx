@@ -57,6 +57,7 @@ const petInfo = {
     breed: '골든 리트리버',
     color: '노란색',
     personality: ['친절함', '지혜로움', '활동적'],
+    avatarSrc: 'https://via.placeholder.com/120', // 추가된 부분
   },
   타이틀3: {
     name: '타이틀3',
@@ -80,6 +81,25 @@ export const Default: Story = {
       gender: '남성',
       email: 'example@example.com',
       phone: '010-1234-5678',
+    },
+    petOptions: Object.keys(petInfo),
+    petInfo: petInfo,
+  },
+};
+
+export const WithAvatarSrc: Story = {
+  args: {
+    headerText: '마이 페이지',
+    largeButtonText: 'Save',
+    smallButtonText: '핸드폰 번호 수정하기',
+    showPrimaryButton: true,
+    userInfo: {
+      name: '이영희',
+      birthdate: '1992-02-02',
+      gender: '여성',
+      email: 'example2@example.com',
+      phone: '010-8765-4321',
+      avatarSrc: 'https://via.placeholder.com/120', // 예시 이미지 URL
     },
     petOptions: Object.keys(petInfo),
     petInfo: petInfo,

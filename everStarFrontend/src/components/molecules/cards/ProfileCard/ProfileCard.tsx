@@ -1,6 +1,6 @@
 import { PencilIcon } from 'components/atoms/icons/Pencil/PencilIcon';
-import { AvatarSquare } from 'components/atoms/symbols/Avatar/AvatarSquare';
-import { Tag } from '../../../atoms/buttons/Tag';
+import { Avatar } from 'components/atoms/symbols/Avatar/Avatar';
+import { Tag } from 'components/atoms/buttons/Tag';
 
 interface IProfileCard {
   name: string;
@@ -8,6 +8,8 @@ interface IProfileCard {
   date: string;
   description: string;
   tagList: string[];
+  avatarSrc?: string; // 선택적 prop으로 이미지 경로 받음
+  onPencilClick: () => void; // Function to handle pencil icon click
 }
 
 export const ProfileCard = ({
@@ -16,12 +18,14 @@ export const ProfileCard = ({
   date,
   description,
   tagList,
+  avatarSrc,
+  onPencilClick,
 }: IProfileCard) => {
   const visibleTags = tagList.slice(0, 3);
 
   return (
     <div className='w-[340px] h-[496px] bg-greyscalewhite shadow-md'>
-      <AvatarSquare />
+      <Avatar size='square' src={avatarSrc} />
       <div className='flex justify-between w-full p-4 h-fit'>
         <label className='block kor-h-h3 text-greyscaleblack-100'>{name}</label>
         <label className='block text-sm text-greyscaleblack-100'>
@@ -38,7 +42,7 @@ export const ProfileCard = ({
           ))}
         </div>
         <div className='mt-8 mr-3'>
-          <PencilIcon size={24} color='black' />
+          <PencilIcon size={24} color='black' onClick={onPencilClick} />
         </div>
       </div>
     </div>

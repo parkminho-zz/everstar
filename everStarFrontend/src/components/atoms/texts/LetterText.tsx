@@ -1,6 +1,6 @@
 import React from 'react';
 
-type LabelSize = 'large' | 'medium' | 'small';
+type LabelSize = 'large' | 'medium' | 'small' | 'xl';
 type Color = 'black' | 'gray' | 'white';
 
 interface ILetterText {
@@ -11,6 +11,7 @@ interface ILetterText {
 }
 
 const fontStyle = {
+  xl: 'text-[24px] font-normal leading-normal tracking-tight',
   large: 'text-[16px] font-normal leading-normal tracking-tight',
   medium: 'text-[13px] font-normal leading-normal tracking-[-1.04px]',
   small: 'text-[12px] font-normal leading-normal tracking-[-0.24px]',
@@ -22,12 +23,7 @@ const colorStyle = {
   white: 'text-greyscalewhite',
 };
 
-export const LetterText = ({
-  size,
-  color,
-  children,
-  className,
-}: ILetterText) => {
+export const LetterText = ({ size, color, children, className }: ILetterText) => {
   return (
     <div className='max-w-full'>
       <div
