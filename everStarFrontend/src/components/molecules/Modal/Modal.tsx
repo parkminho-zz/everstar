@@ -24,7 +24,11 @@ export const Modal: React.FC<ModalProps> = ({
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
       <div
         className='bg-white rounded-lg shadow-md w-[360px] max-w-full p-4'
-        style={{ height: height || 'auto' }} // height가 제공되면 사용, 그렇지 않으면 auto
+        style={{
+          height: height || 'auto',
+          maxHeight: '90vh',
+          overflowY: 'auto',
+        }} // height가 제공되면 사용, 그렇지 않으면 auto
       >
         <ModalHeader {...headerProps} onLeftIconClick={onClose} />
         <div className='justify-center'>{children}</div>

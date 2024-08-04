@@ -14,6 +14,7 @@ interface SelectProps {
   onOptionSelect: (option: string | number) => void;
   infoText: string;
   showIcon?: boolean;
+  label?: string; // 추가된 부분
 }
 
 export const Select: React.FC<SelectProps> = ({
@@ -25,10 +26,11 @@ export const Select: React.FC<SelectProps> = ({
   onOptionSelect,
   infoText,
   showIcon = true,
+  label = '레이블', // 추가된 부분
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | number | null>(
-    null
+    null,
   );
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
@@ -70,7 +72,7 @@ export const Select: React.FC<SelectProps> = ({
         {showLabel && (
           <Lable
             className='!flex-[0_0_auto]'
-            prop='레이블'
+            prop={label}
             show={starshow}
             font='default'
           />
@@ -98,7 +100,7 @@ export const Select: React.FC<SelectProps> = ({
           )}
         </div>
         {isOpen && (
-          <div className='absolute z-10 w-full bg-white rounded-md shadow-lg mt-14'>
+          <div className='absolute z-10 w-full bg-white rounded-md shadow-lg top-full mt-1'>
             <DropdownMenu
               options={options}
               onOptionSelect={handleOptionSelect}
@@ -116,7 +118,7 @@ export const Select: React.FC<SelectProps> = ({
 Select.propTypes = {
   className: PropTypes.string,
   options: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+    PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   ).isRequired,
   title: PropTypes.string.isRequired,
   showLabel: PropTypes.bool,
@@ -124,6 +126,7 @@ Select.propTypes = {
   onOptionSelect: PropTypes.func.isRequired,
   infoText: PropTypes.string.isRequired,
   showIcon: PropTypes.bool,
+  label: PropTypes.string, // 추가된 부분
 };
 
 export type { SelectProps };
