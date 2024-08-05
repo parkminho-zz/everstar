@@ -28,6 +28,8 @@ import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
+import com.everstarbackmain.global.exception.CustomException;
+import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
 
 @ExtendWith(MockitoExtension.class)
@@ -71,12 +73,34 @@ public class GetCheeringMessageDetailServiceTest {
 	public void 응원메시지_상세_조회_성공_테스트() {
 		//given
 		BDDMockito.given(petRepository.findByIdAndIsDeleted(1L, false)).willReturn(Optional.of(pet));
-		BDDMockito.given(cheeringMessageRepository.findCheeringMessageByIdAndPetAndIsDeleted(1L, pet, false)).willReturn(Optional.of(cheeringMessage));
+		BDDMockito.given(cheeringMessageRepository.findCheeringMessageByIdAndPetAndIsDeleted(1L, pet, false))
+			.willReturn(Optional.of(cheeringMessage));
 
 		//when
 		CheeringMessageDetailResponseDto responseDto = cheeringMessageService.getCheeringMessageDetail(1L, 1L);
 
 		//then
 		Assertions.assertThat(responseDto.getContent()).isEqualTo(requestDto.getContent());
+	}
+
+	@Test
+	@DisplayName("응원메시지 상세 조회 펫 존재하지 않음 실패 테스트")
+	public void 응원메시지_상세_조회_펫_존재하지_않음_실패_테스트() {
+		//when then
+		Assertions.assertThatThrownBy(() -> cheeringMessageService.getCheeringMessageDetail(1L, 1L)).isInstanceOf(
+			ExceptionResponse.class)
+			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_FOUND_PET_EXCEPTION);
+	}
+
+	@Test
+	@DisplayName("응원메시지 상세 조회 응원메시지 존재하지 않음 실패 테스트")
+	public void 응원메시지_상세_조회_응원메시지_존재하지_않음_실패_테스트() {
+		//given
+		BDDMockito.given(petRepository.findByIdAndIsDeleted(1L, false)).willReturn(Optional.of(pet));
+
+		//when then
+		Assertions.assertThatThrownBy(() -> cheeringMessageService.getCheeringMessageDetail(1L, 1L)).isInstanceOf(
+				ExceptionResponse.class)
+			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_FOUND_CHEERING_MESSAGE_EXCEPTION);
 	}
 }
