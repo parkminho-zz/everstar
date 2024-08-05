@@ -17,5 +17,5 @@ public interface CheeringMessageRepository extends JpaRepository<CheeringMessage
 	@Override
 	Page<CheeringMessageResponseDto> findCheeringMessagesByPetId(Pet pet, Pageable pageable);
 
-	Optional<CheeringMessage> findCheeringMessageById(Long cheeringId, Boolean isDeleted);
+	Optional<CheeringMessage> findCheeringMessageByIdAndIsDeleted(Long cheeringId, Boolean isDeleted);
 }
