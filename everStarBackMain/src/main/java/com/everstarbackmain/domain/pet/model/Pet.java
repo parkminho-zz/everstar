@@ -98,7 +98,7 @@ public class Pet extends BaseTimeEntity {
 		lastSendLetterTime = LocalDateTime.now();
 	}
 
-	public static Pet createPet(User user, CreatePetRequestDto createPetRequestDto) {
+	public static Pet createPet(User user, CreatePetRequestDto createPetRequestDto, String profileImageUrl) {
 		return Pet.builder()
 			.user(user)
 			.name(createPetRequestDto.getName())
@@ -107,7 +107,7 @@ public class Pet extends BaseTimeEntity {
 			.species(createPetRequestDto.getSpecies())
 			.gender(createPetRequestDto.getGender())
 			.relationship(createPetRequestDto.getRelationship())
-			.profileImageUrl(createPetRequestDto.getProfileImageUrl())
+			.profileImageUrl(profileImageUrl)
 			.build();
 	}
 

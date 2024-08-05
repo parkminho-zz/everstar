@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.everstarbackmain.domain.pet.message.SuccessPetMessage;
 import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
@@ -36,8 +38,8 @@ public class PetController {
 
 	@PostMapping
 	public ResponseEntity<Map<String, Object>> addPet(Authentication authentication,
-		@RequestBody @Valid CreatePetRequestDto requestDto) {
-		petService.createPet(authentication, requestDto);
+		@RequestPart @Valid CreatePetRequestDto requestDto, @RequestPart MultipartFile profileImage) {
+		petService.createPet(authentication, requestDto, profileImage);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessPetMessage.SUCCESS_CREATE_PET);
 		log.info("main server - request : {}", requestDto);
