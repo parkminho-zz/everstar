@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum CustomException {
 
 	WRONG_TYPE_EXCEPTION(400, "WrongTypeException", "잘못된 형식의 데이터입니다."),
+	NOT_EXIST_CHAT_ROOM(400, "NotExistChatRoom", "채팅방이 존재하지 않습니다."),
 
 	EXPIRED_JWT_EXCEPTION(401, "ExpiredJwtException", "토큰이 만료했습니다."),
 	NOT_VALID_JWT_EXCEPTION(401, "NotValidJwtException", "토큰이 유효하지 않습니다."),
