@@ -51,28 +51,23 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
   return (
     <Modal isOpen={true} onClose={onClose} text={modalTitle}>
-      <div className='space-y-5'>
+      <div className="space-y-5">
         <Search
-          initialState='default'
+          initialState="default"
           options={searchOptions}
-          className=''
+          className=""
           onOptionSelect={handleTagAdd}
           moveToTopOnClick={false}
         />
-        <Lable
-          prop={`성격 ${tags.length}/3`}
-          show={true}
-          font='default'
-          className='mb-2'
-        />
+        <Lable prop={`성격 ${tags.length}/3`} show={true} font="default" className="mb-2" />
         <div
-          className={`mt-1 border w-full border-gray-300 p-4 rounded text-center ${tagsContainerClassName}`}
+          className={`mt-1 border w-[320px] border-gray-300 p-4 rounded text-center ${tagsContainerClassName}`}
         >
-          <div className='flex justify-center flex-wrap gap-2 w-[320px]'>
+          <div className="flex flex-wrap justify-center w-full gap-2">
             {tags.map((tag, index) => (
               <Tag
                 key={index}
-                className='cursor-pointer kor-p-p4'
+                className="cursor-pointer kor-p-p4"
                 onClick={() => handleTagRemove(tag)}
               >
                 {tag}
@@ -80,21 +75,21 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             ))}
           </div>
         </div>
-        <div className='flex flex-col gap-2 mt-2'>
+        <div className="flex flex-col gap-2 mt-2">
           {tags.length > 0 && (
-            <InformationText state='default' align='center'>
+            <InformationText state="default" align="center">
               다시 선택하려면 클릭해주세요
             </InformationText>
           )}
           {error && (
-            <InformationText state='error' align='center'>
+            <InformationText state="error" align="center">
               {error}
             </InformationText>
           )}
         </div>
         <PrimaryButton
-          theme='white'
-          size='large'
+          theme="white"
+          size="large"
           disabled={tags.length !== 3} // 3개가 선택되지 않으면 비활성화
           onClick={handleSubmit}
           icon={null}
