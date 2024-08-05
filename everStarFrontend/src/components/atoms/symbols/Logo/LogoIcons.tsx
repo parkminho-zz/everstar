@@ -18,6 +18,7 @@ interface LogoIconsProps {
     | 'small-star-img'
     | 'star'
     | 'vertical-star';
+  className?: string;
 }
 
 const iconMap = {
@@ -31,9 +32,9 @@ const iconMap = {
   'vertical-star': VerticalStarIcon,
 };
 
-export const LogoIcons: React.FC<LogoIconsProps> = ({ variant }) => {
+export const LogoIcons: React.FC<LogoIconsProps> = ({ variant, className }) => {
   const IconComponent = iconMap[variant];
-  return <IconComponent />;
+  return <IconComponent className={className} />;
 };
 
 export type { LogoIconsProps };

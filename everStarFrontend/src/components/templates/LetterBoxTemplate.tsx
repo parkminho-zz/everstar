@@ -3,6 +3,7 @@ import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
 import { Glass } from 'components/molecules/Glass/Glass';
 import { LetterBox } from 'components/organics/LetterBox/LetterBox';
 import { useMediaQuery } from 'react-responsive';
+import { useNavigate } from 'react-router-dom';
 
 interface Letter {
   id: number;
@@ -29,17 +30,19 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
   onPageChange,
   headerText,
 }) => {
-  const [letters, setLetters] = useState(letterData);
+  const navigate = useNavigate();
+
+  const [letters] = useState(letterData);
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1199 });
 
   const handleLetterClick = (id: number) => {
-    setLetters(
-      letters.map((letter) => (letter.id === id ? { ...letter, state: 'received' } : letter))
-    );
+    // setLetters(
+    //   letters.map((letter) => (letter.id === id ? { ...letter, state: 'received' } : letter))
+    // );
+    navigate(`/earth/letter/${id}`);
   };
 
-  // Set items per page based on screen size
   const itemsPerPage = isMobile ? 2 : isTablet ? 6 : 6;
 
   return (
@@ -52,7 +55,7 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
         showPageIndicator={true}
       />
       <div className={`absolute inset-0 flex flex-col items-center ${isMobile ? '' : 'p-8'} `}>
-        <ModalHeader text={headerText} />
+        <ModalHeader text={headerText} onLeftIconClick={() => navigate(-1)} />
         <div
           className={`flex flex-col items-center w-full max-w-5xl  ${isMobile ? 'mt-9' : 'p-8 mt-20'} `}
         >

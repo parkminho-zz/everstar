@@ -4,10 +4,9 @@ import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { ProgressBar } from 'components/molecules/ProgressBar/ProgressBar';
 import { useMediaQuery } from 'react-responsive';
 import bgImage from 'assets/images/bg-earth.png';
-import { Header } from 'components/molecules/Header/Header';
-import { Footer } from 'components/molecules/Footer/Footer';
 import { LogoIcons } from 'components/atoms/symbols/Logo/LogoIcons';
 import { Rainbow } from 'components/atoms/symbols/Rainbow/Rainbow';
+import { useNavigate } from 'react-router-dom';
 
 type ViewMemorialBookSize = 'large' | 'medium' | 'small';
 type RainbowColor = 'none' | 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'indigo' | 'violet';
@@ -73,12 +72,9 @@ export const EarthMain: React.FC<EarthMainProps> = ({
   buttonIcon,
   className,
 }) => {
+  const navigate = useNavigate();
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
-
-  const headerType = isMobile ? 'mobile-earth' : isTabletOrMobile ? 'tablet-earth' : 'default';
-
-  const footerType = isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop';
 
   // const isDisabled = fill < 49;
   const progressButtonText = () => {
@@ -111,7 +107,6 @@ export const EarthMain: React.FC<EarthMainProps> = ({
       className='relative flex flex-col min-h-screen overflow-hidden bg-center bg-cove'
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <Header type={headerType} className='top-0 z-50' />
       <Rainbow className={getRainbowStyle()} color={getColor(fill)} />
       <div className='relative z-10 flex flex-col items-center justify-center flex-grow'>
         <div
@@ -146,14 +141,13 @@ export const EarthMain: React.FC<EarthMainProps> = ({
             theme='white'
             size='large'
             disabled={buttonDisabled}
-            onClick={() => alert('버튼 클릭됨')}
+            onClick={() => navigate(`/earth/quest/${fill + 1}`)}
             icon={null}
           >
             {progressButtonText()}
           </PrimaryButton>
         </div>
       </div>
-      <Footer type={footerType} className='relative z-20 w-full mt-0' />
     </div>
   );
 };

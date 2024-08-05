@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Avatar } from 'components/atoms/symbols/Avatar/Avatar';
 import { LetterIcons } from 'components/atoms/symbols/Letter/LetterIcons';
 import { LetterboxIcons } from 'components/atoms/symbols/Letterbox/LetterboxIcons';
@@ -21,38 +22,40 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({ type, className }) => {
+  const navigate = useNavigate();
+
+  const handleLetterIconClick = () => {
+    navigate('/earth/letter');
+  };
+
+  const handleLetterBoxIconClick = () => {
+    navigate('/earth/letterbox');
+  };
+
   let containerClass = 'w-[1358px] gap-[656px]';
   let gapClass = 'gap-12';
   let logoVariant: 'small-earth' | 'small-star' = 'small-earth';
   let content = (
     <>
-      <LetterIcons variant='letter' />
-      <LetterboxIcons variant='letterbox' />
+      <LetterIcons variant='letter' onClick={handleLetterIconClick} className='cursor-pointer' />
+      <LetterboxIcons
+        variant='letterbox'
+        onClick={handleLetterBoxIconClick}
+        className='cursor-pointer'
+      />
       <Avatar size='small' />
     </>
   );
 
-  if (
-    type === 'tablet-earth' ||
-    type === 'tablet-everstar' ||
-    type === 'tablet-mypage'
-  ) {
+  if (type === 'tablet-earth' || type === 'tablet-everstar' || type === 'tablet-mypage') {
     containerClass = 'w-[768px] gap-[470px]';
     gapClass = 'gap-12';
-  } else if (
-    type === 'mobile-earth' ||
-    type === 'mobile-everstar' ||
-    type === 'mobile-mypage'
-  ) {
+  } else if (type === 'mobile-earth' || type === 'mobile-everstar' || type === 'mobile-mypage') {
     containerClass = 'w-[360px] gap-14';
     gapClass = 'gap-12';
   }
 
-  if (
-    type === 'everstar' ||
-    type === 'tablet-everstar' ||
-    type === 'mobile-everstar'
-  ) {
+  if (type === 'everstar' || type === 'tablet-everstar' || type === 'mobile-everstar') {
     content = (
       <>
         <PostitIcons variant='postit' />
@@ -61,15 +64,10 @@ export const Header: React.FC<Props> = ({ type, className }) => {
       </>
     );
     logoVariant = 'small-star';
-  } else if (
-    type === 'mypage' ||
-    type === 'tablet-mypage' ||
-    type === 'mobile-mypage'
-  ) {
+  } else if (type === 'mypage' || type === 'tablet-mypage' || type === 'mobile-mypage') {
     content = (
       <>
-        <div style={{ width: '24px', height: '24px' }} />{' '}
-        <LogoIcons variant='small-star-img' />
+        <div style={{ width: '24px', height: '24px' }} /> <LogoIcons variant='small-star-img' />
         <LogoIcons variant='small-earth-img' />
       </>
     );
@@ -80,10 +78,8 @@ export const Header: React.FC<Props> = ({ type, className }) => {
     <div
       className={`flex h-14 items-center justify-center gap-2 px-0 py-2 relative border-b [border-bottom-style:solid] border-black ${className}`}
     >
-      <div
-        className={`flex items-center justify-center relative ${containerClass}`}
-      >
-        <LogoIcons variant={logoVariant} />
+      <div className={`flex items-center justify-center relative ${containerClass}`}>
+        <LogoIcons variant={logoVariant} className='cursor-pointer' />
         <div
           className={`inline-flex items-center justify-center ${gapClass} pl-6 pr-0 py-[7px] relative flex-[0_0_auto]`}
         >
