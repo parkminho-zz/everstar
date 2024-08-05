@@ -32,7 +32,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
 		String servletPath = request.getServletPath();
-		if (!servletPath.equals("/ws-stomp/websocket") && !servletPath.equals("/api/chat/room")) {
+		if (!servletPath.equals("/ws-stomp/websocket") && !servletPath.equals("/api/chat/room")
+			&& !servletPath.equals("/chat/room")) {
 			String accessToken = extractAccessToken(request);
 			String userEmail = extractUserEmail(accessToken);
 			User user = userRepository.findUserByEmailAndIsDeleted(userEmail, false).orElseThrow(() ->
