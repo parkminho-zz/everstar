@@ -1,27 +1,19 @@
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { RootState } from 'store/Store';
+// src/components/organics/Login/Login.tsx
+
+import React from 'react';
 import { LoginContainer } from 'components/organics/Login/LoginContainer';
-import bgImage from 'assets/images/bg-login.png';
+import bgImage from 'assets/images/bg-login.webp';
+import { useAuthStatus } from 'hooks/useAuth';
 
 export const Login: React.FC = () => {
-  const navigate = useNavigate();
-  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
-
-  useEffect(() => {
-    console.log('Access Token:', accessToken); // 콘솔에 토큰 출력
-    if (accessToken) {
-      navigate('/profile');
-    }
-  }, [accessToken, navigate]);
+  useAuthStatus(); // Custom hook to handle authentication and redirection
 
   return (
     <div
-      className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover'
+      className="relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <div className='relative z-10 flex items-center justify-center w-full h-full'>
+      <div className="relative z-10 flex items-center justify-center w-full h-full">
         <LoginContainer />
       </div>
     </div>

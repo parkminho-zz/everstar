@@ -1,3 +1,10 @@
+// src/hooks/useAuth.ts
+
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { RootState } from 'store/Store';
+
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import {
   sendVerificationCode,
@@ -7,10 +14,9 @@ import {
   VerifyCodeResponse,
   JoinResponse,
   UserInfo,
-} from '../api/authApi';
+} from 'api/authApi';
 import { setToken, setUser } from 'store/actions/authActions';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 export const useSendVerificationCode = (): UseMutationResult<
   SendCodeResponse,
@@ -67,4 +73,16 @@ export const useJoinUser = (): UseMutationResult<JoinResponse, unknown, UserInfo
       navigate('/login');
     },
   });
+};
+
+export const useAuthStatus = () => {
+  const navigate = useNavigate();
+  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
+
+  useEffect(() => {
+    console.log('Access Token:', accessToken); // 콘솔에 토큰 출력
+    if (accessToken) {
+      navigate('/profile');
+    }
+  }, [accessToken, navigate]);
 };
