@@ -1,7 +1,6 @@
-package com.everstarbackmain.domain.cheeringMessage.controller;
+package com.everstarbackmain.domain.cheeringMessage.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
@@ -23,20 +22,16 @@ import org.springframework.security.core.Authentication;
 
 import com.everstarbackmain.domain.cheeringMessage.repository.CheeringMessageRepository;
 import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageResponseDto;
-import com.everstarbackmain.domain.cheeringMessage.service.CheeringMessageService;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
-import com.everstarbackmain.domain.petterLetter.repository.PetLetterRepository;
-import com.everstarbackmain.domain.petterLetter.responseDto.PetLetterResponseDto;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
-import com.everstarbackmain.domain.userLetter.model.UserLetter;
-import com.everstarbackmain.domain.userLetter.requestDto.WriteLetterRequestDto;
-import com.everstarbackmain.global.openai.util.OpenAiClient;
+import com.everstarbackmain.global.exception.CustomException;
+import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
 
 @ExtendWith(MockitoExtension.class)
@@ -86,6 +81,17 @@ public class GetCheeringMessageServiceTest {
 
 		//when
 		Page<CheeringMessageResponseDto> actualPage = cheeringMessageService.getCheeringMessages(1L, pageable);
+
+		//then
 		Assertions.assertThat(actualPage).isEqualTo(expectedPage);
+	}
+
+	@Test
+	@DisplayName("응원메시지 목록 조회 실패 펫이 존재하지 않음 테스트")
+	public void 응원_메시지_목록_펫_존재하지_않음_실패_테스트() {
+		//when then
+		Assertions.assertThatThrownBy(() -> cheeringMessageService.getCheeringMessages(1L, pageable))
+			.isInstanceOf(ExceptionResponse.class)
+			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_FOUND_PET_EXCEPTION);
 	}
 }
