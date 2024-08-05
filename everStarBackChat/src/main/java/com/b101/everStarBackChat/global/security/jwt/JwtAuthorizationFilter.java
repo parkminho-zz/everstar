@@ -31,14 +31,21 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
-		String accessToken = extractAccessToken(request);
-		String userEmail = extractUserEmail(accessToken);
-		User user = userRepository.findUserByEmailAndIsDeleted(userEmail, false).orElseThrow(() ->
-			new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION)
-		);
+		String servletPath = request.getServletPath();
+		if (!servletPath.equals("/ws-stomp/websocket") && !servletPath.equals("/api/chat/room")
+			&& !servletPath.equals("/chat/room")) {
+			String accessToken = extractAccessToken(request);
+			if(accessToken != null) {
+				String userEmail = extractUserEmail(accessToken);
+				User user = userRepository.findUserByEmailAndIsDeleted(userEmail, false).orElseThrow(() ->
+					new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION)
+				);
 
-		generateAuthentication(user);
-		log.info("Authentication set for user: {}", userEmail);
+				generateAuthentication(user);
+				log.info("Authentication set for user: {}", userEmail);
+			}
+
+		}
 		filterChain.doFilter(request, response);
 	}
 
@@ -48,7 +55,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
 		if (!StringUtils.hasText(bearerToken) || !bearerToken.startsWith("Bearer ")) {
 			log.error("mainServer error: {}", CustomException.ACCESS_DENIED_EXCEPTION);
-			throw new ExceptionResponse(CustomException.ACCESS_DENIED_EXCEPTION);
+			return null;
 		}
 
 		return bearerToken.substring(7);

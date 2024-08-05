@@ -39,6 +39,8 @@ public class SecurityConfig {
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		);
 		http.authorizeHttpRequests((auth) -> auth
+			.requestMatchers("/api/chat/**", "/ws-stomp/**").permitAll()
+			.requestMatchers("/api/sessions/**").permitAll()
 			.anyRequest().authenticated()
 		);
 		http.exceptionHandling((handle) -> handle.authenticationEntryPoint(customExceptionHandler));
@@ -46,4 +48,5 @@ public class SecurityConfig {
 
 		return http.build();
 	}
+
 }
