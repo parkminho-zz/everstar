@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 import com.everstarbackmain.domain.memorialBook.repository.MemorialBookRepository;
@@ -24,6 +25,7 @@ import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
+import com.everstarbackmain.global.util.S3UploadUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,12 +41,15 @@ public class PetService {
 	private final MemorialBookRepository memorialBookRepository;
 	private final SentimentAnalysisRepository sentimentAnalysisRepository;
 	private final PetLetterScheduler petLetterScheduler;
+	private final S3UploadUtil s3UploadUtil;
 
 	@Transactional
-	public void createPet(Authentication authentication, CreatePetRequestDto createPetRequestDto) {
+	public void createPet(Authentication authentication, CreatePetRequestDto createPetRequestDto,
+		MultipartFile profileImage) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 
-		Pet pet = Pet.createPet(user, createPetRequestDto);
+		String profileImageUrl = s3UploadUtil.saveFile(profileImage);
+		Pet pet = Pet.createPet(user, createPetRequestDto, profileImageUrl);
 		petRepository.save(pet);
 
 		addPersonalities(pet, createPetRequestDto);
