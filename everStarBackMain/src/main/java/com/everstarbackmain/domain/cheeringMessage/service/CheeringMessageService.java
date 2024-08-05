@@ -1,5 +1,7 @@
 package com.everstarbackmain.domain.cheeringMessage.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.everstarbackmain.domain.cheeringMessage.model.CheeringMessage;
 import com.everstarbackmain.domain.cheeringMessage.repository.CheeringMessageRepository;
 import com.everstarbackmain.domain.cheeringMessage.requestDto.CreateCheeringMessageRequestDto;
+import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageResponseDto;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.user.model.User;
@@ -36,7 +39,7 @@ public class CheeringMessageService {
 		Pet findPet = petRepository.findByIdAndIsDeleted(findPetId, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
-		if(requestDto.getIsAnonymous()){
+		if (requestDto.getIsAnonymous()) {
 			CheeringMessage cheeringMessage = CheeringMessage.createAnonymousCheeringMessage(requestDto, findPet);
 			cheeringMessageRepository.save(cheeringMessage);
 			return;
@@ -44,5 +47,12 @@ public class CheeringMessageService {
 
 		CheeringMessage cheeringMessage = CheeringMessage.createNoAnonymousCheeringMessage(requestDto, findPet, pet);
 		cheeringMessageRepository.save(cheeringMessage);
+	}
+
+	public Page<CheeringMessageResponseDto> getCheeringMessages(Long findPetId, Pageable pageable) {
+		Pet pet = petRepository.findByIdAndIsDeleted(findPetId, false)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+
+		return cheeringMessageRepository.findCheeringMessagesByPetId(pet, pageable);
 	}
 }
