@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageDetailResponseDto;
 import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageResponseDto;
 import com.everstarbackmain.domain.cheeringMessage.service.CheeringMessageService;
 import com.everstarbackmain.global.util.HttpResponseUtil;
@@ -33,6 +34,15 @@ public class CheeringMessageGetController {
 
 		log.info("main server - response : {}", response);
 
+		return response;
+	}
+
+	@GetMapping("/cheeringMessage-id")
+	ResponseEntity<Map<String, Object>> getCheeringMessagesDetail(@PathVariable("pet-id") Long petId, @PathVariable("{cheeringMessage-id}") Long cheeringMessageId) {
+		CheeringMessageDetailResponseDto responseDto = cheeringMessageService.getCheeringMessageDetail(petId, cheeringMessageId);
+		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
+
+		log.info("main server - response : {}", response);
 		return response;
 	}
 }
