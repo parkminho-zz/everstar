@@ -17,7 +17,7 @@ public class CheeringMessageDetailResponseDto {
 	private String relationShip;
 	private String petName;
 
-	public static CheeringMessageDetailResponseDto create(CheeringMessage cheeringMessage) {
+	public static CheeringMessageDetailResponseDto createCheeringMessageDetailResponseDto(CheeringMessage cheeringMessage) {
 		return CheeringMessageDetailResponseDto.builder()
 			.content(cheeringMessage.getContent())
 			.isAnonymous(cheeringMessage.getIsAnonymous())
