@@ -1,3 +1,4 @@
+// src/components/templates/Profile.tsx
 import React, { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useSelector } from 'react-redux';
@@ -9,7 +10,7 @@ import { PetInfoForm } from 'components/organics/PetInfoForm/PetInfoForm';
 import { SearchModal } from 'components/organics/SearchModal/SearchModal';
 import bgImage from 'assets/images/bg-everstar.webp';
 import { RootState } from 'store/Store';
-import { useFetchPets, useAddPet } from 'hooks/usePets';
+import { useFetchPets } from 'hooks/usePets';
 
 export const Profile: React.FC = () => {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
@@ -21,8 +22,6 @@ export const Profile: React.FC = () => {
   const [isPetInfoOpen, setPetInfoOpen] = useState(false);
   const [isSearchModalOpen, setSearchModalOpen] = useState(false);
   const [currentFormData, setCurrentFormData] = useState<FormData | null>(null);
-
-  const { mutate: addPet } = useAddPet(token);
 
   const handlePetFormSubmit = (formData: FormData) => {
     setCurrentFormData(formData);
@@ -42,7 +41,26 @@ export const Profile: React.FC = () => {
         new Blob([JSON.stringify(requestDto)], { type: 'application/json' }),
       );
 
-      addPet(currentFormData);
+      try {
+        const response = await fetch('https://i11b101.p.ssafy.io/api/pets', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: currentFormData,
+        });
+
+        if (!response.ok) {
+          throw new Error('반려동물을 추가하는 데 실패했습니다');
+        }
+
+        const data = await response.json();
+        console.log('반려동물을 성공적으로 추가했습니다:', data);
+        setPetInfoOpen(false);
+      } catch (error) {
+        console.error('반려동물 추가 에러:', error);
+      }
+
       setCurrentFormData(null);
     } else {
       console.log('currentFormData is null');
@@ -101,6 +119,7 @@ export const Profile: React.FC = () => {
                     src: pet.profileImageUrl,
                     size: 'medium',
                     name: pet.name,
+                    id: pet.id,
                   }))
                 : []
             }

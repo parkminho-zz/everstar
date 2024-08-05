@@ -6,8 +6,12 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
-import { fetchPets, addPet, Pet } from 'api/petApi';
-import { setPets, addPet as addPetAction } from 'store/slices/petSlice';
+import { fetchPets, fetchPetDetails, addPet, Pet, PetInfo } from 'api/petApi';
+import {
+  setPets,
+  addPet as addPetAction,
+  setPetDetails,
+} from 'store/slices/petSlice';
 
 export const useFetchPets = (token: string) => {
   const dispatch = useDispatch();
@@ -29,7 +33,7 @@ export const useAddPet = (
   options?: UseMutationOptions<Pet, Error, FormData>,
 ) => {
   const dispatch = useDispatch();
-  const queryClient = useQueryClient(); // 리액트 쿼리 클라이언트 가져오기
+  const queryClient = useQueryClient();
 
   return useMutation<Pet, Error, FormData>({
     mutationFn: (formData: FormData) => {
@@ -39,8 +43,8 @@ export const useAddPet = (
     ...options,
     onSuccess: (data: Pet, variables: FormData, context: unknown) => {
       console.log('Successfully added pet:', data);
-      dispatch(addPetAction(data)); // 추가된 반려동물 정보를 Redux 스토어에 저장
-      queryClient.invalidateQueries({ queryKey: ['pets'] }); // 'pets' 쿼리 무효화
+      dispatch(addPetAction(data));
+      queryClient.invalidateQueries({ queryKey: ['pets'] });
       if (options?.onSuccess) {
         options.onSuccess(data, variables, context);
       }
@@ -48,5 +52,19 @@ export const useAddPet = (
     onError: (error: Error) => {
       console.error('Error adding pet:', error);
     },
+  });
+};
+
+export const useFetchPetDetails = (petId: number, token: string) => {
+  const dispatch = useDispatch();
+  return useQuery<PetInfo, Error>({
+    queryKey: ['petDetails', petId],
+    queryFn: async () => {
+      console.log('Fetching pet details inside useFetchPetDetails');
+      const details = await fetchPetDetails(petId, token);
+      dispatch(setPetDetails(details));
+      return details;
+    },
+    enabled: !!token && petId !== null,
   });
 };
