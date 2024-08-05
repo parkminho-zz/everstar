@@ -1,110 +1,68 @@
 import React, { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { useQuery, useMutation } from 'react-query';
 import { useSelector } from 'react-redux';
 import { Header } from 'components/molecules/Header/Header';
 import { Footer } from 'components/molecules/Footer/Footer';
 import { Glass } from 'components/molecules/Glass/Glass';
 import { ProfileSelection } from 'components/organics/ProfileSelection/ProfileSelection';
-import { PetInfoForm, PetFormData } from 'components/organics/PetInfoForm/PetInfoForm';
+import { PetInfoForm } from 'components/organics/PetInfoForm/PetInfoForm';
 import { SearchModal } from 'components/organics/SearchModal/SearchModal';
-import bgImage from 'assets/images/bg-everstar.png';
+import bgImage from 'assets/images/bg-everstar.webp';
 import { RootState } from 'store/Store';
-
-interface Pet {
-  id: number;
-  profileImageUrl: string;
-  name: string;
-}
-
-interface ApiResponse {
-  data: Pet[];
-}
-
-const fetchPets = async (token: string): Promise<Pet[]> => {
-  const response = await fetch('https://i11b101.p.ssafy.io/api/pets', {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) {
-    console.log(token);
-    throw new Error('반려동물 정보를 가져오는 데 실패했습니다');
-  }
-  const result: ApiResponse = await response.json();
-  return result.data;
-};
-
-const addPet = async (petData: PetFormData, token: string) => {
-  const formData = new FormData();
-  formData.append('name', petData.name);
-  formData.append('age', petData.age.toString());
-  formData.append('memorialDate', petData.memorialDate?.toISOString().split('T')[0] || '');
-  formData.append('species', petData.species);
-  formData.append('gender', petData.gender);
-  formData.append('relationship', petData.relationship);
-  formData.append('profileImageUrl', petData.profileImageUrl as File);
-  formData.append('introduction', petData.introduction);
-  formData.append('questIndex', '1'); // questIndex 고정
-  formData.append('personality', JSON.stringify(petData.personality));
-
-  const response = await fetch('https://i11b101.p.ssafy.io/api/pets', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: formData,
-  });
-
-  if (!response.ok) {
-    throw new Error('반려동물을 추가하는 데 실패했습니다');
-  }
-
-  return response.json();
-};
+import { useFetchPets } from 'hooks/usePets';
 
 export const Profile: React.FC = () => {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
   const token = useSelector((state: RootState) => state.auth.accessToken);
-  const {
-    data: pets,
-    isLoading,
-    error,
-  } = useQuery<Pet[], Error>('pets', () => fetchPets(token), {
-    enabled: !!token,
-  });
+  const { data: pets, isLoading, error } = useFetchPets(token);
+  console.log('Token:', token);
 
   const [isPetInfoOpen, setPetInfoOpen] = useState(false);
   const [isSearchModalOpen, setSearchModalOpen] = useState(false);
-  const [currentFormData, setCurrentFormData] = useState<PetFormData | null>(null);
+  const [currentFormData, setCurrentFormData] = useState<FormData | null>(null);
 
-  const { mutate: mutateAddPet } = useMutation((petData: PetFormData) => addPet(petData, token), {
-    onSuccess: () => {
-      console.log('반려동물을 성공적으로 추가했습니다');
-      setPetInfoOpen(false);
-    },
-    onError: (error: Error) => {
-      console.error('반려동물 추가 에러:', error.message);
-    },
-  });
-
-  const handlePetFormSubmit = (formData: PetFormData) => {
-    setCurrentFormData({ ...formData, personality: [] }); // 초기에는 빈 배열로 설정
+  const handlePetFormSubmit = (formData: FormData) => {
+    setCurrentFormData(formData);
     setPetInfoOpen(false);
     setSearchModalOpen(true);
   };
 
-  const handleSearchModalSubmit = (personalities: string[]) => {
+  const handleSearchModalSubmit = async (personalities: string[]) => {
     setSearchModalOpen(false);
     if (currentFormData) {
-      const updatedFormData = {
-        ...currentFormData,
-        personality: personalities,
-      };
-      mutateAddPet(updatedFormData);
-      setCurrentFormData(null); // Clear the current form data after submission
+      const requestDtoBlob = currentFormData.get('requestDto') as Blob;
+      const requestDtoText = await requestDtoBlob.text();
+      const requestDto = JSON.parse(requestDtoText);
+      requestDto.personalities = personalities;
+      currentFormData.set(
+        'requestDto',
+        new Blob([JSON.stringify(requestDto)], { type: 'application/json' }),
+      );
+
+      try {
+        const response = await fetch('https://i11b101.p.ssafy.io/api/pets', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: currentFormData,
+        });
+
+        if (!response.ok) {
+          throw new Error('반려동물을 추가하는 데 실패했습니다');
+        }
+
+        const data = await response.json();
+        console.log('반려동물을 성공적으로 추가했습니다:', data);
+        setPetInfoOpen(false);
+      } catch (error) {
+        console.error('반려동물 추가 에러:', error);
+      }
+
+      setCurrentFormData(null);
+    } else {
+      console.log('currentFormData is null');
     }
   };
 
@@ -132,22 +90,11 @@ export const Profile: React.FC = () => {
         {isPetInfoOpen ? (
           <PetInfoForm
             headerText="반려동물 정보 입력"
-            smallButtonText=""
-            text="반려동물 정보를 <br/> 입력해주세요."
             showPrimaryButton={true}
+            text="반려동물 정보를 입력해주세요."
             onClose={() => setPetInfoOpen(false)}
             onSubmit={handlePetFormSubmit}
-            relationshipOptions={[
-              '엄마',
-              '아빠',
-              '언니',
-              '누나',
-              '형',
-              '오빠',
-              '이모',
-              '삼촌',
-              '친구',
-            ]}
+            relationshipOptions={['엄마', '아빠', '언니', '누나', '형', '오빠', '친구']}
           />
         ) : (
           <ProfileSelection
