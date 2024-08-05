@@ -5,7 +5,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 
-@Builder
+
 @Getter
 public class CheeringMessageResponseDto {
 	private Long cheeringMessageId;
