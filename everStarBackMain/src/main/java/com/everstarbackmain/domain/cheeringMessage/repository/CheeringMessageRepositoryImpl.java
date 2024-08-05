@@ -1,4 +1,40 @@
 package com.everstarbackmain.domain.cheeringMessage.repository;
 
-public class CheeringMessageRepositoryImpl {
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
+import com.everstarbackmain.domain.cheeringMessage.model.QCheeringMessage;
+import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageResponseDto;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+public class CheeringMessageRepositoryImpl implements CheeringMessageRepositoryCustom {
+
+	private final JPAQueryFactory jpaQueryFactory;
+	private QCheeringMessage cheeringMessage = QCheeringMessage.cheeringMessage;
+
+
+	@Override
+	public Page<CheeringMessageResponseDto> findCheeringMessagesByPetId(Long petId, Pageable pageable) {
+		List<CheeringMessageResponseDto> cheeringMessages = jpaQueryFactory
+			.select(Projections.constructor(CheeringMessageResponseDto.class, cheeringMessage.id, cheeringMessage.content, cheeringMessage.isAnonymous, cheeringMessage.behindPetRelationship, cheeringMessage.behindPetName))
+			.from(cheeringMessage)
+			.where(cheeringMessage.pet.id.eq(petId))
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.fetch();
+
+		long total = jpaQueryFactory
+			.selectFrom(cheeringMessage)
+			.where(cheeringMessage.pet.id.eq(petId))
+			.fetchCount();
+
+		return new PageImpl<>(cheeringMessages, pageable, total);
+	}
 }
