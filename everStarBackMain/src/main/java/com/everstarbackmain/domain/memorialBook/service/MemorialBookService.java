@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.everstarbackmain.domain.aiAnswer.model.AiAnswer;
 import com.everstarbackmain.domain.aiAnswer.repository.AiAnswerRepository;
-import com.everstarbackmain.domain.aiAnswer.responseDto.AiAnswerDetailResponseDto;
+import com.everstarbackmain.domain.aiAnswer.responsedto.AiAnswerDetailResponseDto;
 import com.everstarbackmain.domain.diary.model.Diary;
 import com.everstarbackmain.domain.diary.repository.DiaryRepository;
 import com.everstarbackmain.domain.diary.responseDto.DiaryDetailResponseDto;

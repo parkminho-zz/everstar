@@ -1,4 +1,4 @@
-package com.everstarbackmain.domain.aiAnswer.responseDto;
+package com.everstarbackmain.domain.aiAnswer.responsedto;
 
 import com.everstarbackmain.domain.aiAnswer.model.AiAnswer;
 

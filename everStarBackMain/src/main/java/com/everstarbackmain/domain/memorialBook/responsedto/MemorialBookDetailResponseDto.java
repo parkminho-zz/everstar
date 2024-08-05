@@ -2,7 +2,7 @@ package com.everstarbackmain.domain.memorialBook.responsedto;
 
 import java.util.List;
 
-import com.everstarbackmain.domain.aiAnswer.responseDto.AiAnswerDetailResponseDto;
+import com.everstarbackmain.domain.aiAnswer.responsedto.AiAnswerDetailResponseDto;
 import com.everstarbackmain.domain.diary.responseDto.DiaryDetailResponseDto;
 import com.everstarbackmain.domain.pet.responsedto.PetDetailResponseDto;
 import com.everstarbackmain.domain.quest.responseDto.QuestDetailResponseDto;
