@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.everstarbackmain.domain.cheeringMessage.model.CheeringMessage;
 import com.everstarbackmain.domain.cheeringMessage.repository.CheeringMessageRepository;
 import com.everstarbackmain.domain.cheeringMessage.requestDto.CreateCheeringMessageRequestDto;
+import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageDetailResponseDto;
 import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageResponseDto;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
@@ -54,5 +55,18 @@ public class CheeringMessageService {
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
 		return cheeringMessageRepository.findCheeringMessagesByPetId(pet, pageable);
+	}
+
+	public CheeringMessageDetailResponseDto getCheeringMessageDetail(Long petId, Long cheeringMessageId) {
+		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+
+		CheeringMessage cheeringMessage = cheeringMessageRepository.findCheeringMessageByIdAndPetAndIsDeleted(
+				cheeringMessageId, pet, false)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_CHEERING_MESSAGE_EXCEPTION));
+
+		CheeringMessageDetailResponseDto responseDto = CheeringMessageDetailResponseDto.createCheeringMessageDetailResponseDto(
+			cheeringMessage);
+		return responseDto;
 	}
 }
