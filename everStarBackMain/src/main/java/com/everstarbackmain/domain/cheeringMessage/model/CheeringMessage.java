@@ -74,4 +74,8 @@ public class CheeringMessage extends BaseTimeEntity {
 			.content(requestDto.getContent())
 			.build();
 	}
+
+	public void deleteCheeringMessage() {
+		this.isDeleted = true;
+	}
 }

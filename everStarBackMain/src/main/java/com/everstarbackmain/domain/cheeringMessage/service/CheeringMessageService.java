@@ -69,4 +69,17 @@ public class CheeringMessageService {
 			cheeringMessage);
 		return responseDto;
 	}
+
+	@Transactional
+	public void deleteCheeringMessage(Authentication authentication, Long petId, Long cheeringMessageId) {
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
+
+		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+
+		CheeringMessage cheeringMessage = cheeringMessageRepository.findCheeringMessageByIdAndPetAndIsDeleted(
+				cheeringMessageId, pet, false)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_CHEERING_MESSAGE_EXCEPTION));
+		cheeringMessage.deleteCheeringMessage();
+	}
 }

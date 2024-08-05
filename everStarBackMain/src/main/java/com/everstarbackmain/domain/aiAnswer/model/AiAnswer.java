@@ -1,6 +1,6 @@
 package com.everstarbackmain.domain.aiAnswer.model;
 
-import com.everstarbackmain.domain.aiAnswer.requestDto.CreateAiAnswerRequestDto;
+import com.everstarbackmain.domain.aiAnswer.requestdto.CreateAiAnswerRequestDto;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.quest.model.Quest;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
