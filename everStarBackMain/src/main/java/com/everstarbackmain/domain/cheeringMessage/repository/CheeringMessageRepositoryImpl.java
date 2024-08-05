@@ -27,14 +27,14 @@ public class CheeringMessageRepositoryImpl implements CheeringMessageRepositoryC
 				Projections.constructor(CheeringMessageResponseDto.class, cheeringMessage.id, cheeringMessage.content,
 					cheeringMessage.isAnonymous, cheeringMessage.behindPetRelationship, cheeringMessage.behindPetName))
 			.from(cheeringMessage)
-			.where(cheeringMessage.pet.eq(pet))
+			.where(cheeringMessage.pet.eq(pet).and(cheeringMessage.isDeleted.isFalse()))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
 
 		long total = jpaQueryFactory
 			.selectFrom(cheeringMessage)
-			.where(cheeringMessage.pet.eq(pet))
+			.where(cheeringMessage.pet.eq(pet).and(cheeringMessage.isDeleted.isFalse()))
 			.fetchCount();
 
 		return new PageImpl<>(cheeringMessages, pageable, total);
