@@ -37,8 +37,8 @@ public class CheeringMessageGetController {
 		return response;
 	}
 
-	@GetMapping("/cheeringMessage-id")
-	ResponseEntity<Map<String, Object>> getCheeringMessagesDetail(@PathVariable("pet-id") Long petId, @PathVariable("{cheeringMessage-id}") Long cheeringMessageId) {
+	@GetMapping("/{cheeringMessage-id}")
+	ResponseEntity<Map<String, Object>> getCheeringMessagesDetail(@PathVariable("pet-id") Long petId, @PathVariable("cheeringMessage-id") Long cheeringMessageId) {
 		CheeringMessageDetailResponseDto responseDto = cheeringMessageService.getCheeringMessageDetail(petId, cheeringMessageId);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
 
