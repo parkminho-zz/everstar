@@ -40,7 +40,7 @@ public class ChatRoomController {
 		ChatRoomResponseDto responseDto = chatRoomService.createChatRoom();
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
 
-		log.info("chat server - request : roomId {}", responseDto.getId());
+		log.info("chat server - request : roomId {}", responseDto.getRoomId());
 		log.info("chat server - response : chatRoomResponseDto {}", response);
 		return response;
 	}
