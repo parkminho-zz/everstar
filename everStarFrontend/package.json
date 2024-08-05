@@ -15,11 +15,7 @@
     "@types/node": "^16.18.101",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-<<<<<<< HEAD
-    "axios": "^1.7.3",
-=======
     "date-fns": "^3.6.0",
->>>>>>> b47abf6590e2dbf89b180a1e929252807f1fb38a
     "framer-motion": "^11.3.19",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",

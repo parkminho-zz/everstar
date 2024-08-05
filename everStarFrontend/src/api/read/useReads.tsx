@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchReads } from 'api/read/readApi';
-import { fetchReadById } from 'api/read/readApi';
+import { fetchReads, fetchReadById } from 'api/read/readApi';
 
 export const useReads = () => {
   return useQuery({
