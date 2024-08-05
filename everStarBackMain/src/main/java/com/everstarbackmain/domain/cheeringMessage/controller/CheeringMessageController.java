@@ -46,14 +46,6 @@ public class CheeringMessageController {
 		return response;
 	}
 
-	@GetMapping
-	ResponseEntity<Map<String, Object>> getCheeringMessages(@PathVariable("pet-id") Long petId, Pageable pageable) {
-		Page<CheeringMessageResponseDto> responseDto = cheeringMessageService.getCheeringMessages(petId, pageable);
-		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
 
-		log.info("main server - response : {}", response);
-
-		return response;
-	}
 
 }
