@@ -15,8 +15,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.everstarbackmain.domain.memorialBook.repository.MemorialBookRepository;
 import com.everstarbackmain.domain.pet.model.Pet;
@@ -33,6 +35,7 @@ import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
+import com.everstarbackmain.global.util.S3UploadUtil;
 
 @ExtendWith(MockitoExtension.class)
 public class PetServiceTest {
@@ -51,6 +54,9 @@ public class PetServiceTest {
 
 	@Mock
 	private PetLetterScheduler petLetterScheduler;
+
+	@Mock
+	private S3UploadUtil s3UploadUtil;
 
 	@Mock
 	private Authentication authentication;
@@ -72,7 +78,7 @@ public class PetServiceTest {
 			Gender.MALE, LocalTime.now(), Role.ROLE_USER));
 		requestDto = new CreatePetRequestDto("petName", 10,
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
-			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이", "사랑스러운"));
+			"relationship", List.of("개구쟁이", "귀염둥이", "사랑스러운"));
 
 		pet = Pet.builder()
 			.user(user)
@@ -97,9 +103,17 @@ public class PetServiceTest {
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.save(any(Pet.class))).willReturn(pet);
+		given(s3UploadUtil.saveFile(any(MultipartFile.class))).willReturn("profileImageUrl");
+
+		MockMultipartFile profileImage = new MockMultipartFile(
+			"profileImage",
+			"profileImage.jpg",
+			"image/jpeg",
+			"test image content".getBytes()
+		);
 
 		// when
-		petService.createPet(authentication, requestDto);
+		petService.createPet(authentication, requestDto, profileImage);
 
 		// then
 		verify(petRepository).save(any(Pet.class));

@@ -25,7 +25,7 @@ import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageRe
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
-import com.everstarbackmain.domain.pet.requestDto.CreatePetRequestDto;
+import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;
@@ -65,7 +65,7 @@ public class GetCheeringMessageServiceTest {
 
 		pet = Pet.createPet(user, new CreatePetRequestDto("petName", 10,
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
-			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
+			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
 	}
 
 	@Test
