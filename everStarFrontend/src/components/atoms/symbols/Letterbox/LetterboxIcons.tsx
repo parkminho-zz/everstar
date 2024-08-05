@@ -4,11 +4,15 @@ import { ReactComponent as LetterboxIcon } from 'assets/symbols/letterbox.svg';
 interface LetterboxIconsProps {
   variant: 'letterbox' | 'letterbox-alert' | 'letterbox-text';
   number?: number;
+  onClick?: () => void;
+  className?: string;
 }
 
 export const LetterboxIcons: React.FC<LetterboxIconsProps> = ({
   variant,
   number,
+  onClick,
+  className,
 }) => {
   return (
     <div
@@ -17,6 +21,8 @@ export const LetterboxIcons: React.FC<LetterboxIconsProps> = ({
         display: 'inline-block',
         textAlign: 'center',
       }}
+      onClick={onClick}
+      className={className}
     >
       {variant === 'letterbox-text' ? (
         <div

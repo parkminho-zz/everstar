@@ -4,9 +4,11 @@ import { ReactComponent as LetterIcon } from 'assets/symbols/letter.svg';
 interface LetterIconsProps {
   variant: 'letter' | 'letter-text';
   text?: string;
+  onClick?: () => void;
+  className?: string;
 }
 
-export const LetterIcons: React.FC<LetterIconsProps> = ({ variant, text }) => {
+export const LetterIcons: React.FC<LetterIconsProps> = ({ variant, text, onClick, className }) => {
   return (
     <div
       style={{
@@ -14,6 +16,8 @@ export const LetterIcons: React.FC<LetterIconsProps> = ({ variant, text }) => {
         display: 'inline-block',
         textAlign: 'center',
       }}
+      onClick={onClick}
+      className={className}
     >
       {variant === 'letter-text' ? (
         <div

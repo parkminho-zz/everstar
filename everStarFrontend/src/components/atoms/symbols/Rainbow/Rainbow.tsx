@@ -11,17 +11,9 @@ import { ReactComponent as RedRainbow } from 'assets/symbols/rainbow-red.svg';
 interface Props {
   color: 'none' | 'yellow' | 'violet' | 'blue' | 'green' | 'orange' | 'red' | 'indigo';
   className?: string;
-  // size: string;
 }
 
 export const Rainbow: React.FC<Props> = ({ color, className }): JSX.Element => {
-  // const getSize = () => {
-  //   if (size === 'mobile') {
-  //     return 'w-[375px] !h-[667px]';
-  //   } else if (size === 'tablet') {
-  //     return 'w-[375px] !h-[667px]';
-  //   }
-  // };
   return (
     <div className={`w-[1440px] h-[1024px] ${className}`}>
       {color === 'yellow' && (
