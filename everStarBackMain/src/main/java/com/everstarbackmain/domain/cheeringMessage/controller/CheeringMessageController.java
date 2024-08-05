@@ -2,8 +2,11 @@ package com.everstarbackmain.domain.cheeringMessage.controller;
 
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.everstarbackmain.domain.cheeringMessage.message.SuccessCheeringMessageMessage;
 import com.everstarbackmain.domain.cheeringMessage.requestDto.CreateCheeringMessageRequestDto;
+import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageResponseDto;
 import com.everstarbackmain.domain.cheeringMessage.service.CheeringMessageService;
 import com.everstarbackmain.global.util.HttpResponseUtil;
 
@@ -37,6 +41,16 @@ public class CheeringMessageController {
 			SuccessCheeringMessageMessage.SUCCESS_CREATE_CHEERINGMESSAGE);
 
 		log.info("main server - request : {}", requestDto);
+		log.info("main server - response : {}", response);
+
+		return response;
+	}
+
+	@GetMapping
+	ResponseEntity<Map<String, Object>> getCheeringMessages(@PathVariable("pet-id") Long petId, Pageable pageable) {
+		Page<CheeringMessageResponseDto> responseDto = cheeringMessageService.getCheeringMessages(petId, pageable);
+		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
+
 		log.info("main server - response : {}", response);
 
 		return response;
