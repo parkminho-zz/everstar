@@ -55,5 +55,4 @@ public class CheeringMessageService {
 
 		return cheeringMessageRepository.findCheeringMessagesByPetId(pet, pageable);
 	}
-
 }
