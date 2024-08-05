@@ -3,7 +3,7 @@ import { useMediaQuery } from 'react-responsive';
 import { Header } from 'components/molecules/Header/Header';
 import { Footer } from 'components/molecules/Footer/Footer';
 import { Glass } from 'components/molecules/Glass/Glass';
-import bgImage from 'assets/images/bg-login.png';
+import bgImage from 'assets/images/bg-login.webp';
 import { UserProfile, UserProfileProps } from 'components/organics/Profile/UserProfile';
 
 // JSON 데이터 (예시)

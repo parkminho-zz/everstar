@@ -3,7 +3,7 @@ import { CurrentLocation } from 'components/molecules/EverStar/CurrentLocation/C
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { ProgressBar } from 'components/molecules/ProgressBar/ProgressBar';
 import { useMediaQuery } from 'react-responsive';
-import bgImage from 'assets/images/bg-everstar.png';
+import bgImage from 'assets/images/bg-everstar.webp';
 import { Header } from 'components/molecules/Header/Header';
 import { Footer } from 'components/molecules/Footer/Footer';
 import { BookIcons } from 'components/atoms/symbols/Book/BookIcons';
@@ -142,53 +142,53 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
 
   return (
     <div
-      className='flex flex-col min-h-screen bg-center bg-cover'
+      className="flex flex-col min-h-screen bg-center bg-cover"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <Header type={headerType} className='sticky top-0 z-50' />
-      <div className='flex flex-col items-center justify-center flex-grow'>
+      <Header type={headerType} className="sticky top-0 z-50" />
+      <div className="flex flex-col items-center justify-center flex-grow">
         <div
           className={`flex flex-col w-72 h-[300px] items-start gap-[10px] pl-2 pr-2 py-4 relative bg-[#f3f6fb] shadow-[0px_4px_4px_#00000040] ${className}`}
         >
-          <div className='flex w-64 items-center justify-center gap-6 relative flex-[0_0_auto]'>
-            <div className='relative w-fit mt-[-1.00px] font-kor-h-h2 font-[number:var(--kor-h-h2-font-weight)] text-greyscaleblack-100 text-[length:var(--kor-h-h2-font-size)] tracking-[var(--kor-h-h2-letter-spacing)] leading-[var(--kor-h-h2-line-height)] [font-style:var(--kor-h-h2-font-style)]'>
-              <CurrentLocation title={title} type='everstar' />
+          <div className="flex w-64 items-center justify-center gap-6 relative flex-[0_0_auto]">
+            <div className="relative w-fit mt-[-1.00px] font-kor-h-h2 font-[number:var(--kor-h-h2-font-weight)] text-greyscaleblack-100 text-[length:var(--kor-h-h2-font-size)] tracking-[var(--kor-h-h2-letter-spacing)] leading-[var(--kor-h-h2-line-height)] [font-style:var(--kor-h-h2-font-style)]">
+              <CurrentLocation title={title} type="everstar" />
             </div>
           </div>
 
-          <div className='flex justify-center w-full mt-0'>
+          <div className="flex justify-center w-full mt-0">
             <PrimaryButton
               theme={buttonTheme}
               size={buttonSize}
               disabled={buttonDisabled}
               onClick={onButtonClick}
-              icon={<LogoIcons variant='small-earth-img' />}
+              icon={<LogoIcons variant="small-earth-img" />}
             >
               {buttonText}
             </PrimaryButton>
           </div>
 
-          <div className='flex flex-col items-start gap-[15px] p-1 relative bg-white rounded-xl w-full '>
+          <div className="flex flex-col items-start gap-[15px] p-1 relative bg-white rounded-xl w-full ">
             <MusicControlButton duration={190} />
           </div>
 
-          <div className='flex flex-col items-start gap-[8px] p-4 relative bg-white rounded-xl w-full'>
-            <ProgressBar className='w-full' fill={fill} />
+          <div className="flex flex-col items-start gap-[8px] p-4 relative bg-white rounded-xl w-full">
+            <ProgressBar className="w-full" fill={fill} />
           </div>
-          <div className='relative w-[260px] h-[14px] mr-[-2.00px] font-kor-p-p2 font-[number:var(--kor-p-p2-font-weight)] text-black text-[length:var(--kor-p-p2-font-size)] text-center tracking-[var(--kor-p-p2-letter-spacing)] leading-[var(--kor-p-p2-line-height)] whitespace-nowrap [font-style:var(--kor-p-p2-font-style)]'>
+          <div className="relative w-[260px] h-[14px] mr-[-2.00px] font-kor-p-p2 font-[number:var(--kor-p-p2-font-weight)] text-black text-[length:var(--kor-p-p2-font-size)] text-center tracking-[var(--kor-p-p2-letter-spacing)] leading-[var(--kor-p-p2-line-height)] whitespace-nowrap [font-style:var(--kor-p-p2-font-style)]">
             {title}
             {getMessage(fill)}
           </div>
         </div>
 
-        <div className='mt-20'>
-          <BookIcons variant='book-close' />
+        <div className="mt-20">
+          <BookIcons variant="book-close" />
         </div>
 
-        <div className='flex items-center justify-center mt-3'>
+        <div className="flex items-center justify-center mt-3">
           <ViewMemorialBook
             theme={progressButtonTheme}
-            size='large'
+            size="large"
             disabled={isDisabled}
             onClick={() => alert('버튼 클릭됨')}
           >
@@ -196,7 +196,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
           </ViewMemorialBook>
         </div>
       </div>
-      <Footer type={footerType} className='mt-auto' />
+      <Footer type={footerType} className="mt-auto" />
     </div>
   );
 };
