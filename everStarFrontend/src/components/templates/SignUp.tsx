@@ -41,7 +41,7 @@ interface UserInfo {
 }
 
 const sendVerificationCode = async (
-  phone: string,
+  phone: string
 ): Promise<SendCodeResponse> => {
   const response = await fetch(
     'https://i11b101.p.ssafy.io/api/auth/users/send-code',
@@ -51,7 +51,7 @@ const sendVerificationCode = async (
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ phone }),
-    },
+    }
   );
 
   if (!response.ok) {
@@ -60,7 +60,7 @@ const sendVerificationCode = async (
       alert('잘못된 전화번호입니다. 다시 확인해주세요.');
     } else {
       throw new Error(
-        errorResponse.message || 'Failed to send verification code',
+        errorResponse.message || 'Failed to send verification code'
       );
     }
   }
@@ -83,7 +83,7 @@ const verifyAuthCode = async ({
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ phone, certificationNumber }),
-    },
+    }
   );
 
   if (!response.ok) {
@@ -108,7 +108,7 @@ const joinUser = async (userData: UserInfo): Promise<JoinResponse> => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(userData),
-    },
+    }
   );
 
   if (!response.ok) {
@@ -148,7 +148,7 @@ export const SignUp: React.FC = () => {
     userName: string,
     birthDate: string,
     gender: string,
-    questReceptionTime: string,
+    questReceptionTime: string
   ) => {
     setPhone(phoneNumber);
     setFormData({
@@ -206,7 +206,7 @@ export const SignUp: React.FC = () => {
             navigate('/login');
           }
         },
-      },
+      }
     );
   };
 
@@ -244,7 +244,7 @@ export const SignUp: React.FC = () => {
             userName: string,
             birthDate: string,
             gender: string,
-            questReceptionTime: string,
+            questReceptionTime: string
           ) => {
             handleSignUpButtonClick(
               phoneNumber,
@@ -252,7 +252,7 @@ export const SignUp: React.FC = () => {
               userName,
               birthDate,
               gender,
-              questReceptionTime,
+              questReceptionTime
             );
           }}
         />
