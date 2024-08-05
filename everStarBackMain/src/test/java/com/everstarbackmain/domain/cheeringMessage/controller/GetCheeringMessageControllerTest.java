@@ -27,7 +27,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.everstarbackmain.domain.cheeringMessage.message.SuccessCheeringMessageMessage;
+import com.everstarbackmain.domain.cheeringMessage.model.CheeringMessage;
 import com.everstarbackmain.domain.cheeringMessage.requestDto.CreateCheeringMessageRequestDto;
+import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageDetailResponseDto;
 import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageResponseDto;
 import com.everstarbackmain.domain.cheeringMessage.service.CheeringMessageService;
 import com.everstarbackmain.domain.pet.model.Pet;
@@ -66,12 +68,24 @@ public class GetCheeringMessageControllerTest {
 	private Page page;
 
 	private User user;
-
+	private Pet pet;
+	private CreateCheeringMessageRequestDto requestDto;
+	private CheeringMessage cheeringMessage;
+	private CheeringMessageDetailResponseDto responseDto;
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		user = User.signUpUser(new JoinRequestDto("email", "password", "name", "010-1111-1111", LocalDate.now(),
 			Gender.MALE, LocalTime.now(), Role.ROLE_USER));
+
+		pet = Pet.createPet(user, new CreatePetRequestDto("petName", 10,
+			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
+			"relationship", "profileImageUrl", List.of("개구쟁이", "귀염둥이")));
+
+		requestDto = new CreateCheeringMessageRequestDto("content", false);
+		cheeringMessage = CheeringMessage.createAnonymousCheeringMessage(requestDto, pet);
+
+		responseDto = CheeringMessageDetailResponseDto.createCheeringMessageDetailResponseDto(cheeringMessage);
 	}
 
 	@Test
@@ -84,6 +98,23 @@ public class GetCheeringMessageControllerTest {
 		response.put("data", page);
 
 		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/api/pets/1/cheeringMessages?page=0&size=10")
+			.with(SecurityMockMvcRequestPostProcessors.csrf())
+			.contentType(MediaType.APPLICATION_JSON)
+		);
+
+		result.andExpect(MockMvcResultMatchers.status().isOk());
+	}
+
+	@Test
+	@DisplayName("응원메시지 상세 조회 성공 테스트")
+	@WithMockAuthUser(email = "test@gmail.com", role = Role.ROLE_USER)
+	public void 응원_메시지_상세_조회_성공_테스트() throws Exception {
+		//given
+		Map<String, Object> response = new HashMap<>();
+		BDDMockito.given(cheeringMessageService.getCheeringMessageDetail(1L, 1L)).willReturn(responseDto);
+		response.put("data", responseDto);
+
+		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/api/pets/1/cheeringMessages/2")
 			.with(SecurityMockMvcRequestPostProcessors.csrf())
 			.contentType(MediaType.APPLICATION_JSON)
 		);
