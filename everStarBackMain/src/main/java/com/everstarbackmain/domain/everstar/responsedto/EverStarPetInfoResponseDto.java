@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.everstarbackmain.domain.pet.model.Pet;
-import com.everstarbackmain.domain.pet.responsedto.MyPagePetInfoResponseDto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,11 +22,9 @@ public class EverStarPetInfoResponseDto {
 	private String introduction;
 	private Integer age;
 	private LocalDate memorialDate;
-	private List<String> petPersonalities; //MypageDto? or service에서 List<String>
+	private List<String> petPersonalities;
 
-	// 인자로 들어간 성격 리스트가 MyPagePetInfoResponseDto에 있느는데 그걸 가져와도 되는건지?
-	public static EverStarPetInfoResponseDto createEverStarPetInfoResponseDto(Pet pet, List<String> petPersonalities, MyPagePetInfoResponseDto petPersonalitiesDto) {
-
+	public static EverStarPetInfoResponseDto createEverStarPetInfoResponseDto(Pet pet, List<String> petPersonalities) {
 		return EverStarPetInfoResponseDto.builder()
 			.userId(pet.getUser().getId())
 			.id(pet.getId())
@@ -37,7 +34,6 @@ public class EverStarPetInfoResponseDto {
 			.age(pet.getAge())
 			.memorialDate(pet.getMemorialDate())
 			.petPersonalities(petPersonalities)
-			// .petPersonalities(petPersonalitiesDto.getPetPersonalities())
 			.build();
 	}
 }

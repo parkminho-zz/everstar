@@ -41,6 +41,7 @@ public class SecurityConfig {
 		http.authorizeHttpRequests((auth) -> auth
 			.requestMatchers("/api/pets/**").hasRole("USER")
 			.requestMatchers("/api/accounts/users/**").hasRole("USER")
+			.requestMatchers("/api/everstar/**").hasRole("USER")
 			.anyRequest().authenticated()
 		);
 		http.exceptionHandling((handle) -> handle.authenticationEntryPoint(customExceptionHandler));
