@@ -13,10 +13,4 @@ public class WriteLetterRequestDto {
 
 	@NotBlank
 	private String content;
-
-	private String imageUrl;
-
-	public WriteLetterRequestDto(String content) {
-		this.content = content;
-	}
 }

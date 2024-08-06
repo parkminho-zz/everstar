@@ -78,8 +78,8 @@ public class GetLetterDetailServiceTest {
 		pet = Pet.createPet(user, new CreatePetRequestDto("petName", 10,
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
-		requestDto = new WriteLetterRequestDto("dd", "dd");
-		userLetter = UserLetter.writeLetterHasImage(pet, requestDto);
+		requestDto = new WriteLetterRequestDto("dd");
+		userLetter = UserLetter.writeLetterHasImage(pet, requestDto, "image");
 		userLetter = UserLetter.writeLetterHasNotImage(pet, requestDto);
 		petLetter = PetLetter.writePetLetterAnswer(userLetter, "content");
 	}
