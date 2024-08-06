@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.b101.everStarBackChat.domain.chat.requestDto.ChatMessage;
 import com.b101.everStarBackChat.domain.chat.service.ChatService;
+import com.b101.everStarBackChat.global.kafka.KafkaProducerService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 public class ChatController {
 
 	private final ChatService chatService;
+	private final KafkaProducerService producerService;
 
 	@MessageMapping("/chat/message")
 	public void sendMessage(@Payload ChatMessage message) {
-		chatService.sendMessage(message);
+		producerService.sendMessage(message);
 	}
 }
