@@ -9,7 +9,7 @@ import lombok.Getter;
 public enum AiAnswerType {
 
 	TEXT("TEXT"),
-	TEXT_IMAGE("IMAGE"),
+	IMAGE("IMAGE"),
 	WEBRTC("MUSIC");
 
 	private String type;
