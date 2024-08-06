@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.everstarbackmain.domain.questAnswer.message.SuccessQuestAnswerMessage;
 import com.everstarbackmain.domain.userLetter.message.SuccessUserLetterMessage;
@@ -31,8 +33,8 @@ public class UserLetterController {
 
 	@PostMapping
 	public ResponseEntity<Map<String, Object>> writeLetter(Authentication authentication,
-		@PathVariable("pet-id") long petId, @RequestBody @Valid WriteLetterRequestDto requestDto) {
-		userLetterService.writeLetter(authentication, petId, requestDto);
+		@PathVariable("pet-id") long petId, @RequestPart @Valid WriteLetterRequestDto requestDto, @RequestPart MultipartFile image) {
+		userLetterService.writeLetter(authentication, petId, requestDto, image);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessUserLetterMessage.SUCCESS_WRITE_LETTER);
 

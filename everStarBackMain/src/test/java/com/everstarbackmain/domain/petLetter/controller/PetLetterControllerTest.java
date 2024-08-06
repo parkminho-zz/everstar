@@ -93,7 +93,7 @@ public class PetLetterControllerTest {
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
 
 		requestDto = new WriteLetterRequestDto("dd", "dd");
-		userLetter = UserLetter.writeLetterHasImage(pet, requestDto);
+		userLetter = UserLetter.writeLetterHasNotImage(pet, requestDto);
 		petLetter = PetLetter.writePetLetterAnswer(userLetter, "content");
 		getLetterResponseDto = GetLetterResponseDto.createGetLetterResponseDto(petLetter);
 	}

@@ -74,7 +74,7 @@ public class WritePetLetterEventListenerTest {
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
 		requestDto = new WriteLetterRequestDto("dd", "dd");
-		userLetter = UserLetter.writeLetterHasImage(pet, requestDto);
+		userLetter = UserLetter.writeLetterHasImage(pet, requestDto, "image");
 		userLetter = UserLetter.writeLetterHasNotImage(pet, requestDto);
 		userLetters = Collections.singletonList(userLetter);
 		petLetter = PetLetter.writePetLetterAnswer(userLetter, "content");
