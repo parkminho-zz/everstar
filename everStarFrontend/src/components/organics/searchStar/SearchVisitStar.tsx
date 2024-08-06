@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Modal } from 'components/molecules/Modal/Modal';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
-import { Select } from 'components/molecules/input/Select';
-import { Textbox } from 'components/molecules/input/Textbox';
+import { Search } from 'components/molecules/input/Search';
 
 interface SearchVisitStarProps {
   isOpen: boolean;
@@ -21,8 +20,6 @@ export const SearchVisitStar: React.FC<SearchVisitStarProps> = ({
 }) => {
   const [verificationCode] = useState('');
 
-  const colorOptions = ['11', '2', '33', '44', '55', '6', '77'];
-
   const handleVerify = () => {
     onVerify(verificationCode);
   };
@@ -35,24 +32,14 @@ export const SearchVisitStar: React.FC<SearchVisitStarProps> = ({
             className="left-0 [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal] "
             dangerouslySetInnerHTML={{ __html: text }}
           />
-          <div className="[font-family:'Noto_Sans_KR-Bold'] font-bold text-[#1f2329] text-sm tracking-[-1.12px] leading-[normal]">
-            <Textbox
-              type={'small'}
-              label={'반려동물 이름을 검색해주세요'}
-              showInfoText={false}
-              showStar={false}
-            />
-          </div>
-          <div className='mt-6'>
-            <Select
-              options={colorOptions}
-              title={''}
-              showLabel={false}
-              onOptionSelect={function (): void {}}
-              infoText={''}
-            />
-          </div>
         </div>
+        <Search
+          initialState={'disable'}
+          options={[]}
+          onOptionSelect={function (): void {
+            throw new Error('Function not implemented.');
+          }}
+        />
         <div className='flex justify-end w-full mt-10'>
           <PrimaryButton
             theme='white'

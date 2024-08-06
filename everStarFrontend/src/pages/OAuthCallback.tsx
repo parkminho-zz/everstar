@@ -1,19 +1,17 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { SetUser, SetToken } from 'store/Auth';
-
+import { setUser, setToken } from 'store/slices/authSlice'; // 경로 확인
+import config from 'config';
 const fetchUserInfo = async (token: string) => {
-  const response = await fetch(
-    'https://i11b101.p.ssafy.io/api/accounts/users',
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
+  const response = await fetch(`${config.API_BASE_URL}/api/accounts/users`, {
+    // 템플릿 리터럴 사용
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
     },
-  );
+  });
 
   if (!response.ok) {
     throw new Error('Failed to fetch user info');
@@ -29,25 +27,16 @@ export const OAuthCallback: React.FC = () => {
 
   useEffect(() => {
     const pathSegments = location.pathname.split('/');
-    const token = pathSegments[pathSegments.length - 1]; // 마지막 경로 세그먼트에서 토큰 추출
+    const token = pathSegments[pathSegments.length - 1];
 
     if (token) {
-      console.log('Extracted token:', token); // 토큰 로그 추가
-      // 토큰을 Redux에 저장
-      dispatch(SetToken(token));
+      console.log('Extracted token:', token);
+      dispatch(setToken(token));
 
-      // 사용자 정보 조회
       fetchUserInfo(token)
         .then((user) => {
-          console.log('Fetched user info:', user); // 사용자 정보 로그 추가
-          dispatch(
-            SetUser({
-              ...user,
-              // 필요한 경우 birthDate와 questReceptionTime 변환
-              // birthDate: new Date(user.birthDate),
-              // questReceptionTime: new Date(user.questReceptionTime),
-            }),
-          );
+          console.log('Fetched user info:', user);
+          dispatch(setUser(user));
           navigate('/profile');
         })
         .catch((error) => {

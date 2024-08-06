@@ -4,9 +4,16 @@ import { ReactComponent as Rocket } from 'assets/symbols/rocket.svg';
 interface RocketIconsProps {
   variant: 'rocket' | 'rocket-text';
   text?: string;
+  onClick?: () => void;
+  className?: string;
 }
 
-export const RocketIcons: React.FC<RocketIconsProps> = ({ variant, text }) => {
+export const RocketIcons: React.FC<RocketIconsProps> = ({
+  variant,
+  text,
+  onClick,
+  className,
+}) => {
   return (
     <div
       style={{
@@ -14,6 +21,8 @@ export const RocketIcons: React.FC<RocketIconsProps> = ({ variant, text }) => {
         display: 'inline-block',
         textAlign: 'center',
       }}
+      onClick={onClick}
+      className={className}
     >
       {variant === 'rocket-text' ? (
         <div

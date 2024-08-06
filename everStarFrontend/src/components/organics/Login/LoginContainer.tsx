@@ -1,3 +1,5 @@
+import config from 'config';
+
 import React, { useState } from 'react';
 import { LogoIcons } from 'components/atoms/symbols/Logo/LogoIcons';
 import { KakaoLoginButton } from 'components/atoms/buttons/KakaoLoginButton';
@@ -8,7 +10,7 @@ export const LoginContainer: React.FC = () => {
   const [page, setPage] = useState<'page-1' | 'page-2' | 'page-3' | 'page-4'>('page-1');
 
   const handleOAuthLogin = (provider: 'kakao' | 'google') => {
-    window.location.href = `https://i11b101.p.ssafy.io/api/auth/oauth2/authorization/${provider}`; // apiUrl 사용
+    window.location.href = `${config.API_BASE_URL}/api/auth/oauth2/authorization/${provider}`; // apiUrl 사용
   };
 
   return (

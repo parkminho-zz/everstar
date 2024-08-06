@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { MoveContainer } from 'components/organics/input/MoveContainer/MoveContainer';
 import { SearchVisitStar } from './SearchVisitStar';
 import { Glass } from 'components/molecules/Glass/Glass';
+import { useNavigate } from 'react-router-dom';
 
 export const SearchStar = (): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
@@ -33,10 +35,10 @@ export const SearchStar = (): JSX.Element => {
           title={'영원별 이동'}
           nextPage1={'random'}
           nextPage2={'search'}
+          // onNextPage1Click={}
+          onNextPage2Click={handleModalOpen}
+          onLeftIconClick={() => navigate('/everstar/1')}
         />
-        <button onClick={handleModalOpen} className='mt-0'>
-          찾아가기
-        </button>
         <SearchVisitStar
           isOpen={isModalOpen}
           onClose={handleModalClose}

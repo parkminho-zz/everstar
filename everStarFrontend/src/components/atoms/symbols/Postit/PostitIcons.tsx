@@ -4,9 +4,16 @@ import { ReactComponent as Postit } from 'assets/symbols/postit.svg';
 interface PostitIconsProps {
   variant: 'postit' | 'postit-text';
   text?: string;
+  onClick?: () => void;
+  className?: string;
 }
 
-export const PostitIcons: React.FC<PostitIconsProps> = ({ variant, text }) => {
+export const PostitIcons: React.FC<PostitIconsProps> = ({
+  variant,
+  text,
+  onClick,
+  className,
+}) => {
   return (
     <div
       style={{
@@ -14,6 +21,8 @@ export const PostitIcons: React.FC<PostitIconsProps> = ({ variant, text }) => {
         display: 'inline-block',
         textAlign: 'center',
       }}
+      onClick={onClick}
+      className={className}
     >
       {variant === 'postit-text' ? (
         <div

@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MyPage } from 'pages/MyPage';
@@ -10,6 +9,7 @@ import { ProfilePage } from 'pages/ProfilePage';
 import { SignUpPage } from 'pages/SignUpPage';
 import { LoginPage } from 'pages/LoginPage';
 import { OAuthCallback } from 'pages/OAuthCallback';
+import './firebase-messaging-sw';
 
 const queryClient = new QueryClient();
 
@@ -25,7 +25,7 @@ function App() {
             <Route path='/profile/*' element={<ProfilePage />}></Route>
             <Route path='/tutorial' element={<TutorialPage />}></Route>
             <Route path='/earth/*' element={<EarthPage />}></Route>
-            <Route path='/everstar/*' element={<EverstarPage />}></Route>
+            <Route path='/everstar/:petid/*' element={<EverstarPage />}></Route>
             <Route path='/mypage/*' element={<MyPage />}></Route>
             <Route path='/oauth/*' element={<OAuthCallback />} />
           </Routes>
