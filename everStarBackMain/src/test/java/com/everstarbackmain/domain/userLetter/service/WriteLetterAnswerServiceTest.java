@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
@@ -32,6 +33,7 @@ import com.everstarbackmain.domain.userLetter.requestDto.WriteLetterRequestDto;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
+import com.everstarbackmain.global.util.S3UploadUtil;
 
 @ExtendWith(MockitoExtension.class)
 public class WriteLetterAnswerServiceTest {
@@ -54,6 +56,12 @@ public class WriteLetterAnswerServiceTest {
 	@Mock
 	private PrincipalDetails principalDetails;
 
+	@Mock
+	private MultipartFile file;
+
+	@Mock
+	private S3UploadUtil s3UploadUtil;
+
 	private User user;
 	private Pet pet;
 	private PetLetter petLetter;
@@ -75,7 +83,7 @@ public class WriteLetterAnswerServiceTest {
 		userLetter = UserLetter.writeLetterHasNotImage(pet, writeLetterRequestDto);
 		petLetter = PetLetter.writePetLetter(pet, "content");
 		petLetterTypeByUser = PetLetter.writePetLetterAnswer(userLetter, "content");
-		requestDto = new WriteLetterRequestDto("dd", "dd");
+		requestDto = new WriteLetterRequestDto("dd");
 	}
 
 	@Test
@@ -91,7 +99,7 @@ public class WriteLetterAnswerServiceTest {
 
 		// when then
 		Assertions.assertThatNoException()
-			.isThrownBy(() -> userLetterService.writeLetterAnswer(authentication, 1L, 1L, requestDto));
+			.isThrownBy(() -> userLetterService.writeLetterAnswer(authentication, 1L, 1L, requestDto, file));
 	}
 
 	@Test
@@ -106,7 +114,7 @@ public class WriteLetterAnswerServiceTest {
 			.willReturn(Optional.of(petLetterTypeByUser));
 
 		// when then
-		Assertions.assertThatThrownBy(() -> userLetterService.writeLetterAnswer(authentication, 1L, 1L, requestDto))
+		Assertions.assertThatThrownBy(() -> userLetterService.writeLetterAnswer(authentication, 1L, 1L, requestDto, file))
 			.isInstanceOf(ExceptionResponse.class)
 			.hasFieldOrPropertyWithValue("customException", CustomException.ACCESS_LETTER_SEND_TYPE);
 	}
@@ -124,7 +132,7 @@ public class WriteLetterAnswerServiceTest {
 			.willReturn(Optional.of(petLetter));
 
 		// when then
-		Assertions.assertThatThrownBy(() -> userLetterService.writeLetterAnswer(authentication, 1L, 1L, requestDto))
+		Assertions.assertThatThrownBy(() -> userLetterService.writeLetterAnswer(authentication, 1L, 1L, requestDto, file))
 			.isInstanceOf(ExceptionResponse.class)
 			.hasFieldOrPropertyWithValue("customException", CustomException.NOT_ACCESS_SEND_LETTER_ANSWER);
 	}
