@@ -12,28 +12,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.security.core.Authentication;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 import com.everstarbackmain.domain.memorialBook.util.MemorialBookScheduler;
-import com.everstarbackmain.domain.quest.model.Quest;
-import com.everstarbackmain.domain.quest.model.QuestType;
-import com.everstarbackmain.domain.quest.repository.QuestRepository;
-import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
-import com.everstarbackmain.domain.questAnswer.model.QuestAnswerType;
-import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
+import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
-import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
 import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;
 import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;
@@ -47,16 +37,12 @@ import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
-import com.everstarbackmain.global.util.S3UploadUtil;
 
 @ExtendWith(MockitoExtension.class)
 class QuestAnswerServiceTest {
 
 	@InjectMocks
 	private QuestAnswerService questAnswerService;
-
-	@Mock
-	private QuestRepository questRepository;
 
 	@Mock
 	private PetRepository petRepository;
@@ -77,9 +63,6 @@ class QuestAnswerServiceTest {
 	private OpenAiClient openAiClient;
 
 	@Mock
-	private S3UploadUtil s3UploadUtil;
-
-	@Mock
 	private TaskScheduler taskScheduler;
 
 	@Mock
@@ -93,8 +76,6 @@ class QuestAnswerServiceTest {
 	private MemorialBook memorialBook;
 	private SentimentAnalysis sentimentAnalysis;
 	private SentimentAnalysisResult sentimentAnalysisResult;
-	private Quest quest;
-	private CreateAnswerRequestDto createAnswerRequestDto;
 
 	@BeforeEach
 	public void setup() {
@@ -106,47 +87,6 @@ class QuestAnswerServiceTest {
 		memorialBook = MemorialBook.createMemorialBook(pet);
 		sentimentAnalysis = SentimentAnalysis.createSentimentAnalysis(pet);
 		sentimentAnalysisResult = SentimentAnalysisResult.createSentimentAnalysisResult(0.1, 0.3, 0.6);
-		quest = new Quest("content", QuestType.TEXT);
-		createAnswerRequestDto = new CreateAnswerRequestDto("content", QuestAnswerType.TEXT_IMAGE.getType());
-
-		ReflectionTestUtils.setField(pet, "id", 1L);
-	}
-
-	@Test
-	@DisplayName("퀘스트_답변_생성_성공_테스트")
-	public void 퀘스트_답변_생성_성공_테스트() {
-		// given
-		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
-		given(authentication.getPrincipal()).willReturn(principalDetails);
-		given(principalDetails.getUser()).willReturn(user);
-		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
-		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
-
-		// when
-		questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
-
-		// then
-		BDDMockito.then(questAnswerRepository).should(times(1)).save(any(QuestAnswer.class));
-		BDDMockito.then(s3UploadUtil).should(times(1)).saveFile(imageFile);
-	}
-
-	@Test
-	@DisplayName("퀘스트_답변_생성_퀘스트_없음_예외_테스트")
-	public void 퀘스트_답변_생성_퀘스트_없음_예외_테스트() {
-		// given
-		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
-		given(authentication.getPrincipal()).willReturn(principalDetails);
-		given(principalDetails.getUser()).willReturn(user);
-		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
-		given(questRepository.findById(anyLong())).willReturn(Optional.empty());
-
-		// when
-		ExceptionResponse exceptionResponse = assertThrows(ExceptionResponse.class, () -> {
-			questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
-		});
-
-		// then
-		assertEquals(CustomException.NOT_FOUND_QUEST_EXCEPTION, exceptionResponse.getCustomException());
 	}
 
 	@Test
@@ -156,16 +96,14 @@ class QuestAnswerServiceTest {
 		for (int i = 0; i < 48; i++) {
 			pet.plusQuestIndex();
 		}
-		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
 		given(sentimentAnalysisRepository.findByPetId(anyLong())).willReturn(Optional.of(sentimentAnalysis));
 		given(naverCloudClient.analyseSentiment(anyString())).willReturn(Optional.of(sentimentAnalysisResult).get());
-		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
 
 		// when
-		questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
+		questAnswerService.createQuestAnswer(authentication, 1L);
 
 		// then
 		verify(memorialBookScheduler).scheduleMemorialBookActivation(user, 1L);
@@ -178,7 +116,6 @@ class QuestAnswerServiceTest {
 		for (int i = 0; i < 6; i++) {
 			pet.plusQuestIndex();
 		}
-		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		SentimentAnalysis sentimentAnalysis = mock(SentimentAnalysis.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
@@ -190,10 +127,9 @@ class QuestAnswerServiceTest {
 			.willReturn(SentimentAnalysisResult.createSentimentAnalysisResult(0.1, 0.2, 0.7));
 		given(sentimentAnalysisRepository.findByPetId(anyLong()))
 			.willReturn(Optional.of(sentimentAnalysis));
-		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
 
 		// when
-		questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
+		questAnswerService.createQuestAnswer(authentication, 1L);
 
 		// then
 		verify(naverCloudClient, times(1)).analyseSentiment(anyString());
@@ -210,7 +146,6 @@ class QuestAnswerServiceTest {
 			pet.plusQuestIndex();
 		}
 
-		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
@@ -219,11 +154,10 @@ class QuestAnswerServiceTest {
 			.willReturn(List.of("answer1", "answer2", "answer3", "answer4", "answer5", "answer6", "answer7"));
 		given(naverCloudClient.analyseSentiment(anyString()))
 			.willThrow(new ExceptionResponse(CustomException.NAVER_SENTIMENT_API_EXCEPTION));
-		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
 
 		// when
 		ExceptionResponse exceptionResponse = assertThrows(ExceptionResponse.class, () -> {
-			questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
+			questAnswerService.createQuestAnswer(authentication, 1L);
 		});
 
 		// then
@@ -238,7 +172,6 @@ class QuestAnswerServiceTest {
 			pet.plusQuestIndex();
 		}
 
-		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
@@ -249,11 +182,10 @@ class QuestAnswerServiceTest {
 			.willReturn(SentimentAnalysisResult.createSentimentAnalysisResult(0.1, 0.2, 0.7));
 		given(sentimentAnalysisRepository.findByPetId(anyLong()))
 			.willReturn(Optional.empty());
-		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
 
 		// when
 		ExceptionResponse exceptionResponse = assertThrows(ExceptionResponse.class, () -> {
-			questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
+			questAnswerService.createQuestAnswer(authentication, 1L);
 		});
 
 		// then
@@ -267,16 +199,14 @@ class QuestAnswerServiceTest {
 		for (int i = 0; i < 48; i++) {
 			pet.plusQuestIndex();
 		}
-		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
 		given(sentimentAnalysisRepository.findByPetId(anyLong())).willReturn(Optional.of(sentimentAnalysis));
 		given(naverCloudClient.analyseSentiment(anyString())).willReturn(Optional.of(sentimentAnalysisResult).get());
-		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
 
 		// when
-		questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
+		questAnswerService.createQuestAnswer(authentication, 1L);
 
 		// then
 		verify(openAiClient).analysisTotalSentiment(sentimentAnalysis);
@@ -289,7 +219,6 @@ class QuestAnswerServiceTest {
 		for (int i = 0; i < 48; i++) {
 			pet.plusQuestIndex();
 		}
-		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
@@ -297,11 +226,10 @@ class QuestAnswerServiceTest {
 		given(naverCloudClient.analyseSentiment(anyString())).willReturn(Optional.of(sentimentAnalysisResult).get());
 		given(openAiClient.analysisTotalSentiment(any(SentimentAnalysis.class)))
 			.willThrow(new ExceptionResponse(CustomException.OPENAI_API_EXCEPTION));
-		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
 
 		// when
 		ExceptionResponse exceptionResponse = assertThrows(ExceptionResponse.class, () -> {
-			questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
+			questAnswerService.createQuestAnswer(authentication, 1L);
 		});
 
 		// then

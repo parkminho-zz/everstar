@@ -127,6 +127,6 @@ public class Pet extends BaseTimeEntity {
 	private LocalDateTime generateRandomTime() {
 		Random random = new Random();
 		int randomMinutes = 1 + random.nextInt(5);
-		return LocalDateTime.now().plusMinutes(randomMinutes);
+		return LocalDateTime.now().plusWeeks(randomMinutes);
 	}
 }
