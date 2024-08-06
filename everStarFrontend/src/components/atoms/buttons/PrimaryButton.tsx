@@ -13,7 +13,7 @@ interface IPrimaryButtonProps {
   size: PrimaryButtonSize;
   disabled: boolean;
   children?: string; // Optional children prop
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: () => void;
   icon?: React.ReactElement | null;
   hug?: boolean;
   label?: string; // Optional label prop

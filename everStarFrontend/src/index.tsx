@@ -9,15 +9,18 @@ import reportWebVitals from './reportWebVitals';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import { Store } from './store/Store';
 import { Provider } from 'react-redux';
+// import { PersistGate } from 'redux-persist/integration/react';
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
 
 root.render(
   <React.StrictMode>
     <Provider store={Store}>
       <App />
     </Provider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
 
 reportWebVitals();

@@ -8,11 +8,17 @@ interface IMoveContainer {
   title: string;
   nextPage1: pageType;
   nextPage2: pageType;
+  onNextPage1Click?: () => void;
+  onNextPage2Click?: () => void;
+  onLeftIconClick?: () => void;
 }
 export const MoveContainer = ({
   title,
   nextPage1,
   nextPage2,
+  onNextPage1Click,
+  onNextPage2Click,
+  onLeftIconClick,
 }: IMoveContainer) => {
   const goNext = (next: pageType) => {
     switch (next) {
@@ -30,11 +36,15 @@ export const MoveContainer = ({
   };
   return (
     <div className='flex w-[360px] h-[278px] py-6 px-0 flex-col items-center gap-4 flex-shrink-0 bg-white'>
-      <ModalHeader text={title} showLeftIcon={true} />
+      <ModalHeader
+        text={title}
+        showLeftIcon={true}
+        onLeftIconClick={onLeftIconClick}
+      />
       <PrimaryButton
         theme='white'
         size='large'
-        onClick={() => console.log(goNext(nextPage1))}
+        onClick={onNextPage1Click}
         disabled={false}
         icon={<ArrowIcon color='black' direction='right' size={24} />}
       >
@@ -43,7 +53,7 @@ export const MoveContainer = ({
       <PrimaryButton
         theme='white'
         size='large'
-        onClick={() => console.log(goNext(nextPage2))}
+        onClick={onNextPage2Click}
         disabled={false}
         icon={<ArrowIcon color='black' direction='right' size={24} />}
       >

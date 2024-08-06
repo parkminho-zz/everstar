@@ -31,22 +31,29 @@ export interface UserInfo {
   questReceptionTime: string;
 }
 
-export const sendVerificationCode = async (phone: string): Promise<SendCodeResponse> => {
-  const response = await fetch(`${config.API_BASE_URL}/api/auth/users/check-code`, {
-    // 환경 변수 사용
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ phone }),
-  });
+export const sendVerificationCode = async (
+  phone: string
+): Promise<SendCodeResponse> => {
+  const response = await fetch(
+    `${config.API_BASE_URL}/api/auth/users/send-code`,
+    {
+      // 환경 변수 사용
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ phone }),
+    }
+  );
 
   if (!response.ok) {
     const errorResponse = await response.json();
     if (response.status === 400) {
       alert('잘못된 전화번호입니다. 다시 확인해주세요.');
     } else {
-      throw new Error(errorResponse.message || 'Failed to send verification code');
+      throw new Error(
+        errorResponse.message || 'Failed to send verification code'
+      );
     }
   }
 
@@ -60,13 +67,16 @@ export const verifyAuthCode = async ({
   phone: string;
   certificationNumber: string;
 }): Promise<VerifyCodeResponse> => {
-  const response = await fetch('https://i11b101.p.ssafy.io/api/auth/users/check-code', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ phone, certificationNumber }),
-  });
+  const response = await fetch(
+    `${config.API_BASE_URL}/api/auth/users/check-code`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ phone, certificationNumber }),
+    }
+  );
 
   if (!response.ok) {
     const errorResponse = await response.json();
