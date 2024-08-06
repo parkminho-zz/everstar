@@ -74,7 +74,7 @@ public class WriteLetterServiceTest {
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
 
-		requestDto = new WriteLetterRequestDto("dd", "dd");
+		requestDto = new WriteLetterRequestDto("dd");
 		noImageRequestDto = new WriteLetterRequestDto("dd");
 		userLetter = UserLetter.writeLetterHasImage(pet, requestDto, "imgUrl");
 	}
