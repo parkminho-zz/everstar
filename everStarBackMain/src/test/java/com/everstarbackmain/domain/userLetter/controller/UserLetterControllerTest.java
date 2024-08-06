@@ -84,7 +84,7 @@ public class UserLetterControllerTest {
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
 
-		requestDto = new WriteLetterRequestDto("dd", "dd");
+		requestDto = new WriteLetterRequestDto("dd");
 		userLetter = UserLetter.writeLetterHasImage(pet, requestDto, "image");
 	}
 
@@ -119,12 +119,16 @@ public class UserLetterControllerTest {
 		Map<String, Object> response = new HashMap<>();
 		response.put("data", SuccessUserLetterMessage.SUCCESS_WRITE_LETTER_ANSWER);
 
-		BDDMockito.doNothing().when(userLetterService).writeLetterAnswer(authentication, 1L, 1L, requestDto);
+		MockMultipartFile file = new MockMultipartFile("image", "test.jpg", "image/jpeg", "test image content".getBytes());
+		MockMultipartFile requestDtoFile = new MockMultipartFile("requestDto", "", "application/json", requestBody.getBytes());
 
-		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/api/pets/1/letters/1")
+		BDDMockito.doNothing().when(userLetterService).writeLetterAnswer(authentication, 1L, 1L, requestDto, file);
+
+		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.multipart("/api/pets/1/letters/1")
+			.file(file)  // 파일 추가
+			.file(requestDtoFile)  // JSON 데이터 추가
 			.with(SecurityMockMvcRequestPostProcessors.csrf())
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(requestBody));
+			.contentType(MediaType.MULTIPART_FORM_DATA));
 
 		result.andExpect(MockMvcResultMatchers.status().isOk());
 	}

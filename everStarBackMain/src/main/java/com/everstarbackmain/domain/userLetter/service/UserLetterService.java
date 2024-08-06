@@ -58,7 +58,7 @@ public class UserLetterService {
 
 	@Transactional
 	public void writeLetterAnswer(Authentication authentication, Long petId, Long petLetterId,
-		WriteLetterRequestDto requestDto) {
+		WriteLetterRequestDto requestDto, MultipartFile image) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
@@ -71,6 +71,14 @@ public class UserLetterService {
 
 		if (petLetter.getUserLetter() != null) {
 			throw new ExceptionResponse(CustomException.NOT_ACCESS_SEND_LETTER_ANSWER);
+		}
+
+		if (image != null) {
+			String imageUrl = s3UploadUtil.saveFile(image);
+			UserLetter userLetter = writeUserLetter(pet, requestDto, imageUrl);
+			userLetterRepository.save(userLetter);
+			petLetter.fetchReplyLetter(userLetter);
+			return;
 		}
 
 		UserLetter userLetter = writeUserLetterNoImage(pet, requestDto);
