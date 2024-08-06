@@ -1,29 +1,17 @@
 // src/store/slices/petSlice.ts
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Pet } from 'api/petApi';
-
-export interface PetInfo {
-  id: number;
-  userId: number;
-  name: string;
-  age: number;
-  memorialDate: string; // 변경된 부분
-  species: string;
-  gender: string;
-  relationship: string;
-  profileImage: string;
-  personalities: string[];
-}
+import { Pet, PetInfo } from 'api/petApi';
 
 interface PetState {
   pets: Pet[];
   petDetails: PetInfo | null;
+  selectedPetId: number | null;
 }
 
 const initialState: PetState = {
   pets: [],
   petDetails: null,
+  selectedPetId: null,
 };
 
 const petSlice = createSlice({
@@ -48,9 +36,18 @@ const petSlice = createSlice({
     setPetDetails: (state, action: PayloadAction<PetInfo>) => {
       state.petDetails = action.payload;
     },
+    setSelectedPetId: (state, action: PayloadAction<number | null>) => {
+      state.selectedPetId = action.payload;
+    },
   },
 });
 
-export const { addPet, setPets, updatePet, removePet, setPetDetails } =
-  petSlice.actions;
+export const {
+  addPet,
+  setPets,
+  updatePet,
+  removePet,
+  setPetDetails,
+  setSelectedPetId,
+} = petSlice.actions;
 export default petSlice.reducer;
