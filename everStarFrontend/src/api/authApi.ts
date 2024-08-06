@@ -1,3 +1,4 @@
+// src/api/authApi.ts
 import config from 'config';
 
 export interface SendCodeResponse {
@@ -10,18 +11,6 @@ export interface VerifyCodeResponse {
   message: string;
 }
 
-export interface JoinResponse {
-  token: string;
-  user: {
-    email: string;
-    userName: string;
-    phoneNumber: string;
-    birthDate: string;
-    gender: string;
-    questReceptionTime: string;
-  };
-}
-
 export interface UserInfo {
   email: string;
   userName: string;
@@ -31,33 +20,28 @@ export interface UserInfo {
   questReceptionTime: string;
 }
 
-export const sendVerificationCode = async (
-  phone: string
-): Promise<SendCodeResponse> => {
-  const response = await fetch(
-    `${config.API_BASE_URL}/api/auth/users/send-code`,
-    {
-      // 환경 변수 사용
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ phone }),
-    }
-  );
+const apiUrl = config.API_BASE_URL;
 
+const handleResponse = async (response: Response) => {
   if (!response.ok) {
     const errorResponse = await response.json();
-    if (response.status === 400) {
-      alert('잘못된 전화번호입니다. 다시 확인해주세요.');
-    } else {
-      throw new Error(
-        errorResponse.message || 'Failed to send verification code'
-      );
-    }
+    throw new Error(errorResponse.message || 'An error occurred');
   }
+  return response;
+};
 
-  return response.json();
+export const sendVerificationCode = async (
+  phone: string,
+): Promise<SendCodeResponse> => {
+  const response = await fetch(`${apiUrl}/api/auth/users/send-code`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    body: JSON.stringify({ phone }),
+  });
+
+  return handleResponse(response).then((res) => res.json());
 };
 
 export const verifyAuthCode = async ({
@@ -67,44 +51,50 @@ export const verifyAuthCode = async ({
   phone: string;
   certificationNumber: string;
 }): Promise<VerifyCodeResponse> => {
-  const response = await fetch(
-    `${config.API_BASE_URL}/api/auth/users/check-code`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ phone, certificationNumber }),
-    }
-  );
+  const response = await fetch(`${apiUrl}/api/auth/users/check-code`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    body: JSON.stringify({ phone, certificationNumber }),
+  });
 
-  if (!response.ok) {
-    const errorResponse = await response.json();
-    if (response.status === 400) {
-      alert(errorResponse.message);
-    } else {
-      throw new Error(errorResponse.message || 'Failed to verify auth code');
-    }
-  }
-
-  return response.json();
+  return handleResponse(response).then((res) => res.json());
 };
 
-export const joinUser = async (userData: UserInfo): Promise<JoinResponse> => {
-  console.log('전송 데이터:', userData); // 전송하는 데이터 출력
-  const response = await fetch(`${config.API_BASE_URL}/api/auth/oauth/join`, {
+export const joinUser = async (
+  userData: UserInfo,
+): Promise<{ data: UserInfo; token: string | null }> => {
+  const response = await fetch(`${apiUrl}/api/auth/oauth/join`, {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8',
     },
     body: JSON.stringify(userData),
   });
 
+  const data = await handleResponse(response).then((res) => res.json());
+  const token = response.headers.get('Authorization')?.split(' ')[1] || null;
+
+  return { data, token };
+};
+
+export const fetchUserInfo = async (token: string): Promise<UserInfo> => {
+  console.log(`Fetching user info with token: ${token}`);
+  const response = await fetch(`${apiUrl}/api/accounts/users`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+  });
+
+  console.log('Response status:', response.status);
   if (!response.ok) {
-    const errorResponse = await response.json();
-    console.error('회원가입 실패:', errorResponse); // 오류 메시지 출력
-    throw new Error(errorResponse.message || 'Failed to join user');
+    throw new Error('사용자 정보를 가져오는 데 실패했습니다');
   }
 
-  return response.json();
+  const result = await response.json();
+  console.log('Fetched user info:', result);
+  return result.data;
 };
