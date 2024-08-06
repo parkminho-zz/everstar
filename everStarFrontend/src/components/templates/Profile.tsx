@@ -11,6 +11,7 @@ import { SearchModal } from 'components/organics/SearchModal/SearchModal';
 import bgImage from 'assets/images/bg-everstar.webp';
 import { RootState } from 'store/Store';
 import { useFetchPets } from 'hooks/usePets';
+import config from 'config';
 
 export const Profile: React.FC = () => {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
@@ -42,7 +43,7 @@ export const Profile: React.FC = () => {
       );
 
       try {
-        const response = await fetch('https://i11b101.p.ssafy.io/api/pets', {
+        const response = await fetch(`${config.API_BASE_URL}/api/pets`, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -68,22 +69,16 @@ export const Profile: React.FC = () => {
   };
 
   if (isLoading) return <div>로딩 중...</div>;
-  if (error) return <div className='text-red-500'>{error.message}</div>;
+  if (error) return <div className="text-red-500">{error.message}</div>;
 
   return (
     <div
-      className='relative flex flex-col min-h-screen bg-center bg-cover'
+      className="relative flex flex-col min-h-screen bg-center bg-cover"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
       <Header
-        type={
-          isMobile
-            ? 'mobile-everstar'
-            : isTabletOrMobile
-              ? 'tablet-everstar'
-              : 'everstar'
-        }
-        className='sticky top-0 z-50'
+        type={isMobile ? 'mobile-everstar' : isTabletOrMobile ? 'tablet-everstar' : 'everstar'}
+        className="sticky top-0 z-50"
       />
       <Glass
         variant={isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop'}
@@ -91,25 +86,17 @@ export const Profile: React.FC = () => {
         totalPages={1}
         onPageChange={(newPage) => console.log('페이지 변경:', newPage)}
         showPageIndicator={false}
-        className='z-10'
+        className="z-10"
       />
-      <div className='z-20 flex items-center justify-center flex-grow'>
+      <div className="z-20 flex items-center justify-center flex-grow">
         {isPetInfoOpen ? (
           <PetInfoForm
-            headerText='반려동물 정보 입력'
+            headerText="반려동물 정보 입력"
             showPrimaryButton={true}
-            text='반려동물 정보를 입력해주세요.'
+            text="반려동물 정보를 입력해주세요."
             onClose={() => setPetInfoOpen(false)}
             onSubmit={handlePetFormSubmit}
-            relationshipOptions={[
-              '엄마',
-              '아빠',
-              '언니',
-              '누나',
-              '형',
-              '오빠',
-              '친구',
-            ]}
+            relationshipOptions={['엄마', '아빠', '언니', '누나', '형', '오빠', '친구']}
           />
         ) : (
           <ProfileSelection
@@ -129,19 +116,13 @@ export const Profile: React.FC = () => {
       </div>
       <Footer
         type={isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop'}
-        className='relative z-10 mt-auto'
+        className="relative z-10 mt-auto"
       />
       {isSearchModalOpen && (
         <SearchModal
-          searchOptions={[
-            '친근한',
-            '충성스러운',
-            '활발한',
-            '차분한',
-            '보호적인',
-          ]}
-          modalTitle='반려동물 성격 선택'
-          buttonLabel='작성 완료'
+          searchOptions={['친근한', '충성스러운', '활발한', '차분한', '보호적인']}
+          modalTitle="반려동물 성격 선택"
+          buttonLabel="작성 완료"
           onClose={() => {
             setSearchModalOpen(false);
             setPetInfoOpen(true);

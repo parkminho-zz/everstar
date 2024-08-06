@@ -1,4 +1,5 @@
 // src/api/petApi.ts
+import config from 'config';
 
 export interface Pet {
   id: number;
@@ -36,7 +37,7 @@ interface ApiResponse {
 
 export const fetchPets = async (token: string): Promise<Pet[]> => {
   console.log('Fetching pets with token:', token);
-  const response = await fetch('https://i11b101.p.ssafy.io/api/pets', {
+  const response = await fetch(`${config.API_BASE_URL}/api/pets`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -55,12 +56,9 @@ export const fetchPets = async (token: string): Promise<Pet[]> => {
 
 // src/api/petApi.ts
 
-export const fetchPetDetails = async (
-  petId: number,
-  token: string,
-): Promise<PetInfo> => {
+export const fetchPetDetails = async (petId: number, token: string): Promise<PetInfo> => {
   console.log(`Fetching pet details for petId ${petId} with token:`, token);
-  const response = await fetch(`https://i11b101.p.ssafy.io/api/pets/${petId}`, {
+  const response = await fetch(`${config.API_BASE_URL}/api/pets/${petId}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -86,7 +84,7 @@ export const fetchPetDetails = async (
 
 export const addPet = async (formData: FormData, token: string) => {
   console.log('Adding pet with token:', token);
-  const response = await fetch('https://i11b101.p.ssafy.io/api/pets', {
+  const response = await fetch(`${config.API_BASE_URL}/api/pets`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
