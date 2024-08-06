@@ -9,6 +9,7 @@ import { ProfilePage } from 'pages/ProfilePage';
 import { SignUpPage } from 'pages/SignUpPage';
 import { LoginPage } from 'pages/LoginPage';
 import { OAuthCallback } from 'pages/OAuthCallback';
+import './firebase-messaging-sw';
 
 const queryClient = new QueryClient();
 
