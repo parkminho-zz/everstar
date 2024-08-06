@@ -69,6 +69,7 @@ public class CheeringMessage extends BaseTimeEntity {
 			.pet(findPet)
 			.isAnonymous(requestDto.getIsAnonymous())
 			.content(requestDto.getContent())
+			.color(requestDto.getColor())
 			.behindPetName(pet.getName())
 			.behindPetRelationship(pet.getRelationship())
 			.build();
@@ -79,6 +80,7 @@ public class CheeringMessage extends BaseTimeEntity {
 			.pet(findPet)
 			.isAnonymous(requestDto.getIsAnonymous())
 			.content(requestDto.getContent())
+			.color(requestDto.getColor())
 			.build();
 	}
 
