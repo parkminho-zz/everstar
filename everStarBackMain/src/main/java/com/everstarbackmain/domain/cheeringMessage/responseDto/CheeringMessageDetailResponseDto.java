@@ -1,6 +1,7 @@
 package com.everstarbackmain.domain.cheeringMessage.responseDto;
 
 import com.everstarbackmain.domain.cheeringMessage.model.CheeringMessage;
+import com.everstarbackmain.domain.cheeringMessage.model.Color;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ public class CheeringMessageDetailResponseDto {
 	private Boolean isAnonymous;
 	private String relationShip;
 	private String petName;
+	private Color color;
 
 	public static CheeringMessageDetailResponseDto createCheeringMessageDetailResponseDto(CheeringMessage cheeringMessage) {
 		return CheeringMessageDetailResponseDto.builder()
@@ -23,6 +25,7 @@ public class CheeringMessageDetailResponseDto {
 			.isAnonymous(cheeringMessage.getIsAnonymous())
 			.relationShip(cheeringMessage.getBehindPetRelationship())
 			.petName(cheeringMessage.getBehindPetName())
+			.color(cheeringMessage.getColor())
 			.build();
 	}
 }

@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
+import com.everstarbackmain.domain.cheeringMessage.model.Color;
 import com.everstarbackmain.domain.cheeringMessage.repository.CheeringMessageRepository;
 import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageResponseDto;
 import com.everstarbackmain.domain.pet.model.Pet;
@@ -75,7 +76,7 @@ public class GetCheeringMessageServiceTest {
 		BDDMockito.given(petRepository.findByIdAndIsDeleted(1L, false)).willReturn(Optional.of(pet));
 
 		Page<CheeringMessageResponseDto> expectedPage = new PageImpl<>(
-			Collections.singletonList(new CheeringMessageResponseDto(1L, "1", true, "test", "name"))
+			Collections.singletonList(new CheeringMessageResponseDto(1L, "1", true, "test", "name", Color.BLUE))
 		);
 		BDDMockito.given(cheeringMessageRepository.findCheeringMessagesByPetId(pet, pageable)).willReturn(expectedPage);
 

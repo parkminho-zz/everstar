@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 
 import com.everstarbackmain.domain.cheeringMessage.model.CheeringMessage;
+import com.everstarbackmain.domain.cheeringMessage.model.Color;
 import com.everstarbackmain.domain.cheeringMessage.repository.CheeringMessageRepository;
 import com.everstarbackmain.domain.cheeringMessage.requestDto.CreateCheeringMessageRequestDto;
 import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageDetailResponseDto;
@@ -64,7 +65,7 @@ public class GetCheeringMessageDetailServiceTest {
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
 
-		requestDto = new CreateCheeringMessageRequestDto("content", false);
+		requestDto = new CreateCheeringMessageRequestDto("content", Color.BLUE, false);
 		cheeringMessage = CheeringMessage.createAnonymousCheeringMessage(requestDto, pet);
 	}
 
