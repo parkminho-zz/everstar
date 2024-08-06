@@ -6,6 +6,8 @@ import com.everstarbackmain.global.entity.BaseTimeEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -47,14 +49,19 @@ public class CheeringMessage extends BaseTimeEntity {
 	@Column
 	private String behindPetRelationship;
 
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Color color;
+
 	@Builder
-	private CheeringMessage(Pet pet, Boolean isAnonymous, String content, String behindPetName, String behindPetRelationship) {
+	private CheeringMessage(Pet pet, Boolean isAnonymous, String content, String behindPetName, String behindPetRelationship, Color color) {
 		this.pet = pet;
 		this.isDeleted = false;
 		this.isAnonymous = isAnonymous;
 		this.content = content;
 		this.behindPetName = behindPetName;
 		this.behindPetRelationship = behindPetRelationship;
+		this.color = color;
 	}
 
 	public static CheeringMessage createNoAnonymousCheeringMessage(CreateCheeringMessageRequestDto requestDto, Pet findPet, Pet pet) {
