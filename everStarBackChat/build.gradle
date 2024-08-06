@@ -63,7 +63,6 @@ dependencies {
 	implementation 'com.github.danielwegener:logback-kafka-appender:0.1.0'
 	implementation 'net.logstash.logback:logstash-logback-encoder:6.2'
 	implementation 'org.springframework.kafka:spring-kafka'
-	implementation 'org.springframework.boot:spring-boot-starter-data-kafka'
 
 	// websocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
@@ -71,6 +70,11 @@ dependencies {
 
 	// openvidu
 	implementation 'io.openvidu:openvidu-java-client:2.30.0'
+
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.1' // 버전은 실제 사용하는 Kafka와 호환되는 버전으로 변경
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.15.1'
+	implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.1'
+
 }
 
 tasks.named('test') {
