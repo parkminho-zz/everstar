@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;
 import com.everstarbackmain.domain.petterLetter.model.SendType;
 import com.everstarbackmain.domain.petterLetter.repository.PetLetterRepository;
@@ -12,7 +13,6 @@ import com.everstarbackmain.domain.userLetter.model.UserLetter;
 import com.everstarbackmain.domain.userLetter.repository.UserLetterRepository;
 import com.everstarbackmain.domain.userLetter.requestDto.WriteLetterRequestDto;
 import com.everstarbackmain.domain.pet.model.Pet;
-import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;

@@ -44,9 +44,8 @@ public class PetService {
 	private final S3UploadUtil s3UploadUtil;
 
 	@Transactional
-	public void createPet(Authentication authentication, CreatePetRequestDto createPetRequestDto,
+	public void createPet(User user, CreatePetRequestDto createPetRequestDto,
 		MultipartFile profileImage) {
-		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 
 		String profileImageUrl = s3UploadUtil.saveFile(profileImage);
 		Pet pet = Pet.createPet(user, createPetRequestDto, profileImageUrl);
@@ -67,8 +66,7 @@ public class PetService {
 	}
 
 	@Transactional
-	public void updatePetIntroduction(Authentication authentication, Long petId, UpdatePetIntroductionDto requestDto) {
-		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
+	public void updatePetIntroduction(User user, Long petId, UpdatePetIntroductionDto requestDto) {
 		String newIntroduction = requestDto.getIntroduction();
 		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
@@ -93,26 +91,22 @@ public class PetService {
 		sentimentAnalysisRepository.save(sentimentAnalysis);
 	}
 
-	public List<EnrolledPetsResponseDto> getAllUserPets(Authentication authentication) {
-		Long userId = ((PrincipalDetails)authentication.getPrincipal()).getUser().getId();
+	public List<EnrolledPetsResponseDto> getAllUserPets(User user) {
+		Long userId = user.getId();
 		List<Pet> pets = petRepository.findAllByUserIdAndIsDeleted(userId, false);
 		return pets.stream()
 			.map(EnrolledPetsResponseDto::createEnrolledResponseDto)
 			.collect(Collectors.toList());
 	}
 
-	public MyPagePetInfoResponseDto getMyPetInfo(Authentication authentication, Long petId) {
-		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
+	public MyPagePetInfoResponseDto getMyPetInfo(User user, Long petId) {
 		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 		log.info("main server - Logged-in User ID: {}", user.getId());
 		log.info("main server - Pet Owner: {}", pet.getUser().getId());
 		log.info("main server - Pet ID: {}", petId);
 
-		List<String> petPersonalities = petPersonalityRepository.findAllByPetIdAndIsDeleted(petId, false).stream()
-			.map(PetPersonality::getPersonalityValue)
-			.collect(Collectors.toList());
-
+		List<String> petPersonalities = petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(petId, false);
 		return MyPagePetInfoResponseDto.createMyPagePetInfoDto(pet, petPersonalities);
 	}
 }

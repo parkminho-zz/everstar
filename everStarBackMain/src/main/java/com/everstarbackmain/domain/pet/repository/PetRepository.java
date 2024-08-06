@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.user.model.User;
 
-public interface PetRepository extends JpaRepository<Pet, Long> {
+public interface PetRepository extends JpaRepository<Pet, Long>, PetRepositoryCustom {
 
 	@EntityGraph(attributePaths = "user")
 	Optional<Pet> findByIdAndIsDeleted(Long id, Boolean isDeleted);

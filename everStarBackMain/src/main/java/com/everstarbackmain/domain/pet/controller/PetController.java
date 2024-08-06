@@ -21,6 +21,8 @@ import com.everstarbackmain.domain.pet.requestdto.UpdatePetIntroductionDto;
 import com.everstarbackmain.domain.pet.responsedto.EnrolledPetsResponseDto;
 import com.everstarbackmain.domain.pet.responsedto.MyPagePetInfoResponseDto;
 import com.everstarbackmain.domain.pet.service.PetService;
+import com.everstarbackmain.domain.user.model.User;
+import com.everstarbackmain.global.security.auth.PrincipalDetails;
 import com.everstarbackmain.global.util.HttpResponseUtil;
 
 import jakarta.validation.Valid;
@@ -39,7 +41,8 @@ public class PetController {
 	@PostMapping
 	public ResponseEntity<Map<String, Object>> addPet(Authentication authentication,
 		@RequestPart @Valid CreatePetRequestDto requestDto, @RequestPart MultipartFile profileImage) {
-		petService.createPet(authentication, requestDto, profileImage);
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
+		petService.createPet(user, requestDto, profileImage);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessPetMessage.SUCCESS_CREATE_PET);
 		log.info("main server - request : {}", requestDto);
@@ -50,7 +53,8 @@ public class PetController {
 	@PutMapping("/{pet-id}")
 	public ResponseEntity<Map<String, Object>> updatePetIntroduction(Authentication authentication,
 		@PathVariable("pet-id") Long petId, @RequestBody @Valid UpdatePetIntroductionDto requestDto) {
-		petService.updatePetIntroduction(authentication, petId, requestDto);
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
+		petService.updatePetIntroduction(user, petId, requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessPetMessage.SUCCESS_UPDATE_PET_INTRODUCTION);
 
@@ -61,9 +65,10 @@ public class PetController {
 
 	@GetMapping
 	public ResponseEntity<Map<String, Object>> getAllUserPets(Authentication authentication) {
-		List<EnrolledPetsResponseDto> responseDtos = petService.getAllUserPets(authentication);
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
+		List<EnrolledPetsResponseDto> responseDtos = petService.getAllUserPets(user);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDtos);
-		log.info("main server - request : user {},", authentication);
+		log.info("main server - request : user {},", user);
 		log.info("main server - response : 유저 반려동물 목록{}", responseDtos);
 		return response;
 	}
@@ -71,9 +76,10 @@ public class PetController {
 	@GetMapping("/{pet-id}")
 	public ResponseEntity<Map<String, Object>> getMyPetInfo(Authentication authentication,
 		@PathVariable("pet-id") Long petId) {
-		MyPagePetInfoResponseDto responseDto = petService.getMyPetInfo(authentication, petId);
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
+		MyPagePetInfoResponseDto responseDto = petService.getMyPetInfo(user, petId);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
-		log.info("main server - request : user {},", authentication);
+		log.info("main server - request : user {},", user);
 		log.info("main server - response : 유저 마이페이지 동물정보{}", responseDto);
 		return response;
 	}

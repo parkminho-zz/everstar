@@ -20,10 +20,10 @@ import org.springframework.security.core.Authentication;
 
 import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 import com.everstarbackmain.domain.memorialBook.util.MemorialBookScheduler;
+import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
-import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
 import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;
 import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;

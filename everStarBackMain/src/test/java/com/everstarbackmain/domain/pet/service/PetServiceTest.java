@@ -100,8 +100,6 @@ public class PetServiceTest {
 	@DisplayName("펫 생성 성공 테스트 - 성격 리스트 저장")
 	public void 펫_생성_성공_테스트_성격리스트저장() {
 		// given
-		given(authentication.getPrincipal()).willReturn(principalDetails);
-		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.save(any(Pet.class))).willReturn(pet);
 		given(s3UploadUtil.saveFile(any(MultipartFile.class))).willReturn("profileImageUrl");
 
@@ -113,7 +111,7 @@ public class PetServiceTest {
 		);
 
 		// when
-		petService.createPet(authentication, requestDto, profileImage);
+		petService.createPet(user, requestDto, profileImage);
 
 		// then
 		verify(petRepository).save(any(Pet.class));
@@ -124,12 +122,10 @@ public class PetServiceTest {
 	@DisplayName("유저의 반려동물 목록 조회 성공 테스트 - 존재하는 경우")
 	public void 유저의_반려동물_목록_조회_성공_테스트_존재하는경우() {
 		// given
-		given(authentication.getPrincipal()).willReturn(principalDetails);
-		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findAllByUserIdAndIsDeleted(user.getId(), false)).willReturn(petList);
 
 		// when
-		List<EnrolledPetsResponseDto> responseDtos = petService.getAllUserPets(authentication);
+		List<EnrolledPetsResponseDto> responseDtos = petService.getAllUserPets(user);
 
 		// then
 		Assertions.assertThat(responseDtos).isNotEmpty();
@@ -144,12 +140,10 @@ public class PetServiceTest {
 	@DisplayName("유저의 반려동물 목록 조회 성공 테스트 - 존재하지 않는 경우")
 	public void 유저의_반려동물_목록_조회_성공_테스트_존재하지않는경우() {
 		// given
-		given(authentication.getPrincipal()).willReturn(principalDetails);
-		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findAllByUserIdAndIsDeleted(user.getId(), false)).willReturn(Collections.emptyList());
 
 		// when
-		List<EnrolledPetsResponseDto> responseDtos = petService.getAllUserPets(authentication);
+		List<EnrolledPetsResponseDto> responseDtos = petService.getAllUserPets(user);
 
 		// then
 		Assertions.assertThat(responseDtos).isEmpty();

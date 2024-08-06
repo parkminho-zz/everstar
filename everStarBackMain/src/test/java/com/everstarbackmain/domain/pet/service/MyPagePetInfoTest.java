@@ -86,6 +86,7 @@ public class MyPagePetInfoTest {
 		PetPersonality personality = mock(PetPersonality.class);
 		given(personality.getPersonalityValue()).willReturn(value);
 		return personality;
+
 	}
 
 	@Test
@@ -94,11 +95,14 @@ public class MyPagePetInfoTest {
 		// given
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
-		given(petRepository.findByIdAndUserAndIsDeleted (1L, user, false)).willReturn(Optional.of(pet));
-		given(petPersonalityRepository.findAllByPetIdAndIsDeleted(1L, false)).willReturn(petPersonalities);
+		given(petRepository.findByIdAndUserAndIsDeleted(1L, user, false)).willReturn(Optional.of(pet));
+
+		// Mock PetPersonality values
+		given(petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(1L, false))
+			.willReturn(List.of("Friendly", "Playful", "Curious"));
 
 		// when
-		MyPagePetInfoResponseDto responseDto = petService.getMyPetInfo(authentication, 1L);
+		MyPagePetInfoResponseDto responseDto = petService.getMyPetInfo(user, 1L);
 
 		// then
 		assertThat(responseDto).isNotNull();
@@ -112,7 +116,6 @@ public class MyPagePetInfoTest {
 		assertThat(responseDto.getRelationship()).isEqualTo(pet.getRelationship());
 		assertThat(responseDto.getSpecies()).isEqualTo(pet.getSpecies());
 		assertThat(responseDto.getPetPersonalities()).containsExactly("Friendly", "Playful", "Curious");
-
 	}
 
 	@Test
@@ -140,7 +143,7 @@ public class MyPagePetInfoTest {
 		given(petRepository.findByIdAndIsDeleted(2L, false)).willReturn(java.util.Optional.of(anotherPet));
 
 		// when
-		Throwable thrown = catchThrowable(() -> petService.getMyPetInfo(authentication, 1L));
+		Throwable thrown = catchThrowable(() -> petService.getMyPetInfo(user, 1L));
 
 		// then
 		assertThat(thrown).isNotNull();  // 예외가 발생했는지 확인
@@ -155,7 +158,7 @@ public class MyPagePetInfoTest {
 		given(petRepository.findByIdAndIsDeleted(1L, false)).willReturn(Optional.empty());
 
 		// when
-		Throwable thrown = catchThrowable(() -> petService.getMyPetInfo(authentication, 1L));
+		Throwable thrown = catchThrowable(() -> petService.getMyPetInfo(user, 1L));
 
 		// then
 		assertThat(thrown).isInstanceOf(Throwable.class);
