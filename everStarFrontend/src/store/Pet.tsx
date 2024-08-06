@@ -16,7 +16,7 @@ const initialState: petState = {
     species: '',
     gender: '',
     relationship: '',
-    profileImageUrl: '',
+    profileImage: null,
     introduction: '',
     questIndex: 0,
     lastAccessTime: new Date(0),
@@ -32,7 +32,7 @@ export interface PetInfo {
   species: string;
   gender: string;
   relationship: string;
-  profileImageUrl: string;
+  profileImage: File | null;
   introduction: string;
   questIndex: number;
   lastAccessTime: Date;

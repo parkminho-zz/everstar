@@ -3,7 +3,7 @@ import { CurrentLocation } from 'components/molecules/EverStar/CurrentLocation/C
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { ProgressBar } from 'components/molecules/ProgressBar/ProgressBar';
 import { useMediaQuery } from 'react-responsive';
-import bgImage from 'assets/images/bg-everstar.png';
+import bgImage from 'assets/images/bg-everstar.webp';
 import { Header } from 'components/molecules/Header/Header';
 import { Footer } from 'components/molecules/Footer/Footer';
 import { BookIcons } from 'components/atoms/symbols/Book/BookIcons';

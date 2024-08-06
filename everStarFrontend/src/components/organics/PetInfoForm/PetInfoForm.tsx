@@ -8,11 +8,11 @@ import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
 
 export interface PetInfoFormProps {
   headerText: string;
-  smallButtonText: string; // 추가
+  smallButtonText?: string;
   showPrimaryButton?: boolean;
   text: string;
   onClose: () => void;
-  onSubmit: (formData: PetFormData) => void;
+  onSubmit: (formData: FormData) => void;
   relationshipOptions: string[];
 }
 
@@ -23,10 +23,7 @@ export interface PetFormData {
   species: string;
   gender: string;
   relationship: string;
-  profileImageUrl: File | null;
-  introduction: string;
-  questIndex: number;
-  personality: string[];
+  profileImage: File | null;
 }
 
 export const PetInfoForm: React.FC<PetInfoFormProps> = ({
@@ -39,15 +36,12 @@ export const PetInfoForm: React.FC<PetInfoFormProps> = ({
 }) => {
   const [formData, setFormData] = useState<PetFormData>({
     name: '',
-    age: 0,
+    age: -1,
     memorialDate: null,
     species: '',
     gender: '',
     relationship: '',
-    profileImageUrl: null,
-    introduction: '',
-    questIndex: 1,
-    personality: [], // 초기에는 빈 배열로 설정
+    profileImage: null,
   });
 
   const [isFormValid, setIsFormValid] = useState(false);
@@ -55,31 +49,40 @@ export const PetInfoForm: React.FC<PetInfoFormProps> = ({
     useState<string[]>(relationshipOptions);
 
   useEffect(() => {
-    const {
-      name,
-      age,
-      memorialDate,
-      species,
-      gender,
-      relationship,
-      profileImageUrl,
-      introduction,
-    } = formData;
+    const { name, age, memorialDate, species, gender, relationship, profileImage } = formData;
     setIsFormValid(
       name !== '' &&
-        age !== 0 &&
+        (age === -1 || (age >= 0 && age <= 999)) &&
         memorialDate !== null &&
         species !== '' &&
         gender !== '' &&
         relationship !== '' &&
-        profileImageUrl !== null &&
-        introduction !== '',
+        profileImage !== null,
     );
   }, [formData]);
 
   const handleButtonClick = () => {
-    console.log('Form Submitted', formData);
-    onSubmit({ ...formData, questIndex: 1 }); // 고정값으로 설정
+    const formattedFormData = new FormData();
+    const requestDto = {
+      name: formData.name,
+      age: formData.age,
+      memorialDate: formData.memorialDate
+        ? formData.memorialDate.toISOString().split('T')[0]
+        : null,
+      species: formData.species,
+      gender: formData.gender,
+      relationship: formData.relationship,
+    };
+    formattedFormData.append(
+      'requestDto',
+      new Blob([JSON.stringify(requestDto)], { type: 'application/json' }),
+    );
+    if (formData.profileImage) {
+      formattedFormData.append('profileImage', formData.profileImage);
+    }
+
+    console.log('Form Submitted', formattedFormData);
+    onSubmit(formattedFormData);
   };
 
   const handleInputChange = (
@@ -92,44 +95,39 @@ export const PetInfoForm: React.FC<PetInfoFormProps> = ({
     });
 
     if (field === 'gender') {
-      if (value === '남성') {
-        setDynamicRelationshipOptions([
-          '형',
-          '누나',
-          '아빠',
-          '엄마',
-          '이모',
-          '삼촌',
-          '친구',
-        ]);
-      } else if (value === '여성') {
-        setDynamicRelationshipOptions([
-          '오빠',
-          '언니',
-          '아빠',
-          '엄마',
-          '이모',
-          '삼촌',
-          '친구',
-        ]);
+      if (value === 'MALE') {
+        setDynamicRelationshipOptions(['형', '누나', '아빠', '엄마', '친구']);
+      } else if (value === 'FEMALE') {
+        setDynamicRelationshipOptions(['오빠', '언니', '아빠', '엄마', '친구']);
       } else {
         setDynamicRelationshipOptions(relationshipOptions);
       }
     }
   };
 
+  const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const ageValue = value === '' ? -1 : parseInt(value, 10);
+
+    if (/^\d*$/.test(value) && ageValue >= 0 && ageValue <= 999) {
+      handleInputChange('age', ageValue);
+    } else if (value === '') {
+      handleInputChange('age', -1);
+    }
+  };
+
   const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      handleInputChange('profileImageUrl', event.target.files[0]);
+      handleInputChange('profileImage', event.target.files[0]);
     }
   };
 
   return (
-    <div className='flex justify-center p-6'>
-      <div className='flex flex-col items-center w-full max-w-lg gap-8 p-5 bg-white rounded-lg shadow-md z-20'>
+    <div className="flex justify-center p-6">
+      <div className="z-20 flex flex-col items-center w-full max-w-lg gap-8 p-5 bg-white rounded-lg shadow-md">
         <ModalHeader text={headerText} onLeftIconClick={onClose} />
-        <div className='flex flex-col items-center w-full gap-8 p-5'>
-          <div className='flex flex-col w-full'>
+        <div className="flex flex-col items-center w-full gap-8 p-5">
+          <div className="flex flex-col w-full">
             <div
               className="left-0 text-left [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal]"
               dangerouslySetInnerHTML={{
@@ -139,126 +137,108 @@ export const PetInfoForm: React.FC<PetInfoFormProps> = ({
           </div>
 
           <InputField
-            label='이름'
+            label="이름"
             showLabel={true}
             showValidationText={false}
             starshow={true}
-            state='default'
+            state="default"
             text={formData.name}
             showCheckIcon={false}
-            className=''
+            className=""
             onChange={(e) => handleInputChange('name', e.target.value)}
           />
 
           <InputField
-            label='나이'
+            label="나이"
             showLabel={true}
             showValidationText={false}
-            starshow={true}
-            state='default'
-            text={formData.age.toString()}
+            starshow={false}
+            state="default"
+            text={formData.age === -1 ? '' : formData.age.toString()}
             showCheckIcon={false}
-            className=''
-            onChange={(e) => handleInputChange('age', parseInt(e.target.value))}
+            className=""
+            onChange={handleAgeChange}
           />
 
           <PrimaryButton
-            theme='white'
-            size='large'
+            theme="white"
+            size="large"
             onClick={() => document.getElementById('photoInput')?.click()}
             disabled={false}
             icon={null}
             hug={false}
-            label='프로필 사진'
+            label="프로필 사진"
             showLabelStar={true}
           >
             이미지 추가
           </PrimaryButton>
-          {formData.profileImageUrl && (
-            <span className='text-sm text-gray-600'>
-              {formData.profileImageUrl.name}
-            </span>
+          {formData.profileImage && (
+            <span className="text-sm text-gray-600">{formData.profileImage.name}</span>
           )}
           <input
-            type='file'
-            id='photoInput'
+            type="file"
+            id="photoInput"
             style={{ display: 'none' }}
             onChange={handlePhotoChange}
           />
 
           <Select
-            label='성별'
-            className=''
+            label="성별"
+            className=""
             options={['남성', '여성']}
-            title='성별을 선택하세요'
+            title="성별을 선택하세요"
             showLabel={true}
             starshow={true}
             onOptionSelect={(option) =>
-              handleInputChange('gender', option as string)
+              handleInputChange('gender', option === '남성' ? 'MALE' : 'FEMALE')
             }
-            infoText=''
+            infoText=""
             showIcon={true}
           />
 
           <InputField
-            label='종류'
+            label="종류"
             showLabel={true}
             showValidationText={false}
             starshow={true}
-            state='default'
+            state="default"
             text={formData.species}
             showCheckIcon={false}
-            className=''
+            className=""
             onChange={(e) => handleInputChange('species', e.target.value)}
           />
 
           <Select
-            label='관계'
-            className=''
+            label="관계"
+            className=""
             options={dynamicRelationshipOptions}
-            title='나와의 관계를 선택하세요'
+            title="나와의 관계를 선택하세요"
             showLabel={true}
             starshow={true}
-            onOptionSelect={(option) =>
-              handleInputChange('relationship', option as string)
-            }
-            infoText=''
+            onOptionSelect={(option) => handleInputChange('relationship', option as string)}
+            infoText=""
             showIcon={true}
           />
 
-          <InputField
-            label='소개'
-            showLabel={true}
-            showValidationText={false}
-            starshow={true}
-            state='default'
-            text={formData.introduction}
-            showCheckIcon={false}
-            className=''
-            onChange={(e) => handleInputChange('introduction', e.target.value)}
-          />
-
           <DateInputField
-            label='떠난 날'
+            label="떠난 날"
             showLabel={true}
             showValidationText={false}
             starshow={true}
-            state='default'
-            date={
-              formData.memorialDate ? new Date(formData.memorialDate) : null
-            }
-            placeholder='떠난 날을 선택하세요'
+            state="default"
+            date={formData.memorialDate ? new Date(formData.memorialDate) : null}
+            placeholder="떠난 날을 선택하세요"
             onChange={(date) => handleInputChange('memorialDate', date)}
           />
 
-          <div className='flex justify-end w-full mt-5'>
+          <div className="flex justify-end w-full mt-5">
             {showPrimaryButton && (
               <PrimaryButton
-                theme='white'
-                size='small'
+                theme="white"
+                size="small"
                 onClick={handleButtonClick}
                 disabled={!isFormValid}
-                icon={<ArrowIcon color='black' direction='right' size={24} />}
+                icon={<ArrowIcon color="black" direction="right" size={24} />}
                 hug={true}
               ></PrimaryButton>
             )}
