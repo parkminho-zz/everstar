@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import {
-  CheerMessage,
-  CheerMessageProps,
-} from 'components/organics/CheerMessage/CheerMessage';
+import { CheerMessage, CheerMessageProps } from 'components/organics/CheerMessage/CheerMessage';
 
-import bgImage from 'assets/images/bg-everstar.png';
+import bgImage from 'assets/images/bg-everstar.webp';
 import { Header } from 'components/molecules/Header/Header';
 import { Footer } from 'components/molecules/Footer/Footer';
 import { useMediaQuery } from 'react-responsive';
@@ -27,25 +24,17 @@ export const EverStarCheerMessage: React.FC<
       ? 'tablet-everstar'
       : 'everstar';
 
-  const footerType = isMobile
-    ? 'mobile'
-    : isTabletOrMobile
-      ? 'tablet'
-      : 'desktop';
+  const footerType = isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop';
 
   return (
     <div
-      className='flex flex-col min-h-screen bg-center bg-cover'
+      className="flex flex-col min-h-screen bg-center bg-cover"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <Header type={headerType} className='sticky top-0 z-50' />
+      <Header type={headerType} className="sticky top-0 z-50" />
 
-      <CheerMessage
-        {...props}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      />
-      <Footer type={footerType} className='mt-auto' />
+      <CheerMessage {...props} currentPage={currentPage} onPageChange={handlePageChange} />
+      <Footer type={footerType} className="mt-auto" />
     </div>
   );
 };

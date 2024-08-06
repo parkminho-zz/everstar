@@ -1,59 +1,65 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+// Define the UserInfo interface
 interface UserInfo {
   email: string;
   userName: string;
   phoneNumber: string;
-  birthDate: string; // 수정된 부분
+  birthDate: string;
   gender: string;
-  questReceptionTime: string; // 수정된 부분
+  questReceptionTime: string;
 }
 
+// Define the AuthState interface
 interface AuthState {
   accessToken: string;
   userInfo: UserInfo;
   notifications: string[];
 }
 
+// Define the initial state
 const initialState: AuthState = {
   accessToken: '',
   userInfo: {
     email: '',
     userName: '',
     phoneNumber: '',
-    birthDate: '', // 수정된 부분
+    birthDate: '',
     gender: '',
-    questReceptionTime: '', // 수정된 부분
+    questReceptionTime: '',
   },
   notifications: [],
 };
 
-export const authSlice = createSlice({
+// Create the auth slice
+const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    SetToken: (state, action: PayloadAction<string>) => {
+    setToken: (state, action: PayloadAction<string>) => {
       state.accessToken = action.payload;
     },
-    SetUser: (state, action: PayloadAction<UserInfo>) => {
+    setUser: (state, action: PayloadAction<UserInfo>) => {
       state.userInfo = action.payload;
     },
-    DeleteToken: (state) => {
+    deleteToken: (state) => {
       state.accessToken = '';
     },
-    DeleteUser: (state) => {
+    deleteUser: (state) => {
       state.userInfo = initialState.userInfo;
     },
-    AddNotification: (state, action: PayloadAction<string>) => {
+    addNotification: (state, action: PayloadAction<string>) => {
       state.notifications.push(action.payload);
     },
-    RemoveNotification: (state, action: PayloadAction<number>) => {
+    removeNotification: (state, action: PayloadAction<number>) => {
       state.notifications.splice(action.payload, 1);
     },
   },
 });
 
-export const { SetToken, DeleteToken, SetUser, DeleteUser, AddNotification, RemoveNotification } =
+// Export the actions
+export const { setToken, setUser, deleteToken, deleteUser, addNotification, removeNotification } =
   authSlice.actions;
 
+// Export the reducer
 export default authSlice.reducer;
