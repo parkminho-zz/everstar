@@ -23,11 +23,11 @@ export interface PetInfo {
   userId: number;
   name: string;
   age: number;
-  memorialDate: string;
+  memorialDate: string; // LocalDate 형식으로 유지
   species: string;
   gender: string;
   relationship: string;
-  profileImage: string;
+  profileImageUrl: string;
   personalities: string[];
 }
 
@@ -54,9 +54,10 @@ export const fetchPets = async (token: string): Promise<Pet[]> => {
   return result.data;
 };
 
-// src/api/petApi.ts
-
-export const fetchPetDetails = async (petId: number, token: string): Promise<PetInfo> => {
+export const fetchPetDetails = async (
+  petId: number,
+  token: string,
+): Promise<PetInfo> => {
   console.log(`Fetching pet details for petId ${petId} with token:`, token);
   const response = await fetch(`${config.API_BASE_URL}/api/pets/${petId}`, {
     method: 'GET',
@@ -73,13 +74,7 @@ export const fetchPetDetails = async (petId: number, token: string): Promise<Pet
   const result = await response.json();
   console.log('Fetched pet details:', result);
 
-  // Convert memorialDate from string to Date
-  const petInfo: PetInfo = {
-    ...result.data,
-    memorialDate: new Date(result.data.memorialDate),
-  };
-
-  return petInfo;
+  return result.data;
 };
 
 export const addPet = async (formData: FormData, token: string) => {
