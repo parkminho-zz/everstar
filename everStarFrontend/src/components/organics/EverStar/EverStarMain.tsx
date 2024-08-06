@@ -16,7 +16,7 @@ interface EverStarMainProps {
   buttonSize: 'large' | 'medium' | 'small';
   buttonDisabled: boolean;
   buttonText: string;
-  onButtonClick: React.MouseEventHandler<HTMLButtonElement>;
+  onButtonClick: () => void;
 }
 
 interface ViewMemorialBookProps {
@@ -57,7 +57,8 @@ const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
   const focus = 'bg-mainprimary text-greyscalewhite hover:bg-bgorange';
   const white = 'bg-white text-mainsecondary hover:bg-bgorange';
   const hover = 'bg-bgorange text-mainsecondary hover:bg-mainprimary';
-  const disabledStyle = 'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
+  const disabledStyle =
+    'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
 
   const color: Record<ViewMemorialBookTheme, string> = {
     focus,
@@ -103,7 +104,9 @@ const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
       disabled={disabled}
       onClick={onClick}
     >
-      <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>{children}</span>
+      <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>
+        {children}
+      </span>
     </button>
   );
 };

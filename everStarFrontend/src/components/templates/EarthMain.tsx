@@ -9,7 +9,15 @@ import { Rainbow } from 'components/atoms/symbols/Rainbow/Rainbow';
 import { useNavigate } from 'react-router-dom';
 
 type ViewMemorialBookSize = 'large' | 'medium' | 'small';
-type RainbowColor = 'none' | 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'indigo' | 'violet';
+type RainbowColor =
+  | 'none'
+  | 'red'
+  | 'orange'
+  | 'yellow'
+  | 'green'
+  | 'blue'
+  | 'indigo'
+  | 'violet';
 
 interface EarthMainProps {
   title: string;
@@ -19,7 +27,7 @@ interface EarthMainProps {
   buttonDisabled: boolean;
   buttonText: string;
   buttonIcon: 'SmallStarImg' | 'SmallEarthImg';
-  onButtonClick: React.MouseEventHandler<HTMLButtonElement>;
+  onButtonClick: () => void;
 }
 
 const milestoneColors = [
@@ -76,6 +84,11 @@ export const EarthMain: React.FC<EarthMainProps> = ({
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
 
+  const handleButtonClick = () => {
+    onButtonClick();
+    navigate('/everstar/:id');
+  };
+
   // const isDisabled = fill < 49;
   const progressButtonText = () => {
     if (fill >= 49) return '모든 퀘스트를 완료했습니다!';
@@ -122,7 +135,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
               theme='white'
               size={buttonSize}
               disabled={false}
-              onClick={onButtonClick}
+              onClick={handleButtonClick}
               icon={getIcon()}
             >
               {buttonText}

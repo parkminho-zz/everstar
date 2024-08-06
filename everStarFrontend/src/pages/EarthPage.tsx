@@ -5,7 +5,10 @@ import { EarthMain } from 'components/templates/EarthMain';
 import { LetterBoxTemplate } from 'components/templates/LetterBoxTemplate';
 import { Header } from 'components/molecules/Header/Header';
 import { Footer } from 'components/molecules/Footer/Footer';
-import { LetterColor, LetterState } from 'components/molecules/cards/LetterCard/LetterCard';
+import {
+  LetterColor,
+  LetterState,
+} from 'components/molecules/cards/LetterCard/LetterCard';
 import { LetterDetailTemplate } from 'components/templates/LetterDetailTemplate';
 import { LetterWriteTemplate } from 'components/templates/LetterWriteTemplate';
 import { QuestTemplate } from 'components/templates/QuestTemplate';
@@ -14,8 +17,16 @@ export const EarthPage: React.FC = () => {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
 
-  const headerType = isMobile ? 'mobile-earth' : isTabletOrMobile ? 'tablet-earth' : 'default';
-  const footerType = isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop';
+  const headerType = isMobile
+    ? 'mobile-earth'
+    : isTabletOrMobile
+      ? 'tablet-earth'
+      : 'default';
+  const footerType = isMobile
+    ? 'mobile'
+    : isTabletOrMobile
+      ? 'tablet'
+      : 'desktop';
 
   const generateLargeLetterData = (count: number) => {
     return Array.from({ length: count }, (_, index) => ({
@@ -55,7 +66,7 @@ export const EarthPage: React.FC = () => {
                 letterData={generateLargeLetterData(50)}
                 currentPage={1}
                 totalPages={9}
-                onPageChange={() => console.log('이동')}
+                onPageChange={() => console.log('이동1')}
                 headerText='편지함'
               />
             }

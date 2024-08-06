@@ -9,6 +9,7 @@ import { Footer } from 'components/molecules/Footer/Footer';
 import { BookIcons } from 'components/atoms/symbols/Book/BookIcons';
 import { LogoIcons } from 'components/atoms/symbols/Logo/LogoIcons';
 import { MusicControlButton } from 'components/molecules/music/MusicControlButton';
+import { useNavigate } from 'react-router-dom';
 
 type ViewMemorialBookTheme = 'focus' | 'hover' | 'white';
 type ViewMemorialBookSize = 'large' | 'medium' | 'small';
@@ -21,7 +22,7 @@ interface EverStarMainProps {
   buttonSize: ViewMemorialBookSize;
   buttonDisabled: boolean;
   buttonText: string;
-  onButtonClick: React.MouseEventHandler<HTMLButtonElement>;
+  onButtonClick: () => void;
 }
 
 interface ViewMemorialBookProps {
@@ -62,7 +63,8 @@ const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
   const focus = 'bg-mainprimary text-greyscalewhite hover:bg-bgorange';
   const white = 'bg-white text-mainsecondary hover:bg-bgorange';
   const hover = 'bg-bgorange text-mainsecondary hover:bg-mainprimary';
-  const disabledStyle = 'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
+  const disabledStyle =
+    'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
 
   const color: Record<ViewMemorialBookTheme, string> = {
     focus,
@@ -108,7 +110,9 @@ const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
       disabled={disabled}
       onClick={onClick}
     >
-      <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>{children}</span>
+      <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>
+        {children}
+      </span>
     </button>
   );
 };
@@ -123,8 +127,14 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   onButtonClick,
   className,
 }) => {
+  const navigate = useNavigate();
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
+
+  const handleButtonClick = () => {
+    onButtonClick();
+    navigate('/earth');
+  };
 
   const headerType = isMobile
     ? 'mobile-everstar'
@@ -132,7 +142,11 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
       ? 'tablet-everstar'
       : 'everstar';
 
-  const footerType = isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop';
+  const footerType = isMobile
+    ? 'mobile'
+    : isTabletOrMobile
+      ? 'tablet'
+      : 'desktop';
 
   const isDisabled = fill < 49;
   const progressButtonText = isDisabled
@@ -161,7 +175,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
               theme={buttonTheme}
               size={buttonSize}
               disabled={buttonDisabled}
-              onClick={onButtonClick}
+              onClick={handleButtonClick}
               icon={<LogoIcons variant='small-earth-img' />}
             >
               {buttonText}

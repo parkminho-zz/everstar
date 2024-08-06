@@ -22,12 +22,6 @@ export const Avatar: React.FC<AvatarProps> = ({
   className,
   onClick,
 }) => {
-  const handleClick = () => {
-    if (onClick) {
-      onClick();
-    }
-  };
-
   return (
     <div
       style={{
@@ -36,8 +30,8 @@ export const Avatar: React.FC<AvatarProps> = ({
         alignItems: 'center',
         cursor: onClick ? 'pointer' : 'default',
       }}
+      onClick={onClick}
       className={className}
-      onClick={handleClick}
     >
       {size === 'text' ? (
         <div
