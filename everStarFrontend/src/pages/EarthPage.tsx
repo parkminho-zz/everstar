@@ -5,28 +5,19 @@ import { EarthMain } from 'components/templates/EarthMain';
 import { LetterBoxTemplate } from 'components/templates/LetterBoxTemplate';
 import { Header } from 'components/molecules/Header/Header';
 import { Footer } from 'components/molecules/Footer/Footer';
-import {
-  LetterColor,
-  LetterState,
-} from 'components/molecules/cards/LetterCard/LetterCard';
+import { LetterColor, LetterState } from 'components/molecules/cards/LetterCard/LetterCard';
 import { LetterDetailTemplate } from 'components/templates/LetterDetailTemplate';
 import { LetterWriteTemplate } from 'components/templates/LetterWriteTemplate';
 import { QuestTemplate } from 'components/templates/QuestTemplate';
+import { QuestRtcTemplate } from 'components/templates/QuestRtcTemplate';
+import { OpenViduAppWrapper } from 'components/templates/OpenViduApp.js'; // OpenViduApp.js 파일의 OpenViduAppWrapper 컴포넌트를 임포트
 
 export const EarthPage: React.FC = () => {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
 
-  const headerType = isMobile
-    ? 'mobile-earth'
-    : isTabletOrMobile
-      ? 'tablet-earth'
-      : 'default';
-  const footerType = isMobile
-    ? 'mobile'
-    : isTabletOrMobile
-      ? 'tablet'
-      : 'desktop';
+  const headerType = isMobile ? 'mobile-earth' : isTabletOrMobile ? 'tablet-earth' : 'default';
+  const footerType = isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop';
 
   const generateLargeLetterData = (count: number) => {
     return Array.from({ length: count }, (_, index) => ({
@@ -88,6 +79,31 @@ export const EarthPage: React.FC = () => {
               />
             }
           />
+          <Route
+            path='openvidu'
+            element={
+              <QuestRtcTemplate
+                headerText='오늘의 질문'
+                textboxLabel='내용'
+                largeButtonText='이미지 삽입'
+                smallButtonText='제출'
+              />
+            }
+          />
+
+          <Route
+            path='openvidu'
+            element={
+              <QuestRtcTemplate
+                headerText='오늘의 질문'
+                textboxLabel='내용'
+                largeButtonText='이미지 삽입'
+                smallButtonText='제출'
+              />
+            }
+          />
+          <Route path='/earth/openvidu/sessionid/:sessionId' element={<OpenViduAppWrapper />} />
+          <Route path='/earth/openvidu/sessionid' element={<OpenViduAppWrapper />} />
         </Routes>
       </div>
       <Footer type={footerType} className='relative z-20 w-full mt-0' />
