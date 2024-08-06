@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUser, setToken } from 'store/slices/authSlice'; // 경로 확인
-
+import config from 'config';
 const fetchUserInfo = async (token: string) => {
-  const response = await fetch('https://i11b101.p.ssafy.io/api/accounts/users', {
+  const response = await fetch(`${config.API_BASE_URL}/api/accounts/users`, {
+    // 템플릿 리터럴 사용
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,

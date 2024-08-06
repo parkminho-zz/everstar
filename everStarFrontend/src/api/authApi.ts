@@ -1,3 +1,5 @@
+import config from 'config';
+
 export interface SendCodeResponse {
   success: boolean;
   message: string;
@@ -30,7 +32,8 @@ export interface UserInfo {
 }
 
 export const sendVerificationCode = async (phone: string): Promise<SendCodeResponse> => {
-  const response = await fetch('https://i11b101.p.ssafy.io/api/auth/users/send-code', {
+  const response = await fetch(`${config.API_BASE_URL}/api/auth/users/check-code`, {
+    // 환경 변수 사용
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -79,7 +82,7 @@ export const verifyAuthCode = async ({
 
 export const joinUser = async (userData: UserInfo): Promise<JoinResponse> => {
   console.log('전송 데이터:', userData); // 전송하는 데이터 출력
-  const response = await fetch('https://i11b101.p.ssafy.io/api/auth/oauth/join', {
+  const response = await fetch(`${config.API_BASE_URL}//api/auth/oauth/join`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
