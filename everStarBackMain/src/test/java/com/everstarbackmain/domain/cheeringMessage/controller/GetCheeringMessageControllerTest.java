@@ -27,6 +27,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.everstarbackmain.domain.cheeringMessage.model.CheeringMessage;
+import com.everstarbackmain.domain.cheeringMessage.model.Color;
 import com.everstarbackmain.domain.cheeringMessage.requestDto.CreateCheeringMessageRequestDto;
 import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageDetailResponseDto;
 import com.everstarbackmain.domain.cheeringMessage.service.CheeringMessageService;
@@ -80,7 +81,7 @@ public class GetCheeringMessageControllerTest {
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
 
-		requestDto = new CreateCheeringMessageRequestDto("content", false);
+		requestDto = new CreateCheeringMessageRequestDto("content", Color.BLUE, false);
 		cheeringMessage = CheeringMessage.createAnonymousCheeringMessage(requestDto, pet);
 
 		responseDto = CheeringMessageDetailResponseDto.createCheeringMessageDetailResponseDto(cheeringMessage);
