@@ -1,4 +1,3 @@
-// src/components/templates/MyInfo.tsx
 import React, { useEffect, useMemo, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from 'store/Store';
@@ -43,7 +42,7 @@ export const MyInfo: React.FC = () => {
     data: petDetailsData,
     isLoading: isPetDetailsLoading,
     error: petDetailsError,
-  } = useFetchPetDetails(selectedPetId !== -1 ? selectedPetId : null, token);
+  } = useFetchPetDetails(selectedPetId, token);
 
   useEffect(() => {
     if (petsData) {
@@ -58,14 +57,13 @@ export const MyInfo: React.FC = () => {
   }, [userData, dispatch]);
 
   useEffect(() => {
-    if (initialLoad && pets.length > 0) {
-      dispatch(setSelectedPetId(pets[0].id));
+    if (initialLoad) {
       setInitialLoad(false);
     }
-  }, [initialLoad, pets, dispatch]);
+  }, [initialLoad]);
 
   useEffect(() => {
-    if (selectedPetId !== -1 && petDetailsData) {
+    if (selectedPetId !== null && petDetailsData) {
       dispatch(setPetDetails(petDetailsData));
     }
   }, [selectedPetId, petDetailsData, dispatch]);
@@ -133,11 +131,11 @@ export const MyInfo: React.FC = () => {
     smallButtonText: '핸드폰 번호 수정하기',
     showPrimaryButton: true,
     userInfo: {
-      name: userInfo.userName || '', // userInfo에서 직접 가져오기
-      birthdate: userInfo.birthDate || '', // userInfo에서 직접 가져오기
-      gender: getGenderText(userInfo.gender || ''), // userInfo에서 직접 가져오기
-      email: userInfo.email || '', // userInfo에서 직접 가져오기
-      phone: userInfo.phoneNumber || '', // userInfo에서 직접 가져오기
+      name: userInfo.userName || '',
+      birthdate: userInfo.birthDate || '',
+      gender: getGenderText(userInfo.gender || ''),
+      email: userInfo.email || '',
+      phone: userInfo.phoneNumber || '',
     },
     petOptions: petOptions,
     petInfo: petInfo,
@@ -146,10 +144,7 @@ export const MyInfo: React.FC = () => {
 
   return (
     <div className='relative z-10 flex-grow my-4'>
-      <UserProfile
-        {...userProfileData}
-        onLeftIconClick={() => navigate(-1)} // 이전 페이지로 이동하는 핸들러 추가
-      />
+      <UserProfile {...userProfileData} onLeftIconClick={() => navigate(-1)} />
     </div>
   );
 };

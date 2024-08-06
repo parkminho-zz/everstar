@@ -56,7 +56,6 @@ export const UserProfile: React.FC<UserProfileProps> = ({
     if (selectedPet) {
       onPetSelect(selectedPet);
       setCurrentPet(petInfo[selectedPet]);
-      setActiveTab('two');
     }
   }, [selectedPet, petInfo, onPetSelect]);
 
