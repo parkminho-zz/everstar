@@ -19,6 +19,6 @@ public class ChatService {
 			message.updateEnterMessage(message.getSender() + "님이 입장하셨습니다.");
 		}
 
-		messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+		messagingTemplate.convertAndSend("/api/chat/sub/chat/room/" + message.getRoomId(), message);
 	}
 }

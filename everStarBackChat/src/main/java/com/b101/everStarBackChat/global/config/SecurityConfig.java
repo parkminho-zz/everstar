@@ -39,7 +39,7 @@ public class SecurityConfig {
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		);
 		http.authorizeHttpRequests((auth) -> auth
-			.requestMatchers("/api/chat/**", "/ws-stomp/**").permitAll()
+			.requestMatchers("/api/chat/**", "/api/chat/ws-stomp/**").permitAll()
 			.requestMatchers("/api/sessions/**").permitAll()
 			.anyRequest().authenticated()
 		);
