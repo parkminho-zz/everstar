@@ -7,9 +7,15 @@ import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.everstarbackmain.domain.memorialBook.util.MemorialBookScheduler;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
+import com.everstarbackmain.domain.quest.model.Quest;
+import com.everstarbackmain.domain.quest.model.QuestType;
+import com.everstarbackmain.domain.quest.repository.QuestRepository;
+import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
+import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;
@@ -21,6 +27,7 @@ import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
+import com.everstarbackmain.global.util.S3UploadUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,37 +38,58 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class QuestAnswerService {
 
+	private final QuestRepository questRepository;
 	private final QuestAnswerRepository questAnswerRepository;
 	private final PetRepository petRepository;
 	private final SentimentAnalysisRepository sentimentAnalysisRepository;
 	private final MemorialBookScheduler memorialBookScheduler;
 	private final NaverCloudClient naverCloudClient;
 	private final OpenAiClient openAiClient;
+	private final S3UploadUtil s3UploadUtil;
 
 	@Transactional
-	public void createQuestAnswer(Authentication authentication, Long petId) {
+	public void createQuestAnswer(Authentication authentication, Long petId, Long questId,
+		CreateAnswerRequestDto requestDto, MultipartFile imageFile) {
 		User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
 
-		// TODO: 질문 답변 생성 메서드 구현
-
-		plusPetQuestIndex(user, petId);
-	}
-
-	private void plusPetQuestIndex(User user, Long petId) {
-		Optional<Pet> findPet = petRepository.findByIdAndIsDeleted(petId, false);
-		Pet pet = findPet
+		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
+		Quest quest = questRepository.findById(questId)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_QUEST_EXCEPTION));
+
+		if (requestDto.getType().equals(QuestType.TEXT.getType())) {
+			QuestAnswer questAnswer = QuestAnswer.createTextQuestAnswer(pet, quest, requestDto);
+			questAnswerRepository.save(questAnswer);
+			plusPetQuestIndex(user, pet);
+			return;
+		}
+
+		if (requestDto.getType().equals(QuestType.TEXT_IMAGE.getType())) {
+			String imageUrl = s3UploadUtil.saveFile(imageFile);
+			QuestAnswer questAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, requestDto, imageUrl);
+			questAnswerRepository.save(questAnswer);
+			plusPetQuestIndex(user, pet);
+			return;
+		}
+
+		String imageUrl = s3UploadUtil.saveFile(imageFile);
+		QuestAnswer questAnswer = QuestAnswer.createImageQuestAnswer(pet, quest, requestDto, imageUrl);
+		questAnswerRepository.save(questAnswer);
+		plusPetQuestIndex(user, pet);
+	}
+
+	private void plusPetQuestIndex(User user, Pet pet) {
 		pet.plusQuestIndex();
 		int petQuestIndex = pet.getQuestIndex();
 
 		if (petQuestIndex % 7 == 0) {
-			analyseWeeklyQuestAnswer(petId, petQuestIndex);
+			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex);
 		}
 
 		if (petQuestIndex == 49) {
-			memorialBookScheduler.scheduleMemorialBookActivation(user, petId);
-			analysisTotalQuestAnswer(petId);
+			memorialBookScheduler.scheduleMemorialBookActivation(user, pet.getId());
+			analysisTotalQuestAnswer(pet.getId());
 		}
 	}
 

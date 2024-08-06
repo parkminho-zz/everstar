@@ -11,10 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateAnswerRequestDto {
 
-	@NotBlank
 	private String content;
-
-	private String imageUrl;
 
 	@NotBlank
 	private String type;

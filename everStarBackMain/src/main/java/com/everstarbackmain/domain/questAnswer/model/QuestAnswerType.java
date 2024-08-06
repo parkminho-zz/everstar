@@ -9,7 +9,8 @@ import lombok.Getter;
 public enum QuestAnswerType {
 
 	TEXT("TEXT"),
-	TEXT_IMAGE("TEXT_IMAGE");
+	TEXT_IMAGE("TEXT_IMAGE"),
+	WEBRTC("WEBRTC");
 
 	private String type;
 }

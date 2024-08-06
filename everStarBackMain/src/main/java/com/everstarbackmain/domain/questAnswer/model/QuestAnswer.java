@@ -41,7 +41,6 @@ public class QuestAnswer extends BaseTimeEntity {
 	@JoinColumn(name = "quest_id")
 	private Quest quest;
 
-	@Column(nullable = false)
 	private String content;
 
 	private String imageUrl;
@@ -64,12 +63,30 @@ public class QuestAnswer extends BaseTimeEntity {
 		isDeleted = false;
 	}
 
-	public static QuestAnswer createQuestAnswer(Pet pet, Quest quest, CreateAnswerRequestDto requestDto) {
+	public static QuestAnswer createTextQuestAnswer(Pet pet, Quest quest, CreateAnswerRequestDto requestDto) {
 		return QuestAnswer.builder()
 			.pet(pet)
 			.quest(quest)
 			.content(requestDto.getContent())
-			.imageUrl(requestDto.getImageUrl())
+			.type(QuestAnswerType.valueOf(requestDto.getType()))
+			.build();
+	}
+
+	public static QuestAnswer createImageQuestAnswer(Pet pet, Quest quest, CreateAnswerRequestDto requestDto, String imageUrl) {
+		return QuestAnswer.builder()
+			.pet(pet)
+			.quest(quest)
+			.imageUrl(imageUrl)
+			.type(QuestAnswerType.valueOf(requestDto.getType()))
+			.build();
+	}
+
+	public static QuestAnswer createTextImageQuestAnswer(Pet pet, Quest quest, CreateAnswerRequestDto requestDto, String imageUrl) {
+		return QuestAnswer.builder()
+			.pet(pet)
+			.quest(quest)
+			.content(requestDto.getContent())
+			.imageUrl(imageUrl)
 			.type(QuestAnswerType.valueOf(requestDto.getType()))
 			.build();
 	}
