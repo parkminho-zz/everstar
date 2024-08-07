@@ -1,8 +1,13 @@
 package com.everstarbackmain.domain.questAnswer.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +26,7 @@ import com.everstarbackmain.domain.quest.repository.QuestRepository;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswerTypeNo;
 import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
+import com.everstarbackmain.global.karlo.util.KalroClient;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;
@@ -52,6 +58,7 @@ public class QuestAnswerService {
 	private final MemorialBookScheduler memorialBookScheduler;
 	private final NaverCloudClient naverCloudClient;
 	private final OpenAiClient openAiClient;
+	private final KalroClient kalroClient;
 	private final S3UploadUtil s3UploadUtil;
 
 	@Transactional
@@ -143,6 +150,14 @@ public class QuestAnswerService {
 					questAnswer, imageUrl);
 				AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
 					new CreateAiAnswerRequestDto(aiAnswerResponse, null, AiAnswerType.TEXT.getType()));
+				aiAnswerRepository.save(aiAnswer);
+			}
+
+			if (type.equals(QuestAnswerTypeNo.TEXT_TO_IMAGE_ART.getType())) {
+				String encodedAiAnswerResponse = kalroClient.writePetTextToImageAnswer(pet, quest, questAnswer);
+				String uploadedImageUrl = s3UploadUtil.uploadS3ByEncodedFile(encodedAiAnswerResponse);
+				AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
+					new CreateAiAnswerRequestDto(null, uploadedImageUrl, AiAnswerType.IMAGE.getType()));
 				aiAnswerRepository.save(aiAnswer);
 			}
 
