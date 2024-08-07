@@ -8,6 +8,7 @@ import { PostitIcons } from 'components/atoms/symbols/Postit/PostitIcons';
 import { RocketIcons } from 'components/atoms/symbols/Rocket/RocketIcons';
 import { RootState } from 'store/Store';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 interface Props {
   type:
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({ type, className }) => {
+  const params = useParams();
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
   const navigate = useNavigate();
 
@@ -40,7 +42,7 @@ export const Header: React.FC<Props> = ({ type, className }) => {
   };
 
   const handlePostitIconClick = () => {
-    navigate(`/everstar/${petId}/message`);
+    navigate(`/everstar/${params.pet}/message`);
   };
 
   const handleExploreClick = () => {

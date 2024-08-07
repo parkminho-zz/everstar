@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   CheerMessage,
   CheerMessageProps,
@@ -39,6 +39,10 @@ export const EverStarCheerMessage: React.FC<
     : isTabletOrMobile
       ? 'tablet'
       : 'desktop';
+
+  useEffect(() => {
+    // window.location.reload();
+  }, []);
 
   // 로딩 및 오류 상태 처리
   if (isLoading) return <div>Loading...</div>;

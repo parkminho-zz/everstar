@@ -6,7 +6,6 @@ import { Glass } from 'components/molecules/Glass/Glass';
 import { IntroduceWrite } from 'components/organics/CheerMessage/IntroduceWrite';
 import { CheerColorSelect } from 'components/organics/CheerMessage/CheerColorSelect';
 import { CheerMessageWrite } from 'components/organics/CheerMessage/CheerMessageWrite';
-
 import { useFetchCheeringPetDelete } from 'hooks/useEverStar';
 
 export interface CheerMessageProps {
@@ -43,6 +42,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     useState(false);
   const [isCheerMessageWriteModalOpen, setCheerMessageWriteModalOpen] =
     useState(false);
+  const [selectedColor, setSelectedColor] = useState<string>(''); // 색상 상태 추가
 
   const cardsPerPage = 12;
 
@@ -67,6 +67,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
       }
     );
   };
+
   const handlePencilClick = () => {
     setIntroduceWriteModalOpen(true);
   };
@@ -92,12 +93,18 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     setCheerMessageWriteModalOpen(true);
   };
 
+  const handleCheerColorSelect = (color: string) => {
+    setSelectedColor(color); // 선택된 색상 저장
+  };
+
   const handleCloseCheerMessageWriteModal = () => {
     setCheerMessageWriteModalOpen(false);
   };
 
   const handleVerifyCheerMessageWrite = () => {
     setCheerMessageWriteModalOpen(false);
+    console.log(selectedColor);
+    console.log(123);
   };
 
   const renderPostItCards = () => {
@@ -113,7 +120,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
         color={card.color as never}
         onDelete={() =>
           handleDelete(startIdx + index, card.petId, card.cheeringMessageId)
-        } // 예제의 petId 및 cheeringMessageId
+        }
       />
     ));
 
@@ -176,6 +183,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
         onResend={function (): void {
           throw new Error('Function not implemented.');
         }}
+        onOptionSelect={handleCheerColorSelect} // 색상 선택 처리 함수 전달
       />
 
       <CheerMessageWrite

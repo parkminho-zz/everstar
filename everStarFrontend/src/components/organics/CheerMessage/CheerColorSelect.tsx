@@ -9,6 +9,7 @@ interface CheerColorSelectProps {
   onResend: () => void;
   onVerify: (code: string) => void;
   text: string;
+  onOptionSelect: (color: string) => void;
   height?: string;
 }
 
@@ -17,10 +18,11 @@ export const CheerColorSelect: React.FC<CheerColorSelectProps> = ({
   onClose,
   onVerify,
   text,
+  onOptionSelect,
 }) => {
-  const [verificationCode] = useState('');
+  const [selectedColor, setSelectedColor] = useState<string>('');
 
-  const colorOptions = [
+  const colorOptions: (string | number)[] = [
     '빨간색',
     '주황색',
     '노란색',
@@ -30,8 +32,14 @@ export const CheerColorSelect: React.FC<CheerColorSelectProps> = ({
     '보라색',
   ];
 
+  const handleOptionSelect = (option: string | number) => {
+    const color = typeof option === 'string' ? option : option.toString();
+    setSelectedColor(color);
+    onOptionSelect(color); // 선택된 색상을 부모 컴포넌트로 전달
+  };
+
   const handleVerify = () => {
-    onVerify(verificationCode);
+    onVerify(selectedColor);
   };
 
   return (
@@ -47,7 +55,7 @@ export const CheerColorSelect: React.FC<CheerColorSelectProps> = ({
               options={colorOptions}
               title={'포스트잇 색깔을 선택해주세요'}
               showLabel={false}
-              onOptionSelect={function (): void {}}
+              onOptionSelect={handleOptionSelect} // 수정된 부분
               infoText={''}
             />
           </div>
