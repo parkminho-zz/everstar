@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { CheerMessage, CheerMessageProps } from 'components/organics/CheerMessage/CheerMessage';
-
-import bgImage from 'assets/images/bg-everstar.webp';
-import { Header } from 'components/molecules/Header/Header';
-import { Footer } from 'components/molecules/Footer/Footer';
+import {
+  CheerMessage,
+  CheerMessageProps,
+} from 'components/organics/CheerMessage/CheerMessage';
 import { useFetchCheeringPet } from 'hooks/useEverStar';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
@@ -48,19 +47,13 @@ export const EverStarCheerMessage: React.FC<
   console.log('Mapped postItCards:', postItCards);
 
   return (
-    <div
-      className="flex flex-col min-h-screen bg-center bg-cover"
-      style={{ backgroundImage: `url(${bgImage})` }}
-    >
-      <Header type="everstar" className="sticky top-0 z-50" />
-
+    <div>
       <CheerMessage
         {...props}
         postItCards={postItCards}
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
-      <Footer className="mt-auto" />
     </div>
   );
 };

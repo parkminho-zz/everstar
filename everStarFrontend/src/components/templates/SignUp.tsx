@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Footer } from 'components/molecules/Footer/Footer';
 import { SignUpForm } from 'components/organics/SignUpForm/SignUpForm';
 import { PhoneNumberModal } from 'components/organics/PhoneNumberModal/PhoneNumberModal';
-import { useSendVerificationCode, useVerifyAuthCode, useJoinUser } from 'hooks/useAuth';
-import bgImage from 'assets/images/bg-login.webp';
+import {
+  useSendVerificationCode,
+  useVerifyAuthCode,
+  useJoinUser,
+} from 'hooks/useAuth';
 
 interface UserInfo {
   email: string;
@@ -100,27 +102,21 @@ export const SignUp: React.FC = () => {
   };
 
   return (
-    <div
-      className="flex flex-col min-h-screen bg-center bg-cover"
-      style={{ backgroundImage: `url(${bgImage})` }}
-    >
-      <div className="flex items-center justify-center flex-grow">
-        <SignUpForm
-          headerText="회원가입"
-          smallButtonText=""
-          showPrimaryButton={true}
-          text="회원가입을 위해 정보를 입력해주세요."
-          onButtonClick={handleSignUpButtonClick}
-        />
-        <PhoneNumberModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          onResend={handleResend}
-          onVerify={handleVerifyAndJoin}
-          text="인증번호를 <br /> 입력해 주세요"
-        />
-      </div>
-      <Footer className="mt-auto" />
+    <div className='flex items-center justify-center flex-grow'>
+      <SignUpForm
+        headerText='회원가입'
+        smallButtonText=''
+        showPrimaryButton={true}
+        text='회원가입을 위해 정보를 입력해주세요.'
+        onButtonClick={handleSignUpButtonClick}
+      />
+      <PhoneNumberModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onResend={handleResend}
+        onVerify={handleVerifyAndJoin}
+        text='인증번호를 <br /> 입력해 주세요'
+      />
     </div>
   );
 };
