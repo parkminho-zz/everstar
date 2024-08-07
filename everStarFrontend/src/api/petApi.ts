@@ -54,10 +54,7 @@ export const fetchPets = async (token: string): Promise<Pet[]> => {
   return result.data;
 };
 
-export const fetchPetDetails = async (
-  petId: number,
-  token: string,
-): Promise<PetInfo> => {
+export const fetchPetDetails = async (petId: number, token: string): Promise<PetInfo> => {
   console.log(`Fetching pet details for petId ${petId} with token:`, token);
   const response = await fetch(`${config.API_BASE_URL}/api/pets/${petId}`, {
     method: 'GET',
@@ -74,7 +71,21 @@ export const fetchPetDetails = async (
   const result = await response.json();
   console.log('Fetched pet details:', result);
 
-  return result.data;
+  // Transform the data to fit the PetInfo interface
+  const petDetails: PetInfo = {
+    id: result.data.id,
+    userId: result.data.userId,
+    name: result.data.name,
+    age: result.data.age,
+    memorialDate: result.data.memorialDate,
+    species: result.data.species,
+    gender: result.data.gender,
+    relationship: result.data.relationship,
+    profileImageUrl: result.data.profileImageUrl,
+    personalities: result.data.petPersonalities, // Convert petPersonalities to personalities
+  };
+
+  return petDetails;
 };
 
 export const addPet = async (formData: FormData, token: string) => {
