@@ -102,6 +102,7 @@ public class Pet extends BaseTimeEntity {
 		lastSendLetterTime = LocalDateTime.now();
 	}
 
+	// ---------------펫 인스턴스의 정보에 대한 static method ------------------------------
 	public static Pet createPet(User user, CreatePetRequestDto createPetRequestDto, String profileImageUrl) {
 		return Pet.builder()
 			.user(user)
@@ -115,14 +116,22 @@ public class Pet extends BaseTimeEntity {
 			.build();
 	}
 
-	public void plusQuestIndex() {
-		questIndex++;
-	}
-
 	public void updatePetIntroduction(String newIntroduction) {
 		this.introduction = newIntroduction;
 	}
 
+	// ----------------펫 퀘스트 관련 Static methods -----------------------------------------
+	public void plusQuestIndex() {
+		questIndex++;
+		setIsQuestCompleted(); // 완료시 true됨
+	}
+
+	public void setIsQuestCompleted() {
+		isQuestCompleted = !isQuestCompleted;
+	}
+
+
+	// ----------------편지 서비스 관련 Static methods -----------------------------------------
 	public void updatePetSendTime(){
 		this.lastSendLetterTime = LocalDateTime.now();
 		this.sendLetterTime = generateRandomTime();
