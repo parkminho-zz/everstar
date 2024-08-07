@@ -68,7 +68,7 @@ public class QuestAnswerService {
 		if (requestDto.getType().equals(QuestType.TEXT.getType())) {
 			QuestAnswer questAnswer = QuestAnswer.createTextQuestAnswer(pet, quest, requestDto);
 			questAnswerRepository.save(questAnswer);
-			plusPetQuestIndex(user, pet, quest, questAnswer, "");
+			plusPetQuestIndexByTextType(user, pet, quest, questAnswer);
 			return;
 		}
 
@@ -76,17 +76,17 @@ public class QuestAnswerService {
 			String imageUrl = s3UploadUtil.saveFile(imageFile);
 			QuestAnswer questAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, requestDto, imageUrl);
 			questAnswerRepository.save(questAnswer);
-			plusPetQuestIndex(user, pet, quest, questAnswer, imageUrl);
+			plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl);
 			return;
 		}
 
 		String imageUrl = s3UploadUtil.saveFile(imageFile);
 		QuestAnswer questAnswer = QuestAnswer.createImageQuestAnswer(pet, quest, requestDto, imageUrl);
 		questAnswerRepository.save(questAnswer);
-		plusPetQuestIndex(user, pet, quest, questAnswer, imageUrl);
+		plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl);
 	}
 
-	private void plusPetQuestIndex(User user, Pet pet, Quest quest, QuestAnswer questAnswer, String imageUrl) {
+	private void plusPetQuestIndexByTextType(User user, Pet pet, Quest quest, QuestAnswer questAnswer) {
 		pet.plusQuestIndex();
 		int petQuestIndex = pet.getQuestIndex();
 
@@ -99,7 +99,23 @@ public class QuestAnswerService {
 			analysisTotalQuestAnswer(pet.getId());
 		}
 
-		requestAiAnswer(user, pet, quest, questAnswer, imageUrl);
+		requestAiAnswerByTextType(user, pet, quest, questAnswer);
+	}
+
+	private void plusPetQuestIndexByImageType(User user, Pet pet, Quest quest, QuestAnswer questAnswer, String imageUrl) {
+		pet.plusQuestIndex();
+		int petQuestIndex = pet.getQuestIndex();
+
+		if (petQuestIndex % 7 == 0) {
+			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex);
+		}
+
+		if (petQuestIndex == 49) {
+			memorialBookScheduler.scheduleMemorialBookActivation(user, pet.getId());
+			analysisTotalQuestAnswer(pet.getId());
+		}
+
+		requestAiAnswerByImageType(user, pet, quest, questAnswer, imageUrl);
 	}
 
 	private void analyseWeeklyQuestAnswer(Long petId, int petQuestIndex) {
@@ -123,26 +139,36 @@ public class QuestAnswerService {
 		sentimentAnalysis.addTotalResult(openAiClient.analysisTotalSentiment(sentimentAnalysis));
 	}
 
-	private void requestAiAnswer(User user, Pet pet, Quest quest, QuestAnswer questAnswer, String imageUrl) {
+	private void requestAiAnswerByTextType(User user, Pet pet, Quest quest, QuestAnswer questAnswer) {
 		Long questId = quest.getId();
 		List<String> personalities = petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(
 			pet.getId(), false);
 
 		QuestAnswerTypeNo.findTypeByQuestNumber(questId).ifPresentOrElse(type -> {
-
 			if (type.equals(QuestAnswerTypeNo.TEXT_TO_TEXT.getType())) {
 				String aiAnswerResponse = openAiClient.writePetTextToTextAnswer(user, pet, personalities, quest,
 					questAnswer);
 				AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
-					new CreateAiAnswerRequestDto(aiAnswerResponse, null, AiAnswerType.TEXT.getType()));
+					CreateAiAnswerRequestDto.createTextAiAnswerRequestDto(aiAnswerResponse,
+						AiAnswerType.TEXT.getType()));
 				aiAnswerRepository.save(aiAnswer);
 			}
+		}, () -> {
+		});
+	}
 
+	private void requestAiAnswerByImageType(User user, Pet pet, Quest quest, QuestAnswer questAnswer, String imageUrl) {
+		Long questId = quest.getId();
+		List<String> personalities = petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(
+			pet.getId(), false);
+
+		QuestAnswerTypeNo.findTypeByQuestNumber(questId).ifPresentOrElse(type -> {
 			if (type.equals(QuestAnswerTypeNo.TEXT_IMAGE_TO_TEXT.getType())) {
 				String aiAnswerResponse = openAiClient.writePetTextImageToTextAnswer(user, pet, personalities, quest,
 					questAnswer, imageUrl);
 				AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
-					new CreateAiAnswerRequestDto(aiAnswerResponse, null, AiAnswerType.TEXT.getType()));
+					CreateAiAnswerRequestDto.createTextAiAnswerRequestDto(aiAnswerResponse,
+						AiAnswerType.TEXT.getType()));
 				aiAnswerRepository.save(aiAnswer);
 			}
 
