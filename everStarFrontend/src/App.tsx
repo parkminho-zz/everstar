@@ -5,10 +5,10 @@ import { EverstarPage } from 'pages/EverstarPage';
 import { TutorialPage } from 'pages/TutorialPage';
 import { EarthPage } from 'pages/EarthPage';
 import { SplashPage } from 'pages/SplashPage';
-import { ProfilePage } from 'pages/ProfilePage';
 import { SignUpPage } from 'pages/SignUpPage';
 import { LoginPage } from 'pages/LoginPage';
 import { OAuthCallback } from 'pages/OAuthCallback';
+import './firebase-messaging-sw';
 
 const queryClient = new QueryClient();
 
@@ -21,7 +21,6 @@ function App() {
             <Route path='/' element={<SplashPage />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/signup/:userEmail*' element={<SignUpPage />} />
-            <Route path='/profile/*' element={<ProfilePage />}></Route>
             <Route path='/tutorial' element={<TutorialPage />}></Route>
             <Route path='/earth/*' element={<EarthPage />}></Route>
             <Route path='/everstar/:pet/*' element={<EverstarPage />}></Route>

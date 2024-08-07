@@ -55,16 +55,20 @@ export const useAddPet = (
   });
 };
 
-export const useFetchPetDetails = (petId: number, token: string) => {
+export const useFetchPetDetails = (petId: number | null, token: string) => {
   const dispatch = useDispatch();
   return useQuery<PetInfo, Error>({
     queryKey: ['petDetails', petId],
     queryFn: async () => {
       console.log('Fetching pet details inside useFetchPetDetails');
+      if (petId === null) throw new Error('Pet ID is null');
       const details = await fetchPetDetails(petId, token);
       dispatch(setPetDetails(details));
       return details;
     },
     enabled: !!token && petId !== null,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
 };
