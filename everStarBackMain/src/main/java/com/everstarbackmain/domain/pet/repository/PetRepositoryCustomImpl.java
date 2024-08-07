@@ -58,14 +58,14 @@ public class PetRepositoryCustomImpl implements PetRepositoryCustom {
 			.select(Projections.constructor(EverStarPetSearchResponseDto.class, pet.id, pet.name, pet.user.userName,
 				pet.user.email))
 			.from(pet)
-			.where(pet.name.eq(petName).and(pet.isDeleted.isFalse()))
+			.where(pet.name.like(petName + "%").and(pet.isDeleted.isFalse()))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
 
 		long total = queryFactory
 			.selectFrom(pet)
-			.where(pet.name.eq(petName).and(pet.isDeleted.isFalse()))
+			.where(pet.name.eq(petName + "%").and(pet.isDeleted.isFalse()))
 			.fetchCount();
 
 		return new PageImpl<>(searchPets, pageable, total);
