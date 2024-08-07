@@ -24,7 +24,7 @@ public class PetLetterScheduler {
 	private final ApplicationEventPublisher eventPublisher;
 
 	public void schedulePetLetter(UserLetter userLetter) {
-		LocalDateTime nextDayWritePetLetterTime = userLetter.getCreatedTime().plusMinutes(1);
+		LocalDateTime nextDayWritePetLetterTime = userLetter.getCreatedTime().plusSeconds(1);
 		Date nextDayWritePetLetterDate = Date.from(
 			nextDayWritePetLetterTime.atZone(ZoneId.systemDefault()).toInstant());
 

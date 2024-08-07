@@ -73,6 +73,9 @@ dependencies {
 
 	// coolsms nurigo 문자인증
 	implementation 'net.nurigo:sdk:4.3.0'
+
+	//fcm
+	implementation 'com.google.firebase:firebase-admin:6.8.1'
 }
 
 tasks.named('test') {
