@@ -1,21 +1,24 @@
 // src/hooks/useAuth.ts
-
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from 'store/Store';
-import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import {
+  useQuery,
+  useMutation,
+  UseMutationResult,
+} from '@tanstack/react-query';
+
 import {
   sendVerificationCode,
   verifyAuthCode,
   joinUser,
+  fetchUserInfo,
   SendCodeResponse,
   VerifyCodeResponse,
-  JoinResponse,
   UserInfo,
 } from 'api/authApi';
 import { setToken, setUser } from 'store/slices/authSlice';
-import { useDispatch } from 'react-redux';
 
 export const useSendVerificationCode = (): UseMutationResult<
   SendCodeResponse,
@@ -25,13 +28,12 @@ export const useSendVerificationCode = (): UseMutationResult<
 > => {
   return useMutation<SendCodeResponse, unknown, string>({
     mutationFn: sendVerificationCode,
-    onSuccess: () => {
-      console.log('Verification code sent successfully');
-    },
-    onError: (error: unknown) => {
-      const err = error as Error;
-      console.error('Error sending verification code:', err.message);
-    },
+    onSuccess: () => console.log('Verification code sent successfully'),
+    onError: (error: unknown) =>
+      console.error(
+        'Error sending verification code:',
+        (error as Error).message,
+      ),
   });
 };
 
@@ -41,34 +43,57 @@ export const useVerifyAuthCode = (): UseMutationResult<
   { phone: string; certificationNumber: string },
   unknown
 > => {
-  return useMutation<VerifyCodeResponse, unknown, { phone: string; certificationNumber: string }>({
+  return useMutation<
+    VerifyCodeResponse,
+    unknown,
+    { phone: string; certificationNumber: string }
+  >({
     mutationFn: verifyAuthCode,
-    onSuccess: () => {
-      console.log('Auth code verified successfully');
-    },
-    onError: (error: unknown) => {
-      const err = error as Error;
-      console.error('Error verifying auth code:', err.message);
-    },
+    onSuccess: () => console.log('Auth code verified successfully'),
+    onError: (error: unknown) =>
+      console.error('Error verifying auth code:', (error as Error).message),
   });
 };
 
-export const useJoinUser = (): UseMutationResult<JoinResponse, unknown, UserInfo, unknown> => {
+export const useJoinUser = (): UseMutationResult<
+  { data: UserInfo; token: string | null },
+  unknown,
+  UserInfo,
+  unknown
+> => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  return useMutation<JoinResponse, unknown, UserInfo>({
+  return useMutation<
+    { data: UserInfo; token: string | null },
+    unknown,
+    UserInfo
+  >({
     mutationFn: joinUser,
-    onSuccess: (data: JoinResponse) => {
-      console.log('User joined successfully', data); // 성공 로그 추가
-      dispatch(setToken(data.token)); // 토큰 저장
-      dispatch(setUser(data.user));
-      console.log('Token and user set in Redux:', data.token, data.user); // 디스패치 후 로그
-      navigate('/profile');
+    onSuccess: async ({ data, token }) => {
+      console.log('User joined successfully', data, token);
+
+      if (token) {
+        dispatch(setToken(token));
+
+        try {
+          const userInfo = await fetchUserInfo(token);
+          dispatch(setUser(userInfo));
+          navigate('/mypage/profile');
+        } catch (error) {
+          console.error(
+            'Error fetching user info after joining:',
+            (error as Error).message,
+          );
+          navigate('/login');
+        }
+      } else {
+        console.error('Token not found in response data');
+        navigate('/login');
+      }
     },
     onError: (error: unknown) => {
-      const err = error as Error;
-      console.error('Error joining user:', err.message);
+      console.error('Error joining user:', (error as Error).message);
       navigate('/login');
     },
   });
@@ -79,9 +104,24 @@ export const useAuthStatus = () => {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
 
   useEffect(() => {
-    console.log('Access Token:', accessToken); // 콘솔에 토큰 출력
     if (accessToken) {
-      navigate('/profile');
+      navigate('/mypage/profile');
     }
   }, [accessToken, navigate]);
+};
+
+export const useFetchUserInfo = (token: string) => {
+  const dispatch = useDispatch();
+
+  return useQuery<UserInfo, Error>({
+    queryKey: ['userInfo', token],
+    queryFn: async () => {
+      if (!token) throw new Error('Token is required');
+      const data = await fetchUserInfo(token);
+      console.log(data);
+      dispatch(setUser(data));
+      return data;
+    },
+    enabled: !!token,
+  });
 };
