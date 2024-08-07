@@ -19,6 +19,7 @@ import com.everstarbackmain.domain.pet.requestdto.UpdatePetIntroductionDto;
 import com.everstarbackmain.domain.pet.responsedto.EnrolledPetsResponseDto;
 import com.everstarbackmain.domain.pet.responsedto.MyPagePetInfoResponseDto;
 import com.everstarbackmain.domain.petterLetter.util.PetLetterScheduler;
+import com.everstarbackmain.domain.quest.util.QuestScheduler;
 import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;
 import com.everstarbackmain.domain.sentimentAnalysis.repository.SentimentAnalysisRepository;
 import com.everstarbackmain.domain.user.model.User;
@@ -40,6 +41,7 @@ public class PetService {
 	private final PetPersonalityRepository petPersonalityRepository;
 	private final MemorialBookRepository memorialBookRepository;
 	private final SentimentAnalysisRepository sentimentAnalysisRepository;
+	private final QuestScheduler questScheduler;
 	private final PetLetterScheduler petLetterScheduler;
 	private final S3UploadUtil s3UploadUtil;
 
@@ -55,7 +57,10 @@ public class PetService {
 		createMemorialBook(pet);
 		createSentimentAnalysis(pet);
 
+		// Scheduler
 		petLetterScheduler.scheduleSendPetLetter(pet);
+		questScheduler.scheduleInitialQuest(user, pet.getId());
+
 	}
 
 	private void addPersonalities(Pet pet, CreatePetRequestDto createPetRequestDto) {
