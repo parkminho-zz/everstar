@@ -6,6 +6,9 @@ import { EverStarSearchStar } from 'components/templates/EverStarSearchStar';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
+import { Header } from 'components/molecules/Header/Header'; // 헤더 임포트
+import { Footer } from 'components/molecules/Footer/Footer'; // 푸터 임포트
+import bgImage from 'assets/images/bg-everstar.webp';
 
 interface PetProfile {
   name: string;
@@ -63,40 +66,47 @@ export const EverstarPage: React.FC = () => {
   }, [location]);
 
   return (
-    <div className='flex flex-col min-h-screen'>
-      <div className='flex-grow'>
-        <Routes>
-          <Route
-            path='/'
-            element={
-              <EverStarMain
-                title='a'
-                fill={49}
-                buttonSize='large'
-                buttonDisabled={false}
-                buttonText='지구별로 이동'
-                onButtonClick={() => console.log('영원별 이동')}
-                buttonTheme={'white'}
-              />
-            }
-          />
-          <Route
-            path='message'
-            element={
-              petProfile ? (
-                <EverStarCheerMessage
-                  profile={petProfile}
-                  postItCards={[]} // Add actual data if available
-                  totalPages={0} // Add actual data if available
+    <div
+      className='flex flex-col min-h-screen bg-center bg-cover'
+      style={{ backgroundImage: `url(${bgImage})` }}
+    >
+      <div className='flex flex-col min-h-screen'>
+        <Header type='everstar' className='top-0 z-50' />{' '}
+        {/* 헤더를 여기에 배치 */}
+        <div className='flex-grow'>
+          <Routes>
+            <Route
+              path='/'
+              element={
+                <EverStarMain
+                  title='a'
+                  fill={49}
+                  buttonSize='large'
+                  buttonDisabled={false}
+                  buttonText='지구별로 이동'
+                  onButtonClick={() => console.log('영원별 이동')}
+                  buttonTheme='white'
                 />
-              ) : (
-                <div>Loading...</div> // Or any fallback UI
-              )
-            }
-          />
-
-          <Route path='explore' element={<EverStarSearchStar />} />
-        </Routes>
+              }
+            />
+            <Route
+              path='message'
+              element={
+                petProfile ? (
+                  <EverStarCheerMessage
+                    profile={petProfile}
+                    postItCards={[]} // Add actual data if available
+                    totalPages={0} // Add actual data if available
+                  />
+                ) : (
+                  <div>Loading...</div> // Or any fallback UI
+                )
+              }
+            />
+            <Route path='explore' element={<EverStarSearchStar />} />
+          </Routes>
+        </div>
+        <Footer className='mt-auto' /> {/* 푸터를 여기에 배치 */}
       </div>
     </div>
   );

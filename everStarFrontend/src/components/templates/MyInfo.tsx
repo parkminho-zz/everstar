@@ -1,16 +1,20 @@
-// src/components/templates/MyInfo.tsx
 import React, { useEffect, useMemo, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from 'store/Store';
 import { useFetchPets, useFetchPetDetails } from 'hooks/usePets';
 import { useFetchUserInfo } from 'hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { setPets, setSelectedPetId, setPetDetails } from 'store/slices/petSlice';
+import {
+  setPets,
+  setSelectedPetId,
+  setPetDetails,
+} from 'store/slices/petSlice';
 import { setUser } from 'store/slices/authSlice';
 import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
 import { Tab } from 'components/molecules/Tab/Tab';
 import { UserInfoTab } from 'components/organics/Profile/UserInfoTab';
 import { PetInfoTab } from 'components/organics/Profile/PetInfoTab';
+import { Glass } from 'components/molecules/Glass/Glass';
 
 export const MyInfo: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,12 +22,22 @@ export const MyInfo: React.FC = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const pets = useSelector((state: RootState) => state.pet.pets);
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
-  const selectedPetId = useSelector((state: RootState) => state.pet.selectedPetId);
+  const selectedPetId = useSelector(
+    (state: RootState) => state.pet.selectedPetId,
+  );
   const [activeTab, setActiveTab] = useState<'one' | 'two'>('one');
   const [initialPetId] = useState<number | null>(selectedPetId);
 
-  const { data: petsData, isLoading: isPetsLoading, error: petsError } = useFetchPets(token);
-  const { data: userData, isLoading: isUserLoading, error: userError } = useFetchUserInfo(token);
+  const {
+    data: petsData,
+    isLoading: isPetsLoading,
+    error: petsError,
+  } = useFetchPets(token);
+  const {
+    data: userData,
+    isLoading: isUserLoading,
+    error: userError,
+  } = useFetchUserInfo(token);
 
   const {
     mutate: fetchPetDetails,
@@ -108,9 +122,10 @@ export const MyInfo: React.FC = () => {
   );
 
   if (isPetsLoading || isUserLoading) return <div>로딩 중...</div>;
-  if (petsError) return <div className="text-red-500">{petsError.message}</div>;
-  if (userError) return <div className="text-red-500">{userError.message}</div>;
-  if (petDetailsError) return <div className="text-red-500">{petDetailsError.message}</div>;
+  if (petsError) return <div className='text-red-500'>{petsError.message}</div>;
+  if (userError) return <div className='text-red-500'>{userError.message}</div>;
+  if (petDetailsError)
+    return <div className='text-red-500'>{petDetailsError.message}</div>;
   if (!userInfo) return <div>사용자 정보를 불러오는 중...</div>;
 
   const handleButtonClick = () => {
@@ -118,35 +133,48 @@ export const MyInfo: React.FC = () => {
   };
 
   return (
-    <div className="relative z-10 flex-grow my-4">
-      <div className="flex justify-center p-6">
-        <div className="flex flex-col items-center w-[360px] gap-8 p-5 bg-white rounded-lg shadow-md">
-          <ModalHeader
-            text="마이 페이지"
-            showLeftIcon={true}
-            onLeftIconClick={() => navigate(-1)}
-          />
-          <Tab
-            row="two"
-            activeTab={activeTab}
-            className="mb-4"
-            onTabClick={(tab) => setActiveTab(tab as 'one' | 'two')}
-          />
-          {activeTab === 'one' ? (
-            <UserInfoTab
-              userInfo={{
-                name: userInfo?.userName || '',
-                birthdate: userInfo?.birthDate || '',
-                gender: getGenderText(userInfo?.gender || ''),
-                email: userInfo?.email || '',
-                phone: userInfo?.phoneNumber || '',
-              }}
-              smallButtonText="핸드폰 번호 수정하기"
-              onButtonClick={handleButtonClick}
+    <div className='relative flex flex-col items-center justify-center w-full min-h-screen'>
+      <Glass
+        currentPage={1}
+        totalPages={1}
+        onPageChange={(newPage) => console.log('Page changed to:', newPage)}
+        showPageIndicator={false}
+        className='absolute top-0 bottom-0 left-0 right-0 z-0'
+      />
+      <div className='relative z-10 flex flex-col items-center justify-center w-full h-full'>
+        <div className='flex justify-center p-6'>
+          <div className='flex flex-col items-center w-[360px] gap-8 p-5 bg-white rounded-lg shadow-md'>
+            <ModalHeader
+              text='마이 페이지'
+              showLeftIcon={true}
+              onLeftIconClick={() => navigate(-1)}
             />
-          ) : (
-            <PetInfoTab petOptions={petOptions} petInfo={petInfo} onPetSelect={onPetSelect} />
-          )}
+            <Tab
+              row='two'
+              activeTab={activeTab}
+              className='mb-4'
+              onTabClick={(tab) => setActiveTab(tab as 'one' | 'two')}
+            />
+            {activeTab === 'one' ? (
+              <UserInfoTab
+                userInfo={{
+                  name: userInfo?.userName || '',
+                  birthdate: userInfo?.birthDate || '',
+                  gender: getGenderText(userInfo?.gender || ''),
+                  email: userInfo?.email || '',
+                  phone: userInfo?.phoneNumber || '',
+                }}
+                smallButtonText='핸드폰 번호 수정하기'
+                onButtonClick={handleButtonClick}
+              />
+            ) : (
+              <PetInfoTab
+                petOptions={petOptions}
+                petInfo={petInfo}
+                onPetSelect={onPetSelect}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>
