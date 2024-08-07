@@ -25,11 +25,4 @@ public class PetLetterResponseDto {
 		this.content = content;
 		this.createAt = createAt;
 	}
-
-	public static PetLetterResponseDto fromPetLetter(PetLetter petLetter) {
-		return PetLetterResponseDto.builder()
-			.petLetterId(petLetter.getId())
-			.isRead(petLetter.getIsRead())
-			.build();
-	}
 }

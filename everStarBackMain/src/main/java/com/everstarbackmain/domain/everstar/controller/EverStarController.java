@@ -48,4 +48,9 @@ public class EverStarController {
 
 		return response;
 	}
+
+	@GetMapping("/search")
+	public ResponseEntity<Map<String, Object>> getEverStarSearch(@RequestParam(name = "petname") String petName) {
+
+	}
 }
