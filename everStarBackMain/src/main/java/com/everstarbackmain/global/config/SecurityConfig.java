@@ -42,7 +42,7 @@ public class SecurityConfig {
 			.requestMatchers("/api/pets/**").hasRole("USER")
 			.requestMatchers("/api/accounts/users/**").hasRole("USER")
 			.requestMatchers("/api/everstar/**").hasRole("USER")
-			.requestMatchers("/api/notification/**").hasRole("USER")
+			.requestMatchers("/api/notifications/**").hasRole("USER")
 			.anyRequest().authenticated()
 		);
 		http.exceptionHandling((handle) -> handle.authenticationEntryPoint(customExceptionHandler));
