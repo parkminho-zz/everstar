@@ -6,6 +6,8 @@ interface PostitIconsProps {
   text?: string;
   onClick?: () => void;
   className?: string;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 export const PostitIcons: React.FC<PostitIconsProps> = ({
@@ -13,6 +15,8 @@ export const PostitIcons: React.FC<PostitIconsProps> = ({
   text,
   onClick,
   className,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
   return (
     <div
@@ -22,6 +26,8 @@ export const PostitIcons: React.FC<PostitIconsProps> = ({
         textAlign: 'center',
       }}
       onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       className={className}
     >
       {variant === 'postit-text' ? (
@@ -45,7 +51,7 @@ export const PostitIcons: React.FC<PostitIconsProps> = ({
           {text || '텍스트'}
         </div>
       ) : (
-        <Postit className='w-6 h-6' />
+        <Postit className="w-6 h-6" />
       )}
     </div>
   );

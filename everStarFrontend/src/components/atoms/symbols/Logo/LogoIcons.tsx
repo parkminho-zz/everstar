@@ -17,9 +17,13 @@ interface LogoIconsProps {
     | 'small-star'
     | 'small-star-img'
     | 'star'
-    | 'vertical-star';
+    | 'vertical-star'
+    | 'earth-text' // 추가된 부분
+    | 'star-text'; // 추가된 부분
   onClick?: () => void;
   className?: string;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 const iconMap = {
@@ -37,11 +41,68 @@ export const LogoIcons: React.FC<LogoIconsProps> = ({
   variant,
   onClick,
   className,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
-  const IconComponent = iconMap[variant];
+  const renderContent = () => {
+    if (variant === 'earth-text') {
+      return (
+        <div
+          style={{
+            position: 'relative',
+            width: '24px',
+            height: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontFamily: "'Noto_Sans-Bold',Helvetica",
+            fontWeight: 'bold',
+            fontSize: '8px',
+            color: 'black',
+            lineHeight: '8px',
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          지구별
+        </div>
+      );
+    } else if (variant === 'star-text') {
+      return (
+        <div
+          style={{
+            position: 'relative',
+            width: '24px',
+            height: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontFamily: "'Noto_Sans-Bold',Helvetica",
+            fontWeight: 'bold',
+            fontSize: '8px',
+            color: 'black',
+            lineHeight: '8px',
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          영원별
+        </div>
+      );
+    } else {
+      const IconComponent = iconMap[variant as keyof typeof iconMap];
+      return <IconComponent className={className} />;
+    }
+  };
+
   return (
-    <div onClick={onClick}>
-      <IconComponent className={className} />
+    <div
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className={`flex flex-col items-center ${className}`}
+    >
+      {renderContent()}
     </div>
   );
 };

@@ -6,10 +6,6 @@ const meta: Meta<typeof Glass> = {
   tags: ['autodocs'],
   component: Glass,
   argTypes: {
-    variant: {
-      control: { type: 'radio', options: ['desktop', 'tablet', 'mobile'] },
-      description: 'Variant of the Glass component to display',
-    },
     currentPage: {
       control: 'number',
       description: 'Current page number',
@@ -23,6 +19,10 @@ const meta: Meta<typeof Glass> = {
       control: 'boolean',
       description: 'Show or hide the PageIndicator',
     },
+    className: {
+      control: 'text',
+      description: 'Additional classes for styling',
+    },
   },
 };
 
@@ -30,29 +30,11 @@ export default meta;
 
 type Story = StoryObj<typeof Glass>;
 
-export const Desktop: Story = {
+export const Default: Story = {
   args: {
-    variant: 'desktop',
     currentPage: 1,
     totalPages: 3,
     showPageIndicator: true,
-  },
-};
-
-export const Tablet: Story = {
-  args: {
-    variant: 'tablet',
-    currentPage: 1,
-    totalPages: 3,
-    showPageIndicator: true,
-  },
-};
-
-export const Mobile: Story = {
-  args: {
-    variant: 'mobile',
-    currentPage: 1,
-    totalPages: 3,
-    showPageIndicator: true,
+    className: '',
   },
 };

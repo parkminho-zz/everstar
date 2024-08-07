@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
 import { Glass } from 'components/molecules/Glass/Glass';
 import { LetterBox } from 'components/organics/LetterBox/LetterBox';
-import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router-dom';
 
 interface Letter {
@@ -31,39 +30,29 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
   headerText,
 }) => {
   const navigate = useNavigate();
-
   const [letters] = useState(letterData);
-  const isMobile = useMediaQuery({ maxWidth: 767 });
-  const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1199 });
 
   const handleLetterClick = (id: number) => {
-    // setLetters(
-    //   letters.map((letter) => (letter.id === id ? { ...letter, state: 'received' } : letter))
-    // );
     navigate(`/earth/letter/${id}`);
   };
 
-  const itemsPerPage = isMobile ? 2 : isTablet ? 6 : 6;
-
   return (
-    <div className='relative flex items-center justify-center min-h-screen'>
+    <div className="relative flex items-center justify-center min-h-screen">
       <Glass
-        variant={isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop'}
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={onPageChange}
         showPageIndicator={true}
+        className="w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5"
       />
-      <div className={`absolute inset-0 flex flex-col items-center ${isMobile ? '' : 'p-8'} `}>
+      <div className="absolute inset-0 flex flex-col items-center p-4 sm:p-8">
         <ModalHeader text={headerText} onLeftIconClick={() => navigate(-1)} />
-        <div
-          className={`flex flex-col items-center w-full max-w-5xl  ${isMobile ? 'mt-9' : 'p-8 mt-20'} `}
-        >
+        <div className="flex flex-col items-center w-full max-w-5xl mt-9 sm:mt-20">
           <LetterBox
             letters={letters}
             onLetterClick={handleLetterClick}
             currentPage={currentPage}
-            itemsPerPage={itemsPerPage}
+            itemsPerPage={6}
           />
         </div>
       </div>

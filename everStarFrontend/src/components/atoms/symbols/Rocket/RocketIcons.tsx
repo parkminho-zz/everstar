@@ -6,6 +6,8 @@ interface RocketIconsProps {
   text?: string;
   onClick?: () => void;
   className?: string;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 export const RocketIcons: React.FC<RocketIconsProps> = ({
@@ -13,6 +15,8 @@ export const RocketIcons: React.FC<RocketIconsProps> = ({
   text,
   onClick,
   className,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
   return (
     <div
@@ -22,6 +26,8 @@ export const RocketIcons: React.FC<RocketIconsProps> = ({
         textAlign: 'center',
       }}
       onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       className={className}
     >
       {variant === 'rocket-text' ? (
@@ -45,7 +51,7 @@ export const RocketIcons: React.FC<RocketIconsProps> = ({
           {text || '영원별탐사'}
         </div>
       ) : (
-        <Rocket className='w-6 h-6' />
+        <Rocket className="w-6 h-6" />
       )}
     </div>
   );
