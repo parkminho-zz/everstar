@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/notification")
+@RequestMapping("/api/notifications")
 @Slf4j(topic = "elk")
 public class NotificationController {
 
@@ -33,6 +33,9 @@ public class NotificationController {
 		notificationService.saveNotification(authentication, requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessNotificationMessage.SUCCESS_SAVE_NOTIFICATION);
+
+		log.info("main server - request : {}", requestDto);
+		log.info("main server - response : {}", response);
 		return response;
 	}
 }

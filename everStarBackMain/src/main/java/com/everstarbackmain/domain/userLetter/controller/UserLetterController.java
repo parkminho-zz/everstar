@@ -33,8 +33,8 @@ public class UserLetterController {
 
 	@PostMapping
 	public ResponseEntity<Map<String, Object>> writeLetter(Authentication authentication,
-		@PathVariable("pet-id") long petId, @RequestPart @Valid WriteLetterRequestDto requestDto,
-		@RequestPart MultipartFile image) {
+		@PathVariable("pet-id") long petId, @RequestPart("requestDto") @Valid WriteLetterRequestDto requestDto,
+		@RequestPart("image") MultipartFile image) {
 		userLetterService.writeLetter(authentication, petId, requestDto, image);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessUserLetterMessage.SUCCESS_WRITE_LETTER);
@@ -48,7 +48,7 @@ public class UserLetterController {
 	@PostMapping("/{letter-id}")
 	public ResponseEntity<Map<String, Object>> writeLetterAnswer(Authentication authentication,
 		@PathVariable("pet-id") Long petId, @PathVariable("letter-id") Long letterId,
-		@RequestPart @Valid WriteLetterRequestDto requestDto, @RequestPart MultipartFile image) {
+		@RequestPart("requestDto") @Valid WriteLetterRequestDto requestDto, @RequestPart("image") MultipartFile image) {
 		userLetterService.writeLetterAnswer(authentication, petId, letterId, requestDto , image);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessUserLetterMessage.SUCCESS_WRITE_LETTER_ANSWER);

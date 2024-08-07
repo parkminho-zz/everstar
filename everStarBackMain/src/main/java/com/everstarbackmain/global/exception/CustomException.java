@@ -26,6 +26,7 @@ public enum CustomException {
 	NOT_FOUND_PET_EXCEPTION(404, "NotFoundPetException", "반려동물이 존재하지 않습니다."),
 	NOT_FOUND_PETLETTER_EXCEPTION(404, "NotFoundPetLetterException", "반려동물에게 온 편지가 존재하지 않습니다."),
 	NOT_FOUND_USER_EXCEPTION(404, "NotFoundUserException", "유저가 존재하지 않습니다."),
+	NOT_FOUND_NOTIFICATION_EXCEPTION(404, "NotFoundNotificationException", "알림이 존재하지 않습니다."),
 	NOT_FOUND_MEMORIAL_BOOK_EXCEPTION(404, "NotFoundMemorialBookException", "메모리얼북이 존재하지 않습니다."),
 	NOT_FOUND_CHEERING_MESSAGE_EXCEPTION(404, "NotFoundCheering_Message_Exception", "응원메시지가 존재하지 않습니다."),
 	NOT_FOUND_SENTIMENT_ANALYSIS_EXCEPTION(404, "NotFoundSentimentAnalysisException", "감정 분석 결과가 존재하지 않습니다."),
