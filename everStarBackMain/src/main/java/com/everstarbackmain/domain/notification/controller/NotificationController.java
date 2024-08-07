@@ -33,6 +33,9 @@ public class NotificationController {
 		notificationService.saveNotification(authentication, requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessNotificationMessage.SUCCESS_SAVE_NOTIFICATION);
+
+		log.info("main server - request : {}", requestDto);
+		log.info("main server - response : {}", response);
 		return response;
 	}
 }
