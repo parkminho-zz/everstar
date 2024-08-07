@@ -1,5 +1,6 @@
 package com.everstarbackmain.global.openai.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +18,9 @@ import com.everstarbackmain.domain.userLetter.model.UserLetter;
 import com.everstarbackmain.global.config.OpenAiConfig;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
+import com.everstarbackmain.global.openai.model.Content;
 import com.everstarbackmain.global.openai.model.OpenAiPrompt;
+import com.everstarbackmain.global.openai.model.TextImageGPTRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -140,10 +143,38 @@ public class OpenAiClient {
 	private String createPetTextToTextAnswerPrompt(User user, Pet pet, List<String> petPersonalities, Quest quest, QuestAnswer questAnswer) {
 		String petName = pet.getName();
 		String personalities = String.join(", ", petPersonalities);
-		String prompt = String.format(OpenAiPrompt.WRITE_PET_TEXT_ANSWER_PROMPT.getPrompt(), petName, petName,
+		String prompt = String.format(OpenAiPrompt.WRITE_PET_TEXT_TO_TEXT_ANSWER_PROMPT.getPrompt(), petName, petName,
 			quest.getContent(), questAnswer.getContent(), petName, pet.getRelationship(), personalities, user.getUserName());
 		return prompt;
 	}
 
+	public String writePetTextImageToTextAnswer(User user, Pet pet, List<String> petPersonalities, Quest quest,
+		QuestAnswer questAnswer, String imageUrl) {
+		String prompt = createPetTextImageToTextAnswerPrompt(user, pet, petPersonalities, quest, questAnswer);
+
+		List<Content> contents = new ArrayList<>();
+		contents.add(Content.createTextContent(prompt));
+		contents.add(Content.createImageContent(imageUrl));
+
+		TextImageGPTRequest request = new TextImageGPTRequest(openAiConfig.getModel(), contents);
+		ChatGPTResponse response = restTemplate.postForObject(openAiConfig.getApiUrl(), request, ChatGPTResponse.class);
+
+		if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
+			throw new ExceptionResponse(CustomException.OPENAI_API_EXCEPTION);
+		}
+
+		String result = response.getChoices().get(0).getMessage().getContent();
+		log.info("main server - openai api pet text image answer response : {}", result);
+
+		return result;
+	}
+
+	private String createPetTextImageToTextAnswerPrompt(User user, Pet pet, List<String> petPersonalities, Quest quest, QuestAnswer questAnswer) {
+		String petName = pet.getName();
+		String personalities = String.join(", ", petPersonalities);
+		String prompt = String.format(OpenAiPrompt.WRITE_PET_TEXT_IMAGE_TO_TEXT_ANSWER_PROMPT.getPrompt(), petName, petName,
+			quest.getContent(), questAnswer.getContent(), petName, pet.getRelationship(), personalities, user.getUserName());
+		return prompt;
+	}
 }
 
