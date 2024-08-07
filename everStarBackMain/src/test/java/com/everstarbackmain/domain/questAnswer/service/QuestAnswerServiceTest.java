@@ -106,6 +106,7 @@ class QuestAnswerServiceTest {
 	private CreateAnswerRequestDto createAnswerRequestDto;
 	private CreateAnswerRequestDto createTextAnswerRequestDto;
 	private QuestAnswer textQuestAnswer;
+	private QuestAnswer textImageToTextAnswer;
 
 	@BeforeEach
 	public void setup() {
@@ -122,6 +123,8 @@ class QuestAnswerServiceTest {
 		createAnswerRequestDto = new CreateAnswerRequestDto("content", QuestAnswerType.TEXT_IMAGE.getType());
 		createTextAnswerRequestDto = new CreateAnswerRequestDto("content", QuestAnswerType.TEXT.getType());
 		textQuestAnswer = QuestAnswer.createTextQuestAnswer(pet, quest, createTextAnswerRequestDto);
+		textImageToTextAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, createAnswerRequestDto, "imageUrl");
+
 
 		ReflectionTestUtils.setField(pet, "id", 1L);
 	}
@@ -307,6 +310,30 @@ class QuestAnswerServiceTest {
 
 		// then
 		verify(openAiClient).writePetTextToTextAnswer(user, pet, petPersonalities, quest, textQuestAnswer);
+	}
+
+	@Test
+	@DisplayName("퀘스트_답변_생성_후_TEXT_IMAGE_TO_TEXT_타입일_경우_관련_OPENAI_API_호출_테스트")
+	public void 퀘스트_답변_생성_후_TEXT_IMAGE_TO_TEXT_타입일_경우_관련_OPENAI_API_호출_테스트() {
+		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
+		given(authentication.getPrincipal()).willReturn(principalDetails);
+		given(principalDetails.getUser()).willReturn(user);
+		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
+		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
+		given(petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(
+			petPersonalities);
+		given(s3UploadUtil.saveFile(any())).willReturn("imageUrl");
+		ReflectionTestUtils.setField(quest, "id", 2L);
+
+		given(QuestAnswerTypeNo.findTypeByQuestNumber(anyLong())).willReturn(
+			Optional.of(QuestAnswerTypeNo.TEXT_IMAGE_TO_TEXT.getType()));
+		given(QuestAnswer.createTextImageQuestAnswer(any(), any(), any(), anyString())).willReturn(textImageToTextAnswer);
+
+		// when
+		questAnswerService.createQuestAnswer(authentication, 1L, 37L, createAnswerRequestDto, imageFile);
+
+		// then
+		verify(openAiClient).writePetTextImageToTextAnswer(user, pet, petPersonalities, quest, textImageToTextAnswer, "imageUrl");
 	}
 
 }
