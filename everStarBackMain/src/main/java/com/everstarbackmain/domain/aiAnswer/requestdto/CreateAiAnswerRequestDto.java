@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateAiAnswerRequestDto {
 
-	@NotBlank
 	private String content;
 
 	private String imageUrl;
