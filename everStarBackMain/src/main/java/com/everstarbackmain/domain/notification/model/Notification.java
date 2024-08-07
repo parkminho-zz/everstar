@@ -32,7 +32,7 @@ public class Notification {
 	@Column(nullable = false)
 	private String deviceToken;
 
-	private Notification(User user, String deviceToken) {
+	public Notification(User user, String deviceToken) {
 		this.user = user;
 		this.deviceToken = deviceToken;
 	}
