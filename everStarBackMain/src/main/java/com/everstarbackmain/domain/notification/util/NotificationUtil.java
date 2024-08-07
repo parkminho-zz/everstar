@@ -4,12 +4,11 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.everstarbackmain.domain.notification.model.Notification;
 import com.everstarbackmain.domain.notification.repository.NotificationRepository;
-import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.user.model.User;
-import com.everstarbackmain.domain.userLetter.model.UserLetter;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -22,35 +21,37 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Slf4j
 public class NotificationUtil {
 
 	private final NotificationRepository notificationRepository;
 
-	public void sendPetLetterNotification(UserLetter userLetter) {
-		Pet pet = userLetter.getPet();
-		User user = pet.getUser();
-
+	@Transactional
+	public void sendPetLetterNotification(User user, String petName) {
 		List<Notification> notifications = notificationRepository.findByUser(user);
-		sendNotification(notifications, pet);
+		sendNotification(notifications, petName);
 	}
 
-	private void sendNotification(List<Notification> notifications, Pet pet) {
+	private void sendNotification(List<Notification> notifications, String petName) {
 		for (Notification notification : notifications) {
 			Message message = Message.builder()
 				.setWebpushConfig(WebpushConfig.builder()
 					.setNotification(WebpushNotification.builder()
-						.setTitle(pet.getName() + "에게 편지가 왔어요")
+						.setTitle(petName + "에게 편지가 왔어요")
 						.build())
 					.build())
 				.setToken(notification.getDeviceToken())
 				.build();
 
-			try {
+			try{
 				FirebaseMessaging.getInstance().sendAsync(message).get();
-			} catch (Exception e) {
-				log.error("main server - request : {}", e.getMessage());
-				new ExceptionResponse(CustomException.NOT_FOUND_NOTIFICATION_EXCEPTION);
+			}catch (ExecutionException e){
+				log.error("main server - error : {}", e.getMessage());
+				notificationRepository.delete(notification);
+			}catch (InterruptedException e){
+				log.error("main server - error : {}", e.getMessage());
+				notificationRepository.delete(notification);
 			}
 		}
 	}
