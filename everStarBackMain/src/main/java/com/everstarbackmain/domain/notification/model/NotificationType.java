@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public enum NotificationType {
 
-	DONE("DONE"),
+	COMPLETED("COMPLETED"),
 	NEWQUEST("NEWQUEST");
 
 	private final String notificationType;

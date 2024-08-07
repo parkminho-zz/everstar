@@ -94,7 +94,7 @@ public class Pet extends BaseTimeEntity {
 		this.profileImageUrl = profileImageUrl;
 		this.introduction =
 			(introduction != null && !introduction.isEmpty()) ? introduction : name + " 의 사랑스런 소개글을 작성 해주세요";
-		questIndex = 0;
+		questIndex = 1;
 		isQuestCompleted = false;
 		isDeleted = false;
 		lastAccessTime = LocalDateTime.now();
