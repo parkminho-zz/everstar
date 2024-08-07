@@ -1,5 +1,6 @@
 package com.everstarbackmain.domain.notification.model;
 
+import com.everstarbackmain.domain.notification.requestdto.NotificationCreateRequestDto;
 import com.everstarbackmain.domain.user.model.User;
 
 import jakarta.persistence.Column;
@@ -32,8 +33,8 @@ public class Notification {
 	@Column(nullable = false)
 	private String deviceToken;
 
-	public Notification(User user, String deviceToken) {
+	public Notification(User user, NotificationCreateRequestDto requestDto) {
 		this.user = user;
-		this.deviceToken = deviceToken;
+		this.deviceToken = requestDto.getDeviceToken();
 	}
 }
