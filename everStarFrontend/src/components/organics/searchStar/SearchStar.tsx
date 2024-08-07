@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { MoveContainer } from 'components/organics/input/MoveContainer/MoveContainer';
 import { SearchVisitStar } from './SearchVisitStar';
-import { Glass } from 'components/molecules/Glass/Glass';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
@@ -33,18 +32,8 @@ export const SearchStar = (): JSX.Element => {
   };
 
   return (
-    <div className="relative flex flex-col items-center p-12">
-      <div className="absolute flex items-center justify-center top-20 bottom-[-2rem] right-[10rem] left-[10rem] inset-10 z-1">
-        <Glass
-          currentPage={0}
-          totalPages={0}
-          showPageIndicator={false}
-          onPageChange={() => {}}
-          className="w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5"
-        />
-      </div>
-
-      <div className="relative z-10 flex flex-col items-center mt-40">
+    <div className='relative flex flex-col items-center justify-center min-h-screen'>
+      <div className='relative z-10 flex flex-col items-center justify-center w-full h-full p-12'>
         <MoveContainer
           title={'영원별 이동'}
           nextPage1={'random'}
@@ -57,7 +46,7 @@ export const SearchStar = (): JSX.Element => {
           isOpen={isModalOpen}
           onClose={handleModalClose}
           onVerify={(code) => console.log('Verified code:', code)}
-          text=""
+          text=''
           onResend={() => {}}
         />
       </div>
