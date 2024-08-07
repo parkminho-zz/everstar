@@ -32,7 +32,7 @@ export const useSendVerificationCode = (): UseMutationResult<
     onError: (error: unknown) =>
       console.error(
         'Error sending verification code:',
-        (error as Error).message,
+        (error as Error).message
       ),
   });
 };
@@ -83,7 +83,7 @@ export const useJoinUser = (): UseMutationResult<
         } catch (error) {
           console.error(
             'Error fetching user info after joining:',
-            (error as Error).message,
+            (error as Error).message
           );
           navigate('/login');
         }

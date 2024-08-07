@@ -1,9 +1,42 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { EverStarMain } from 'components/templates/EverStarMain';
 import { EverStarCheerMessage } from 'components/templates/EverStarCheerMessage';
 import { EverStarSearchStar } from 'components/templates/EverStarSearchStar';
+
+interface PetProfile {
+  name: string;
+  age: number;
+  date: string;
+  description: string;
+  tagList: string[];
+  avatarUrl: string;
+}
+
 export const EverstarPage: React.FC = () => {
+  const [petProfile, setPetProfile] = useState<PetProfile | null>(null);
+  const location = useLocation(); // Use location to trigger re-render
+
+  useEffect(() => {
+    const storedPetDetails = sessionStorage.getItem('petDetails');
+    if (storedPetDetails) {
+      try {
+        // Parse the stored JSON string and update the state
+        const petDetails = JSON.parse(storedPetDetails);
+        setPetProfile({
+          name: petDetails.name || 'Unknown',
+          age: petDetails.age || 0,
+          date: petDetails.memorialDate || 'Unknown',
+          description: petDetails.introduction || 'No description',
+          tagList: petDetails.petPersonalities || [],
+          avatarUrl: petDetails.profileImageUrl || '',
+        });
+      } catch (error) {
+        console.error('Error parsing pet details:', error);
+      }
+    }
+  }, [location]);
+
   return (
     <div className='flex flex-col min-h-screen'>
       <div className='flex-grow'>
@@ -12,7 +45,7 @@ export const EverstarPage: React.FC = () => {
             path='/'
             element={
               <EverStarMain
-                title='지구별'
+                title='a'
                 fill={49}
                 buttonSize='large'
                 buttonDisabled={false}
@@ -25,18 +58,15 @@ export const EverstarPage: React.FC = () => {
           <Route
             path='message'
             element={
-              <EverStarCheerMessage
-                profile={{
-                  name: '홍길동',
-                  age: 5,
-                  date: '2023-07-25',
-                  description: '사랑스러운 반려동물입니다.',
-                  tagList: ['#쾌활한'],
-                  avatarUrl: '',
-                }}
-                postItCards={[]}
-                totalPages={0}
-              />
+              petProfile ? (
+                <EverStarCheerMessage
+                  profile={petProfile}
+                  postItCards={[]} // Add actual data if available
+                  totalPages={0} // Add actual data if available
+                />
+              ) : (
+                <div>Loading...</div> // Or any fallback UI
+              )
             }
           />
 

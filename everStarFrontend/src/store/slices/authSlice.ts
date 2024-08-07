@@ -19,7 +19,7 @@ export const fetchUser = createAsyncThunk<UserInfo, string>(
   async (token: string) => {
     const userInfo = await fetchUserInfo(token);
     return userInfo;
-  },
+  }
 );
 
 const authSlice = createSlice({
@@ -50,7 +50,7 @@ const authSlice = createSlice({
       fetchUser.fulfilled,
       (state, action: PayloadAction<UserInfo>) => {
         state.userInfo = action.payload;
-      },
+      }
     );
   },
 });

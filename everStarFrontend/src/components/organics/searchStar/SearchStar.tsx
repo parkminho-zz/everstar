@@ -3,8 +3,12 @@ import { MoveContainer } from 'components/organics/input/MoveContainer/MoveConta
 import { SearchVisitStar } from './SearchVisitStar';
 import { Glass } from 'components/molecules/Glass/Glass';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/Store';
+import { useFetchPetExplore } from 'hooks/useEverStar';
 
 export const SearchStar = (): JSX.Element => {
+  const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -14,6 +18,18 @@ export const SearchStar = (): JSX.Element => {
 
   const handleModalClose = () => {
     setIsModalOpen(false);
+  };
+
+  const { refetch } = useFetchPetExplore();
+  const handleNextPage1Click = async () => {
+    try {
+      const result = await refetch();
+      if (result.data) {
+        navigate(`/everstar/${result.data.id}`);
+      }
+    } catch (error) {
+      console.error('Error fetching random pet:', error);
+    }
   };
 
   return (
@@ -36,8 +52,9 @@ export const SearchStar = (): JSX.Element => {
           nextPage1={'random'}
           nextPage2={'search'}
           // onNextPage1Click={}
+          onNextPage1Click={handleNextPage1Click}
           onNextPage2Click={handleModalOpen}
-          onLeftIconClick={() => navigate('/everstar/1')}
+          onLeftIconClick={() => navigate(`/everstar/${petId}`)}
         />
         <SearchVisitStar
           isOpen={isModalOpen}

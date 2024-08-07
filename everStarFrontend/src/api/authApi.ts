@@ -20,8 +20,6 @@ export interface UserInfo {
   questReceptionTime: string;
 }
 
-const apiUrl = config.API_BASE_URL;
-
 const handleResponse = async (response: Response) => {
   if (!response.ok) {
     const errorResponse = await response.json();
@@ -31,15 +29,18 @@ const handleResponse = async (response: Response) => {
 };
 
 export const sendVerificationCode = async (
-  phone: string,
+  phone: string
 ): Promise<SendCodeResponse> => {
-  const response = await fetch(`${apiUrl}/api/auth/users/send-code`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8',
-    },
-    body: JSON.stringify({ phone }),
-  });
+  const response = await fetch(
+    `${config.API_BASE_URL}/api/auth/users/send-code`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      body: JSON.stringify({ phone }),
+    }
+  );
 
   return handleResponse(response).then((res) => res.json());
 };
@@ -51,21 +52,24 @@ export const verifyAuthCode = async ({
   phone: string;
   certificationNumber: string;
 }): Promise<VerifyCodeResponse> => {
-  const response = await fetch(`${apiUrl}/api/auth/users/check-code`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8',
-    },
-    body: JSON.stringify({ phone, certificationNumber }),
-  });
+  const response = await fetch(
+    `${config.API_BASE_URL}/api/auth/users/check-code`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      body: JSON.stringify({ phone, certificationNumber }),
+    }
+  );
 
   return handleResponse(response).then((res) => res.json());
 };
 
 export const joinUser = async (
-  userData: UserInfo,
+  userData: UserInfo
 ): Promise<{ data: UserInfo; token: string | null }> => {
-  const response = await fetch(`${apiUrl}/api/auth/oauth/join`, {
+  const response = await fetch(`${config.API_BASE_URL}/api/auth/oauth/join`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8',
@@ -81,7 +85,7 @@ export const joinUser = async (
 
 export const fetchUserInfo = async (token: string): Promise<UserInfo> => {
   console.log(`Fetching user info with token: ${token}`);
-  const response = await fetch(`${apiUrl}/api/accounts/users`, {
+  const response = await fetch(`${config.API_BASE_URL}/api/accounts/users`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
