@@ -67,6 +67,9 @@ public class Pet extends BaseTimeEntity {
 	private Integer questIndex;
 
 	@Column(nullable = false)
+	private Boolean isQuestCompleted;
+
+	@Column(nullable = false)
 	private Boolean isDeleted;
 
 	@Column(nullable = false)
@@ -92,6 +95,7 @@ public class Pet extends BaseTimeEntity {
 		this.introduction =
 			(introduction != null && !introduction.isEmpty()) ? introduction : name + " 의 사랑스런 소개글을 작성 해주세요";
 		questIndex = 0;
+		isQuestCompleted = false;
 		isDeleted = false;
 		lastAccessTime = LocalDateTime.now();
 		sendLetterTime = generateRandomTime();
