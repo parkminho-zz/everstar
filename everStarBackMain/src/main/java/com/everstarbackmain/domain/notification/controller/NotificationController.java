@@ -34,5 +34,5 @@ public class NotificationController {
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessNotificationMessage.SUCCESS_SAVE_NOTIFICATION);
 		return response;
-	}g
+	}
 }

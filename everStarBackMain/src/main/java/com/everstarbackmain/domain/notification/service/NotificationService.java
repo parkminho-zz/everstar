@@ -23,7 +23,7 @@ public class NotificationService {
 
 	@Transactional
 	public void saveNotification(Authentication authentication, NotificationCreateRequestDto requestDto) {
-		User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 		Notification notification = new Notification(user, requestDto);
 		notificationRepository.save(notification);
 	}
