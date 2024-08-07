@@ -9,13 +9,13 @@ import lombok.Getter;
 @Getter
 public class EverStarPetSearchResponseDto {
 
-	private String id;
+	private Long id;
 	private String petName;
 	private String userName;
 	private String email;
 
 	@QueryProjection
-	public EverStarPetSearchResponseDto(String petName, String userName, String id, String email) {
+	public EverStarPetSearchResponseDto(Long id, String petName, String userName, String email) {
 		this.petName = petName;
 		this.userName = userName;
 		this.id = id;

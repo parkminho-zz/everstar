@@ -2,6 +2,8 @@ package com.everstarbackmain.domain.everstar.controller;
 
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.everstarbackmain.domain.everstar.responsedto.EverStarPetInfoResponseDto;
+import com.everstarbackmain.domain.everstar.responsedto.EverStarPetSearchResponseDto;
 import com.everstarbackmain.domain.everstar.service.EverStarService;
 
 import com.everstarbackmain.global.util.HttpResponseUtil;
@@ -49,8 +52,14 @@ public class EverStarController {
 		return response;
 	}
 
-	@GetMapping("/search")
-	public ResponseEntity<Map<String, Object>> getEverStarSearch(@RequestParam(name = "petname") String petName) {
+	@GetMapping("/pets/search")
+	public ResponseEntity<Map<String, Object>> getEverStarSearch(@RequestParam(name = "petname") String petName,
+		Pageable pageable) {
+		Page<EverStarPetSearchResponseDto> responseDto = everStarService.getPetSearchByName(petName, pageable);
 
+		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
+		log.info("main server - response : {}", response);
+
+		return response;
 	}
 }
