@@ -1,7 +1,7 @@
 import config from 'config';
 
 export interface Cheering {
-  cotent: string;
+  content: string;
   color: string;
   isAnonymous: boolean;
 }
@@ -99,7 +99,7 @@ export const fetchPetExplore = async (petId: number, token: string) => {
 };
 
 export const fetchPetPost = async (
-  formData: FormData,
+  data: { content: string; color: string; isAnonymous: boolean },
   token: string,
   petId: number,
   paramsId: number
@@ -110,9 +110,10 @@ export const fetchPetPost = async (
     {
       method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: formData,
+      body: JSON.stringify(data),
     }
   );
 
@@ -123,5 +124,30 @@ export const fetchPetPost = async (
 
   const result = await response.json();
   console.log('Added pet response:', result);
+  return result;
+};
+
+export const fetchPetIntroduction = async (
+  introduction: string,
+  token: string,
+  petId: number
+) => {
+  console.log('Adding pet with token:', token);
+  const response = await fetch(`${config.API_BASE_URL}/api/pets/${petId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ introduction }),
+  });
+
+  console.log('Response status:', response.status);
+  if (!response.ok) {
+    throw new Error('자기소개 수정 실패했어');
+  }
+
+  const result = await response.json();
+  console.log('modify pet response:', result);
   return result;
 };

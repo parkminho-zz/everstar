@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Modal } from 'components/molecules/Modal/Modal';
 import { Textbox } from 'components/molecules/input/Textbox';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
+import { useUpdatePetIntroduction } from 'hooks/useEverStar';
+import { RootState } from 'store/Store';
+import { useSelector } from 'react-redux';
 
 interface IntroduceWriteProps {
   isOpen: boolean;
@@ -15,13 +18,37 @@ interface IntroduceWriteProps {
 export const IntroduceWrite: React.FC<IntroduceWriteProps> = ({
   isOpen,
   onClose,
-  onVerify,
   text,
 }) => {
-  const [verificationCode] = useState('');
+  const [message, setMessage] = useState('');
+
+  const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
+
+  const updatePetIntroduction = useUpdatePetIntroduction({
+    onSuccess: () => {
+      console.log('Pet introduction updated successfully');
+      // Update session storage with new introduction
+      const petDetails = JSON.parse(
+        sessionStorage.getItem('petDetails') || '{}'
+      );
+      petDetails.introduction = message;
+      sessionStorage.setItem('petDetails', JSON.stringify(petDetails));
+      onClose();
+    },
+    onError: (error) => {
+      console.error('Error updating pet introduction:', error);
+    },
+  });
 
   const handleVerify = () => {
-    onVerify(verificationCode);
+    if (message.trim() === '') {
+      console.error('Introduction message is empty');
+      return;
+    }
+    updatePetIntroduction.mutate({
+      introduction: message,
+      petId: Number(petId),
+    });
   };
 
   return (
@@ -38,9 +65,12 @@ export const IntroduceWrite: React.FC<IntroduceWriteProps> = ({
               className=''
               label='내용'
               showInfoText={true}
-              infoText='0/255'
+              infoText={message.length ? `${message.length}/255` : ''}
               infoTextAlign='left'
               showStar={false}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              maxLength={255}
             />
           </div>
         </div>

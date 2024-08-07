@@ -6,7 +6,10 @@ import { Glass } from 'components/molecules/Glass/Glass';
 import { IntroduceWrite } from 'components/organics/CheerMessage/IntroduceWrite';
 import { CheerColorSelect } from 'components/organics/CheerMessage/CheerColorSelect';
 import { CheerMessageWrite } from 'components/organics/CheerMessage/CheerMessageWrite';
-import { useFetchCheeringPetDelete } from 'hooks/useEverStar';
+import { useFetchCheeringPetDelete, useFetchPetPost } from 'hooks/useEverStar';
+import { RootState } from 'store/Store';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 export interface CheerMessageProps {
   profile: {
@@ -43,10 +46,32 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
   const [isCheerMessageWriteModalOpen, setCheerMessageWriteModalOpen] =
     useState(false);
   const [selectedColor, setSelectedColor] = useState<string>(''); // 색상 상태 추가
+  const token = useSelector((state: RootState) => state.auth.accessToken);
+  const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
+  const params = useParams(); //params.pet 사용
 
   const cardsPerPage = 12;
+  const { mutate: createCheeringPet } = useFetchPetPost(
+    token,
+    Number(petId),
+    Number(params.pet)
+  );
+  const { mutate: deleteCheeringPet } = useFetchCheeringPetDelete();
 
-  const { mutate: deleteCheeringPet } = useFetchCheeringPetDelete(); // 훅 사용
+  const handleCreate = (formData: {
+    content: string;
+    color: string;
+    isAnonymous: boolean;
+  }) => {
+    createCheeringPet(formData, {
+      onSuccess: (newCheeringMessage) => {
+        console.log(newCheeringMessage);
+      },
+      onError: (error) => {
+        console.error('응원 메시지 생성 실패:', error);
+      },
+    });
+  };
 
   const handleDelete = (
     index: number,
@@ -101,10 +126,14 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     setCheerMessageWriteModalOpen(false);
   };
 
-  const handleVerifyCheerMessageWrite = () => {
+  const handleVerifyCheerMessageWrite = (message: string) => {
+    handleCreate({
+      content: message,
+      // color: selectedColor,
+      color: 'BLUE',
+      isAnonymous: false,
+    });
     setCheerMessageWriteModalOpen(false);
-    console.log(selectedColor);
-    console.log(123);
   };
 
   const renderPostItCards = () => {
@@ -112,7 +141,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     const endIdx = startIdx + cardsPerPage;
     const cardsToShow = postItCards.slice(startIdx, endIdx);
 
-    const cards = cardsToShow.map((card, index) => (
+    return cardsToShow.map((card, index) => (
       <PostItCard
         key={startIdx + index}
         contents={card.contents}
@@ -123,8 +152,6 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
         }
       />
     ));
-
-    return cards;
   };
 
   const totalPagesCalculated = Math.ceil(
@@ -135,11 +162,11 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     <div className='relative flex flex-col items-center p-12'>
       <div className='absolute inset-0 z-0'>
         <Glass
-          variant='desktop'
           currentPage={currentPage}
           totalPages={totalPagesCalculated}
           onPageChange={onPageChange}
           showPageIndicator={true}
+          className='w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5'
         />
       </div>
       <div className='relative z-10 w-full max-w-screen-lg p-6 bg-gray-100 rounded-lg shadow-md'>
@@ -170,9 +197,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
         onClose={handleCloseIntroduceWriteModal}
         onVerify={handleVerifyIntroduceWrite}
         text='소개글을 입력하세요'
-        onResend={function (): void {
-          throw new Error('Function not implemented.');
-        }}
+        onResend={() => {}}
       />
 
       <CheerColorSelect
@@ -191,9 +216,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
         onClose={handleCloseCheerMessageWriteModal}
         onVerify={handleVerifyCheerMessageWrite}
         text='응원 메시지를 입력하세요'
-        onResend={function (): void {
-          throw new Error('Function not implemented.');
-        }}
+        onResend={() => {}}
       />
     </div>
   );

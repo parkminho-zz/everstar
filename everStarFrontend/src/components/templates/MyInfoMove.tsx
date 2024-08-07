@@ -1,4 +1,3 @@
-// src/components/templates/MyinfoMove.tsx
 import React from 'react';
 import { MoveContainer } from 'components/organics/input/MoveContainer/MoveContainer';
 import { useNavigate } from 'react-router-dom';
@@ -21,11 +20,11 @@ export const MyinfoMove: React.FC<EverStarSearchStarProps> = () => {
   };
 
   return (
-    <div className='flex flex-col items-center justify-center flex-grow'>
+    <div className="flex items-center justify-center w-full h-full">
       <MoveContainer
-        title='마이 페이지'
-        nextPage1='mypage'
-        nextPage2='profile'
+        title="마이 페이지"
+        nextPage1="mypage"
+        nextPage2="profile"
         onNextPage1Click={handleNextPage1Click}
         onNextPage2Click={handleNextPage2Click}
         onLeftIconClick={handleLeftIconClick} // 뒤로 가기 핸들러 추가

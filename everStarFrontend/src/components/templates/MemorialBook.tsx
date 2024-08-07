@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { useMediaQuery } from 'react-responsive';
 import {
   MemorialBook as OrganicsMemorialBook,
   PageType,
@@ -212,17 +211,6 @@ const parseMemorialBookData = (data: typeof jsonData) => {
 const questionsAndAnswers = parseMemorialBookData(jsonData);
 
 export const MemorialBook: React.FC = () => {
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
-  const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
-
-  const headerType = isMobile
-    ? 'mobile-everstar'
-    : isTabletOrMobile
-      ? 'tablet-everstar'
-      : 'everstar';
-
-  const footerType = isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop';
-
   const memorialBookRef = useRef<HTMLDivElement>(null);
 
   const handleDownloadPdf = async () => {
@@ -262,9 +250,8 @@ export const MemorialBook: React.FC = () => {
       className="relative flex flex-col min-h-screen bg-center bg-cover"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <Header type={headerType} className="sticky top-0 z-50" />
+      <Header type="everstar" className="sticky top-0 z-50" />
       <Glass
-        variant={isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop'}
         currentPage={1}
         totalPages={questionsAndAnswers.length}
         onPageChange={(newPage) => console.log('Page changed to:', newPage)}
@@ -293,7 +280,7 @@ export const MemorialBook: React.FC = () => {
           일기 작성
         </PrimaryButton>
       </div>
-      <Footer type={footerType} className="relative z-10 mt-auto" />
+      <Footer className="relative z-10 mt-auto" />
     </div>
   );
 };

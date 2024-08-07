@@ -14,8 +14,14 @@ import {
   fetchPetExplore,
   Cheering,
   fetchPetPost,
+  fetchPetIntroduction,
 } from '../api/everStarApi';
 import { RootState } from 'store/Store';
+
+interface UpdatePetIntroductionVariables {
+  introduction: string;
+  petId: number;
+}
 
 export const useFetchCheeringPetDelete = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
@@ -67,7 +73,6 @@ export const useFetchCheeringPet = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
 
   const params = useParams();
-  console.log(params.pet);
   return useQuery({
     queryKey: ['CheerPet', params.pet],
     queryFn: async () => {
@@ -75,7 +80,6 @@ export const useFetchCheeringPet = () => {
         throw new Error('Missing petId or token');
       }
       const cheer = await fetchCheeringPet(Number(params.pet), token);
-      console.log(cheer);
       return cheer;
     },
     enabled: !!token && params.pet !== null,
@@ -106,22 +110,61 @@ export const useFetchPetPost = (
   token: string,
   petId: number,
   paramsId: number,
-  options?: UseMutationOptions<Cheering, Error, FormData>
+  options?: UseMutationOptions<
+    Cheering,
+    Error,
+    { content: string; color: string; isAnonymous: boolean }
+  >
 ) => {
   const queryClient = useQueryClient();
 
-  return useMutation<Cheering, Error, FormData>({
-    mutationFn: (formData: FormData) => {
-      console.log('Adding pet with formData:', formData);
-      return fetchPetPost(formData, token, petId, paramsId);
+  return useMutation<
+    Cheering,
+    Error,
+    { content: string; color: string; isAnonymous: boolean }
+  >({
+    mutationFn: (data) => {
+      return fetchPetPost(data, token, petId, paramsId);
     },
     ...options,
-    onSuccess: () => {
-      console.log('Successfully added pet:');
-      queryClient.invalidateQueries({ queryKey: ['CheerPet'] });
+    onSuccess: (data) => {
+      console.log('Successfully added pet:', data);
+      queryClient.invalidateQueries({ queryKey: ['CheerPet', paramsId] });
     },
-    onError: (error: Error) => {
+    onError: (error) => {
       console.error('Error adding pet:', error);
     },
+  });
+};
+
+export const useUpdatePetIntroduction = (
+  options?: UseMutationOptions<unknown, Error, UpdatePetIntroductionVariables>
+) => {
+  const queryClient = useQueryClient();
+  const token = useSelector((state: RootState) => state.auth.accessToken);
+
+  return useMutation<unknown, Error, UpdatePetIntroductionVariables>({
+    mutationFn: ({ introduction, petId }) => {
+      if (!token) {
+        throw new Error('토큰이 없습니다');
+      }
+      return fetchPetIntroduction(introduction, token, petId);
+    },
+    onSuccess: (data, variables, context) => {
+      console.log('Successfully updated pet introduction:', data);
+      queryClient.invalidateQueries({
+        queryKey: ['petDetails', variables.introduction],
+      });
+      if (options?.onSuccess) {
+        options.onSuccess(data, variables, context);
+      }
+    },
+    onError: (error, variables, context) => {
+      console.error('Error updating pet introduction:', error);
+      if (options?.onError) {
+        options.onError(error, variables, context);
+      }
+    },
+    ...options,
   });
 };

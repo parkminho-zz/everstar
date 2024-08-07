@@ -7,7 +7,6 @@ import {
 import bgImage from 'assets/images/bg-everstar.webp';
 import { Header } from 'components/molecules/Header/Header';
 import { Footer } from 'components/molecules/Footer/Footer';
-import { useMediaQuery } from 'react-responsive';
 import { useFetchCheeringPet } from 'hooks/useEverStar';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
@@ -24,21 +23,6 @@ export const EverStarCheerMessage: React.FC<
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
-
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
-  const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
-
-  const headerType = isMobile
-    ? 'mobile-everstar'
-    : isTabletOrMobile
-      ? 'tablet-everstar'
-      : 'everstar';
-
-  const footerType = isMobile
-    ? 'mobile'
-    : isTabletOrMobile
-      ? 'tablet'
-      : 'desktop';
 
   useEffect(() => {
     // window.location.reload();
@@ -75,7 +59,7 @@ export const EverStarCheerMessage: React.FC<
       className='flex flex-col min-h-screen bg-center bg-cover'
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <Header type={headerType} className='sticky top-0 z-50' />
+      <Header type='everstar' className='sticky top-0 z-50' />
 
       <CheerMessage
         {...props}
@@ -83,7 +67,7 @@ export const EverStarCheerMessage: React.FC<
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
-      <Footer type={footerType} className='mt-auto' />
+      <Footer className='mt-auto' />
     </div>
   );
 };

@@ -7,6 +7,8 @@ interface AvatarProps {
   name?: string;
   className?: string; // 추가된 부분
   onClick?: () => void; // 추가된 클릭 이벤트 핸들러
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 const sizeMap = {
@@ -21,6 +23,8 @@ export const Avatar: React.FC<AvatarProps> = ({
   name,
   className,
   onClick,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
   return (
     <div
@@ -31,6 +35,8 @@ export const Avatar: React.FC<AvatarProps> = ({
         cursor: onClick ? 'pointer' : 'default',
       }}
       onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       className={className}
     >
       {size === 'text' ? (
@@ -54,8 +60,8 @@ export const Avatar: React.FC<AvatarProps> = ({
           마이페이지
         </div>
       ) : size === 'square' ? (
-        <div className='w-[340px] h-[250px] self-stretch'>
-          <img src={src || defaultAvatarSrc} alt='avatar' />
+        <div className="w-[340px] h-[250px] self-stretch">
+          <img src={src || defaultAvatarSrc} alt="avatar" />
         </div>
       ) : (
         <div
@@ -68,7 +74,7 @@ export const Avatar: React.FC<AvatarProps> = ({
         >
           <img
             src={src || defaultAvatarSrc}
-            alt='avatar'
+            alt="avatar"
             style={{ width: '100%', height: '100%' }}
           />
         </div>

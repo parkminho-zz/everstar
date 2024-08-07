@@ -1,13 +1,8 @@
 import React, { useState } from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { Footer } from 'components/molecules/Footer/Footer';
 import { SignUpForm } from 'components/organics/SignUpForm/SignUpForm';
 import { PhoneNumberModal } from 'components/organics/PhoneNumberModal/PhoneNumberModal';
-import {
-  useSendVerificationCode,
-  useVerifyAuthCode,
-  useJoinUser,
-} from 'hooks/useAuth';
+import { useSendVerificationCode, useVerifyAuthCode, useJoinUser } from 'hooks/useAuth';
 import bgImage from 'assets/images/bg-login.webp';
 
 interface UserInfo {
@@ -20,14 +15,6 @@ interface UserInfo {
 }
 
 export const SignUp: React.FC = () => {
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
-  const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
-  const footerType = isMobile
-    ? 'mobile'
-    : isTabletOrMobile
-      ? 'tablet'
-      : 'desktop';
-
   const [isModalOpen, setModalOpen] = useState(false);
   const [phone, setPhone] = useState('');
   const [formData, setFormData] = useState<UserInfo>({
@@ -114,15 +101,15 @@ export const SignUp: React.FC = () => {
 
   return (
     <div
-      className='flex flex-col min-h-screen bg-center bg-cover'
+      className="flex flex-col min-h-screen bg-center bg-cover"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <div className='flex items-center justify-center flex-grow'>
+      <div className="flex items-center justify-center flex-grow">
         <SignUpForm
-          headerText='회원가입'
-          smallButtonText=''
+          headerText="회원가입"
+          smallButtonText=""
           showPrimaryButton={true}
-          text='회원가입을 위해 정보를 입력해주세요.'
+          text="회원가입을 위해 정보를 입력해주세요."
           onButtonClick={handleSignUpButtonClick}
         />
         <PhoneNumberModal
@@ -130,10 +117,10 @@ export const SignUp: React.FC = () => {
           onClose={handleCloseModal}
           onResend={handleResend}
           onVerify={handleVerifyAndJoin}
-          text='인증번호를 <br /> 입력해 주세요'
+          text="인증번호를 <br /> 입력해 주세요"
         />
       </div>
-      <Footer type={footerType} className='mt-auto' />
+      <Footer className="mt-auto" />
     </div>
   );
 };
