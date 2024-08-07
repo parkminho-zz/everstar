@@ -41,7 +41,11 @@ export const useVerifyAuthCode = (): UseMutationResult<
   { phone: string; certificationNumber: string },
   unknown
 > => {
-  return useMutation<VerifyCodeResponse, unknown, { phone: string; certificationNumber: string }>({
+  return useMutation<
+    VerifyCodeResponse,
+    unknown,
+    { phone: string; certificationNumber: string }
+  >({
     mutationFn: verifyAuthCode,
     onSuccess: () => {
       console.log('Auth code verified successfully');
@@ -53,7 +57,12 @@ export const useVerifyAuthCode = (): UseMutationResult<
   });
 };
 
-export const useJoinUser = (): UseMutationResult<JoinResponse, unknown, UserInfo, unknown> => {
+export const useJoinUser = (): UseMutationResult<
+  JoinResponse,
+  unknown,
+  UserInfo,
+  unknown
+> => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

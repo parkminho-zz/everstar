@@ -92,7 +92,7 @@ export const verifyAuthCode = async ({
 
 export const joinUser = async (userData: UserInfo): Promise<JoinResponse> => {
   console.log('전송 데이터:', userData); // 전송하는 데이터 출력
-  const response = await fetch(`${config.API_BASE_URL}//api/auth/oauth/join`, {
+  const response = await fetch(`${config.API_BASE_URL}/api/auth/oauth/join`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

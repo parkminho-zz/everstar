@@ -6,6 +6,8 @@ import { LetterboxIcons } from 'components/atoms/symbols/Letterbox/LetterboxIcon
 import { LogoIcons } from 'components/atoms/symbols/Logo/LogoIcons';
 import { PostitIcons } from 'components/atoms/symbols/Postit/PostitIcons';
 import { RocketIcons } from 'components/atoms/symbols/Rocket/RocketIcons';
+import { RootState } from 'store/Store';
+import { useSelector } from 'react-redux';
 
 interface Props {
   type:
@@ -22,6 +24,7 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({ type, className }) => {
+  const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
   const navigate = useNavigate();
 
   const handleLetterIconClick = () => {
@@ -29,7 +32,7 @@ export const Header: React.FC<Props> = ({ type, className }) => {
   };
 
   const handleStarIconClick = () => {
-    navigate('/everstar/:id');
+    navigate(`/everstar/${petId}`);
   };
 
   const handleEarthIconClick = () => {
@@ -37,11 +40,11 @@ export const Header: React.FC<Props> = ({ type, className }) => {
   };
 
   const handlePostitIconClick = () => {
-    navigate('/everstar/1/message');
+    navigate(`/everstar/${petId}/message`);
   };
 
   const handleExploreClick = () => {
-    navigate('/everstar/1/explore');
+    navigate(`/everstar/${petId}/explore`);
   };
 
   const handleLetterBoxIconClick = () => {

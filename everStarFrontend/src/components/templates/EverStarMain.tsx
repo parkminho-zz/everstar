@@ -10,6 +10,7 @@ import { BookIcons } from 'components/atoms/symbols/Book/BookIcons';
 import { LogoIcons } from 'components/atoms/symbols/Logo/LogoIcons';
 import { MusicControlButton } from 'components/molecules/music/MusicControlButton';
 import { useNavigate } from 'react-router-dom';
+import { useFetchOtherPetDetails } from 'hooks/useEverStar';
 
 type ViewMemorialBookTheme = 'focus' | 'hover' | 'white';
 type ViewMemorialBookSize = 'large' | 'medium' | 'small';
@@ -34,14 +35,14 @@ interface ViewMemorialBookProps {
 }
 
 const milestoneColors = [
-  { min: 0, max: 6, message: '와 무지개를 완성해보아요' },
-  { min: 7, max: 13, message: '와 빨강 무지개를 완성했어요.' },
-  { min: 14, max: 20, message: '와 주황 무지개를 완성했어요.' },
-  { min: 21, max: 27, message: '와 노랑 무지개를 완성했어요.' },
-  { min: 28, max: 34, message: '와 초록 무지개를 완성했어요.' },
-  { min: 35, max: 41, message: '와 파랑 무지개를 완성했어요.' },
-  { min: 42, max: 48, message: '와 남색 무지개를 완성했어요.' },
-  { min: 49, max: 49, message: '와 모든 무지개를 달성했어요!' },
+  { min: 0, max: 6, message: ' 무지개를 완성해보아요' },
+  { min: 7, max: 13, message: ' 빨강 무지개를 완성했어요.' },
+  { min: 14, max: 20, message: ' 주황 무지개를 완성했어요.' },
+  { min: 21, max: 27, message: ' 노랑 무지개를 완성했어요.' },
+  { min: 28, max: 34, message: ' 초록 무지개를 완성했어요.' },
+  { min: 35, max: 41, message: ' 파랑 무지개를 완성했어요.' },
+  { min: 42, max: 48, message: ' 남색 무지개를 완성했어요.' },
+  { min: 49, max: 49, message: ' 모든 무지개를 달성했어요!' },
 ];
 
 const getMessage = (fill: number) => {
@@ -127,6 +128,8 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   onButtonClick,
   className,
 }) => {
+  useFetchOtherPetDetails();
+
   const navigate = useNavigate();
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 480px)' });

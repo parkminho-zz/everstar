@@ -24,7 +24,8 @@ function App() {
             <Route path='/profile/*' element={<ProfilePage />}></Route>
             <Route path='/tutorial' element={<TutorialPage />}></Route>
             <Route path='/earth/*' element={<EarthPage />}></Route>
-            <Route path='/everstar/:petid/*' element={<EverstarPage />}></Route>
+            <Route path='/everstar/:pet/*' element={<EverstarPage />}></Route>
+            <Route path='/pets/*' element={<EarthPage />}></Route>
             <Route path='/mypage/*' element={<MyPage />}></Route>
             <Route path='/oauth/*' element={<OAuthCallback />} />
           </Routes>

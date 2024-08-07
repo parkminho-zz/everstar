@@ -7,6 +7,8 @@ import { IntroduceWrite } from 'components/organics/CheerMessage/IntroduceWrite'
 import { CheerColorSelect } from 'components/organics/CheerMessage/CheerColorSelect';
 import { CheerMessageWrite } from 'components/organics/CheerMessage/CheerMessageWrite';
 
+import { useFetchCheeringPetDelete } from 'hooks/useEverStar';
+
 export interface CheerMessageProps {
   profile: {
     name: string;
@@ -16,7 +18,13 @@ export interface CheerMessageProps {
     tagList: string[];
     avatarUrl: string;
   };
-  postItCards: Array<{ contents: string; name: string; color: string }>;
+  postItCards: Array<{
+    contents: string;
+    name: string;
+    color: string;
+    petId: number;
+    cheeringMessageId: number;
+  }>;
   currentPage: number;
   totalPages: number;
   onPageChange: (newPage: number) => void;
@@ -38,12 +46,27 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
 
   const cardsPerPage = 12;
 
-  const handleDelete = (index: number) => {
-    const newPostItCards = [...postItCards];
-    newPostItCards.splice(index, 1);
-    setPostItCards(newPostItCards);
-  };
+  const { mutate: deleteCheeringPet } = useFetchCheeringPetDelete(); // 훅 사용
 
+  const handleDelete = (
+    index: number,
+    petId: number,
+    cheeringMessageId: number
+  ) => {
+    deleteCheeringPet(
+      { petId, cheeringMessageId },
+      {
+        onSuccess: () => {
+          const newPostItCards = [...postItCards];
+          newPostItCards.splice(index, 1);
+          setPostItCards(newPostItCards);
+        },
+        onError: (error) => {
+          console.error('삭제 실패:', error);
+        },
+      }
+    );
+  };
   const handlePencilClick = () => {
     setIntroduceWriteModalOpen(true);
   };
@@ -88,7 +111,9 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
         contents={card.contents}
         name={card.name}
         color={card.color as never}
-        onDelete={() => handleDelete(startIdx + index)}
+        onDelete={() =>
+          handleDelete(startIdx + index, card.petId, card.cheeringMessageId)
+        } // 예제의 petId 및 cheeringMessageId
       />
     ));
 

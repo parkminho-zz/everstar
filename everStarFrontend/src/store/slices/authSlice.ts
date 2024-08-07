@@ -58,8 +58,14 @@ const authSlice = createSlice({
 });
 
 // Export the actions
-export const { setToken, setUser, deleteToken, deleteUser, addNotification, removeNotification } =
-  authSlice.actions;
+export const {
+  setToken,
+  setUser,
+  deleteToken,
+  deleteUser,
+  addNotification,
+  removeNotification,
+} = authSlice.actions;
 
 // Export the reducer
 export default authSlice.reducer;
