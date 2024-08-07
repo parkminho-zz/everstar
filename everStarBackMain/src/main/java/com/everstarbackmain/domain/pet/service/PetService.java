@@ -41,8 +41,8 @@ public class PetService {
 	private final PetPersonalityRepository petPersonalityRepository;
 	private final MemorialBookRepository memorialBookRepository;
 	private final SentimentAnalysisRepository sentimentAnalysisRepository;
-	private final QuestScheduler questScheduler;
 	private final PetLetterScheduler petLetterScheduler;
+	private final QuestScheduler questScheduler;
 	private final S3UploadUtil s3UploadUtil;
 
 	@Transactional
@@ -60,7 +60,6 @@ public class PetService {
 		// Scheduler
 		petLetterScheduler.scheduleSendPetLetter(pet);
 		questScheduler.scheduleInitialQuest(user, pet.getId());
-
 	}
 
 	private void addPersonalities(Pet pet, CreatePetRequestDto createPetRequestDto) {
