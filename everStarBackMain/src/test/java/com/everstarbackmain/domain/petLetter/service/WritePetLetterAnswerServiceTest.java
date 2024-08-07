@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.everstarbackmain.domain.notification.util.NotificationUtil;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
@@ -46,6 +47,9 @@ public class WritePetLetterAnswerServiceTest {
 
 	@Mock
 	private SmsCertificationUtil smsCertificationUtil;
+
+	@Mock
+	private NotificationUtil notificationUtil;
 
 	private User user;
 	private Pet pet;

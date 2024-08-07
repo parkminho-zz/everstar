@@ -78,7 +78,7 @@ public class NotificationControllerTest {
 		BDDMockito.doNothing().when(notificationService).saveNotification(authentication, requestDto);
 		String requestBody = objectMapper.writeValueAsString(requestDto);
 
-		ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/notification")
+		ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/notifications")
 			.with(SecurityMockMvcRequestPostProcessors.csrf())
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(requestBody));
