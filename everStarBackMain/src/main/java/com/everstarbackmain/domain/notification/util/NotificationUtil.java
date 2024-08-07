@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Slf4j
+@Slf4j(topic = "elk")
 public class NotificationUtil {
 
 	private final NotificationRepository notificationRepository;
@@ -44,12 +44,12 @@ public class NotificationUtil {
 				.setToken(notification.getDeviceToken())
 				.build();
 
-			try{
+			try {
 				FirebaseMessaging.getInstance().sendAsync(message).get();
-			}catch (ExecutionException e){
+			} catch (ExecutionException e) {
 				log.error("main server - error : {}", e.getMessage());
 				notificationRepository.delete(notification);
-			}catch (InterruptedException e){
+			} catch (InterruptedException e) {
 				log.error("main server - error : {}", e.getMessage());
 				notificationRepository.delete(notification);
 			}
