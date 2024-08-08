@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -147,5 +148,28 @@ public class PetServiceTest {
 
 		// then
 		Assertions.assertThat(responseDtos).isEmpty();
+	}
+
+	@Test
+	@DisplayName("펫_프로필_이미지_수정_성공_테스트")
+	public void 펫_프로필_이미지_수정_성공_테스트() {
+		// given
+		given(petRepository.findByIdAndUserAndIsDeleted(pet.getId(), user, false)).willReturn(Optional.of(pet));
+		given(s3UploadUtil.saveFile(any(MultipartFile.class))).willReturn("newProfileImageUrl");
+
+		MockMultipartFile newProfileImage = new MockMultipartFile(
+			"profileImage",
+			"newProfileImage.jpg",
+			"image/jpeg",
+			"new test image content".getBytes()
+		);
+
+		// when
+		petService.updatePetProfileImage(user, pet.getId(), newProfileImage);
+
+		// then
+		verify(petRepository).findByIdAndUserAndIsDeleted(pet.getId(), user, false);
+		verify(s3UploadUtil).saveFile(any(MultipartFile.class));
+		Assertions.assertThat(pet.getProfileImageUrl()).isEqualTo("newProfileImageUrl");
 	}
 }

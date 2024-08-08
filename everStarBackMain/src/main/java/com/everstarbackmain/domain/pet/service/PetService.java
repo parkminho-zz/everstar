@@ -109,4 +109,14 @@ public class PetService {
 		List<String> petPersonalities = petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(petId, false);
 		return MyPagePetInfoResponseDto.createMyPagePetInfoDto(pet, petPersonalities);
 	}
+
+	@Transactional
+	public void updatePetProfileImage(User user, Long petId, MultipartFile profileImage) {
+		String profileImageUrl = s3UploadUtil.saveFile(profileImage);
+
+		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+
+		pet.updateProfileImage(profileImageUrl);
+	}
 }

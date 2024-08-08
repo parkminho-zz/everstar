@@ -119,7 +119,7 @@ public class Pet extends BaseTimeEntity {
 		this.introduction = newIntroduction;
 	}
 
-	public void updatePetSendTime(){
+	public void updatePetSendTime() {
 		this.lastSendLetterTime = LocalDateTime.now();
 		this.sendLetterTime = generateRandomTime();
 	}
@@ -128,5 +128,9 @@ public class Pet extends BaseTimeEntity {
 		Random random = new Random();
 		int randomMinutes = 1 + random.nextInt(5);
 		return LocalDateTime.now().plusWeeks(randomMinutes);
+	}
+
+	public void updateProfileImage(String profileImageUrl) {
+		this.profileImageUrl = profileImageUrl;
 	}
 }
