@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   CheerMessage,
   CheerMessageProps,
@@ -19,10 +19,6 @@ export const EverStarCheerMessage: React.FC<
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
-
-  useEffect(() => {
-    // window.location.reload();
-  }, []);
 
   // 로딩 및 오류 상태 처리
   if (isLoading) return <div>Loading...</div>;

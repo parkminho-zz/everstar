@@ -128,11 +128,11 @@ export const useFetchPetPost = (
     },
     ...options,
     onSuccess: (data) => {
-      console.log('Successfully added pet:', data);
+      console.log('Successfully post pet:', data);
       queryClient.invalidateQueries({ queryKey: ['CheerPet', paramsId] });
     },
     onError: (error) => {
-      console.error('Error adding pet:', error);
+      console.error('Error post pet:', error);
     },
   });
 };
