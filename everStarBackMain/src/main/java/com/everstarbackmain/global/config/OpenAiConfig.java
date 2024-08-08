@@ -23,7 +23,7 @@ public class OpenAiConfig {
 	@Value("${openai.api.key}")
 	private String openAiKey;
 
-	@Bean
+	@Bean(name = "openAiRestTemplate")
 	public RestTemplate template() {
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.getInterceptors().add(((request, body, execution) -> {

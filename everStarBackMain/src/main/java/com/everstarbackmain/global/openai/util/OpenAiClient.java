@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,16 +25,19 @@ import com.everstarbackmain.global.openai.model.ImageGPTResponse;
 import com.everstarbackmain.global.openai.model.OpenAiPrompt;
 import com.everstarbackmain.global.openai.model.TextImageGPTRequest;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j(topic = "elk")
 public class OpenAiClient {
 
 	private final RestTemplate restTemplate;
 	private final OpenAiConfig openAiConfig;
+
+	public OpenAiClient(@Qualifier("openAiRestTemplate") RestTemplate restTemplate, OpenAiConfig openAiConfig) {
+		this.restTemplate = restTemplate;
+		this.openAiConfig = openAiConfig;
+	}
 
 	public String analysisTotalSentiment(SentimentAnalysis sentimentAnalysis) {
 		String userInput = parseAnalysisToJsonString(sentimentAnalysis);
