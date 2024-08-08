@@ -27,10 +27,10 @@ public class SseService {
 	public SseEmitter connect(User user, Long id, String lastEventId) {
 		Pet pet = petRepository.findByUserAndIdAndIsDeleted(user, id,false).orElseThrow(() -> new ExceptionResponse(
 			CustomException.NOT_FOUND_PET_EXCEPTION));
-		Long petId = pet.getId();
 
-		SseEmitter emitter = createEmitter(petId, lastEventId);
-		sendToClient(petId, "EventStream Created. [petId=" + petId + "]");
+		SseEmitter emitter = createEmitter(pet.getId(), lastEventId);
+
+		sendToClient(pet);
 		return emitter;
 	}
 
@@ -46,13 +46,19 @@ public class SseService {
 		return emitter;
 	}
 
-	private void sendToClient(Long petId, Object data) {
-		SseEmitter emitter = emitterRepository.findEmitterByPetId(petId);
+	public void sendToClient(Pet pet) {
+		SseEmitter emitter = emitterRepository.findEmitterByPetId(pet.getId());
 		if (emitter != null) {
 			try {
-				emitter.send(SseEmitter.event().id(String.valueOf(petId)).name("sse").data(data));
+				String data;
+				if (pet.getIsQuestCompleted()) {
+					data = "퀘스트를 완료했어요.";
+				} else {
+					data = pet.getQuestIndex() + "번째 퀘스트가 도착했어요.";
+				}
+				emitter.send(SseEmitter.event().id(String.valueOf(pet.getId())).name("sse").data(data));
 			} catch (IOException e) {
-				emitterRepository.deleteByPetId(petId);
+				emitterRepository.deleteByPetId(pet.getId());
 				emitter.completeWithError(e);
 			}
 		}
