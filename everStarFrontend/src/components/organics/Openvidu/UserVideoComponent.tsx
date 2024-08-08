@@ -20,7 +20,9 @@ const UserVideoComponent: React.FC<UserVideoComponentProps> = ({ streamManager }
         <div className='p-4 border rounded-md shadow-lg streamcomponent'>
           <Video streamManager={streamManager} />
           <div className='mt-2'>
-            <p className='text-sm font-medium'>{getNicknameTag()}</p>
+            {streamManager?.stream?.connection?.data ? (
+              <p className='text-sm font-medium'>{getNicknameTag()}</p>
+            ) : null}
           </div>
         </div>
       ) : null}

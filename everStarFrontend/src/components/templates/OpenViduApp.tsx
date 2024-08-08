@@ -35,6 +35,9 @@ export const OpenViduApp = () => {
   const [mainStreamManager, setMainStreamManager] = useState<StreamManager | undefined>(undefined);
   const [publisher, setPublisher] = useState<Publisher | undefined>(undefined);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
+  const [screensharingStream, setScreensharingStream] = useState<StreamManager | undefined>(
+    undefined
+  );
 
   const [isAudioMuted, setIsAudioMuted] = useState<boolean>(false);
   const [isVideoMuted, setIsVideoMuted] = useState<boolean>(false);
@@ -46,6 +49,9 @@ export const OpenViduApp = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    console.log('구독자 수 변경: ', subscribers);
+  }, [subscribers.length]);
   useEffect(() => {
     console.log('세션아이디 params:', sessionId);
   }, [sessionId]);
@@ -105,7 +111,7 @@ export const OpenViduApp = () => {
   // };
 
   const deleteSubscriber = (streamManager: StreamManager) => {
-    setSubscribers(subscribers.filter((sub) => sub !== streamManager));
+    setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
   };
 
   const joinSession = () => {
@@ -218,38 +224,72 @@ export const OpenViduApp = () => {
   };
 
   const publishScreenShare = () => {
-    if (!screensharing) {
+    if (!screensharing && session) {
+      // 화면 공유를 시작할 때
       const OVScreen = new OpenVidu();
       const sessionScreen = OVScreen.initSession();
 
-      createToken(mySessionId).then((token) => {
-        sessionScreen.connect(token).then(() => {
-          const publisherScreen = OVScreen.initPublisher(undefined, {
-            videoSource: 'screen',
-            publishAudio: false,
-            mirror: false,
-          });
-
-          publisherScreen.once('accessAllowed', (event) => {
-            publisherScreen.stream
-              .getMediaStream()
-              .getVideoTracks()[0]
-              .addEventListener('ended', () => {
-                console.log('User pressed the "Stop sharing" button');
-                sessionScreen.unpublish(publisherScreen);
-                setScreensharing(false);
+      createToken(mySessionId)
+        .then((token) => {
+          sessionScreen
+            .connect(token)
+            .then(() => {
+              const publisherScreen = OVScreen.initPublisher(undefined, {
+                videoSource: 'screen', // 화면 공유
+                publishAudio: false, // 오디오 없음
+                mirror: false,
               });
-            sessionScreen.publish(publisherScreen);
-            setScreensharing(true);
-          });
 
-          publisherScreen.once('accessDenied', (event) => {
-            console.warn('ScreenShare: Access Denied');
-          });
+              publisherScreen.once('accessAllowed', () => {
+                console.log('화면 공유 접근 허용됨');
+                setScreensharingStream(publisherScreen);
+                setScreensharing(true);
+
+                // 화면 공유 스트림을 구독
+                const screenSubscriber = sessionScreen.subscribe(
+                  publisherScreen.stream,
+                  'subscriber'
+                );
+                setSubscribers((prevSubscribers) => [...prevSubscribers, screenSubscriber]);
+
+                // 화면 공유 스트림이 종료되었을 때 처리
+                publisherScreen.stream
+                  .getMediaStream()
+                  .getVideoTracks()[0]
+                  .addEventListener('ended', () => {
+                    console.log('화면 공유 종료됨');
+                    sessionScreen.unpublish(publisherScreen);
+                    setSubscribers((prevSubscribers) =>
+                      prevSubscribers.filter((sub) => sub !== screenSubscriber)
+                    ); // 구독자 배열에서 제거
+                    setScreensharingStream(undefined);
+                    setScreensharing(false);
+                  });
+
+                // 화면 공유 스트림을 세션에 게시
+                sessionScreen.publish(publisherScreen);
+              });
+
+              publisherScreen.once('accessDenied', () => {
+                console.warn('화면 공유: 접근 거부됨');
+              });
+            })
+            .catch((error) => {
+              console.error('화면 공유 연결 오류:', error);
+            });
+        })
+        .catch((error) => {
+          console.error('화면 공유 토큰 생성 오류:', error);
         });
-      });
     } else {
-      console.log('화면 공유 중지');
+      // 화면 공유를 중지할 때
+      if (screensharingStream && session) {
+        session.unpublish(screensharingStream as Publisher);
+        setSubscribers((prevSubscribers) =>
+          prevSubscribers.filter((sub) => sub !== screensharingStream)
+        ); // 구독자 배열에서 제거
+        setScreensharingStream(undefined);
+      }
       setScreensharing(false);
     }
   };
@@ -397,6 +437,11 @@ export const OpenViduApp = () => {
                   <UserVideoComponent streamManager={sub} />
                 </div>
               ))}
+              {screensharingStream !== undefined ? (
+                <div className='box-border stream-container col-md-3'>
+                  <UserVideoComponent streamManager={screensharingStream} />
+                </div>
+              ) : null}
             </div>
             <div className='flex flex-col items-center justify-center w-1/6 gap-8 h-4/5'>
               <CircleButton
@@ -409,7 +454,7 @@ export const OpenViduApp = () => {
                 theme={screensharing ? 'white' : 'hover'}
                 onClick={publishScreenShare}
                 icon={'share'}
-                disabled={false}
+                disabled={screensharing}
               />
               <CircleButton
                 theme={exitClick ? 'hover' : 'white'}
