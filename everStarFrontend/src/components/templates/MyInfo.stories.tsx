@@ -1,5 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { MyInfo } from 'components/templates/MyInfo';
+import { Provider } from 'react-redux';
+import { Store } from 'store/Store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor } from 'store/Store';
 
 const meta: Meta<typeof MyInfo> = {
   title: 'Templates/MyInfo',
@@ -31,5 +35,12 @@ export default meta;
 type Story = StoryObj<typeof MyInfo>;
 
 export const Default: Story = {
+  render: (args) => (
+    <Provider store={Store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <MyInfo {...args} />
+      </PersistGate>
+    </Provider>
+  ),
   args: {},
 };

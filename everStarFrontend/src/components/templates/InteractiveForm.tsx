@@ -1,7 +1,6 @@
 import React from 'react';
 import { InputContainer, InputContainerProps } from 'components/organics/input/InputContainer';
 import { Glass } from 'components/molecules/Glass/Glass';
-import { useMediaQuery } from 'react-responsive';
 
 interface InteractiveFormProps extends InputContainerProps {
   currentPage: number;
@@ -31,23 +30,20 @@ export const InteractiveForm: React.FC<InteractiveFormProps> = ({
   myMessage,
   dateTime,
 }) => {
-  const isMobile = useMediaQuery({ maxWidth: 767 });
-  const isTabletOrMobile = useMediaQuery({ maxWidth: 1199 });
-
   // Override headerText and letterCardMessage for this specific component
   const customHeaderText = headerText;
   const customLetterCardMessage = letterCardMessage;
 
   return (
-    <div className='relative flex items-center justify-center min-h-screen'>
+    <div className="relative flex items-center justify-center min-h-screen">
       <Glass
-        variant={isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop'}
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={onPageChange}
         showPageIndicator={false}
+        className="w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5"
       />
-      <div className='absolute inset-0 flex items-center justify-center'>
+      <div className="absolute inset-0 flex items-center justify-center">
         <InputContainer
           headerText={customHeaderText}
           letterCardType={letterCardType}

@@ -1,9 +1,6 @@
-// src/store/Store.ts
-
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import sessionStorage from 'redux-persist/lib/storage/session';
-
 import authReducer from 'store/slices/authSlice';
 import petReducer from 'store/slices/petSlice';
 
@@ -21,7 +18,8 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const Store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }),
 });
 
 export const persistor = persistStore(Store);

@@ -5,7 +5,6 @@ import { EverstarPage } from 'pages/EverstarPage';
 import { TutorialPage } from 'pages/TutorialPage';
 import { EarthPage } from 'pages/EarthPage';
 import { SplashPage } from 'pages/SplashPage';
-import { ProfilePage } from 'pages/ProfilePage';
 import { SignUpPage } from 'pages/SignUpPage';
 import { LoginPage } from 'pages/LoginPage';
 import { OAuthCallback } from 'pages/OAuthCallback';
@@ -17,17 +16,17 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <div className='container'>
+        <div>
           <Routes>
-            <Route path='/' element={<SplashPage />} />
-            <Route path='/login' element={<LoginPage />} />
-            <Route path='/signup/:userEmail*' element={<SignUpPage />} />
-            <Route path='/profile/*' element={<ProfilePage />}></Route>
-            <Route path='/tutorial' element={<TutorialPage />}></Route>
-            <Route path='/earth/*' element={<EarthPage />}></Route>
-            <Route path='/everstar/:petid/*' element={<EverstarPage />}></Route>
-            <Route path='/mypage/*' element={<MyPage />}></Route>
-            <Route path='/oauth/*' element={<OAuthCallback />} />
+            <Route path="/" element={<SplashPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup/:userEmail*" element={<SignUpPage />} />
+            <Route path="/tutorial" element={<TutorialPage />}></Route>
+            <Route path="/earth/*" element={<EarthPage />}></Route>
+            <Route path="/everstar/:pet/*" element={<EverstarPage />}></Route>
+            <Route path="/pets/*" element={<EarthPage />}></Route>
+            <Route path="/mypage/*" element={<MyPage />}></Route>
+            <Route path="/oauth/*" element={<OAuthCallback />} />
           </Routes>
         </div>
       </Router>

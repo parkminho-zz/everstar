@@ -6,6 +6,8 @@ interface LetterboxIconsProps {
   number?: number;
   onClick?: () => void;
   className?: string;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 export const LetterboxIcons: React.FC<LetterboxIconsProps> = ({
@@ -13,6 +15,8 @@ export const LetterboxIcons: React.FC<LetterboxIconsProps> = ({
   number,
   onClick,
   className,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
   return (
     <div
@@ -22,6 +26,8 @@ export const LetterboxIcons: React.FC<LetterboxIconsProps> = ({
         textAlign: 'center',
       }}
       onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       className={className}
     >
       {variant === 'letterbox-text' ? (
@@ -42,29 +48,29 @@ export const LetterboxIcons: React.FC<LetterboxIconsProps> = ({
             whiteSpace: 'nowrap',
           }}
         >
-          편지
+          편지함
         </div>
       ) : (
         <>
-          <LetterboxIcon className='w-6 h-6' />
+          <LetterboxIcon className="w-6 h-6" />
           {variant === 'letterbox-alert' && number !== undefined && (
             <svg
-              width='16'
-              height='16'
-              viewBox='0 0 16 16'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
               style={{ position: 'absolute', top: 0, right: 0 }}
             >
-              <circle cx='10.5' cy='6.5' r='5.5' fill='#FF9078' />
+              <circle cx="10.5" cy="6.5" r="5.5" fill="#FF9078" />
               <text
-                x='10.5'
-                y='7.5'
-                textAnchor='middle'
-                fill='#1F2329'
-                fontSize='5'
-                fontFamily='Arial'
-                dy='.3em'
+                x="10.5"
+                y="7.5"
+                textAnchor="middle"
+                fill="#1F2329"
+                fontSize="5"
+                fontFamily="Arial"
+                dy=".3em"
               >
                 {number}
               </text>

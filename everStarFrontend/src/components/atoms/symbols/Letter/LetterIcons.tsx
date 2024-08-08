@@ -5,10 +5,19 @@ interface LetterIconsProps {
   variant: 'letter' | 'letter-text';
   text?: string;
   onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
   className?: string;
 }
 
-export const LetterIcons: React.FC<LetterIconsProps> = ({ variant, text, onClick, className }) => {
+export const LetterIcons: React.FC<LetterIconsProps> = ({
+  variant,
+  text,
+  onClick,
+  className,
+  onMouseEnter,
+  onMouseLeave,
+}) => {
   return (
     <div
       style={{
@@ -17,6 +26,8 @@ export const LetterIcons: React.FC<LetterIconsProps> = ({ variant, text, onClick
         textAlign: 'center',
       }}
       onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       className={className}
     >
       {variant === 'letter-text' ? (
@@ -40,7 +51,7 @@ export const LetterIcons: React.FC<LetterIconsProps> = ({ variant, text, onClick
           {text || '편지쓰기'}
         </div>
       ) : (
-        <LetterIcon className='w-6 h-6' />
+        <LetterIcon className="w-6 h-6" />
       )}
     </div>
   );

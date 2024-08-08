@@ -1,24 +1,16 @@
-// src/components/templates/Profile.tsx
 import React, { useState } from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { useSelector } from 'react-redux';
-import { Header } from 'components/molecules/Header/Header';
-import { Footer } from 'components/molecules/Footer/Footer';
-import { Glass } from 'components/molecules/Glass/Glass';
 import { ProfileSelection } from 'components/organics/ProfileSelection/ProfileSelection';
 import { PetInfoForm } from 'components/organics/PetInfoForm/PetInfoForm';
 import { SearchModal } from 'components/organics/SearchModal/SearchModal';
-import bgImage from 'assets/images/bg-everstar.webp';
 import { RootState } from 'store/Store';
-import { useFetchPets } from 'hooks/usePets';
-import config from 'config';
+import { useFetchPets, useAddPet } from 'hooks/usePets';
+import { Glass } from 'components/molecules/Glass/Glass';
 
 export const Profile: React.FC = () => {
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
-  const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const { data: pets, isLoading, error } = useFetchPets(token);
-  console.log('Token:', token);
+  const { mutate: addPet } = useAddPet(token);
 
   const [isPetInfoOpen, setPetInfoOpen] = useState(false);
   const [isSearchModalOpen, setSearchModalOpen] = useState(false);
@@ -42,25 +34,15 @@ export const Profile: React.FC = () => {
         new Blob([JSON.stringify(requestDto)], { type: 'application/json' }),
       );
 
-      try {
-        const response = await fetch(`${config.API_BASE_URL}/api/pets`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: currentFormData,
-        });
-
-        if (!response.ok) {
-          throw new Error('반려동물을 추가하는 데 실패했습니다');
-        }
-
-        const data = await response.json();
-        console.log('반려동물을 성공적으로 추가했습니다:', data);
-        setPetInfoOpen(false);
-      } catch (error) {
-        console.error('반려동물 추가 에러:', error);
-      }
+      addPet(currentFormData, {
+        onSuccess: (data) => {
+          console.log('반려동물을 성공적으로 추가했습니다:', data);
+          setPetInfoOpen(false);
+        },
+        onError: (error) => {
+          console.error('반려동물 추가 에러:', error);
+        },
+      });
 
       setCurrentFormData(null);
     } else {
@@ -69,34 +51,34 @@ export const Profile: React.FC = () => {
   };
 
   if (isLoading) return <div>로딩 중...</div>;
-  if (error) return <div className="text-red-500">{error.message}</div>;
+  if (error) return <div className='text-red-500'>{error.message}</div>;
 
   return (
-    <div
-      className="relative flex flex-col min-h-screen bg-center bg-cover"
-      style={{ backgroundImage: `url(${bgImage})` }}
-    >
-      <Header
-        type={isMobile ? 'mobile-everstar' : isTabletOrMobile ? 'tablet-everstar' : 'everstar'}
-        className="sticky top-0 z-50"
-      />
+    <div className='relative flex flex-col items-center justify-center w-full min-h-screen'>
       <Glass
-        variant={isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop'}
         currentPage={1}
         totalPages={1}
-        onPageChange={(newPage) => console.log('페이지 변경:', newPage)}
+        onPageChange={(newPage) => console.log('Page changed to:', newPage)}
         showPageIndicator={false}
-        className="z-10"
+        className='absolute top-0 bottom-0 left-0 right-0 z-0'
       />
-      <div className="z-20 flex items-center justify-center flex-grow">
+      <div className='relative z-10 flex flex-col items-center justify-center w-full h-full'>
         {isPetInfoOpen ? (
           <PetInfoForm
-            headerText="반려동물 정보 입력"
+            headerText='반려동물 정보 입력'
             showPrimaryButton={true}
-            text="반려동물 정보를 입력해주세요."
+            text='반려동물 정보를 입력해주세요.'
             onClose={() => setPetInfoOpen(false)}
             onSubmit={handlePetFormSubmit}
-            relationshipOptions={['엄마', '아빠', '언니', '누나', '형', '오빠', '친구']}
+            relationshipOptions={[
+              '엄마',
+              '아빠',
+              '언니',
+              '누나',
+              '형',
+              '오빠',
+              '친구',
+            ]}
           />
         ) : (
           <ProfileSelection
@@ -113,23 +95,25 @@ export const Profile: React.FC = () => {
             onAddAvatar={() => setPetInfoOpen(true)}
           />
         )}
+        {isSearchModalOpen && (
+          <SearchModal
+            searchOptions={[
+              '친근한',
+              '충성스러운',
+              '활발한',
+              '차분한',
+              '보호적인',
+            ]}
+            modalTitle='반려동물 성격 선택'
+            buttonLabel='작성 완료'
+            onClose={() => {
+              setSearchModalOpen(false);
+              setPetInfoOpen(true);
+            }}
+            onSubmit={handleSearchModalSubmit}
+          />
+        )}
       </div>
-      <Footer
-        type={isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop'}
-        className="relative z-10 mt-auto"
-      />
-      {isSearchModalOpen && (
-        <SearchModal
-          searchOptions={['친근한', '충성스러운', '활발한', '차분한', '보호적인']}
-          modalTitle="반려동물 성격 선택"
-          buttonLabel="작성 완료"
-          onClose={() => {
-            setSearchModalOpen(false);
-            setPetInfoOpen(true);
-          }}
-          onSubmit={handleSearchModalSubmit}
-        />
-      )}
     </div>
   );
 };

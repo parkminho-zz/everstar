@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
 import { Glass } from 'components/molecules/Glass/Glass';
 import { LetterBox } from 'components/organics/LetterBox/LetterBox';
-import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router-dom';
+import { useFetchLetterPet } from 'hooks/useEarth';
 
 interface Letter {
   id: number;
@@ -24,46 +24,58 @@ interface LetterBoxTemplateProps {
 }
 
 const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
-  letterData,
   currentPage,
   totalPages,
   onPageChange,
   headerText,
 }) => {
   const navigate = useNavigate();
+  const { data, isLoading, isError } = useFetchLetterPet();
 
-  const [letters] = useState(letterData);
-  const isMobile = useMediaQuery({ maxWidth: 767 });
-  const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1199 });
+  // 로딩 및 오류 상태 처리
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error loading data</div>;
 
-  const handleLetterClick = (id: number) => {
-    // setLetters(
-    //   letters.map((letter) => (letter.id === id ? { ...letter, state: 'received' } : letter))
-    // );
-    navigate(`/earth/letter/${id}`);
+  console.log(data.data);
+
+  const petLetters =
+    data?.data?.content?.map(
+      (item: {
+        petLetterId: number;
+        isRead: boolean;
+        petName: string;
+        content: string;
+        createAt: Date;
+      }) => ({
+        petLetterId: item.petLetterId || '',
+        isRead: item.isRead || false,
+        petName: item.petName || '',
+        content: item.content || '',
+        createAt: item.createAt,
+      })
+    ) || [];
+
+  const handleLetterClick = () => {
+    navigate(`/earth/letter/1`);
   };
-
-  const itemsPerPage = isMobile ? 2 : isTablet ? 6 : 6;
 
   return (
     <div className='relative flex items-center justify-center min-h-screen'>
       <Glass
-        variant={isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop'}
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={onPageChange}
         showPageIndicator={true}
+        className='w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5'
       />
-      <div className={`absolute inset-0 flex flex-col items-center ${isMobile ? '' : 'p-8'} `}>
+      <div className='absolute inset-0 flex flex-col items-center p-4 sm:p-8'>
         <ModalHeader text={headerText} onLeftIconClick={() => navigate(-1)} />
-        <div
-          className={`flex flex-col items-center w-full max-w-5xl  ${isMobile ? 'mt-9' : 'p-8 mt-20'} `}
-        >
+        <div className='flex flex-col items-center w-full max-w-5xl mt-9 sm:mt-20'>
           <LetterBox
-            letters={letters}
+            letters={petLetters}
             onLetterClick={handleLetterClick}
             currentPage={currentPage}
-            itemsPerPage={itemsPerPage}
+            itemsPerPage={6}
           />
         </div>
       </div>

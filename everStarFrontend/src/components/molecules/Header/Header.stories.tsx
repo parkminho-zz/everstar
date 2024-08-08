@@ -9,17 +9,7 @@ const meta: Meta<typeof Header> = {
     type: {
       control: {
         type: 'radio',
-        options: [
-          'earth',
-          'tablet-earth',
-          'mobile-earth',
-          'everstar',
-          'tablet-everstar',
-          'mobile-everstar',
-          'mypage',
-          'tablet-mypage',
-          'mobile-mypage',
-        ],
+        options: ['earth', 'everstar', 'mypage'],
       },
     },
     className: {
@@ -31,23 +21,9 @@ const meta: Meta<typeof Header> = {
 export default meta;
 type Story = StoryObj<typeof Header>;
 
-export const Default: Story = {
+export const Earth: Story = {
   args: {
-    type: 'tablet-earth',
-    className: '',
-  },
-};
-
-export const TabletEarth: Story = {
-  args: {
-    type: 'tablet-earth',
-    className: '',
-  },
-};
-
-export const MobileEarth: Story = {
-  args: {
-    type: 'mobile-earth',
+    type: 'earth',
     className: '',
   },
 };
@@ -59,37 +35,9 @@ export const Everstar: Story = {
   },
 };
 
-export const TabletEverstar: Story = {
-  args: {
-    type: 'tablet-everstar',
-    className: '',
-  },
-};
-
-export const MobileEverstar: Story = {
-  args: {
-    type: 'mobile-everstar',
-    className: '',
-  },
-};
-
 export const Mypage: Story = {
   args: {
     type: 'mypage',
-    className: '',
-  },
-};
-
-export const TabletMypage: Story = {
-  args: {
-    type: 'tablet-mypage',
-    className: '',
-  },
-};
-
-export const MobileMypage: Story = {
-  args: {
-    type: 'mobile-mypage',
     className: '',
   },
 };

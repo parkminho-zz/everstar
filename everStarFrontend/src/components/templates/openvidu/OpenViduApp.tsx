@@ -4,7 +4,6 @@
 import React, { useEffect, useState } from 'react';
 import { OpenVidu, Publisher, Subscriber, Session, StreamManager, Device } from 'openvidu-browser';
 import { useParams } from 'react-router-dom';
-import { useMediaQuery } from 'react-responsive';
 import axios from 'axios';
 import Chance from 'chance';
 
@@ -301,13 +300,9 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
     return response.data; // The token
   };
 
-  const isMobile = useMediaQuery({ maxWidth: 767 });
-  const isTabletOrMobile = useMediaQuery({ maxWidth: 1199 });
-
   return (
-    <div className='container'>
+    <div className='w-full h-full'>
       <Glass
-        variant={isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop'}
         currentPage={1}
         totalPages={1}
         onPageChange={() => console.log('이동')}
@@ -361,7 +356,6 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
                   text={mySessionId}
                   showCheckIcon={false}
                   readOnlyState={true}
-
                   // onChange={handleChangeSessionId}
                 ></InputField>
                 {/* <label>Session: </label>
@@ -433,14 +427,13 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
                 disabled={false}
               />
             </div>
-            <div className='flex flex-row z-1 bg-mainerror w-[3/5]'>
-              {/* <div id='main-video' className='col-md-6'>
-            </div> */}
-              <div id='video-container' className='flex flex-wrap gap-4 col-md-6'>
+            <div className='flex flex-row z-1 w-[3/5]'>
+              <div id='main-video' className='col-md-6'>
                 {mainStreamManager !== undefined ? (
                   <Video streamManager={mainStreamManager} />
                 ) : null}
-
+              </div>
+              <div id='video-container' className='flex flex-wrap gap-4 col-md-6'>
                 {subscribers.map((sub, i) => (
                   <div
                     key={i}

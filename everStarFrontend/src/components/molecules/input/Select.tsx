@@ -30,7 +30,7 @@ export const Select: React.FC<SelectProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | number | null>(
-    null,
+    null
   );
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
@@ -100,7 +100,7 @@ export const Select: React.FC<SelectProps> = ({
           )}
         </div>
         {isOpen && (
-          <div className='absolute z-10 w-full bg-white rounded-md shadow-lg top-full mt-1'>
+          <div className='absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg top-full'>
             <DropdownMenu
               options={options}
               onOptionSelect={handleOptionSelect}
@@ -118,7 +118,7 @@ export const Select: React.FC<SelectProps> = ({
 Select.propTypes = {
   className: PropTypes.string,
   options: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
   ).isRequired,
   title: PropTypes.string.isRequired,
   showLabel: PropTypes.bool,

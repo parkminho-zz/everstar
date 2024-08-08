@@ -1,24 +1,8 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setUser, setToken } from 'store/slices/authSlice'; // 경로 확인
-import config from 'config';
-const fetchUserInfo = async (token: string) => {
-  const response = await fetch(`${config.API_BASE_URL}/api/accounts/users`, {
-    // 템플릿 리터럴 사용
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch user info');
-  }
-
-  return response.json();
-};
+import { setUser, setToken } from 'store/slices/authSlice';
+import { fetchUserInfo } from 'api/authApi';
 
 export const OAuthCallback: React.FC = () => {
   const location = useLocation();
@@ -37,7 +21,7 @@ export const OAuthCallback: React.FC = () => {
         .then((user) => {
           console.log('Fetched user info:', user);
           dispatch(setUser(user));
-          navigate('/profile');
+          navigate('/mypage/profile');
         })
         .catch((error) => {
           console.error('Error fetching user info:', error);

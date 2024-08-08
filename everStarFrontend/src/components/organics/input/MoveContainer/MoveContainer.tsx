@@ -23,7 +23,7 @@ export const MoveContainer = ({
   const goNext = (next: pageType) => {
     switch (next) {
       case 'mypage':
-        return '마이페이지';
+        return '내 정보';
       case 'profile':
         return '반려동물 변경';
       case 'random':
@@ -31,7 +31,7 @@ export const MoveContainer = ({
       case 'search':
         return '검색 이동';
       default:
-        return '마이페이지';
+        return '내 정보';
     }
   };
   return (

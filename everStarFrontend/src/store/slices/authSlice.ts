@@ -1,37 +1,27 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+// src/store/slices/authSlice.ts
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { fetchUserInfo, UserInfo } from 'api/authApi';
 
-// Define the UserInfo interface
-interface UserInfo {
-  email: string;
-  userName: string;
-  phoneNumber: string;
-  birthDate: string;
-  gender: string;
-  questReceptionTime: string;
-}
-
-// Define the AuthState interface
 interface AuthState {
   accessToken: string;
-  userInfo: UserInfo;
+  userInfo: UserInfo | null;
   notifications: string[];
 }
 
-// Define the initial state
 const initialState: AuthState = {
   accessToken: '',
-  userInfo: {
-    email: '',
-    userName: '',
-    phoneNumber: '',
-    birthDate: '',
-    gender: '',
-    questReceptionTime: '',
-  },
+  userInfo: null,
   notifications: [],
 };
 
-// Create the auth slice
+export const fetchUser = createAsyncThunk<UserInfo, string>(
+  'auth/fetchUser',
+  async (token: string) => {
+    const userInfo = await fetchUserInfo(token);
+    return userInfo;
+  },
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -46,7 +36,7 @@ const authSlice = createSlice({
       state.accessToken = '';
     },
     deleteUser: (state) => {
-      state.userInfo = initialState.userInfo;
+      state.userInfo = null;
     },
     addNotification: (state, action: PayloadAction<string>) => {
       state.notifications.push(action.payload);
@@ -55,11 +45,13 @@ const authSlice = createSlice({
       state.notifications.splice(action.payload, 1);
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(fetchUser.fulfilled, (state, action: PayloadAction<UserInfo>) => {
+      state.userInfo = action.payload;
+    });
+  },
 });
 
-// Export the actions
 export const { setToken, setUser, deleteToken, deleteUser, addNotification, removeNotification } =
   authSlice.actions;
-
-// Export the reducer
 export default authSlice.reducer;
