@@ -41,6 +41,7 @@ public class QuestAnswer extends BaseTimeEntity {
 	@JoinColumn(name = "quest_id")
 	private Quest quest;
 
+	@Column(length = 1000)
 	private String content;
 
 	private String imageUrl;
