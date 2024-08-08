@@ -43,6 +43,7 @@ public class SecurityConfig {
 			.requestMatchers("/api/accounts/users/**").hasRole("USER")
 			.requestMatchers("/api/everstar/**").hasRole("USER")
 			.requestMatchers("/api/notifications/**").hasRole("USER")
+			.requestMatchers("api/sessions/**").permitAll()
 			.anyRequest().authenticated()
 		);
 		http.exceptionHandling((handle) -> handle.authenticationEntryPoint(customExceptionHandler));
