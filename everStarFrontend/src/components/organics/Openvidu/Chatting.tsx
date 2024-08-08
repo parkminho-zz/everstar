@@ -109,6 +109,7 @@ const Chatting: React.FC<ChattingProps> = ({ userName }) => {
         onChange={(e) => setInput(e.target.value)}
         onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
         style={{ width: '80%' }}
+        className='h-20 mt-2 border solid 3px'
       />
       <button onClick={sendMessage} style={{ width: '20%' }}>
         Send

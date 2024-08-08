@@ -10,7 +10,7 @@ import {
   StreamEvent,
   ExceptionEvent,
 } from 'openvidu-browser';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CircleButton } from '../atoms/buttons/CircleButton';
 import { Glass } from 'components/molecules/Glass/Glass';
@@ -27,7 +27,6 @@ type Props = {
 
 export const OpenViduApp = () => {
   const { sessionId } = useParams<Props>();
-
   const [, setOV] = useState<OpenVidu | null>(null);
   const [mySessionId] = useState<string>(sessionId || 'default_session_id');
   const [myUserName, setMyUserName] = useState<string>('방문자' + Math.floor(Math.random() * 100));
@@ -45,9 +44,23 @@ export const OpenViduApp = () => {
   const [exitClick, setExitClick] = useState<boolean>(false);
   const [, setCurrentVideoDevice] = useState<MediaDeviceInfo | Device | undefined>(undefined);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     console.log('세션아이디 params:', sessionId);
   }, [sessionId]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      leaveSession();
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   const clip = () => {
     const textarea = document.createElement('textarea');
@@ -68,23 +81,6 @@ export const OpenViduApp = () => {
     document.body.removeChild(textarea);
   };
 
-  useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      leaveSession();
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
-
-  // 세션 아이디 변경하는 함수 (사용하지는 않는데 혹시 몰라서 남겨둠)
-  // const handleChangeSessionId = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setMySessionId(e.target.value);
-  // };
-
   const handleChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
     if (name.length > 10) {
@@ -95,6 +91,11 @@ export const OpenViduApp = () => {
     }
     setMyUserName(e.target.value);
   };
+
+  // 세션 아이디 변경하는 함수 (사용하지는 않는데 혹시 몰라서 남겨둠)
+  // const handleChangeSessionId = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setMySessionId(e.target.value);
+  // };
 
   // 메인비디오 스트림 변경하는 함수 (사용하지는 않는데 혹시 몰라서 남겨둠)
   // const handleMainVideoStream = (stream: StreamManager) => {
@@ -303,7 +304,7 @@ export const OpenViduApp = () => {
                 joinSession();
               }}
             >
-              <p>
+              <p className='mt-5'>
                 <InputField
                   state='default'
                   label='사용자 이름을 입력해주세요'
@@ -328,12 +329,18 @@ export const OpenViduApp = () => {
                   // onChange={handleChangeSessionId}
                 ></InputField>
               </p>
-              <div className='flex flex-row items-center justify-center mt-4 text-center'>
+              <div className='flex flex-row items-center justify-center gap-3 mt-6 text-center'>
+                <button
+                  className={`cursor-pointer flex items-center justify-center rounded-lg px-4 text-center shadow-[0px_4px_8px_#dbe5ec99,0px_0px_1px_1px_#dbe5ec99] ${userNameOk ? 'bg-white text-black hover:bg-bgorange' : 'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60'} w-[106px] h-[40px]`}
+                  onClick={() => navigate(-1)}
+                >
+                  뒤로가기
+                </button>
                 <input
-                  className={`flex items-center justify-center rounded-lg px-4 text-center shadow-[0px_4px_8px_#dbe5ec99,0px_0px_1px_1px_#dbe5ec99] ${userNameOk ? 'bg-white text-black hover:bg-bgorange' : 'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60'} w-[106px] h-[40px]`}
+                  className={`cursor-pointer flex items-center justify-center rounded-lg px-4 text-center shadow-[0px_4px_8px_#dbe5ec99,0px_0px_1px_1px_#dbe5ec99] ${userNameOk ? 'bg-white text-black hover:bg-bgorange' : 'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60'} w-[106px] h-[40px]`}
                   name='commit'
                   type='submit'
-                  value='JOIN'
+                  value='입장하기'
                   disabled={!userNameOk}
                 />
               </div>
@@ -349,7 +356,7 @@ export const OpenViduApp = () => {
               채널명 {mySessionId}
             </h1>
             <input
-              className='w-[200px] h-[40px] border rounded-md shadow-md mr-0 hover:shadow-md'
+              className='w-[200px] h-[40px] border rounded-md shadow-md mr-0 hover:shadow-md cursor-pointer'
               type='button'
               id='buttonClip'
               onClick={clip}
@@ -393,7 +400,7 @@ export const OpenViduApp = () => {
             </div>
             <div className='flex flex-col items-center justify-center w-1/6 gap-8 h-4/5'>
               <CircleButton
-                theme={isChatOpen ? 'white' : 'hover'}
+                theme={isChatOpen ? 'hover' : 'white'}
                 onClick={toggleChat}
                 icon={'chat'}
                 disabled={false}
@@ -412,7 +419,7 @@ export const OpenViduApp = () => {
               />
             </div>
             {isChatOpen && (
-              <div className='w-[400px] h-[600px] bg-white shadow-lg'>
+              <div className='w-[400px] h-[600px] bg-white shadow-lg flex flex-row justify-center items-center'>
                 <Chatting userName={myUserName} />
               </div>
             )}
