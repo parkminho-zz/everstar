@@ -19,6 +19,8 @@ import com.everstarbackmain.global.config.OpenAiConfig;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.openai.model.Content;
+import com.everstarbackmain.global.openai.model.ImageGPTRequest;
+import com.everstarbackmain.global.openai.model.ImageGPTResponse;
 import com.everstarbackmain.global.openai.model.OpenAiPrompt;
 import com.everstarbackmain.global.openai.model.TextImageGPTRequest;
 
@@ -174,6 +176,25 @@ public class OpenAiClient {
 		String personalities = String.join(", ", petPersonalities);
 		String prompt = String.format(OpenAiPrompt.WRITE_PET_TEXT_IMAGE_TO_TEXT_ANSWER_PROMPT.getPrompt(), petName, petName,
 			quest.getContent(), questAnswer.getContent(), petName, pet.getRelationship(), personalities, user.getUserName());
+		return prompt;
+	}
+
+	public String writePetTextToImageAnswer(Pet pet, Quest quest, QuestAnswer questAnswer) {
+		String prompt = createPetTextToImageAnswerPrompt(pet, quest, questAnswer);
+
+		ImageGPTRequest request = new ImageGPTRequest(prompt);
+		ImageGPTResponse response = restTemplate.postForObject(openAiConfig.getCreateImageUrl(), request, ImageGPTResponse.class);
+
+		if (response == null || response.getData() == null || response.getData().isEmpty()) {
+			throw new ExceptionResponse(CustomException.OPENAI_API_EXCEPTION);
+		}
+
+		return response.getData().get(0).getB64_json();
+	}
+
+	private String createPetTextToImageAnswerPrompt(Pet pet, Quest quest, QuestAnswer questAnswer) {
+		String prompt = String.format(OpenAiPrompt.WRITE_PET_TEXT_TO_IMAGE_ANSWER_PROMPT.getPrompt(),
+			quest.getContent(), questAnswer.getContent(), pet.getSpecies());
 		return prompt;
 	}
 }

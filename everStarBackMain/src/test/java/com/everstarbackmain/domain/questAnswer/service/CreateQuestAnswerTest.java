@@ -27,7 +27,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.everstarbackmain.domain.aiAnswer.repository.AiAnswerRepository;
-import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 import com.everstarbackmain.domain.memorialBook.util.MemorialBookScheduler;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
@@ -41,8 +40,6 @@ import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswerType;
 import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;
 import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
-import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;
-import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysisResult;
 import com.everstarbackmain.domain.sentimentAnalysis.repository.SentimentAnalysisRepository;
 import com.everstarbackmain.domain.sentimentAnalysis.util.NaverCloudClient;
 import com.everstarbackmain.domain.user.model.Gender;

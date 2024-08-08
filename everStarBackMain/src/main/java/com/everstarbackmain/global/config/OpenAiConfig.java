@@ -17,6 +17,9 @@ public class OpenAiConfig {
 	@Value("${openai.api.url}")
 	private String apiUrl;
 
+	@Value("${openai.api.create-image-url}")
+	private String createImageUrl;
+
 	@Value("${openai.api.key}")
 	private String openAiKey;
 

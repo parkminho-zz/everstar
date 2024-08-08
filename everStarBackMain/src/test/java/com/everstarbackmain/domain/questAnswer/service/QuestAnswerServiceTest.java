@@ -323,7 +323,7 @@ class QuestAnswerServiceTest {
 		given(petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(
 			petPersonalities);
 		given(s3UploadUtil.saveFile(any())).willReturn("imageUrl");
-		ReflectionTestUtils.setField(quest, "id", 2L);
+		ReflectionTestUtils.setField(quest, "id", 37L);
 
 		given(QuestAnswerTypeNo.findTypeByQuestNumber(anyLong())).willReturn(
 			Optional.of(QuestAnswerTypeNo.TEXT_IMAGE_TO_TEXT.getType()));
@@ -334,6 +334,28 @@ class QuestAnswerServiceTest {
 
 		// then
 		verify(openAiClient).writePetTextImageToTextAnswer(user, pet, petPersonalities, quest, textImageToTextAnswer, "imageUrl");
+	}
+
+	@Test
+	@DisplayName("퀘스트_답변_생성_후_TEXT_IMAGE_TO_TEXT_타입일_경우_관련_OPENAI_API_호출_테스트")
+	public void 퀘스트_답변_생성_후_TEXT_TO_IMAGE_ART_타입일_경우_관련_OPENAI_API_호출_테스트() {
+		given(authentication.getPrincipal()).willReturn(principalDetails);
+		given(principalDetails.getUser()).willReturn(user);
+		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
+		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
+		given(petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(
+			petPersonalities);
+		ReflectionTestUtils.setField(quest, "id", 44L);
+
+		given(QuestAnswerTypeNo.findTypeByQuestNumber(anyLong())).willReturn(
+			Optional.of(QuestAnswerTypeNo.TEXT_TO_IMAGE_ART.getType()));
+		given(QuestAnswer.createTextImageQuestAnswer(any(), any(), any(), anyString())).willReturn(textQuestAnswer);
+
+		// when
+		questAnswerService.createQuestAnswer(authentication, 1L, 44L, createTextAnswerRequestDto, null);
+
+		// then
+		verify(openAiClient).writePetTextToImageAnswer(pet, quest, textQuestAnswer);
 	}
 
 }

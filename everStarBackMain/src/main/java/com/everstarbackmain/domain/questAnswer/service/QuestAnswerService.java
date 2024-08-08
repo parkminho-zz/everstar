@@ -76,14 +76,14 @@ public class QuestAnswerService {
 			String imageUrl = s3UploadUtil.saveFile(imageFile);
 			QuestAnswer questAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, requestDto, imageUrl);
 			questAnswerRepository.save(questAnswer);
-			plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl);
+			plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
 			return;
 		}
 
 		String imageUrl = s3UploadUtil.saveFile(imageFile);
 		QuestAnswer questAnswer = QuestAnswer.createImageQuestAnswer(pet, quest, requestDto, imageUrl);
 		questAnswerRepository.save(questAnswer);
-		plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl);
+		plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
 	}
 
 	private void plusPetQuestIndexByTextType(User user, Pet pet, Quest quest, QuestAnswer questAnswer) {
@@ -102,7 +102,8 @@ public class QuestAnswerService {
 		requestAiAnswerByTextType(user, pet, quest, questAnswer);
 	}
 
-	private void plusPetQuestIndexByImageType(User user, Pet pet, Quest quest, QuestAnswer questAnswer, String imageUrl) {
+	private void plusPetQuestIndexByImageType(User user, Pet pet, Quest quest, QuestAnswer questAnswer, String imageUrl,
+		MultipartFile imageFile) {
 		pet.plusQuestIndex();
 		int petQuestIndex = pet.getQuestIndex();
 
@@ -115,7 +116,7 @@ public class QuestAnswerService {
 			analysisTotalQuestAnswer(pet.getId());
 		}
 
-		requestAiAnswerByImageType(user, pet, quest, questAnswer, imageUrl);
+		requestAiAnswerByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
 	}
 
 	private void analyseWeeklyQuestAnswer(Long petId, int petQuestIndex) {
@@ -153,11 +154,21 @@ public class QuestAnswerService {
 						AiAnswerType.TEXT.getType()));
 				aiAnswerRepository.save(aiAnswer);
 			}
+
+			if (type.equals(QuestAnswerTypeNo.TEXT_TO_IMAGE_ART.getType())) {
+				String encodedAiAnswerResponse = openAiClient.writePetTextToImageAnswer(pet, quest, questAnswer);
+				String uploadedImageUrl = s3UploadUtil.uploadS3ByEncodedFile(encodedAiAnswerResponse);
+				AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
+					CreateAiAnswerRequestDto.createImageAiAnswerRequestDto(uploadedImageUrl, AiAnswerType.IMAGE.getType()));
+				aiAnswerRepository.save(aiAnswer);
+			}
+
 		}, () -> {
 		});
 	}
 
-	private void requestAiAnswerByImageType(User user, Pet pet, Quest quest, QuestAnswer questAnswer, String imageUrl) {
+	private void requestAiAnswerByImageType(User user, Pet pet, Quest quest, QuestAnswer questAnswer, String imageUrl,
+		MultipartFile imageFile) {
 		Long questId = quest.getId();
 		List<String> personalities = petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(
 			pet.getId(), false);
