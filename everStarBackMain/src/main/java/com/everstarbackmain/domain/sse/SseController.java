@@ -2,6 +2,7 @@ package com.everstarbackmain.domain.sse;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,20 +30,11 @@ public class SseController {
 
 	@GetMapping(value = "/connect/{pet-id}", produces = "text/event-stream")
 	public SseEmitter connect(
-		@RequestHeader(value="Last-Event-ID", required = false, defaultValue = "") String lastEventId,
-		HttpServletResponse response, Authentication authentication){
-
+		@RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId,
+		@PathVariable(value = "pet-id") Long petId, HttpServletResponse response, Authentication authentication) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
-		Pet pet = petRepository.findByUserAndIsDeleted(user, false).orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
-		Long petId = pet.getId();
-
 		response.setHeader("X-Accel-Buffering", "no");
-		return sseService.connect(petId, lastEventId);
+		return sseService.connect(user, petId, lastEventId);
 	}
 }
 
-
-// Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
-// 	.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
-
-// User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();

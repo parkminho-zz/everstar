@@ -8,7 +8,7 @@ import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.quest.model.Quest;
 import com.everstarbackmain.domain.quest.repository.QuestRepository;
 import com.everstarbackmain.domain.quest.responseDto.QuestDetailResponseDto;
-import com.everstarbackmain.domain.quest.util.QuestScheduler;
+// import com.everstarbackmain.domain.quest.util.QuestScheduler;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
@@ -24,7 +24,7 @@ public class QuestService {
 
 	private final QuestRepository questRepository;
 	private final PetRepository petRepository;
-	private final QuestScheduler questScheduler;
+	// private final QuestScheduler questScheduler;
 
 	@Transactional
 	public void startInitialQuest(User user, Long petId) {
@@ -36,7 +36,7 @@ public class QuestService {
 
 		// 퀘스트 수신 및 스케줄링
 		processQuestForPet(pet, initialQuest);
-		questScheduler.scheduleNextDayQuest(user, petId);
+		// questScheduler.scheduleNextDayQuest(user, petId);
 	}
 
 	public QuestDetailResponseDto getQuestDetail(Long petId, Long questId) {
@@ -64,7 +64,7 @@ public class QuestService {
 		processQuestForPet(pet, quest);
 
 		// 이후의 스케줄링 작업 (퀘스트 잘 처리되나 확인 필요 함)
-		questScheduler.scheduleNextDayQuest(user, petId);
+		// questScheduler.scheduleNextDayQuest(user, petId);
 	}
 
 	private void processQuestForPet(Pet pet, Quest quest) {

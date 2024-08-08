@@ -3,7 +3,6 @@ package com.everstarbackmain.domain.pet.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,13 +18,12 @@ import com.everstarbackmain.domain.pet.requestdto.UpdatePetIntroductionDto;
 import com.everstarbackmain.domain.pet.responsedto.EnrolledPetsResponseDto;
 import com.everstarbackmain.domain.pet.responsedto.MyPagePetInfoResponseDto;
 import com.everstarbackmain.domain.petterLetter.util.PetLetterScheduler;
-import com.everstarbackmain.domain.quest.util.QuestScheduler;
+// import com.everstarbackmain.domain.quest.util.QuestScheduler;
 import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;
 import com.everstarbackmain.domain.sentimentAnalysis.repository.SentimentAnalysisRepository;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
-import com.everstarbackmain.global.security.auth.PrincipalDetails;
 import com.everstarbackmain.global.util.S3UploadUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -42,7 +40,7 @@ public class PetService {
 	private final MemorialBookRepository memorialBookRepository;
 	private final SentimentAnalysisRepository sentimentAnalysisRepository;
 	private final PetLetterScheduler petLetterScheduler;
-	private final QuestScheduler questScheduler;
+	// private final QuestScheduler questScheduler;
 	private final S3UploadUtil s3UploadUtil;
 
 	@Transactional
