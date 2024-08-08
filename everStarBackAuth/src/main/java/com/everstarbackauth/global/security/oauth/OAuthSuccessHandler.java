@@ -41,7 +41,7 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 
 	private String sendNotAuthenticatedAuthUrl(User user) {
 		log.info("auth server: notAuthenticated");
-		return UriComponentsBuilder.fromUriString("http://localhost:3000/signup/" + user.getEmail())
+		return UriComponentsBuilder.fromUriString("https://i11b101.p.ssafy.io/signup/" + user.getEmail())
 			.build()
 			.toString();
 	}
@@ -49,7 +49,7 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 	private String sendVerifiedAuthUrl(User user) {
 		String token = jwtUtil.getAccessToken(user);
 		log.info("auth server - accessToken : {}", token);
-		return UriComponentsBuilder.fromUriString("http://localhost:3000/oauth/" + token)
+		return UriComponentsBuilder.fromUriString("https://i11b101.p.ssafy.io/oauth/" + token)
 			.build()
 			.toString();
 	}
