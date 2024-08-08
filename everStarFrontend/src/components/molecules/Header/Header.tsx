@@ -8,6 +8,7 @@ import { PostitIcons } from 'components/atoms/symbols/Postit/PostitIcons';
 import { RocketIcons } from 'components/atoms/symbols/Rocket/RocketIcons';
 import { RootState } from 'store/Store';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 interface Props {
   type: 'earth' | 'everstar' | 'mypage';
@@ -15,8 +16,9 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({ type, className }) => {
+  const params = useParams();
   const profileImageUrl = useSelector(
-    (state: RootState) => state.pet.petDetails?.profileImageUrl || '',
+    (state: RootState) => state.pet.petDetails?.profileImageUrl || ''
   );
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
   const navigate = useNavigate();
@@ -36,7 +38,7 @@ export const Header: React.FC<Props> = ({ type, className }) => {
   };
 
   const handlePostitIconClick = () => {
-    navigate(`/everstar/${petId}/message`);
+    navigate(`/everstar/${params.pet}/message`);
   };
 
   const handleExploreClick = () => {
@@ -67,22 +69,22 @@ export const Header: React.FC<Props> = ({ type, className }) => {
         onClick={handleLetterIconClick}
         onMouseEnter={() => handleMouseEnter('letter')}
         onMouseLeave={handleMouseLeave}
-        className="cursor-pointer"
+        className='cursor-pointer'
       />
       <LetterboxIcons
         variant={hoveredIcon === 'letterbox' ? 'letterbox-text' : 'letterbox'}
         onClick={handleLetterBoxIconClick}
         onMouseEnter={() => handleMouseEnter('letterbox')}
         onMouseLeave={handleMouseLeave}
-        className="cursor-pointer"
+        className='cursor-pointer'
       />
       <Avatar
         size={hoveredIcon === 'avatar' ? 'text' : 'small'}
-        name="마이페이지"
+        name='마이페이지'
         onClick={handleAvatarIconClick}
         onMouseEnter={() => handleMouseEnter('avatar')}
         onMouseLeave={handleMouseLeave}
-        className="cursor-pointer"
+        className='cursor-pointer'
         src={profileImageUrl}
       />
     </>
@@ -93,26 +95,26 @@ export const Header: React.FC<Props> = ({ type, className }) => {
       <>
         <PostitIcons
           variant={hoveredIcon === 'postit' ? 'postit-text' : 'postit'}
-          text="응원메시지"
+          text='응원메시지'
           onClick={handlePostitIconClick}
           onMouseEnter={() => handleMouseEnter('postit')}
           onMouseLeave={handleMouseLeave}
-          className="cursor-pointer"
+          className='cursor-pointer'
         />
         <RocketIcons
           variant={hoveredIcon === 'rocket' ? 'rocket-text' : 'rocket'}
           onClick={handleExploreClick}
           onMouseEnter={() => handleMouseEnter('rocket')}
           onMouseLeave={handleMouseLeave}
-          className="cursor-pointer"
+          className='cursor-pointer'
         />
         <Avatar
           size={hoveredIcon === 'avatar' ? 'text' : 'small'}
-          name="마이페이지"
+          name='마이페이지'
           onClick={handleAvatarIconClick}
           onMouseEnter={() => handleMouseEnter('avatar')}
           onMouseLeave={handleMouseLeave}
-          className="cursor-pointer"
+          className='cursor-pointer'
           src={profileImageUrl}
         />
       </>
@@ -121,20 +123,24 @@ export const Header: React.FC<Props> = ({ type, className }) => {
   } else if (type === 'mypage') {
     content = (
       <>
-        <div className="w-6 h-6" />
+        <div className='w-6 h-6' />
         <LogoIcons
-          variant={hoveredIcon === 'small-star-img' ? 'star-text' : 'small-star-img'}
+          variant={
+            hoveredIcon === 'small-star-img' ? 'star-text' : 'small-star-img'
+          }
           onClick={handleStarIconClick}
           onMouseEnter={() => handleMouseEnter('small-star-img')}
           onMouseLeave={handleMouseLeave}
-          className="cursor-pointer"
+          className='cursor-pointer'
         />
         <LogoIcons
-          variant={hoveredIcon === 'small-earth-img' ? 'earth-text' : 'small-earth-img'}
+          variant={
+            hoveredIcon === 'small-earth-img' ? 'earth-text' : 'small-earth-img'
+          }
           onClick={handleEarthIconClick}
           onMouseEnter={() => handleMouseEnter('small-earth-img')}
           onMouseLeave={handleMouseLeave}
-          className="cursor-pointer"
+          className='cursor-pointer'
         />
       </>
     );
@@ -152,9 +158,15 @@ export const Header: React.FC<Props> = ({ type, className }) => {
     <div
       className={`flex h-14 items-center justify-center px-4 md:px-8 lg:px-12 relative border-b border-black ${className}`}
     >
-      <div className={`flex items-center justify-between w-full max-w-screen-lg`}>
-        <LogoIcons variant={logoVariant} onClick={logoOnClick()} className="cursor-pointer" />
-        <div className="inline-flex items-center justify-center gap-8 py-2 pl-6 pr-0 md:gap-16 lg:gap-24">
+      <div
+        className={`flex items-center justify-between w-full max-w-screen-lg`}
+      >
+        <LogoIcons
+          variant={logoVariant}
+          onClick={logoOnClick()}
+          className='cursor-pointer'
+        />
+        <div className='inline-flex items-center justify-center gap-8 py-2 pl-6 pr-0 md:gap-16 lg:gap-24'>
           {content}
         </div>
       </div>

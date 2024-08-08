@@ -24,7 +24,7 @@ export const SearchStar = (): JSX.Element => {
     try {
       const result = await refetch();
       if (result.data) {
-        navigate(`/everstar/${result.data.id}`);
+        navigate(`/everstar/${result.data.data.id}`);
       }
     } catch (error) {
       console.error('Error fetching random pet:', error);

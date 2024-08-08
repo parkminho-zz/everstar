@@ -41,7 +41,7 @@ export const EverStarCheerMessage: React.FC<
         color: item.color.toLowerCase() || '',
         cheeringMessageId: item.cheeringMessageId,
         petId: petId,
-      }),
+      })
     ) || [];
 
   console.log('Mapped postItCards:', postItCards);

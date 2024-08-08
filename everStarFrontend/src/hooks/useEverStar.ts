@@ -1,13 +1,27 @@
 import { useSelector } from 'react-redux';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+  UseMutationOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
 
 import {
   fetchCheeringPet,
   fetchOtherPetDetails,
   fetchCheeringPetDelete,
   fetchPetExplore,
+  Cheering,
+  fetchPetPost,
+  fetchPetIntroduction,
 } from '../api/everStarApi';
 import { RootState } from 'store/Store';
+
+interface UpdatePetIntroductionVariables {
+  introduction: string;
+  petId: number;
+}
 
 export const useFetchCheeringPetDelete = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
@@ -55,20 +69,20 @@ export const useFetchOtherPetDetails = () => {
 };
 
 export const useFetchCheeringPet = () => {
-  const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
+  // const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
   const token = useSelector((state: RootState) => state.auth.accessToken);
 
+  const params = useParams();
   return useQuery({
-    queryKey: ['CheerPet', petId],
+    queryKey: ['CheerPet', params.pet],
     queryFn: async () => {
-      if (!petId || !token) {
+      if (!params.pet || !token) {
         throw new Error('Missing petId or token');
       }
-      const cheer = await fetchCheeringPet(petId, token);
-      console.log(cheer);
+      const cheer = await fetchCheeringPet(Number(params.pet), token);
       return cheer;
     },
-    enabled: !!token && petId !== null,
+    enabled: !!token && params.pet !== null,
   });
 };
 
@@ -84,10 +98,73 @@ export const useFetchPetExplore = () => {
       }
 
       const explore = await fetchPetExplore(petId, token);
-      sessionStorage.setItem('petDetails', JSON.stringify(explore.data));
+      sessionStorage.setItem('diffPetDetails', JSON.stringify(explore.data));
       console.log(explore);
       return explore;
     },
-    enabled: !!token && petId !== null,
+    enabled: false,
+  });
+};
+
+export const useFetchPetPost = (
+  token: string,
+  petId: number,
+  paramsId: number,
+  options?: UseMutationOptions<
+    Cheering,
+    Error,
+    { content: string; color: string; isAnonymous: boolean }
+  >
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    Cheering,
+    Error,
+    { content: string; color: string; isAnonymous: boolean }
+  >({
+    mutationFn: (data) => {
+      return fetchPetPost(data, token, petId, paramsId);
+    },
+    ...options,
+    onSuccess: (data) => {
+      console.log('Successfully post pet:', data);
+      queryClient.invalidateQueries({ queryKey: ['CheerPet', paramsId] });
+    },
+    onError: (error) => {
+      console.error('Error post pet:', error);
+    },
+  });
+};
+
+export const useUpdatePetIntroduction = (
+  options?: UseMutationOptions<unknown, Error, UpdatePetIntroductionVariables>
+) => {
+  const queryClient = useQueryClient();
+  const token = useSelector((state: RootState) => state.auth.accessToken);
+
+  return useMutation<unknown, Error, UpdatePetIntroductionVariables>({
+    mutationFn: ({ introduction, petId }) => {
+      if (!token) {
+        throw new Error('토큰이 없습니다');
+      }
+      return fetchPetIntroduction(introduction, token, petId);
+    },
+    onSuccess: (data, variables, context) => {
+      console.log('Successfully updated pet introduction:', data);
+      queryClient.invalidateQueries({
+        queryKey: ['petDetails', variables.introduction],
+      });
+      if (options?.onSuccess) {
+        options.onSuccess(data, variables, context);
+      }
+    },
+    onError: (error, variables, context) => {
+      console.error('Error updating pet introduction:', error);
+      if (options?.onError) {
+        options.onError(error, variables, context);
+      }
+    },
+    ...options,
   });
 };

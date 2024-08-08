@@ -1,35 +1,81 @@
 import { useSelector } from 'react-redux';
-import { useMutation } from '@tanstack/react-query';
+import {
+  UseMutationOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { RootState } from 'store/Store';
-import { fetchLetterPost } from 'api/earthApi';
+import {
+  fetchLetterPet,
+  fetchLetterPetDetail,
+  fetchLetterPost,
+  Letter,
+} from 'api/earthApi';
 
-// 타입 정의 (필요에 따라 수정)
-interface LetterResponse {
-  // 예시로, API 응답에 맞게 정의
-  success: boolean;
-  message?: string;
-}
+export const useFetchLetterPost = (
+  token: string,
+  petId: number,
+  options?: UseMutationOptions<
+    Letter,
+    Error,
+    { content: string; image: string }
+  >
+) => {
+  const queryClient = useQueryClient();
 
-export const usePostLetter = () => {
-  // 리덕스에서 petId와 token을 가져오기
+  return useMutation<Letter, Error, { content: string; image: string }>({
+    mutationFn: (data) => {
+      return fetchLetterPost(data, token, petId);
+    },
+    ...options,
+    onSuccess: (data) => {
+      console.log('Successfully post pet:', data);
+      queryClient.invalidateQueries({ queryKey: ['Letter', petId] });
+    },
+    onError: (error) => {
+      console.error('Error adding pet:', error);
+    },
+  });
+};
+
+export const useFetchLetterPet = () => {
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
   const token = useSelector((state: RootState) => state.auth.accessToken);
 
-  // useMutation 훅을 통해 편지 전송 API 호출을 관리
-  return useMutation<LetterResponse, Error, { formData: FormData }>({
-    mutationFn: async ({ formData }) => {
+  return useQuery({
+    queryKey: ['LetterPet', petId],
+    queryFn: async () => {
       if (!petId || !token) {
         throw new Error('Missing petId or token');
       }
-      return fetchLetterPost(petId, formData, token);
+      const letter = await fetchLetterPet(Number(petId), token);
+      return letter;
     },
-    onSuccess: (data) => {
-      console.log('Letter posted successfully:', data);
-      // 성공 시 작업을 추가할 수 있음
+    enabled: !!token && petId !== null,
+  });
+};
+
+export const useFetchLetterPetDetail = () => {
+  const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
+  const token = useSelector((state: RootState) => state.auth.accessToken);
+  const letterId = useSelector(
+    (state: RootState) => state.pet.petDetails?.userId
+  );
+
+  return useQuery({
+    queryKey: ['LetterPet', petId],
+    queryFn: async () => {
+      if (!petId || !token) {
+        throw new Error('Missing petId or token');
+      }
+      const letter = await fetchLetterPetDetail(
+        Number(petId),
+        token,
+        Number(letterId)
+      );
+      return letter;
     },
-    onError: (error) => {
-      console.error('Error posting letter:', error);
-      // 실패 시 작업을 추가할 수 있음
-    },
+    enabled: !!token && petId !== null,
   });
 };

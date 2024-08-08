@@ -12,6 +12,7 @@ interface CheerMessageWriteProps {
   onVerify: (code: string) => void;
   text: string;
   height?: string;
+  infoText?: string;
 }
 
 export const CheerMessageWrite: React.FC<CheerMessageWriteProps> = ({
@@ -20,11 +21,11 @@ export const CheerMessageWrite: React.FC<CheerMessageWriteProps> = ({
   onVerify,
   text,
 }) => {
-  const [verificationCode] = useState('');
+  const [message, setMessage] = useState('');
   const [isToggleOn, setIsToggleOn] = useState<'on' | 'off'>('off');
 
   const handleVerify = () => {
-    onVerify(verificationCode);
+    onVerify(message);
   };
 
   const handleToggleChange = (status: 'on' | 'off') => {
@@ -45,9 +46,12 @@ export const CheerMessageWrite: React.FC<CheerMessageWriteProps> = ({
               className=''
               label='내용'
               showInfoText={true}
-              infoText=''
+              infoText={message.length ? `${message.length}/255` : ''}
               infoTextAlign='left'
               showStar={false}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              maxLength={255}
             />
           </div>
         </div>
