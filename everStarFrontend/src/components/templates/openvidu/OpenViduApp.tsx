@@ -14,35 +14,37 @@ import { InputField } from 'components/organics/input/InputFields';
 
 const chance = new Chance();
 
-function generateSessionId(): string {
-  const word1 = chance.first();
-  const word2 = chance.country({ full: true }).split(' ')[0];
-  const word3 = chance.color({ format: 'name' });
-  const word4 = chance.animal();
+// function generateSessionId(): string {
+//   const word1 = chance.first();
+//   const word2 = chance.country({ full: true }).split(' ')[0];
+//   const word3 = chance.color({ format: 'name' });
+//   const word4 = chance.animal();
 
-  return `${word1}-${word2}-${word3}-${word4}`.toLowerCase().replace(/\s+/g, '-');
-}
+//   return `${word1}-${word2}-${word3}-${word4}`.toLowerCase().replace(/\s+/g, '-');
+// }
 
-const sessionId = generateSessionId();
-console.log(sessionId);
+// const sessionId = generateSessionId();
+// console.log(sessionId);
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i11b101.p.ssafy.io/';
 
-export const OpenViduAppWrapper: React.FC = () => {
-  const { sessionId } = useParams<{ sessionId: string }>();
-  return <OpenViduApp sessionId={sessionId} />;
-};
+// export const OpenViduAppWrapper: React.FC = () => {
+//   const { sessionId } = useParams<{ sessionId: string }>();
+//   return <OpenViduApp sessionId={sessionId} />;
+// };
 
 type Props = {
-  sessionId?: string;
+  sessionId: string;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
+export const OpenViduApp = () => {
+  const { sessionId } = useParams<Props>();
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [OV, setOV] = useState<OpenVidu | null>(null);
-  const [mySessionId, setMySessionId] = useState<string>(sessionId || generateSessionId());
+  const [mySessionId, setMySessionId] = useState<string>(sessionId || 'default_session_id');
   const [myUserName, setMyUserName] = useState<string>(
     'Participant' + Math.floor(Math.random() * 100)
   );
@@ -61,6 +63,9 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
     MediaDeviceInfo | Device | undefined
   >(undefined);
 
+  useEffect(() => {
+    console.log('세션아이디 params:', sessionId);
+  }, [sessionId]);
   const clip = () => {
     const textarea = document.createElement('textarea');
     document.body.appendChild(textarea);
@@ -139,7 +144,7 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
       console.warn(exception);
     });
 
-    getToken().then((token) => {
+    createToken(mySessionId).then((token) => {
       mySession
         .connect(token, { clientData: myUserName })
         .then(async () => {
@@ -235,7 +240,7 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
       const OVScreen = new OpenVidu();
       const sessionScreen = OVScreen.initSession();
 
-      getToken().then((token) => {
+      createToken(mySessionId).then((token) => {
         sessionScreen.connect(token).then(() => {
           const publisherScreen = OVScreen.initPublisher(undefined, {
             videoSource: 'screen',
@@ -277,14 +282,14 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
   //   }
   // };
 
-  const getToken = async (): Promise<string> => {
-    const sessionId = await createSession(mySessionId);
-    return createToken(sessionId);
-  };
+  // const getToken = async (): Promise<string> => {
+  //   const sessionId = await createSession(mySessionId);
+  //   return createToken(sessionId);
+  // };
 
   const createSession = async (sessionId: string): Promise<string> => {
     const response = await axios.post(
-      `${APPLICATION_SERVER_URL}api/chat/sessions`,
+      `${APPLICATION_SERVER_URL}api/sessions`,
       { customSessionId: sessionId },
       { headers: { 'Content-Type': 'application/json' } }
     );
@@ -293,10 +298,12 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
 
   const createToken = async (sessionId: string): Promise<string> => {
     const response = await axios.post(
-      `${APPLICATION_SERVER_URL}api/chat/sessions/${sessionId}/connections`,
+      `${APPLICATION_SERVER_URL}api/sessions/${sessionId}/connections`,
       {},
       { headers: { 'Content-Type': 'application/json' } }
     );
+
+    console.log('[토큰]: ', response.data);
     return response.data; // The token
   };
 

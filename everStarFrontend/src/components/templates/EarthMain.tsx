@@ -7,15 +7,7 @@ import { RootState } from 'store/Store';
 import { ProgressCard } from 'components/organics/ProgressCard/ProgressCard';
 
 type ViewMemorialBookSize = 'large' | 'medium' | 'small';
-type RainbowColor =
-  | 'none'
-  | 'red'
-  | 'orange'
-  | 'yellow'
-  | 'green'
-  | 'blue'
-  | 'indigo'
-  | 'violet';
+type RainbowColor = 'none' | 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'indigo' | 'violet';
 
 interface EarthMainProps {
   title: string;
