@@ -49,6 +49,11 @@ const meta: Meta<typeof InputField> = {
       description: '플레이스홀더 텍스트',
       defaultValue: '비밀번호를 입력해 주세요',
     },
+    readOnlyState: {
+      control: 'boolean',
+      description: '편집 불가 여부',
+      defaultValue: false,
+    },
   },
 };
 
@@ -66,6 +71,7 @@ export const Default: Story = {
     text: '',
     showCheckIcon: false,
     placeholder: '비밀번호를 입력해 주세요',
+    readOnlyState: false,
   },
 };
 
