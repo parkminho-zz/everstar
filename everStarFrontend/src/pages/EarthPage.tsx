@@ -9,7 +9,7 @@ import { LetterDetailTemplate } from 'components/templates/LetterDetailTemplate'
 import { LetterWriteTemplate } from 'components/templates/LetterWriteTemplate';
 import { QuestTemplate } from 'components/templates/QuestTemplate';
 import { QuestOpenviduTemplate } from 'components/templates/QuestOpenviduTemplate';
-import { OpenViduAppWrapper } from 'components/templates/openvidu/OpenViduApp';
+import { OpenViduApp } from 'components/templates/openvidu/OpenViduApp';
 import bgImage from 'assets/images/bg-earth.webp';
 
 export const EarthPage: React.FC = () => {
@@ -88,8 +88,8 @@ export const EarthPage: React.FC = () => {
                 />
               }
             />
-            <Route path='openvidu/sessionid/:sessionId' element={<OpenViduAppWrapper />} />
-            <Route path='openvidu/sessionid' element={<OpenViduAppWrapper />} />
+            <Route path='openvidu/sessionid/:sessionId' element={<OpenViduApp />} />
+            {/* <Route path='openvidu/sessionid' element={<OpenViduAppWrapper />} /> */}
           </Routes>
         </div>
         <Footer className='w-full mt-auto' />
