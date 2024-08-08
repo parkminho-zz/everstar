@@ -59,7 +59,7 @@ public class PetService {
 
 		// Scheduler
 		petLetterScheduler.scheduleSendPetLetter(pet);
-		questScheduler.scheduleInitialQuest(user, pet.getId());
+		// questScheduler.scheduleInitialQuest(user, pet.getId());
 	}
 
 	private void addPersonalities(Pet pet, CreatePetRequestDto createPetRequestDto) {

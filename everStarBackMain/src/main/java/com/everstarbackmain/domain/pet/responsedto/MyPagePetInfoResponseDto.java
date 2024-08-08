@@ -22,6 +22,7 @@ public class MyPagePetInfoResponseDto {
 	private String name;
 	private PetGender gender;
 	private Integer age;
+	private Integer questIndex;
 	private LocalDate memorialDate;
 	private String relationship;
 	private String species;
@@ -36,6 +37,7 @@ public class MyPagePetInfoResponseDto {
 			.name(pet.getName())
 			.gender(pet.getGender())
 			.age(pet.getAge())
+			.questIndex(pet.getQuestIndex())
 			.memorialDate(pet.getMemorialDate())
 			.relationship(pet.getRelationship())
 			.species(pet.getSpecies())
