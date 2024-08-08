@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from "react";
-import { StreamManager } from "openvidu-browser";
+// Video.tsx
+import React, { useEffect, useRef } from 'react';
+import { StreamManager } from 'openvidu-browser';
 
 interface Props {
   streamManager: StreamManager;
@@ -18,7 +19,7 @@ export const Video: React.FC<Props> = ({ streamManager }) => {
     <video
       ref={videoRef}
       autoPlay
-      className="w-full h-auto border border-gray-300 rounded-lg shadow-md"
+      className='w-full h-auto border border-gray-300 rounded-lg shadow-md'
     />
   );
 };

@@ -23,6 +23,7 @@ export const QuestRtcTemplate: React.FC<InputContainerProps> = ({
       />
       <div className='absolute inset-0 flex items-center justify-center'>
         <InputContainer
+          letterCardMessage='가까운 사람들과 화상통화로 마음을 나눠보세요!'
           headerText={headerText}
           letterCardType='default'
           letterCardColor='white'

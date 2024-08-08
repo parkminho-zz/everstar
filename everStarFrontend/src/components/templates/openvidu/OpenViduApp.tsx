@@ -1,34 +1,34 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { OpenVidu, Publisher, Subscriber, Session, StreamManager } from "openvidu-browser";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { UserVideoComponent } from "./UserVideoComponent";
-import Chance from "chance";
-// import { Device } from "openvidu-browser"; // 필요한 경우 OpenVidu의 Device 타입을 가져옵니다.
-import { CircleButton } from "../../atoms/buttons/CircleButton";
+import React, { useEffect, useState } from 'react';
+import { OpenVidu, Publisher, Subscriber, Session, StreamManager, Device } from 'openvidu-browser';
+import { useParams } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
+import axios from 'axios';
+import Chance from 'chance';
+
+import { Video } from './Video';
+import { CircleButton } from '../../atoms/buttons/CircleButton';
+import { Glass } from 'components/molecules/Glass/Glass';
+import { InputField } from 'components/organics/input/InputFields';
 
 const chance = new Chance();
 
-let OVScreen: OpenVidu;
-let sessionScreen: Session | null = null;
-let screensharing = false;
-
 function generateSessionId(): string {
   const word1 = chance.first();
-  const word2 = chance.country({ full: true }).split(" ")[0];
-  const word3 = chance.color({ format: "name" });
+  const word2 = chance.country({ full: true }).split(' ')[0];
+  const word3 = chance.color({ format: 'name' });
   const word4 = chance.animal();
 
-  return `${word1}-${word2}-${word3}-${word4}`.toLowerCase().replace(/\s+/g, "-");
+  return `${word1}-${word2}-${word3}-${word4}`.toLowerCase().replace(/\s+/g, '-');
 }
 
 const sessionId = generateSessionId();
 console.log(sessionId);
 
 const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === "production" ? "" : "https://i11b101.p.ssafy.io/";
+  process.env.NODE_ENV === 'production' ? '' : 'https://i11b101.p.ssafy.io/';
 
 export const OpenViduAppWrapper: React.FC = () => {
   const { sessionId } = useParams<{ sessionId: string }>();
@@ -41,10 +41,11 @@ type Props = {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [OV, setOV] = useState<OpenVidu | null>(null);
   const [mySessionId, setMySessionId] = useState<string>(sessionId || generateSessionId());
   const [myUserName, setMyUserName] = useState<string>(
-    "Participant" + Math.floor(Math.random() * 100)
+    'Participant' + Math.floor(Math.random() * 100)
   );
   const [session, setSession] = useState<Session | undefined>(undefined);
   const [mainStreamManager, setMainStreamManager] = useState<StreamManager | undefined>(undefined);
@@ -55,17 +56,29 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
   const [isVideoMuted, setIsVideoMuted] = useState<boolean>(false);
   const [isSpeakerMuted, setIsSpeakerMuted] = useState<boolean>(false);
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
-  //   const [currentVideoDevice, setCurrentVideoDevice] = useState<
-  //     MediaDeviceInfo | Device | undefined
-  //   >(undefined);
+  const [screensharing, setScreensharing] = useState<boolean>(false);
+  const [exitClick, setExitClick] = useState<boolean>(false);
+  const [currentVideoDevice, setCurrentVideoDevice] = useState<
+    MediaDeviceInfo | Device | undefined
+  >(undefined);
 
   const clip = () => {
-    const textarea = document.createElement("textarea");
+    const textarea = document.createElement('textarea');
     document.body.appendChild(textarea);
-    const url = `${window.location.href}/${mySessionId}`;
+    const currentUrl = `${window.location.href}`;
+    const slashCount = (currentUrl.match(/\//g) || []).length;
+
+    let url;
+    if (slashCount === 5) {
+      // /가 5개인 경우 sessionId를 추가
+      url = `${currentUrl}/${mySessionId}`;
+    } else {
+      // /가 6개인 경우 그대로 복사
+      url = currentUrl;
+    }
     textarea.value = url;
     textarea.select();
-    document.execCommand("copy");
+    document.execCommand('copy');
     alert(`URL이 복사되었습니다. ${textarea.value}`);
     document.body.removeChild(textarea);
   };
@@ -76,10 +89,10 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
       leaveSession();
     };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, []);
 
@@ -106,8 +119,8 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
     setOV(OV);
     const mySession = OV.initSession();
 
-    mySession.on("streamCreated", (event: any) => {
-      console.log("여기 시작됨 created");
+    mySession.on('streamCreated', (event: any) => {
+      console.log('여기 시작됨 created');
       const subscriber = mySession.subscribe(event.stream, undefined);
       setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
 
@@ -119,11 +132,11 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
       //   });
     });
 
-    mySession.on("streamDestroyed", (event: any) => {
+    mySession.on('streamDestroyed', (event: any) => {
       deleteSubscriber(event.stream.streamManager);
     });
 
-    mySession.on("exception", (exception: any) => {
+    mySession.on('exception', (exception: any) => {
       console.warn(exception);
     });
 
@@ -134,39 +147,42 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
           const publisher = await OV.initPublisherAsync(undefined, {
             audioSource: undefined,
             videoSource: undefined,
-            publishAudio: true,
-            publishVideo: true,
-            resolution: "640x480",
+            publishAudio: !isAudioMuted,
+            publishVideo: !isVideoMuted,
+            resolution: '640x480',
             frameRate: 30,
-            insertMode: "APPEND",
+            insertMode: 'APPEND',
             mirror: false,
           });
 
           mySession.publish(publisher);
 
-          //   const devices: Device[] = await OV.getDevices();
-          //   const videoDevices = devices.filter((device) => device.kind === "videoinput");
-          //   const currentVideoDeviceId = publisher.stream
-          //     .getMediaStream()
-          //     .getVideoTracks()[0]
-          //     .getSettings().deviceId;
-          //   const currentVideoDevice = videoDevices.find(
-          //     (device) => device.deviceId === currentVideoDeviceId
-          //   );
+          const devices: Device[] = await OV.getDevices();
+          const videoDevices = devices.filter((device) => device.kind === 'videoinput');
+          const currentVideoDeviceId = publisher.stream
+            .getMediaStream()
+            .getVideoTracks()[0]
+            .getSettings().deviceId;
+          const currentVideoDevice = videoDevices.find(
+            (device) => device.deviceId === currentVideoDeviceId
+          );
 
-          //   setCurrentVideoDevice(currentVideoDevice);
+          setCurrentVideoDevice(currentVideoDevice);
           setMainStreamManager(publisher);
           setPublisher(publisher);
           setSession(mySession);
+
+          console.log('연결 세션 ID:', mySessionId);
+          console.log('연결 유저 ID:', myUserName);
         })
         .catch((error) => {
-          console.log("There was an error connecting to the session:", error.code, error.message);
+          console.log('There was an error connecting to the session:', error.code, error.message);
         });
     });
   };
 
   //   const joinSession = () => {
-  //     const OVs = new OpenVidu();
+  //     const OVs = new OaccessAllowedpenVidu();
   //     setOV(OVs);
   //     setSession(OVs.initSession());
   //   };
@@ -178,94 +194,89 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
 
     setSession(undefined);
     setSubscribers([]);
-    setMyUserName("Participant" + Math.floor(Math.random() * 100));
+    setMyUserName('Participant' + Math.floor(Math.random() * 100));
     setMainStreamManager(undefined);
     setPublisher(undefined);
   };
 
   const toggleAudio = () => {
+    console.log('audio: ', isAudioMuted);
+
     if (publisher) {
-      publisher.publishAudio(!isAudioMuted);
       setIsAudioMuted(!isAudioMuted);
+      publisher.publishAudio(isAudioMuted);
     }
   };
 
   const toggleVideo = () => {
     if (publisher) {
-      publisher.publishVideo(!isVideoMuted);
       setIsVideoMuted(!isVideoMuted);
+      publisher.publishVideo(isVideoMuted);
     }
   };
 
   const toggleSpeaker = () => {
-    subscribers.forEach((subscriber) => {
-      if (subscriber.stream) {
-        const audioTracks = subscriber.stream.getMediaStream().getAudioTracks();
-        audioTracks.forEach((track) => {
-          track.enabled = !isSpeakerMuted;
-        });
-      }
-    });
     setIsSpeakerMuted(!isSpeakerMuted);
+    subscribers.forEach((subscriber) => {
+      subscriber.subscribeToAudio(isSpeakerMuted);
+    });
   };
 
   const toggleChat = () => {
     setIsChatOpen(!isChatOpen);
   };
 
+  const toggleExit = () => {
+    setExitClick(!exitClick);
+    leaveSession();
+  };
+
   const publishScreenShare = () => {
     if (!screensharing) {
-      const publisherScreen = OVScreen.initPublisher(
-        undefined,
-        {
-          videoSource: "screen",
-          publishAudio: false,
-          mirror: false,
-        },
-        (error) => {
-          if (error) {
-            console.error("Error initializing screen sharing:", error);
-          }
-        }
-      );
+      const OVScreen = new OpenVidu();
+      const sessionScreen = OVScreen.initSession();
 
-      sessionScreen?.publish(publisherScreen).then(() => {
-        screensharing = true;
-        console.log("화면 공유 시작");
-
-        publisherScreen.stream
-          .getMediaStream()
-          .getVideoTracks()[0]
-          .addEventListener("ended", () => {
-            console.log('User pressed the "Stop sharing" button');
-            sessionScreen?.unpublish(publisherScreen);
-            screensharing = false;
-            sessionScreen = null;
-            console.log("화면 공유 중지");
+      getToken().then((token) => {
+        sessionScreen.connect(token).then(() => {
+          const publisherScreen = OVScreen.initPublisher(undefined, {
+            videoSource: 'screen',
+            publishAudio: false,
+            mirror: false,
           });
+
+          publisherScreen.once('accessAllowed', (event) => {
+            publisherScreen.stream
+              .getMediaStream()
+              .getVideoTracks()[0]
+              .addEventListener('ended', () => {
+                console.log('User pressed the "Stop sharing" button');
+                sessionScreen.unpublish(publisherScreen);
+                setScreensharing(false);
+              });
+            sessionScreen.publish(publisherScreen);
+            setScreensharing(true);
+          });
+
+          publisherScreen.once('accessDenied', (event) => {
+            console.warn('ScreenShare: Access Denied');
+          });
+        });
       });
     } else {
-      const publishers = sessionScreen?.streamManagers.filter(
-        (manager) => manager.stream.typeOfVideo === "SCREEN"
-      );
-      if (publishers && publishers.length > 0) {
-        sessionScreen?.unpublish(publishers[0] as Publisher);
-      }
-      sessionScreen = null;
-      screensharing = false;
-      console.log("화면 공유 중지");
+      console.log('화면 공유 중지');
+      setScreensharing(false);
     }
   };
 
-  const sendMessage = (message: string) => {
-    if (session) {
-      session.signal({
-        data: message,
-        to: [],
-        type: "chat",
-      });
-    }
-  };
+  // const sendMessage = (message: string) => {
+  //   if (session) {
+  //     session.signal({
+  //       data: message,
+  //       to: [],
+  //       type: 'chat',
+  //     });
+  //   }
+  // };
 
   const getToken = async (): Promise<string> => {
     const sessionId = await createSession(mySessionId);
@@ -276,7 +287,7 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
     const response = await axios.post(
       `${APPLICATION_SERVER_URL}api/chat/sessions`,
       { customSessionId: sessionId },
-      { headers: { "Content-Type": "application/json" } }
+      { headers: { 'Content-Type': 'application/json' } }
     );
     return response.data; // The sessionId
   };
@@ -285,53 +296,91 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
     const response = await axios.post(
       `${APPLICATION_SERVER_URL}api/chat/sessions/${sessionId}/connections`,
       {},
-      { headers: { "Content-Type": "application/json" } }
+      { headers: { 'Content-Type': 'application/json' } }
     );
     return response.data; // The token
   };
 
+  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const isTabletOrMobile = useMediaQuery({ maxWidth: 1199 });
+
   return (
-    <div className="container">
+    <div className='container'>
+      <Glass
+        variant={isMobile ? 'mobile' : isTabletOrMobile ? 'tablet' : 'desktop'}
+        currentPage={1}
+        totalPages={1}
+        onPageChange={() => console.log('이동')}
+        showPageIndicator={false}
+        className='z-[-1] '
+      />
       {session === undefined ? (
-        <div id="join">
-          <div id="join-dialog" className="jumbotron vertical-center">
-            <h1> Join a video session </h1>
+        <div id='join' className='flex flex-col items-center justify-center w-full h-full'>
+          <div
+            id='join-dialog'
+            className='jumbotron vertical-center w-[390px] h-[316px] flex-shrink-0 bg-white rounded-lg shadow-md flex flex-col justify-center items-center'
+          >
+            <h1 className='kor-h-h2'>화상 채널 입장</h1>
             <form
-              className="form-group"
+              className='form-group'
               onSubmit={(e) => {
+                console.log('세션 ID:', mySessionId);
+                console.log('유저 ID:', myUserName);
                 e.preventDefault();
                 joinSession();
               }}
             >
               <p>
-                <label>Participant: </label>
+                <InputField
+                  state='default'
+                  label='사용자 이름을 입력해주세요'
+                  showLabel={true}
+                  showValidationText={false}
+                  starshow={false}
+                  text={myUserName}
+                  showCheckIcon={false}
+                  onChange={handleChangeUserName}
+                ></InputField>
+                {/* <label></label>
                 <input
-                  className="form-control"
-                  type="text"
-                  id="userName"
+                  className='form-control'
+                  type='text'
+                  id='userName'
                   value={myUserName}
                   onChange={handleChangeUserName}
                   required
-                />
+                /> */}
               </p>
               <p>
-                <label>Session: </label>
+                <InputField
+                  state='disable'
+                  label='세션 ID'
+                  showLabel={true}
+                  showValidationText={false}
+                  starshow={false}
+                  text={mySessionId}
+                  showCheckIcon={false}
+                  readOnlyState={true}
+
+                  // onChange={handleChangeSessionId}
+                ></InputField>
+                {/* <label>Session: </label>
                 <input
-                  className="form-control"
-                  type="text"
-                  id="sessionId"
+                  className='form-control'
+                  type='text'
+                  id='sessionId'
                   value={mySessionId}
                   onChange={handleChangeSessionId}
                   required
                   readOnly
-                />
+                /> */}
               </p>
-              <p className="text-center">
+              <p className='text-center'>
                 <input
-                  className="btn btn-lg btn-success"
-                  name="commit"
-                  type="submit"
-                  value="JOIN"
+                  className='btn btn-lg btn-success'
+                  name='commit'
+                  type='submit'
+                  value='JOIN'
                 />
               </p>
             </form>
@@ -340,17 +389,21 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
       ) : null}
 
       {session !== undefined ? (
-        <div id="session">
-          <div id="session-header">
-            <h1 id="session-title">{mySessionId}</h1>
-            <div className="flex flex-row items-center justify-center">
-              <input
-                className="w-[200px] h-[40px] border rounded-md shadow-md"
-                type="button"
-                id="buttonLeaveSession"
-                onClick={leaveSession}
-                value="Leave session"
-              />
+        <div id='session flex flex-col justify-center items-center'>
+          <div id='session-header' className='flex flex-row justify-between'>
+            <h1 id='session-title' className='kor-h-h2'>
+              {mySessionId}
+            </h1>
+            <input
+              className='w-[200px] h-[40px] border rounded-md shadow-md hover:shadow-md'
+              type='button'
+              id='buttonClip'
+              onClick={clip}
+              value='Copy URL'
+            />
+          </div>
+          <div className='flex flex-row items-center justify-center'>
+            <div className='flex flex-col items-center justify-center'>
               {/* <input
           className="btn btn-large btn-success"
           type="button"
@@ -360,68 +413,76 @@ const OpenViduApp: React.FC<Props> = ({ sessionId }) => {
         /> */}
 
               <CircleButton
-                theme={isAudioMuted ? "white" : "focus"}
+                theme={isAudioMuted ? 'white' : 'hover'}
                 onClick={toggleAudio}
-                icon="mic"
+                icon={isAudioMuted ? 'micOff' : 'mic'}
                 disabled={false}
               />
 
               <CircleButton
-                theme={isVideoMuted ? "focus" : "white"}
+                theme={isVideoMuted ? 'white' : 'hover'}
                 onClick={toggleVideo}
-                icon="video"
+                icon={isVideoMuted ? 'videoOff' : 'video'}
                 disabled={false}
               />
 
               <CircleButton
-                theme={isSpeakerMuted ? "focus" : "white"}
+                theme={isSpeakerMuted ? 'white' : 'hover'}
                 onClick={toggleSpeaker}
-                icon={isSpeakerMuted ? "phoneStop" : "phone"}
+                icon={isSpeakerMuted ? 'phoneStop' : 'phone'}
                 disabled={false}
               />
+            </div>
+            <div className='flex flex-row z-1 bg-mainerror w-[3/5]'>
+              {/* <div id='main-video' className='col-md-6'>
+            </div> */}
+              <div id='video-container' className='flex flex-wrap gap-4 col-md-6'>
+                {mainStreamManager !== undefined ? (
+                  <Video streamManager={mainStreamManager} />
+                ) : null}
 
+                {subscribers.map((sub, i) => (
+                  <div
+                    key={i}
+                    className='box-border stream-container col-md-3'
+                    // onClick={() => handleMainVideoStream(sub)}
+                  >
+                    <Video streamManager={sub} />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
               <CircleButton
-                theme={isChatOpen ? "focus" : "white"}
+                theme={isChatOpen ? 'white' : 'hover'}
                 onClick={toggleChat}
-                icon={"chat"}
+                icon={'chat'}
                 disabled={false}
               />
 
               <CircleButton
-                theme={screensharing ? "focus" : "white"}
+                theme={screensharing ? 'white' : 'hover'}
                 onClick={publishScreenShare}
-                icon={"share"}
+                icon={'share'}
                 disabled={false}
               />
 
-              <input
-                className="w-[200px] h-[40px] border rounded-md shadow-md"
-                type="button"
-                id="buttonClip"
-                onClick={clip}
-                value="Copy URL"
+              <CircleButton
+                theme={exitClick ? 'hover' : 'white'}
+                onClick={toggleExit}
+                icon={'exit'}
+                disabled={false}
               />
             </div>
-          </div>
-
-          <div className="flex flex-row">
-            <div id="main-video" className="col-md-6">
-              {mainStreamManager !== undefined ? (
-                <UserVideoComponent streamManager={mainStreamManager} subscribers={subscribers} />
-              ) : null}
-            </div>
-            <div id="video-container" className="col-md-6">
-              {subscribers.map((sub, i) => (
-                <div
-                  key={i}
-                  className="stream-container"
-                  onClick={() => handleMainVideoStream(sub)}
-                >
-                  <UserVideoComponent streamManager={sub} subscribers={subscribers} />
-                </div>
-              ))}
-            </div>
-            {isChatOpen && <div>채팅창</div>}
+            {isChatOpen && <div className='w-[400px] h-[600px] bg-white shadow-lg'>채팅창</div>}
+            {/* <input
+                className='w-[200px] h-[40px] border rounded-md shadow-md hover:shadow-md'
+                type='button'
+                id='buttonLeaveSession'
+                onClick={leaveSession}
+                value='Leave session'
+              /> */}
           </div>
         </div>
       ) : null}
