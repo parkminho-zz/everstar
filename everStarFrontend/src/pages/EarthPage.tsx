@@ -9,7 +9,7 @@ import { LetterDetailTemplate } from 'components/templates/LetterDetailTemplate'
 import { LetterWriteTemplate } from 'components/templates/LetterWriteTemplate';
 import { QuestTemplate } from 'components/templates/QuestTemplate';
 import { QuestOpenviduTemplate } from 'components/templates/QuestOpenviduTemplate';
-import { OpenViduApp } from 'components/templates/openvidu/OpenViduApp';
+import { OpenViduApp } from 'components/templates/OpenViduApp';
 import bgImage from 'assets/images/bg-earth.webp';
 
 export const EarthPage: React.FC = () => {

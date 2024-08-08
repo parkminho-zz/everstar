@@ -1,53 +1,37 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react/prop-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { OpenVidu, Publisher, Subscriber, Session, StreamManager, Device } from 'openvidu-browser';
+import {
+  OpenVidu,
+  Publisher,
+  Subscriber,
+  Session,
+  StreamManager,
+  Device,
+  StreamEvent,
+  ExceptionEvent,
+} from 'openvidu-browser';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import Chance from 'chance';
-
-import { Video } from './Video';
-import { CircleButton } from '../../atoms/buttons/CircleButton';
+import { CircleButton } from '../atoms/buttons/CircleButton';
 import { Glass } from 'components/molecules/Glass/Glass';
 import { InputField } from 'components/organics/input/InputFields';
-
-const chance = new Chance();
-
-// function generateSessionId(): string {
-//   const word1 = chance.first();
-//   const word2 = chance.country({ full: true }).split(' ')[0];
-//   const word3 = chance.color({ format: 'name' });
-//   const word4 = chance.animal();
-
-//   return `${word1}-${word2}-${word3}-${word4}`.toLowerCase().replace(/\s+/g, '-');
-// }
-
-// const sessionId = generateSessionId();
-// console.log(sessionId);
+import Chatting from 'components/organics/Openvidu/Chatting';
+import UserVideoComponent from '../organics/Openvidu/UserVideoComponent';
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i11b101.p.ssafy.io/';
-
-// export const OpenViduAppWrapper: React.FC = () => {
-//   const { sessionId } = useParams<{ sessionId: string }>();
-//   return <OpenViduApp sessionId={sessionId} />;
-// };
 
 type Props = {
   sessionId: string;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const OpenViduApp = () => {
   const { sessionId } = useParams<Props>();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [OV, setOV] = useState<OpenVidu | null>(null);
-  const [mySessionId, setMySessionId] = useState<string>(sessionId || 'default_session_id');
-  const [myUserName, setMyUserName] = useState<string>(
-    'Participant' + Math.floor(Math.random() * 100)
-  );
+  const [, setOV] = useState<OpenVidu | null>(null);
+  const [mySessionId] = useState<string>(sessionId || 'default_session_id');
+  const [myUserName, setMyUserName] = useState<string>('방문자' + Math.floor(Math.random() * 100));
+  const [userNameOk, setUserNameOk] = useState<boolean>(true);
   const [session, setSession] = useState<Session | undefined>(undefined);
   const [mainStreamManager, setMainStreamManager] = useState<StreamManager | undefined>(undefined);
   const [publisher, setPublisher] = useState<Publisher | undefined>(undefined);
@@ -59,13 +43,12 @@ export const OpenViduApp = () => {
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
   const [screensharing, setScreensharing] = useState<boolean>(false);
   const [exitClick, setExitClick] = useState<boolean>(false);
-  const [currentVideoDevice, setCurrentVideoDevice] = useState<
-    MediaDeviceInfo | Device | undefined
-  >(undefined);
+  const [, setCurrentVideoDevice] = useState<MediaDeviceInfo | Device | undefined>(undefined);
 
   useEffect(() => {
     console.log('세션아이디 params:', sessionId);
   }, [sessionId]);
+
   const clip = () => {
     const textarea = document.createElement('textarea');
     document.body.appendChild(textarea);
@@ -74,10 +57,8 @@ export const OpenViduApp = () => {
 
     let url;
     if (slashCount === 5) {
-      // /가 5개인 경우 sessionId를 추가
       url = `${currentUrl}/${mySessionId}`;
     } else {
-      // /가 6개인 경우 그대로 복사
       url = currentUrl;
     }
     textarea.value = url;
@@ -88,7 +69,6 @@ export const OpenViduApp = () => {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       leaveSession();
     };
@@ -100,19 +80,28 @@ export const OpenViduApp = () => {
     };
   }, []);
 
-  const handleChangeSessionId = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMySessionId(e.target.value);
-  };
+  // 세션 아이디 변경하는 함수 (사용하지는 않는데 혹시 몰라서 남겨둠)
+  // const handleChangeSessionId = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setMySessionId(e.target.value);
+  // };
 
   const handleChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.value;
+    if (name.length > 10) {
+      alert('10글자 이내로 다시 입력하세요');
+      setUserNameOk(false);
+    } else {
+      setUserNameOk(true);
+    }
     setMyUserName(e.target.value);
   };
 
-  const handleMainVideoStream = (stream: StreamManager) => {
-    if (mainStreamManager !== stream) {
-      setMainStreamManager(stream);
-    }
-  };
+  // 메인비디오 스트림 변경하는 함수 (사용하지는 않는데 혹시 몰라서 남겨둠)
+  // const handleMainVideoStream = (stream: StreamManager) => {
+  //   if (mainStreamManager !== stream) {
+  //     setMainStreamManager(stream);
+  //   }
+  // };
 
   const deleteSubscriber = (streamManager: StreamManager) => {
     setSubscribers(subscribers.filter((sub) => sub !== streamManager));
@@ -123,24 +112,26 @@ export const OpenViduApp = () => {
     setOV(OV);
     const mySession = OV.initSession();
 
-    mySession.on('streamCreated', (event: any) => {
-      console.log('여기 시작됨 created');
-      const subscriber = mySession.subscribe(event.stream, undefined);
-      setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
-
-      //   // 오디오 트랙 상태 확인 코드 추가
-      //   const audioTracks = event.stream.getMediaStream().getAudioTracks();
-      //   audioTracks.forEach((track: any) => {
-      //     console.log("Audio Track Label:", track.label);
-      //     console.log("Audio Track Enabled:", track.enabled);
-      //   });
+    subscribers.map((sub) => {
+      console.log('[찐] USER DATA: ', sub.stream.connection.data);
     });
 
-    mySession.on('streamDestroyed', (event: any) => {
+    mySession.on('streamCreated', (event: StreamEvent) => {
+      console.log('여기 시작됨 created');
+
+      subscribers.map((sub) => {
+        console.log('[찐] USER DATA: ', sub.stream.connection.data);
+      });
+
+      const subscriber = mySession.subscribe(event.stream, 'subscriber');
+      setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
+    });
+
+    mySession.on('streamDestroyed', (event: StreamEvent) => {
       deleteSubscriber(event.stream.streamManager);
     });
 
-    mySession.on('exception', (exception: any) => {
+    mySession.on('exception', (exception: ExceptionEvent) => {
       console.warn(exception);
     });
 
@@ -170,26 +161,16 @@ export const OpenViduApp = () => {
           const currentVideoDevice = videoDevices.find(
             (device) => device.deviceId === currentVideoDeviceId
           );
-
           setCurrentVideoDevice(currentVideoDevice);
           setMainStreamManager(publisher);
           setPublisher(publisher);
           setSession(mySession);
-
-          console.log('연결 세션 ID:', mySessionId);
-          console.log('연결 유저 ID:', myUserName);
         })
         .catch((error) => {
           console.log('There was an error connecting to the session:', error.code, error.message);
         });
     });
   };
-
-  //   const joinSession = () => {
-  //     const OVs = new OaccessAllowedpenVidu();
-  //     setOV(OVs);
-  //     setSession(OVs.initSession());
-  //   };
 
   const leaveSession = () => {
     if (session) {
@@ -272,20 +253,10 @@ export const OpenViduApp = () => {
     }
   };
 
-  // const sendMessage = (message: string) => {
-  //   if (session) {
-  //     session.signal({
-  //       data: message,
-  //       to: [],
-  //       type: 'chat',
-  //     });
-  //   }
-  // };
-
-  // const getToken = async (): Promise<string> => {
-  //   const sessionId = await createSession(mySessionId);
-  //   return createToken(sessionId);
-  // };
+  const getToken = async (): Promise<string> => {
+    const sessionId = await createSession(mySessionId);
+    return createToken(sessionId);
+  };
 
   const createSession = async (sessionId: string): Promise<string> => {
     const response = await axios.post(
@@ -320,7 +291,7 @@ export const OpenViduApp = () => {
         <div id='join' className='flex flex-col items-center justify-center w-full h-full'>
           <div
             id='join-dialog'
-            className='jumbotron vertical-center w-[390px] h-[316px] flex-shrink-0 bg-white rounded-lg shadow-md flex flex-col justify-center items-center'
+            className='jumbotron vertical-center w-[390px] h-[316px] flex-shrink-0 bg-white rounded-lg shadow-md flex flex-col justify-center items-center '
           >
             <h1 className='kor-h-h2'>화상 채널 입장</h1>
             <form
@@ -343,17 +314,8 @@ export const OpenViduApp = () => {
                   showCheckIcon={false}
                   onChange={handleChangeUserName}
                 ></InputField>
-                {/* <label></label>
-                <input
-                  className='form-control'
-                  type='text'
-                  id='userName'
-                  value={myUserName}
-                  onChange={handleChangeUserName}
-                  required
-                /> */}
               </p>
-              <p>
+              <p className='mt-4'>
                 <InputField
                   state='disable'
                   label='세션 ID'
@@ -365,68 +327,49 @@ export const OpenViduApp = () => {
                   readOnlyState={true}
                   // onChange={handleChangeSessionId}
                 ></InputField>
-                {/* <label>Session: </label>
-                <input
-                  className='form-control'
-                  type='text'
-                  id='sessionId'
-                  value={mySessionId}
-                  onChange={handleChangeSessionId}
-                  required
-                  readOnly
-                /> */}
               </p>
-              <p className='text-center'>
+              <div className='flex flex-row items-center justify-center mt-4 text-center'>
                 <input
-                  className='btn btn-lg btn-success'
+                  className={`flex items-center justify-center rounded-lg px-4 text-center shadow-[0px_4px_8px_#dbe5ec99,0px_0px_1px_1px_#dbe5ec99] ${userNameOk ? 'bg-white text-black hover:bg-bgorange' : 'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60'} w-[106px] h-[40px]`}
                   name='commit'
                   type='submit'
                   value='JOIN'
+                  disabled={!userNameOk}
                 />
-              </p>
+              </div>
             </form>
           </div>
         </div>
       ) : null}
 
       {session !== undefined ? (
-        <div id='session flex flex-col justify-center items-center'>
-          <div id='session-header' className='flex flex-row justify-between'>
+        <div id='session flex flex-col justify-center items-center w-full'>
+          <div id='session-header' className='flex flex-row justify-around w-full mt-6'>
             <h1 id='session-title' className='kor-h-h2'>
-              {mySessionId}
+              채널명 {mySessionId}
             </h1>
             <input
-              className='w-[200px] h-[40px] border rounded-md shadow-md hover:shadow-md'
+              className='w-[200px] h-[40px] border rounded-md shadow-md mr-0 hover:shadow-md'
               type='button'
               id='buttonClip'
               onClick={clip}
               value='Copy URL'
             />
           </div>
-          <div className='flex flex-row items-center justify-center'>
-            <div className='flex flex-col items-center justify-center'>
-              {/* <input
-          className="btn btn-large btn-success"
-          type="button"
-          id="buttonSwitchCamera"
-          onClick={switchCamera}
-          value="Switch Camera"
-        /> */}
-
+          <div className='flex flex-row items-center justify-center w-full h-4/5'>
+            <div className='flex flex-col items-center justify-center w-1/6 gap-8 h-4/5'>
               <CircleButton
                 theme={isAudioMuted ? 'white' : 'hover'}
                 onClick={toggleAudio}
                 icon={isAudioMuted ? 'micOff' : 'mic'}
                 disabled={false}
               />
-
               <CircleButton
                 theme={isVideoMuted ? 'white' : 'hover'}
                 onClick={toggleVideo}
                 icon={isVideoMuted ? 'videoOff' : 'video'}
                 disabled={false}
               />
-
               <CircleButton
                 theme={isSpeakerMuted ? 'white' : 'hover'}
                 onClick={toggleSpeaker}
@@ -434,40 +377,33 @@ export const OpenViduApp = () => {
                 disabled={false}
               />
             </div>
-            <div className='flex flex-row z-1 w-[3/5]'>
-              <div id='main-video' className='col-md-6'>
-                {mainStreamManager !== undefined ? (
-                  <Video streamManager={mainStreamManager} />
-                ) : null}
-              </div>
-              <div id='video-container' className='flex flex-wrap gap-4 col-md-6'>
-                {subscribers.map((sub, i) => (
-                  <div
-                    key={i}
-                    className='box-border stream-container col-md-3'
-                    // onClick={() => handleMainVideoStream(sub)}
-                  >
-                    <Video streamManager={sub} />
-                  </div>
-                ))}
-              </div>
+            <div className='flex flex-row w-full gap-4 h-4/5'>
+              {mainStreamManager !== undefined ? (
+                <UserVideoComponent streamManager={mainStreamManager} />
+              ) : null}
+              {subscribers.map((sub, i) => (
+                <div
+                  key={i}
+                  className='box-border stream-container col-md-3'
+                  // onClick={() => handleMainVideoStream(sub)}
+                >
+                  <UserVideoComponent streamManager={sub} />
+                </div>
+              ))}
             </div>
-
-            <div>
+            <div className='flex flex-col items-center justify-center w-1/6 gap-8 h-4/5'>
               <CircleButton
                 theme={isChatOpen ? 'white' : 'hover'}
                 onClick={toggleChat}
                 icon={'chat'}
                 disabled={false}
               />
-
               <CircleButton
                 theme={screensharing ? 'white' : 'hover'}
                 onClick={publishScreenShare}
                 icon={'share'}
                 disabled={false}
               />
-
               <CircleButton
                 theme={exitClick ? 'hover' : 'white'}
                 onClick={toggleExit}
@@ -475,14 +411,11 @@ export const OpenViduApp = () => {
                 disabled={false}
               />
             </div>
-            {isChatOpen && <div className='w-[400px] h-[600px] bg-white shadow-lg'>채팅창</div>}
-            {/* <input
-                className='w-[200px] h-[40px] border rounded-md shadow-md hover:shadow-md'
-                type='button'
-                id='buttonLeaveSession'
-                onClick={leaveSession}
-                value='Leave session'
-              /> */}
+            {isChatOpen && (
+              <div className='w-[400px] h-[600px] bg-white shadow-lg'>
+                <Chatting userName={myUserName} />
+              </div>
+            )}
           </div>
         </div>
       ) : null}
