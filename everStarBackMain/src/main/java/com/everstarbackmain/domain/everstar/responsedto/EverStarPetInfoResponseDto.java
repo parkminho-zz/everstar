@@ -20,6 +20,7 @@ public class EverStarPetInfoResponseDto {
 	private String profileImageUrl;
 	private String name;
 	private String introduction;
+	private Integer questIndex;
 	private Integer age;
 	private LocalDate memorialDate;
 	private List<String> petPersonalities;
@@ -31,6 +32,7 @@ public class EverStarPetInfoResponseDto {
 			.profileImageUrl(pet.getProfileImageUrl())
 			.name(pet.getName())
 			.introduction(pet.getIntroduction())
+			.questIndex(pet.getQuestIndex())
 			.age(pet.getAge())
 			.memorialDate(pet.getMemorialDate())
 			.petPersonalities(petPersonalities)
