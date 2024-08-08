@@ -94,8 +94,10 @@ public class UserLetterControllerTest {
 	public void 유저_편지_쓰기_성공_테스트() throws Exception {
 		// given
 		String requestBody = objectMapper.writeValueAsString(requestDto);
-		MockMultipartFile file = new MockMultipartFile("image", "test.jpg", "image/jpeg", "test image content".getBytes());
-		MockMultipartFile requestDtoFile = new MockMultipartFile("requestDto", "", "application/json", requestBody.getBytes());
+		MockMultipartFile file = new MockMultipartFile("image", "test.jpg", "image/jpeg",
+			"test image content".getBytes());
+		MockMultipartFile requestDtoFile = new MockMultipartFile("requestDto", "", "application/json",
+			requestBody.getBytes());
 
 		// Mocking the service method
 		BDDMockito.doNothing().when(userLetterService).writeLetter(authentication, 1L, requestDto, file);
@@ -119,8 +121,10 @@ public class UserLetterControllerTest {
 		Map<String, Object> response = new HashMap<>();
 		response.put("data", SuccessUserLetterMessage.SUCCESS_WRITE_LETTER_ANSWER);
 
-		MockMultipartFile file = new MockMultipartFile("image", "test.jpg", "image/jpeg", "test image content".getBytes());
-		MockMultipartFile requestDtoFile = new MockMultipartFile("requestDto", "", "application/json", requestBody.getBytes());
+		MockMultipartFile file = new MockMultipartFile("image", "test.jpg", "image/jpeg",
+			"test image content".getBytes());
+		MockMultipartFile requestDtoFile = new MockMultipartFile("requestDto", "", "application/json",
+			requestBody.getBytes());
 
 		BDDMockito.doNothing().when(userLetterService).writeLetterAnswer(authentication, 1L, 1L, requestDto, file);
 
