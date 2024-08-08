@@ -3,11 +3,6 @@ import {
   CheerMessage,
   CheerMessageProps,
 } from 'components/organics/CheerMessage/CheerMessage';
-
-import bgImage from 'assets/images/bg-everstar.webp';
-import { Header } from 'components/molecules/Header/Header';
-import { Footer } from 'components/molecules/Footer/Footer';
-import { useMediaQuery } from 'react-responsive';
 import { useFetchCheeringPet } from 'hooks/useEverStar';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
@@ -24,21 +19,6 @@ export const EverStarCheerMessage: React.FC<
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
-
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
-  const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
-
-  const headerType = isMobile
-    ? 'mobile-everstar'
-    : isTabletOrMobile
-      ? 'tablet-everstar'
-      : 'everstar';
-
-  const footerType = isMobile
-    ? 'mobile'
-    : isTabletOrMobile
-      ? 'tablet'
-      : 'desktop';
 
   // 로딩 및 오류 상태 처리
   if (isLoading) return <div>Loading...</div>;
@@ -61,25 +41,19 @@ export const EverStarCheerMessage: React.FC<
         color: item.color.toLowerCase() || '',
         cheeringMessageId: item.cheeringMessageId,
         petId: petId,
-      })
+      }),
     ) || [];
 
   console.log('Mapped postItCards:', postItCards);
 
   return (
-    <div
-      className='flex flex-col min-h-screen bg-center bg-cover'
-      style={{ backgroundImage: `url(${bgImage})` }}
-    >
-      <Header type={headerType} className='sticky top-0 z-50' />
-
+    <div>
       <CheerMessage
         {...props}
         postItCards={postItCards}
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
-      <Footer type={footerType} className='mt-auto' />
     </div>
   );
 };

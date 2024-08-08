@@ -5,6 +5,7 @@ import { PetInfoForm } from 'components/organics/PetInfoForm/PetInfoForm';
 import { SearchModal } from 'components/organics/SearchModal/SearchModal';
 import { RootState } from 'store/Store';
 import { useFetchPets, useAddPet } from 'hooks/usePets';
+import { Glass } from 'components/molecules/Glass/Glass';
 
 export const Profile: React.FC = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
@@ -53,57 +54,66 @@ export const Profile: React.FC = () => {
   if (error) return <div className='text-red-500'>{error.message}</div>;
 
   return (
-    <div className='flex items-center justify-center flex-grow'>
-      {isPetInfoOpen ? (
-        <PetInfoForm
-          headerText='반려동물 정보 입력'
-          showPrimaryButton={true}
-          text='반려동물 정보를 입력해주세요.'
-          onClose={() => setPetInfoOpen(false)}
-          onSubmit={handlePetFormSubmit}
-          relationshipOptions={[
-            '엄마',
-            '아빠',
-            '언니',
-            '누나',
-            '형',
-            '오빠',
-            '친구',
-          ]}
-        />
-      ) : (
-        <ProfileSelection
-          avatars={
-            Array.isArray(pets)
-              ? pets.map((pet) => ({
-                  src: pet.profileImageUrl,
-                  size: 'medium',
-                  name: pet.name,
-                  id: pet.id,
-                }))
-              : []
-          }
-          onAddAvatar={() => setPetInfoOpen(true)}
-        />
-      )}
-      {isSearchModalOpen && (
-        <SearchModal
-          searchOptions={[
-            '친근한',
-            '충성스러운',
-            '활발한',
-            '차분한',
-            '보호적인',
-          ]}
-          modalTitle='반려동물 성격 선택'
-          buttonLabel='작성 완료'
-          onClose={() => {
-            setSearchModalOpen(false);
-            setPetInfoOpen(true);
-          }}
-          onSubmit={handleSearchModalSubmit}
-        />
-      )}
+    <div className='relative flex flex-col items-center justify-center w-full min-h-screen'>
+      <Glass
+        currentPage={1}
+        totalPages={1}
+        onPageChange={(newPage) => console.log('Page changed to:', newPage)}
+        showPageIndicator={false}
+        className='absolute top-0 bottom-0 left-0 right-0 z-0'
+      />
+      <div className='relative z-10 flex flex-col items-center justify-center w-full h-full'>
+        {isPetInfoOpen ? (
+          <PetInfoForm
+            headerText='반려동물 정보 입력'
+            showPrimaryButton={true}
+            text='반려동물 정보를 입력해주세요.'
+            onClose={() => setPetInfoOpen(false)}
+            onSubmit={handlePetFormSubmit}
+            relationshipOptions={[
+              '엄마',
+              '아빠',
+              '언니',
+              '누나',
+              '형',
+              '오빠',
+              '친구',
+            ]}
+          />
+        ) : (
+          <ProfileSelection
+            avatars={
+              Array.isArray(pets)
+                ? pets.map((pet) => ({
+                    src: pet.profileImageUrl,
+                    size: 'medium',
+                    name: pet.name,
+                    id: pet.id,
+                  }))
+                : []
+            }
+            onAddAvatar={() => setPetInfoOpen(true)}
+          />
+        )}
+        {isSearchModalOpen && (
+          <SearchModal
+            searchOptions={[
+              '친근한',
+              '충성스러운',
+              '활발한',
+              '차분한',
+              '보호적인',
+            ]}
+            modalTitle='반려동물 성격 선택'
+            buttonLabel='작성 완료'
+            onClose={() => {
+              setSearchModalOpen(false);
+              setPetInfoOpen(true);
+            }}
+            onSubmit={handleSearchModalSubmit}
+          />
+        )}
+      </div>
     </div>
   );
 };
