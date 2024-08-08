@@ -1,0 +1,48 @@
+package com.everstarbackmain.domain.sse;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import com.everstarbackmain.domain.pet.model.Pet;
+import com.everstarbackmain.domain.pet.repository.PetRepository;
+import com.everstarbackmain.domain.user.model.User;
+import com.everstarbackmain.global.exception.CustomException;
+import com.everstarbackmain.global.exception.ExceptionResponse;
+import com.everstarbackmain.global.security.auth.PrincipalDetails;
+
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/earth")
+@Slf4j(topic = "elk")
+public class SseController {
+
+	private final SseService sseService;
+	private final PetRepository petRepository;
+
+	@GetMapping(value = "/connect/{pet-id}", produces = "text/event-stream")
+	public SseEmitter connect(
+		@RequestHeader(value="Last-Event-ID", required = false, defaultValue = "") String lastEventId,
+		HttpServletResponse response, Authentication authentication){
+
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
+		Pet pet = petRepository.findByUserAndIsDeleted(user, false).orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+		Long petId = pet.getId();
+
+		response.setHeader("X-Accel-Buffering", "no");
+		return sseService.connect(petId, lastEventId);
+	}
+}
+
+
+// Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
+// 	.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+
+// User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
