@@ -4,13 +4,12 @@ import { EarthMain } from 'components/templates/EarthMain';
 import { LetterBoxTemplate } from 'components/templates/LetterBoxTemplate';
 import { Header } from 'components/molecules/Header/Header';
 import { Footer } from 'components/molecules/Footer/Footer';
-import {
-  LetterColor,
-  LetterState,
-} from 'components/molecules/cards/LetterCard/LetterCard';
+import { LetterColor, LetterState } from 'components/molecules/cards/LetterCard/LetterCard';
 import { LetterDetailTemplate } from 'components/templates/LetterDetailTemplate';
 import { LetterWriteTemplate } from 'components/templates/LetterWriteTemplate';
 import { QuestTemplate } from 'components/templates/QuestTemplate';
+import { QuestOpenviduTemplate } from 'components/templates/QuestOpenviduTemplate';
+import { OpenViduAppWrapper } from 'components/templates/openvidu/OpenViduApp';
 import bgImage from 'assets/images/bg-earth.webp';
 
 export const EarthPage: React.FC = () => {
@@ -78,6 +77,19 @@ export const EarthPage: React.FC = () => {
                 />
               }
             />
+            <Route
+              path='openvidu'
+              element={
+                <QuestOpenviduTemplate
+                  headerText='오늘의 질문'
+                  textboxLabel='내용'
+                  largeButtonText='이미지 삽입'
+                  smallButtonText='제출'
+                />
+              }
+            />
+            <Route path='openvidu/sessionid/:sessionId' element={<OpenViduAppWrapper />} />
+            <Route path='openvidu/sessionid' element={<OpenViduAppWrapper />} />
           </Routes>
         </div>
         <Footer className='w-full mt-auto' />
