@@ -84,4 +84,16 @@ public class PetController {
 		return response;
 	}
 
+	@PutMapping("/{pet-id}/profile-image")
+	public ResponseEntity<Map<String, Object>> updatePetProfileImage(Authentication authentication,
+		@PathVariable("pet-id") Long petId, @RequestPart MultipartFile profileImage) {
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
+		petService.updatePetProfileImage(user, petId, profileImage);
+		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
+			SuccessPetMessage.SUCCESS_EDIT_PET_PROFILE_IMAGE);
+
+		log.info("main server - request : user {}, petId {}", user, petId);
+		log.info("main server - response : {}", response);
+		return response;
+	}
 }
