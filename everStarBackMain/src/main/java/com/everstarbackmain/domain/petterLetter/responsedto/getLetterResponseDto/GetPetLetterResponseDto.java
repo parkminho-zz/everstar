@@ -1,6 +1,5 @@
 package com.everstarbackmain.domain.petterLetter.responsedto.getLetterResponseDto;
 
-
 import java.time.LocalDateTime;
 
 import com.everstarbackmain.domain.pet.model.Pet;

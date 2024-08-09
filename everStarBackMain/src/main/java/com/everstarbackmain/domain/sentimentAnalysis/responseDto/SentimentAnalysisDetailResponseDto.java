@@ -22,7 +22,8 @@ public class SentimentAnalysisDetailResponseDto {
 	private Double week6Result;
 	private Double week7Result;
 
-	public static SentimentAnalysisDetailResponseDto createSentimentAnalysisDetailResponseDto(SentimentAnalysis sentimentAnalysis) {
+	public static SentimentAnalysisDetailResponseDto createSentimentAnalysisDetailResponseDto(
+		SentimentAnalysis sentimentAnalysis) {
 		return SentimentAnalysisDetailResponseDto.builder()
 			.id(sentimentAnalysis.getId())
 			.totalResult(sentimentAnalysis.getTotalResult())

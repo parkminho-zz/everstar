@@ -32,7 +32,8 @@ public enum CustomException {
 	NOT_FOUND_MEMORIAL_BOOK_EXCEPTION(404, "NotFoundMemorialBookException", "메모리얼북이 존재하지 않습니다."),
 	NOT_FOUND_CHEERING_MESSAGE_EXCEPTION(404, "NotFoundCheering_Message_Exception", "응원메시지가 존재하지 않습니다."),
 	NOT_FOUND_SENTIMENT_ANALYSIS_EXCEPTION(404, "NotFoundSentimentAnalysisException", "감정 분석 결과가 존재하지 않습니다."),
-	NOT_FOUND_QUEST_EXCEPTION(404, "NotFoundQuestException", "퀘스트가 존재하지 않습니다.")
+	NOT_FOUND_QUEST_EXCEPTION(404, "NotFoundQuestException", "퀘스트가 존재하지 않습니다."),
+	ALL_QUESTS_COMPLETED_EXCEPTION(400, "AllQuestsCompleted", "모든	퀘스트를 완료 하셨습니다! 앞으로 영원별을 추억하며 행복하시길 바랍니다♥"),
 	;
 
 

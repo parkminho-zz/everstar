@@ -20,8 +20,9 @@ public class GetLetterResponseDto {
 	}
 
 	public static GetLetterResponseDto createGetLetterResponseDto(PetLetter petLetter) {
-		if(petLetter.getUserLetter() == null){
-			GetPetLetterResponseDto petLetterResponseDto = GetPetLetterResponseDto.createGetPetLetterResponseDto(petLetter);
+		if (petLetter.getUserLetter() == null) {
+			GetPetLetterResponseDto petLetterResponseDto = GetPetLetterResponseDto.createGetPetLetterResponseDto(
+				petLetter);
 			return new GetLetterResponseDto(petLetterResponseDto);
 		}
 		GetUserLetterResponseDto userLetterResponseDto = GetUserLetterResponseDto.createUserLetterResponseDto(

@@ -27,9 +27,12 @@ public class MemorialBookDetailResponseDto {
 	private List<AiAnswerDetailResponseDto> aiAnswers;
 	private List<DiaryDetailResponseDto> diaries;
 
-	public static MemorialBookDetailResponseDto createMemorialBookDetailResponseDto(MemorialBookInfoResponseDto memorialBookInfoDto,
-		PetDetailResponseDto petDto, SentimentAnalysisDetailResponseDto sentimentDto, List<QuestDetailResponseDto> questDtos,
-		List<QuestAnswerDetailResponseDto> questAnswerDtos, List<AiAnswerDetailResponseDto> aiAnswerDtos, List<DiaryDetailResponseDto> diaryDtos) {
+	public static MemorialBookDetailResponseDto createMemorialBookDetailResponseDto(
+		MemorialBookInfoResponseDto memorialBookInfoDto,
+		PetDetailResponseDto petDto, SentimentAnalysisDetailResponseDto sentimentDto,
+		List<QuestDetailResponseDto> questDtos,
+		List<QuestAnswerDetailResponseDto> questAnswerDtos, List<AiAnswerDetailResponseDto> aiAnswerDtos,
+		List<DiaryDetailResponseDto> diaryDtos) {
 		return MemorialBookDetailResponseDto.builder()
 			.memorialBook(memorialBookInfoDto)
 			.pet(petDto)

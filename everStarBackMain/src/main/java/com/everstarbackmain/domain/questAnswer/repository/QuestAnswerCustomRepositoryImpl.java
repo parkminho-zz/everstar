@@ -1,6 +1,5 @@
 package com.everstarbackmain.domain.questAnswer.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -18,7 +17,8 @@ public class QuestAnswerCustomRepositoryImpl implements QuestAnswerCustomReposit
 	}
 
 	@Override
-	public List<String> findContentByPetIdAndSpecificQuestIdsAndIsDeleted(Long petId, Integer firstQuestId, Integer secondQuestId, boolean isDeleted) {
+	public List<String> findContentByPetIdAndSpecificQuestIdsAndIsDeleted(Long petId, Integer firstQuestId,
+		Integer secondQuestId, boolean isDeleted) {
 		QQuestAnswer questAnswer = QQuestAnswer.questAnswer;
 		return queryFactory.select(questAnswer.content)
 			.from(questAnswer)

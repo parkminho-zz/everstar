@@ -24,6 +24,7 @@ public class GetUserLetterResponseDto {
 	public static GetUserLetterResponseDto createUserLetterResponseDto(PetLetter petLetter) {
 		Pet pet = petLetter.getPet();
 		UserLetter userLetter = petLetter.getUserLetter();
-		return new GetUserLetterResponseDto(pet.getName(), userLetter.getContent(), userLetter.getImgUrl(), userLetter.getCreatedTime());
+		return new GetUserLetterResponseDto(pet.getName(), userLetter.getContent(), userLetter.getImgUrl(),
+			userLetter.getCreatedTime());
 	}
 }

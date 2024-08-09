@@ -1,8 +1,5 @@
 package com.everstarbackmain.domain.questAnswer.service;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,10 +22,10 @@ import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.quest.model.Quest;
 import com.everstarbackmain.domain.quest.model.QuestType;
 import com.everstarbackmain.domain.quest.repository.QuestRepository;
+import com.everstarbackmain.domain.quest.util.QuestScheduler;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswerTypeNo;
 import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
-import com.everstarbackmain.global.config.DiffusionAiConfig;
 import com.everstarbackmain.global.diffusionai.util.DiffusionAiClient;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
@@ -59,6 +56,7 @@ public class QuestAnswerService {
 	private final PetPersonalityRepository petPersonalityRepository;
 	private final SentimentAnalysisRepository sentimentAnalysisRepository;
 	private final MemorialBookScheduler memorialBookScheduler;
+	private final QuestScheduler questScheduler;
 	private final NaverCloudClient naverCloudClient;
 	private final OpenAiClient openAiClient;
 	private final DiffusionAiClient diffusionAiClient;
@@ -74,6 +72,8 @@ public class QuestAnswerService {
 
 		Quest quest = questRepository.findById(questId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_QUEST_EXCEPTION));
+
+		questScheduler.scheduleNextDayQuest(user, petId);
 
 		if (requestDto.getType().equals(QuestType.TEXT.getType())) {
 			QuestAnswer questAnswer = QuestAnswer.createTextQuestAnswer(pet, quest, requestDto);
@@ -94,6 +94,7 @@ public class QuestAnswerService {
 		QuestAnswer questAnswer = QuestAnswer.createImageQuestAnswer(pet, quest, requestDto, imageUrl);
 		questAnswerRepository.save(questAnswer);
 		plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
+
 	}
 
 	private void plusPetQuestIndexByTextType(User user, Pet pet, Quest quest, QuestAnswer questAnswer) {
@@ -169,7 +170,8 @@ public class QuestAnswerService {
 				String encodedAiAnswerResponse = openAiClient.writePetTextToImageAnswer(pet, quest, questAnswer);
 				String uploadedImageUrl = s3UploadUtil.uploadS3ByEncodedFile(encodedAiAnswerResponse);
 				AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
-					CreateAiAnswerRequestDto.createImageAiAnswerRequestDto(uploadedImageUrl, AiAnswerType.IMAGE.getType()));
+					CreateAiAnswerRequestDto.createImageAiAnswerRequestDto(uploadedImageUrl,
+						AiAnswerType.IMAGE.getType()));
 				aiAnswerRepository.save(aiAnswer);
 			}
 

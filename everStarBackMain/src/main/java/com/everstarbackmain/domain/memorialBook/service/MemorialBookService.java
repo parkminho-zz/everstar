@@ -77,7 +77,7 @@ public class MemorialBookService {
 	@Transactional
 	public void addPsychologicalTestResult(Authentication authentication, Long petId, Long memorialBookId,
 		MemorialBookTestResultRequestDto testResultRequestDto) {
-		User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 		MemorialBook memorialBook = memorialBookRepository.findByIdAndIsDeleted(memorialBookId, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
 		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
@@ -106,8 +106,9 @@ public class MemorialBookService {
 		return MemorialBookInfoResponseDto.createMemorialBookDetailResponseDto(memorialBook);
 	}
 
-	public MemorialBookDetailResponseDto getMemorialBookDetail(Authentication authentication, Long petId, Long memorialBookId) {
-		User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
+	public MemorialBookDetailResponseDto getMemorialBookDetail(Authentication authentication, Long petId,
+		Long memorialBookId) {
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 		MemorialBook memorialBook = memorialBookRepository.findByIdAndIsDeleted(memorialBookId, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
 		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
@@ -128,7 +129,8 @@ public class MemorialBookService {
 		List<AiAnswer> aiAnswers = aiAnswerRepository.findByPetId(petId);
 		List<Diary> diaries = diaryRepository.findByMemorialBookIdAndIsDeleted(memorialBookId, false);
 
-		return convertToMemorialBookDetailDto(memorialBook, pet, sentimentAnalysis, quests, questAnswers, aiAnswers, diaries);
+		return convertToMemorialBookDetailDto(memorialBook, pet, sentimentAnalysis, quests, questAnswers, aiAnswers,
+			diaries);
 	}
 
 	private MemorialBookDetailResponseDto convertToMemorialBookDetailDto(MemorialBook memorialBook, Pet pet,
@@ -138,7 +140,8 @@ public class MemorialBookService {
 		return MemorialBookDetailResponseDto.builder()
 			.memorialBook(MemorialBookInfoResponseDto.createMemorialBookDetailResponseDto(memorialBook))
 			.pet(PetDetailResponseDto.createPetDetailResponseDto(pet))
-			.sentimentAnalysis(SentimentAnalysisDetailResponseDto.createSentimentAnalysisDetailResponseDto(sentimentAnalysis))
+			.sentimentAnalysis(
+				SentimentAnalysisDetailResponseDto.createSentimentAnalysisDetailResponseDto(sentimentAnalysis))
 			.quests(quests.stream()
 				.map(QuestDetailResponseDto::createQuestDetailResponseDto)
 				.collect(Collectors.toList()))
