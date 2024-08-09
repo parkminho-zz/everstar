@@ -213,3 +213,27 @@ export const Receive: Story = {
     dateTime: '2024-07-24 10:00:00',
   },
 };
+
+export const Rewrite: Story = {
+  args: {
+    currentPage: 1,
+    totalPages: 10,
+    onPageChange: action('pageChanged'),
+    headerText: '답장하기',
+    letterCardType: 'send',
+    letterCardColor: 'bgorange',
+    letterCardState: 'received',
+    letterCardMessage: '형 안녕! 뚜뚜가 사용자님께 보낸 편지입니다. ',
+    letterCardClassName: '',
+    centered: true,
+    textboxLabel: '내용',
+    largeButtonText: '이미지 추가',
+    smallButtonText: '작성완료',
+    showPrimaryButton: true,
+    customText: '',
+    petName: '뚜뚜',
+    myName: '사용자',
+    myMessage: '뚜뚜에게 보낸 메시지입니다.',
+    dateTime: '2024-07-24 10:00:00',
+  },
+};

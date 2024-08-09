@@ -7,7 +7,6 @@ import { Footer } from 'components/molecules/Footer/Footer';
 import { LetterColor, LetterState } from 'components/molecules/cards/LetterCard/LetterCard';
 import { LetterDetailTemplate } from 'components/templates/LetterDetailTemplate';
 import { LetterWriteTemplate } from 'components/templates/LetterWriteTemplate';
-import { LetterReWriteTemplate } from 'components/templates/LetterReWriteTemplate';
 import { QuestTemplate } from 'components/templates/QuestTemplate';
 import { QuestOpenviduTemplate } from 'components/templates/QuestOpenviduTemplate';
 import { OpenViduApp } from 'components/templates/OpenViduApp';
@@ -62,7 +61,6 @@ export const EarthPage: React.FC = () => {
             />
             <Route path='letter' element={<LetterWriteTemplate />} />
             <Route path='letter/:id' element={<LetterDetailTemplate />} />
-            <Route path='letter/post/:id' element={<LetterReWriteTemplate />} />
             <Route
               path='quest/:questid'
               element={
