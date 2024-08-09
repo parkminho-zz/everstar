@@ -27,11 +27,10 @@ public class SseController {
 
 	@GetMapping(value = "/connect/{pet-id}", produces = "text/event-stream")
 	public SseEmitter connect(
-		@RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId,
 		@PathVariable(value = "pet-id") Long petId, HttpServletResponse response, Authentication authentication) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 		response.setHeader("X-Accel-Buffering", "no");
-		return sseService.connect(user, petId, lastEventId);
+		return sseService.connect(user, petId);
 	}
 }
 
