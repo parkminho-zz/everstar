@@ -29,20 +29,7 @@ public class QuestController {
 	private final QuestService questService;
 	private final HttpResponseUtil responseUtil;
 
-	@GetMapping("/pets/{pet-id}/initialize-quest")
-	public ResponseEntity<Map<String, Object>> initializeQuest(Authentication authentication,
-		@PathVariable("pet-id") Long petId) {
-
-		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
-
-		questService.startInitialQuest(user, petId);
-		QuestDetailResponseDto responseDto = questService.getQuestDetail(petId, 1L);
-		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(responseDto);
-		log.info("main server - request : petId {}", petId);
-		log.info("main server - response : {}", response);
-		return response;
-	}
-
+	// 퀘스트 도착 알림에 맵
 	@GetMapping("/pets/{pet-id}/quests/{quest-id}")
 	public ResponseEntity<Map<String, Object>> getQuestDetail(@PathVariable("pet-id") Long petId,
 		@PathVariable("quest-id") Long questId) {
