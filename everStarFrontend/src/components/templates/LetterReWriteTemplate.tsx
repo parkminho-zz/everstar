@@ -2,7 +2,8 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { InteractiveForm } from 'components/templates/InteractiveForm';
 import { useFetchLetterPetDetail } from 'hooks/useEarth';
-export const LetterDetailTemplate: React.FC = () => {
+
+export const LetterReWriteTemplate: React.FC = () => {
   const navigate = useNavigate();
 
   const letterid = useParams();
@@ -20,7 +21,6 @@ export const LetterDetailTemplate: React.FC = () => {
     return <div>Error loading letter data</div>;
   }
 
-  // 뒤로 가기 버튼 클릭 핸들러
   const handleBackButtonClick = () => {
     navigate(-1); // 이전 페이지로 이동
   };
@@ -29,10 +29,6 @@ export const LetterDetailTemplate: React.FC = () => {
   if (letterData.data.userLetter.petName === '') {
     buttonDisabled = false;
   }
-
-  const handleReplyClick = () => {
-    navigate(`/earth/letter/${letterid}`);
-  };
 
   return (
     <div className='flex flex-col min-h-screen'>
@@ -59,7 +55,6 @@ export const LetterDetailTemplate: React.FC = () => {
           dateTime={letterData.data.userLetter.createAt}
           onLeftIconClick={handleBackButtonClick}
           primaryButtonDisabled={buttonDisabled}
-          handleReplyClick={handleReplyClick}
         />
       </div>
     </div>

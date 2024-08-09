@@ -36,8 +36,6 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error loading data</div>;
 
-  console.log(data.data);
-
   const petLetters =
     data?.data?.content?.map(
       (item: {
@@ -45,18 +43,23 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
         isRead: boolean;
         petName: string;
         content: string;
-        createAt: Date;
+        createAt: string;
       }) => ({
-        petLetterId: item.petLetterId || '',
-        isRead: item.isRead || false,
-        petName: item.petName || '',
-        content: item.content || '',
-        createAt: item.createAt,
+        id: item.petLetterId,
+        type: 'default',
+        color: 'white',
+        state: item.isRead ? 'received' : 'notReceived',
+        name: item.petName,
+        sendMessage:
+          item.content.length > 10
+            ? item.content.slice(0, 10) + '...'
+            : item.content, // 10글자 초과 시 '...' 추가
+        dateTime: new Date(item.createAt).toLocaleString(),
       })
     ) || [];
 
-  const handleLetterClick = () => {
-    navigate(`/earth/letter/1`);
+  const handleLetterClick = (id: number) => {
+    navigate(`/earth/letter/${id}`);
   };
 
   return (
@@ -75,7 +78,7 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
             letters={petLetters}
             onLetterClick={handleLetterClick}
             currentPage={currentPage}
-            itemsPerPage={6}
+            itemsPerPage={10}
           />
         </div>
       </div>

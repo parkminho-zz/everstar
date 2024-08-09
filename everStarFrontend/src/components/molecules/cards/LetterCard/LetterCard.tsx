@@ -67,20 +67,30 @@ export const LetterCard = ({
         </LetterText>
       )}
       {type === 'default' && (
-        <div className={`flex flex-col gap-[16px] ${centered ? 'items-center' : ''}`}>
+        <div
+          className={`flex flex-col gap-[16px] ${centered ? 'items-center' : ''}`}
+        >
           <div className='flex flex-row gap-[10px]'>
             <LetterText size='medium' color='black' className={className}>
               받은 편지
             </LetterText>
-            <LetterText size='small' color={getTextColor()} className={className}>
+            <LetterText
+              size='small'
+              color={getTextColor()}
+              className={className}
+            >
               {sendMessage}
             </LetterText>
           </div>
           <div className='flex flex-row gap-[10px]'>
             <LetterText size='medium' color='black' className={className}>
-              답장 여부
+              읽음 여부
             </LetterText>
-            <LetterText size='small' color={getTextColor()} className={className}>
+            <LetterText
+              size='small'
+              color={getTextColor()}
+              className={className}
+            >
               {getState()}
             </LetterText>
           </div>
