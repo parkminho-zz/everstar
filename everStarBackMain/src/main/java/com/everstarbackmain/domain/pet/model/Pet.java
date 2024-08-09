@@ -123,11 +123,16 @@ public class Pet extends BaseTimeEntity {
 	// ----------------펫 퀘스트 관련 Static methods -----------------------------------------
 	public void plusQuestIndex() {
 		questIndex++;
-		setIsQuestCompleted(); // 완료시 true됨
+		setTrueIsQuestCompleted();
 	}
 
-	public void setIsQuestCompleted() {
-		isQuestCompleted = !isQuestCompleted;
+	public void setTrueIsQuestCompleted() {
+		isQuestCompleted = true;
+	}
+
+
+	public void setFalseIsQuestCompleted() {
+		isQuestCompleted = false;
 	}
 
 
