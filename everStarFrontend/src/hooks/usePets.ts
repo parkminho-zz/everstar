@@ -1,5 +1,6 @@
+// src/hooks/usePets.ts
 import { useQuery, useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
-import { fetchPets, fetchPetDetails, addPet, Pet, PetInfo } from 'api/petApi';
+import { fetchPets, fetchPetDetails, addPet, updateProfileImage, Pet, PetInfo } from 'api/petApi';
 import { useDispatch } from 'react-redux';
 import { setPets, addPet as addPetAction, setPetDetails } from 'store/slices/petSlice';
 
@@ -21,9 +22,7 @@ export const useAddPet = (token: string, options?: UseMutationOptions<Pet, Error
   const queryClient = useQueryClient();
 
   return useMutation<Pet, Error, FormData>({
-    mutationFn: (formData: FormData) => {
-      return addPet(formData, token);
-    },
+    mutationFn: (formData: FormData) => addPet(formData, token),
     ...options,
     onSuccess: (data: Pet, variables: FormData, context: unknown) => {
       dispatch(addPetAction(data));
@@ -53,6 +52,28 @@ export const useFetchPetDetails = (petId: number, token: string) => {
     },
     onError: (error: Error) => {
       console.error('Error fetching pet details:', error);
+    },
+  });
+};
+
+export const useUpdateProfileImage = (
+  petId: number,
+  token: string,
+  options?: UseMutationOptions<void, Error, FormData>,
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, FormData>({
+    mutationFn: (formData: FormData) => updateProfileImage(petId, formData, token),
+    ...options,
+    onSuccess: (data, variables, context) => {
+      queryClient.invalidateQueries({ queryKey: ['petDetails', petId] });
+      if (options?.onSuccess) {
+        options.onSuccess(data, variables, context);
+      }
+    },
+    onError: (error: Error) => {
+      console.error('Error updating profile image:', error);
     },
   });
 };

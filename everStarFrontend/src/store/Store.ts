@@ -1,8 +1,10 @@
+// src/store/Store.ts
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import sessionStorage from 'redux-persist/lib/storage/session';
-import authReducer from 'store/slices/authSlice';
-import petReducer from 'store/slices/petSlice';
+import authReducer from './slices/authSlice';
+import petReducer from './slices/petSlice';
+import memorialBookReducer from './slices/memorialBookSlice';
 
 const persistConfig = {
   key: 'root',
@@ -12,14 +14,14 @@ const persistConfig = {
 const rootReducer = combineReducers({
   auth: authReducer,
   pet: petReducer,
+  memorialBook: memorialBookReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const Store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
 });
 
 export const persistor = persistStore(Store);

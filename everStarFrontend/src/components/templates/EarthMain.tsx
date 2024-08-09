@@ -54,6 +54,8 @@ export const EarthMain: React.FC<EarthMainProps> = ({
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
 
+  const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
+
   const handleButtonClick = () => {
     onButtonClick();
     navigate(`/everstar/${petId}`);
@@ -69,20 +71,18 @@ export const EarthMain: React.FC<EarthMainProps> = ({
     }
   };
 
-  const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
-
   const getOpenvidu = () => {
     navigate(`/earth/openvidu`);
   };
 
   return (
-    <div className='relative flex flex-col items-center justify-center min-h-screen'>
+    <div className="relative flex flex-col items-center justify-center min-h-screen">
       <Rainbow className={getRainbowStyle()} color={getColor(fill)} />
-      <div className='relative z-10 flex flex-col items-center justify-center flex-grow'>
+      <div className="relative z-10 flex flex-col items-center justify-center flex-grow">
         <ProgressCard
           title={title}
           fill={fill}
-          buttonTheme='white'
+          buttonTheme="white"
           buttonSize={buttonSize}
           buttonDisabled={buttonDisabled}
           buttonText={buttonText}
@@ -92,7 +92,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
           className={className}
         />
         <button
-          className='bg-white h-[50px] w-[200px] shadow-lg rounded-md mt-4'
+          className="bg-white h-[50px] w-[200px] shadow-lg rounded-md mt-4"
           onClick={getOpenvidu}
         >
           임시버튼

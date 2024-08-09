@@ -5,6 +5,9 @@ import { Avatar } from 'components/atoms/symbols/Avatar/Avatar';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { InputField } from 'components/organics/input/InputFields';
 import { Tag } from 'components/atoms/buttons/Tag';
+import { useUpdateProfileImage } from 'hooks/usePets';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/Store';
 
 export interface PetInfo {
   id: number;
@@ -28,6 +31,9 @@ export interface PetInfoTabProps {
 export const PetInfoTab: React.FC<PetInfoTabProps> = ({ petOptions, petInfo, onPetSelect }) => {
   const [selectedPet, setSelectedPet] = useState<string | null>(null);
   const [currentPet, setCurrentPet] = useState<PetInfo | null>(null);
+  const token = useSelector((state: RootState) => state.auth.accessToken);
+
+  const { mutate: updateProfileImage } = useUpdateProfileImage(currentPet?.id || 0, token);
 
   useEffect(() => {
     if (selectedPet) {
@@ -35,6 +41,14 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({ petOptions, petInfo, onP
       setCurrentPet(petInfo[selectedPet]);
     }
   }, [selectedPet, petInfo, onPetSelect]);
+
+  const handleProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && currentPet) {
+      const formData = new FormData();
+      formData.append('profileImage', event.target.files[0]);
+      updateProfileImage(formData);
+    }
+  };
 
   return (
     <>
@@ -53,12 +67,18 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({ petOptions, petInfo, onP
           <PrimaryButton
             theme="white"
             size="medium"
-            onClick={() => console.log('Change profile picture')}
+            onClick={() => document.getElementById('profileImageInput')?.click()}
             disabled={false}
             icon={null}
           >
             프로필 사진 변경
           </PrimaryButton>
+          <input
+            type="file"
+            id="profileImageInput"
+            style={{ display: 'none' }}
+            onChange={handleProfileImageChange}
+          />
           <InputField
             label="이름"
             showLabel={true}
