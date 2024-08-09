@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class SseService {
 
-	private static final Long TIMEOUT_MILLI_SEC = 60L;
+	private static final Long TIMEOUT_MILLI_SEC = 60 * 1000L;
 	private final EmitterRepositoryImpl emitterRepository;
 	private final PetRepository petRepository;
 
