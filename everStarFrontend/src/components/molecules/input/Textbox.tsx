@@ -13,8 +13,8 @@ interface TextboxProps {
   showStar?: boolean;
   ghostText?: string;
   maxLength?: number; // 추가된 부분: 최대 글자 수
-  value?: string; // 추가된 부분: inputValue
-  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void; // 추가된 부분: onChange 핸들러
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 export const Textbox = ({
@@ -26,7 +26,7 @@ export const Textbox = ({
   showStar = true,
   ghostText = '고스트 텍스트',
   maxLength = 255, // 기본 최대 글자 수
-  value = '', // 추가된 부분: 기본 값
+  value = '',
   onChange = () => {}, // 추가된 부분: 기본 onChange 핸들러
 }: TextboxProps): JSX.Element => {
   const getInfoText = () => {
