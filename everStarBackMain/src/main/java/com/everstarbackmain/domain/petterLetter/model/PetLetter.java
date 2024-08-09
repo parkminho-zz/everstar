@@ -87,7 +87,7 @@ public class PetLetter extends BaseTimeEntity {
 		this.isRead = true;
 	}
 
-	public void fetchReplyLetter(UserLetter userLetter){
-		this.userLetter =  userLetter;
+	public void fetchReplyLetter(UserLetter userLetter) {
+		this.userLetter = userLetter;
 	}
 }

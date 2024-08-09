@@ -3,9 +3,13 @@ package com.everstarbackmain.domain.questAnswer.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.everstarbackmain.domain.aiAnswer.model.AiAnswer;
@@ -22,6 +26,7 @@ import com.everstarbackmain.domain.quest.util.QuestScheduler;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswerTypeNo;
 import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
+import com.everstarbackmain.global.diffusionai.util.DiffusionAiClient;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;
@@ -54,6 +59,7 @@ public class QuestAnswerService {
 	private final QuestScheduler questScheduler;
 	private final NaverCloudClient naverCloudClient;
 	private final OpenAiClient openAiClient;
+	private final DiffusionAiClient diffusionAiClient;
 	private final S3UploadUtil s3UploadUtil;
 
 	@Transactional
@@ -164,7 +170,8 @@ public class QuestAnswerService {
 				String encodedAiAnswerResponse = openAiClient.writePetTextToImageAnswer(pet, quest, questAnswer);
 				String uploadedImageUrl = s3UploadUtil.uploadS3ByEncodedFile(encodedAiAnswerResponse);
 				AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
-					CreateAiAnswerRequestDto.createImageAiAnswerRequestDto(uploadedImageUrl, AiAnswerType.IMAGE.getType()));
+					CreateAiAnswerRequestDto.createImageAiAnswerRequestDto(uploadedImageUrl,
+						AiAnswerType.IMAGE.getType()));
 				aiAnswerRepository.save(aiAnswer);
 			}
 
@@ -188,8 +195,34 @@ public class QuestAnswerService {
 				aiAnswerRepository.save(aiAnswer);
 			}
 
+			if (type.equals(QuestAnswerTypeNo.TEXT_IMAGE_TO_IMAGE_ART.getType()) ||
+				type.equals(QuestAnswerTypeNo.TEXT_IMAGE_TO_IMAGE_PICTURE.getType())) {
+				String responseImageUrl = diffusionAiClient.writePetTextImageToImageAnswer(questAnswer, imageUrl);
+
+				byte[] imageBytes = downloadImage(responseImageUrl);
+
+				MultipartFile decodedImageFile = new MockMultipartFile(
+					"image",
+					"image.png",
+					"image/png",
+					imageBytes
+				);
+
+				String uploadedImageUrl = s3UploadUtil.saveFile(decodedImageFile);
+				AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
+					CreateAiAnswerRequestDto.createImageAiAnswerRequestDto(uploadedImageUrl,
+						AiAnswerType.IMAGE.getType()));
+				aiAnswerRepository.save(aiAnswer);
+			}
+
 		}, () -> {
 		});
+	}
+
+	private byte[] downloadImage(String imageUrl) {
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<byte[]> response = restTemplate.exchange(imageUrl, HttpMethod.GET, null, byte[].class);
+		return response.getBody();
 	}
 
 }

@@ -8,7 +8,6 @@ import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.quest.model.Quest;
 import com.everstarbackmain.domain.quest.repository.QuestRepository;
 import com.everstarbackmain.domain.quest.responseDto.QuestDetailResponseDto;
-import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 
@@ -23,7 +22,6 @@ public class QuestService {
 
 	private final QuestRepository questRepository;
 	private final PetRepository petRepository;
-
 
 	public QuestDetailResponseDto getQuestDetail(Long petId, Long questId) {
 
@@ -40,7 +38,5 @@ public class QuestService {
 
 		pet.setFalseIsQuestCompleted();
 
-
 	}
-
 }

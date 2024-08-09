@@ -130,14 +130,12 @@ public class Pet extends BaseTimeEntity {
 		isQuestCompleted = true;
 	}
 
-
 	public void setFalseIsQuestCompleted() {
 		isQuestCompleted = false;
 	}
 
-
 	// ----------------편지 서비스 관련 Static methods -----------------------------------------
-	public void updatePetSendTime(){
+	public void updatePetSendTime() {
 		this.lastSendLetterTime = LocalDateTime.now();
 		this.sendLetterTime = generateRandomTime();
 	}

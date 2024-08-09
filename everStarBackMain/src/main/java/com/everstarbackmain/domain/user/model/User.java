@@ -74,7 +74,8 @@ public class User extends BaseTimeEntity {
 	}
 
 	@Builder
-	private User(String email, String password, String userName, String phoneNumber, LocalDate birthDate, Gender gender, LocalTime questReceptionTime, Role role) {
+	private User(String email, String password, String userName, String phoneNumber, LocalDate birthDate, Gender gender,
+		LocalTime questReceptionTime, Role role) {
 		this.email = email;
 		this.password = password;
 		this.userName = userName;
@@ -98,5 +99,4 @@ public class User extends BaseTimeEntity {
 			.role(joinRequestDto.getRole())
 			.build();
 	}
-
 }

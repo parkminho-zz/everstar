@@ -18,7 +18,6 @@ import com.everstarbackmain.domain.pet.requestdto.UpdatePetIntroductionDto;
 import com.everstarbackmain.domain.pet.responsedto.EnrolledPetsResponseDto;
 import com.everstarbackmain.domain.pet.responsedto.MyPagePetInfoResponseDto;
 import com.everstarbackmain.domain.petterLetter.util.PetLetterScheduler;
-import com.everstarbackmain.domain.quest.util.QuestScheduler;
 import com.everstarbackmain.domain.sentimentAnalysis.model.SentimentAnalysis;
 import com.everstarbackmain.domain.sentimentAnalysis.repository.SentimentAnalysisRepository;
 import com.everstarbackmain.domain.user.model.User;

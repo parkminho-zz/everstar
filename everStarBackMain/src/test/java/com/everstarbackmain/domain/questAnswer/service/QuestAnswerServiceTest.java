@@ -34,6 +34,7 @@ import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswerType;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswerTypeNo;
 import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
+import com.everstarbackmain.global.diffusionai.util.DiffusionAiClient;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
@@ -84,6 +85,9 @@ class QuestAnswerServiceTest {
 
 	@Mock
 	private OpenAiClient openAiClient;
+
+	@Mock
+	private DiffusionAiClient diffusionAiClient;
 
 	@Mock
 	private S3UploadUtil s3UploadUtil;
@@ -341,7 +345,7 @@ class QuestAnswerServiceTest {
 	}
 
 	@Test
-	@DisplayName("퀘스트_답변_생성_후_TEXT_IMAGE_TO_TEXT_타입일_경우_관련_OPENAI_API_호출_테스트")
+	@DisplayName("퀘스트_답변_생성_후_TEXT_TO_IMAGE_ART_타입일_경우_관련_OPENAI_API_호출_테스트")
 	public void 퀘스트_답변_생성_후_TEXT_TO_IMAGE_ART_타입일_경우_관련_OPENAI_API_호출_테스트() {
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);

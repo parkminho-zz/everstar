@@ -12,7 +12,8 @@ import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageRe
 import com.everstarbackmain.domain.pet.model.Pet;
 
 @Repository
-public interface CheeringMessageRepository extends JpaRepository<CheeringMessage, Long>, CheeringMessageRepositoryCustom {
+public interface CheeringMessageRepository
+	extends JpaRepository<CheeringMessage, Long>, CheeringMessageRepositoryCustom {
 
 	@Override
 	Page<CheeringMessageResponseDto> findCheeringMessagesByPetId(Pet pet, Pageable pageable);

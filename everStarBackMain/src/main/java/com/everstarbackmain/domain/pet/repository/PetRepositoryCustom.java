@@ -10,6 +10,8 @@ import com.everstarbackmain.domain.everstar.responsedto.EverStarPetSearchRespons
 public interface PetRepositoryCustom {
 
 	List<String> findPetPersonalitiesByIdAndIsDeleted(Long petId, Boolean isDeleted);
+
 	Long findRandomActivePetIdExcluding(Long excludedPetId);
+
 	Page<EverStarPetSearchResponseDto> searchByPetName(String petName, Pageable pageable);
 }

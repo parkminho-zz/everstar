@@ -43,7 +43,7 @@ public class UserLetterService {
 		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
-		if (image != null) {
+		if (!image.isEmpty()) {
 			String imageUrl = s3UploadUtil.saveFile(image);
 			UserLetter userLetter = writeUserLetter(pet, requestDto, imageUrl);
 			userLetterRepository.save(userLetter);
@@ -73,7 +73,7 @@ public class UserLetterService {
 			throw new ExceptionResponse(CustomException.NOT_ACCESS_SEND_LETTER_ANSWER);
 		}
 
-		if (image != null) {
+		if (!image.isEmpty()) {
 			String imageUrl = s3UploadUtil.saveFile(image);
 			UserLetter userLetter = writeUserLetter(pet, requestDto, imageUrl);
 			userLetterRepository.save(userLetter);

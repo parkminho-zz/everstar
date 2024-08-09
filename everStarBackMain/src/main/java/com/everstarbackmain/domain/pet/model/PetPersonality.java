@@ -44,5 +44,4 @@ public class PetPersonality extends BaseTimeEntity {
 	public static PetPersonality createPersonality(Pet pet, String personalityValue) {
 		return new PetPersonality(pet, personalityValue);
 	}
-
 }

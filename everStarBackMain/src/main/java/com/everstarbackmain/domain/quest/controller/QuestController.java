@@ -1,11 +1,9 @@
 package com.everstarbackmain.domain.quest.controller;
 
-import static com.everstarbackmain.domain.user.model.QUser.*;
 
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.everstarbackmain.domain.quest.responseDto.QuestDetailResponseDto;
 import com.everstarbackmain.domain.quest.service.QuestService;
-import com.everstarbackmain.domain.user.model.User;
-import com.everstarbackmain.global.security.auth.PrincipalDetails;
 import com.everstarbackmain.global.util.HttpResponseUtil;
 
 import lombok.RequiredArgsConstructor;

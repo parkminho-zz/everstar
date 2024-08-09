@@ -47,6 +47,7 @@ import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.domain.user.requestDto.JoinRequestDto;
+import com.everstarbackmain.global.diffusionai.util.DiffusionAiClient;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
@@ -85,6 +86,9 @@ public class CreateQuestAnswerTest {
 
 	@Mock
 	private OpenAiClient openAiClient;
+
+	@Mock
+	private DiffusionAiClient diffusionAiClient;
 
 	@Mock
 	private S3UploadUtil s3UploadUtil;

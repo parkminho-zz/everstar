@@ -19,13 +19,12 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class SseService {
 
-	private static final Long TIMEOUT_SEC =  60L;
+	private static final Long TIMEOUT_SEC = 60L;
 	private final EmitterRepositoryImpl emitterRepository;
 	private final PetRepository petRepository;
 
-	// 지구별 접속시 SSE pet과 연결
 	public SseEmitter connect(User user, Long id, String lastEventId) {
-		Pet pet = petRepository.findByUserAndIdAndIsDeleted(user, id,false).
+		Pet pet = petRepository.findByUserAndIdAndIsDeleted(user, id, false).
 			orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
 		SseEmitter emitter = createEmitter(pet.getId(), lastEventId);
@@ -33,7 +32,6 @@ public class SseService {
 		return emitter;
 	}
 
-	// petId 기반으로 Emitter 생성
 	private SseEmitter createEmitter(Long petId, String lastEventId) {
 		SseEmitter emitter = new SseEmitter(TIMEOUT_SEC);
 		emitterRepository.save(petId, emitter);
@@ -58,7 +56,7 @@ public class SseService {
 				emitter.completeWithError(e);
 			}
 		}
-    }
+	}
 
 	private String generateDataMessage(Pet pet) {
 		if (pet.getQuestIndex() == 50) {

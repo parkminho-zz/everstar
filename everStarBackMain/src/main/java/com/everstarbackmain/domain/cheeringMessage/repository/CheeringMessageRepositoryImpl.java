@@ -25,7 +25,8 @@ public class CheeringMessageRepositoryImpl implements CheeringMessageRepositoryC
 		List<CheeringMessageResponseDto> cheeringMessages = jpaQueryFactory
 			.select(
 				Projections.constructor(CheeringMessageResponseDto.class, cheeringMessage.id, cheeringMessage.content,
-					cheeringMessage.isAnonymous, cheeringMessage.behindPetRelationship, cheeringMessage.behindPetName, cheeringMessage.color))
+					cheeringMessage.isAnonymous, cheeringMessage.behindPetRelationship, cheeringMessage.behindPetName,
+					cheeringMessage.color))
 			.from(cheeringMessage)
 			.where(cheeringMessage.pet.eq(pet).and(cheeringMessage.isDeleted.isFalse()))
 			.offset(pageable.getOffset())

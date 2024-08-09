@@ -43,7 +43,7 @@ public class JoinRequestDto {
 	@NotNull
 	private Role role;
 
-	public void passwordEncode(String encodePassword){
+	public void passwordEncode(String encodePassword) {
 		this.password = encodePassword;
 	}
 }

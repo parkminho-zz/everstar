@@ -9,8 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.everstarbackmain.domain.notification.model.Notification;
 import com.everstarbackmain.domain.notification.repository.NotificationRepository;
 import com.everstarbackmain.domain.user.model.User;
-import com.everstarbackmain.global.exception.CustomException;
-import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.WebpushConfig;

@@ -3,7 +3,6 @@ package com.everstarbackmain.domain.cheeringMessage.responseDto;
 import com.everstarbackmain.domain.cheeringMessage.model.Color;
 import com.querydsl.core.annotations.QueryProjection;
 
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter

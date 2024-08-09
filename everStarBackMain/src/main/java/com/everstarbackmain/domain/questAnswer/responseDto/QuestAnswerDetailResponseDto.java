@@ -27,5 +27,4 @@ public class QuestAnswerDetailResponseDto {
 			.type(questAnswer.getType().getType())
 			.build();
 	}
-
 }
