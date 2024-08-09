@@ -84,6 +84,13 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.1' // 버전은 실제 사용하는 Kafka와 호환되는 버전으로 변경
 	implementation 'com.fasterxml.jackson.core:jackson-core:2.15.1'
 	implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.1'
+
+	// openai
+	implementation 'com.theokanning.openai-gpt3-java:service:0.18.2'
+}
+
+compileJava {
+	options.compilerArgs << '-parameters'
 }
 
 tasks.named('test') {
