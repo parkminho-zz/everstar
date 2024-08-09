@@ -17,7 +17,7 @@ export const LetterWriteTemplate: React.FC = () => {
   const currentPage = 1;
   const totalPages = 5;
 
-  // const mutation = useFetchLetterPost(token, Number(petId), {
+  // const mutation = useFetchLetterPost(token, Numbe(petId), {
   //   onSuccess: () => {
   //     console.log('Letter posted successfully');
   //     navigate('/earth');

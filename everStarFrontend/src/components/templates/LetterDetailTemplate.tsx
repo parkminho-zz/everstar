@@ -2,9 +2,13 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { InteractiveForm } from 'components/templates/InteractiveForm';
 import { useFetchLetterPetDetail } from 'hooks/useEarth';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/Store';
+
 export const LetterDetailTemplate: React.FC = () => {
   const navigate = useNavigate();
 
+  const petName = useSelector((state: RootState) => state.pet.petDetails?.name);
   const letterid = useParams();
   const {
     data: letterData,
@@ -27,11 +31,12 @@ export const LetterDetailTemplate: React.FC = () => {
 
   let buttonDisabled = true;
   if (letterData.data.userLetter.petName === '') {
+    letterData.data.userLetter.petName = petName;
     buttonDisabled = false;
   }
 
   const handleReplyClick = () => {
-    navigate(`/earth/letter/${letterid}`);
+    navigate(`/earth/letter/post/${letterid.id}`);
   };
 
   return (

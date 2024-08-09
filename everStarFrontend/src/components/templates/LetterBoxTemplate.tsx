@@ -78,7 +78,7 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
             letters={petLetters}
             onLetterClick={handleLetterClick}
             currentPage={currentPage}
-            itemsPerPage={10}
+            itemsPerPage={100}
           />
         </div>
       </div>
