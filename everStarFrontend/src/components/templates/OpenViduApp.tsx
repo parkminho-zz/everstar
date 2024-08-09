@@ -246,16 +246,17 @@ export const OpenViduApp = () => {
   };
 
   return (
-    <div className='w-full h-full'>
-      <Glass
-        currentPage={1}
-        totalPages={1}
-        onPageChange={() => console.log('이동')}
-        showPageIndicator={false}
-        className='z-[-1] '
-      />
+    <div className='relative flex flex-col items-center p-12'>
+      <div className='absolute inset-0 z-0'>
+        <Glass
+          currentPage={1}
+          totalPages={1}
+          onPageChange={() => console.log('이동')}
+          showPageIndicator={false}
+        />
+      </div>
       {session === undefined ? (
-        <div id='join' className='flex flex-col items-center justify-center w-full h-full'>
+        <div id='join' className='z-10 flex flex-col items-center justify-center w-full h-full'>
           <div
             id='join-dialog'
             className='jumbotron vertical-center w-[390px] h-[316px] flex-shrink-0 bg-white rounded-lg shadow-md flex flex-col justify-center items-center '
@@ -316,14 +317,15 @@ export const OpenViduApp = () => {
       ) : null}
 
       {session !== undefined ? (
-        <div id='session flex flex-col justify-center items-center w-full'>
-          <div id='session-header' className='flex flex-row justify-around w-full mt-6'>
-            <h1 id='session-title' className='kor-h-h2'>
-              채널명 {mySessionId}
+        <div id='session flex flex-col justify-center items-center w-full '>
+          <div id='session-header' className='z-10 flex flex-row justify-around w-full mt-6 mb-6'>
+            <h1 id='session-title' className='z-10 kor-h-h2 '>
+              화상 채널
             </h1>
+            <h3 className='z-10 ml-5'>💡 퀘스트 완료를 위해 화면 캡처를 해주세요!</h3>
           </div>
           <div className='flex flex-row items-center justify-center w-full h-4/5'>
-            <div className='flex flex-col items-center justify-center w-1/6 gap-8 h-4/5'>
+            <div className='z-10 flex flex-col items-center justify-center w-1/6 gap-8 h-4/5 '>
               <CircleButton
                 theme={isAudioMuted ? 'white' : 'hover'}
                 onClick={toggleAudio}
@@ -346,7 +348,7 @@ export const OpenViduApp = () => {
                 label={isSpeakerMuted ? '스피커켜기' : '스피커끄기'}
               />
             </div>
-            <div className='flex flex-row w-full gap-4 h-4/5'>
+            <div className='z-10 flex flex-row w-full gap-4 h-4/5'>
               {mainStreamManager !== undefined ? (
                 <UserVideoComponent streamManager={mainStreamManager} />
               ) : null}
@@ -360,7 +362,7 @@ export const OpenViduApp = () => {
                 </div>
               ))}
             </div>
-            <div className='flex flex-col items-center justify-center w-1/6 gap-8 h-4/5'>
+            <div className='z-10 flex flex-col items-center justify-center w-1/6 gap-8 h-4/5'>
               <CircleButton
                 theme={isChatOpen ? 'hover' : 'white'}
                 onClick={toggleChat}
@@ -384,7 +386,7 @@ export const OpenViduApp = () => {
               />
             </div>
             {isChatOpen && (
-              <div className='w-[400px] h-[600px] bg-white shadow-lg flex flex-row justify-center items-center'>
+              <div className='z-10 w-[40%] h-[500px] bg-white shadow-lg flex flex-row justify-center rounded-lg items-center'>
                 <Chatting userName={myUserName} />
               </div>
             )}

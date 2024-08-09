@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Client, IMessage } from '@stomp/stompjs';
 import connectToStomp from './Stomp';
 import { useParams } from 'react-router-dom';
-// Define TypeScript types for the message and the Stomp client
+import { MessageWithTime } from 'components/molecules/cards/MessageCard/MessageWithTime';
+
 interface Message {
   type: string;
   roomId: string;
@@ -68,13 +69,14 @@ const Chatting: React.FC<ChattingProps> = ({ userName }) => {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>채팅방</h1>
+    <div style={{ padding: '20px' }} className='w-full h-full'>
+      <h1 className='mb-3 text-center kor-h-h3'>채팅</h1>
       <div
         style={{
-          border: '1px solid black',
+          border: '1px solid grey',
           padding: '10px',
-          height: '300px',
+          height: '70%',
+          width: '100%',
           overflowY: 'scroll',
           fontSize: '13px',
         }}
@@ -86,34 +88,31 @@ const Chatting: React.FC<ChattingProps> = ({ userName }) => {
               display: 'flex',
               justifyContent: msg.sender === sender ? 'flex-end' : 'flex-start',
               marginBottom: '10px',
+              width: '100%',
             }}
           >
-            <div
-              style={{
-                backgroundColor: msg.sender === sender ? '#DCF8C6' : '#FFFFFF',
-                padding: '10px',
-                borderRadius: '10px',
-                maxWidth: '60%',
-                textAlign: 'left',
-              }}
-            >
-              <strong>{msg.sender}</strong>
-              <br /> {msg.message}
-            </div>
+            <MessageWithTime
+              flag={msg.sender === sender ? false : true}
+              contents={msg.message}
+              time={'23:00'}
+              sender={msg.sender}
+            />
           </div>
         ))}
       </div>
-      <input
-        type='text'
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-        style={{ width: '80%' }}
-        className='h-20 mt-2 border solid 3px'
-      />
-      <button onClick={sendMessage} style={{ width: '20%' }}>
-        Send
-      </button>
+      <div className='mt-4'>
+        <input
+          type='text'
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+          style={{ width: '80%' }}
+          className='h-20 mt-2 border rounded-lg shadow-md solid 3px'
+        />
+        <button onClick={sendMessage} style={{ width: '20%' }}>
+          Send
+        </button>
+      </div>
     </div>
   );
 };

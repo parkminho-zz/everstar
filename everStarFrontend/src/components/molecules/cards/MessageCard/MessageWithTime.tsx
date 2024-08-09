@@ -4,24 +4,28 @@ interface IProps {
   flag: boolean;
   contents: string;
   time: string;
+  sender?: string;
 }
 
-export const MessageWithTime = ({ flag, contents, time }: IProps) => {
+export const MessageWithTime = ({ flag, contents, time, sender }: IProps) => {
   return (
-    <div className='flex w-[293px]'>
+    <div className='flex flex-col'>
       {flag ? (
-        <div className='flex w-full gap-2'>
-          <Message color='orange'>{contents}</Message>
-          <label className='text-base font-medium leading-6 text-[#CCCCCC] mt-3'>
-            {time}
-          </label>
+        <div className='flex flex-col p-1'>
+          <strong className='mb-0.5 '>{sender}</strong>
+          <div className='flex items-end justify-end w-full gap-1'>
+            <Message color='orange'>{contents}</Message>
+            <label className='text-xs font-medium leading-6 text-[#CCCCCC]'>{time}</label>
+          </div>
         </div>
       ) : (
-        <div className='flex items-end w-full gap-2'>
-          <label className='text-base font-medium leading-6 text-[#CCCCCC] mt-3'>
-            {time}
-          </label>
-          <Message color='gray'>{contents}</Message>
+        <div className='flex flex-col p-1'>
+          <strong className='mb-0.5 ml-10'>{sender}</strong>
+
+          <div className='flex items-end justify-end w-full gap-1'>
+            <label className='text-xs font-medium leading-6 text-[#CCCCCC]'>{time}</label>
+            <Message color='gray'>{contents}</Message>
+          </div>
         </div>
       )}
     </div>
