@@ -29,6 +29,7 @@ import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.quest.model.Quest;
 import com.everstarbackmain.domain.quest.model.QuestType;
 import com.everstarbackmain.domain.quest.repository.QuestRepository;
+import com.everstarbackmain.domain.quest.util.QuestScheduler;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswerType;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswerTypeNo;
@@ -96,6 +97,9 @@ class QuestAnswerServiceTest {
 	@Mock
 	private PrincipalDetails principalDetails;
 
+	@Mock
+	private QuestScheduler questScheduler;
+
 	private User user;
 	private Pet pet;
 	private List<String> petPersonalities;
@@ -133,7 +137,7 @@ class QuestAnswerServiceTest {
 	@DisplayName("퀘스트_49일차_답변_생성_후_스케줄링_메서드_호출_테스트")
 	public void 퀘스트_49일차_답변_생성_후_스케줄링_메서드_호출_테스트() {
 		// given
-		for (int i = 0; i < 48; i++) {
+		for (int i = 0; i < 47; i++) {
 			pet.plusQuestIndex();
 		}
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
@@ -155,7 +159,7 @@ class QuestAnswerServiceTest {
 	@DisplayName("퀘스트_답변_분석_메서드_호출_테스트")
 	public void 퀘스트_답변_분석_메서드_호출_테스트() {
 		// given
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 5; i++) {
 			pet.plusQuestIndex();
 		}
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
@@ -186,7 +190,7 @@ class QuestAnswerServiceTest {
 	@DisplayName("네이버_감정분석_API_예외_처리_테스트")
 	public void 네이버_감정분석_API_예외_처리_테스트() {
 		// given
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 5; i++) {
 			pet.plusQuestIndex();
 		}
 
@@ -214,7 +218,7 @@ class QuestAnswerServiceTest {
 	@DisplayName("감정분석_NOT_FOUND_예외_처리_테스트")
 	public void 감정분석_NOT_FOUND_예외_처리_테스트() {
 		// given
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 5; i++) {
 			pet.plusQuestIndex();
 		}
 
@@ -244,7 +248,7 @@ class QuestAnswerServiceTest {
 	@DisplayName("퀘스트_49일차_답변_생성_후_OPENAI_API_메서드_호출_테스트")
 	public void 퀘스트_49일차_답변_생성_후_OPENAI_API_메서드_호출_테스트() {
 		// given
-		for (int i = 0; i < 48; i++) {
+		for (int i = 0; i < 47; i++) {
 			pet.plusQuestIndex();
 		}
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
@@ -266,7 +270,7 @@ class QuestAnswerServiceTest {
 	@DisplayName("퀘스트_49일차_답변_생성_후_OPENAI_API_EXCEPTION_발생_테스트")
 	public void 퀘스트_49일차_답변_생성_후_OPENAI_API_EXCEPTION_발생_테스트() {
 		// given
-		for (int i = 0; i < 48; i++) {
+		for (int i = 0; i < 47; i++) {
 			pet.plusQuestIndex();
 		}
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
