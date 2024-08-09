@@ -51,12 +51,14 @@ public class SseService {
 		if (emitter != null) {
 			try {
 				String data;
-				if (pet.getIsQuestCompleted()) {
+				if (pet.getQuestIndex() == 50) {
+					data = "영원별에 메모리얼북이 완성 됐어요.";
+				}  else if (pet.getIsQuestCompleted()) {
 					data = "퀘스트를 완료했어요.";
 				} else {
 					data = pet.getQuestIndex() + " 번째 퀘스트가 도착했어요.";
 				}
-				emitter.send(SseEmitter.event().id(String.valueOf(pet.getId())).name("questIndex").data(data));
+				emitter.send(SseEmitter.event().id(String.valueOf(pet.getId())).name("earthSse").data(data));
 			} catch (IOException e) {
 				emitterRepository.deleteByPetId(pet.getId());
 				emitter.completeWithError(e);
