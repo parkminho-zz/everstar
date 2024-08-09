@@ -18,6 +18,7 @@ import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.quest.model.Quest;
 import com.everstarbackmain.domain.quest.model.QuestType;
 import com.everstarbackmain.domain.quest.repository.QuestRepository;
+import com.everstarbackmain.domain.quest.util.QuestScheduler;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswerTypeNo;
 import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
@@ -50,6 +51,7 @@ public class QuestAnswerService {
 	private final PetPersonalityRepository petPersonalityRepository;
 	private final SentimentAnalysisRepository sentimentAnalysisRepository;
 	private final MemorialBookScheduler memorialBookScheduler;
+	private final QuestScheduler questScheduler;
 	private final NaverCloudClient naverCloudClient;
 	private final OpenAiClient openAiClient;
 	private final S3UploadUtil s3UploadUtil;
@@ -84,6 +86,8 @@ public class QuestAnswerService {
 		QuestAnswer questAnswer = QuestAnswer.createImageQuestAnswer(pet, quest, requestDto, imageUrl);
 		questAnswerRepository.save(questAnswer);
 		plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
+
+		questScheduler.scheduleNextDayQuest(user, petId);
 	}
 
 	private void plusPetQuestIndexByTextType(User user, Pet pet, Quest quest, QuestAnswer questAnswer) {

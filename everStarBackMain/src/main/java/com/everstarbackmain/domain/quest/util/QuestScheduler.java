@@ -6,7 +6,6 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +20,6 @@ public class QuestScheduler {
 
 	private final TaskScheduler taskScheduler;
 	private final QuestService questService;
-	private final ApplicationEventPublisher EventPublisher;
 
 
 	// 다음 날 퀘스트 스케줄링
