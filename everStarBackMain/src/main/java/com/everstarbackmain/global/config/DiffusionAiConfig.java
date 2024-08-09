@@ -9,25 +9,22 @@ import lombok.Getter;
 
 @Configuration
 @Getter
-public class OpenAiConfig {
+public class DiffusionAiConfig {
 
-	@Value("${openai.model}")
+	@Value("${diffusionai.model}")
 	private String model;
 
-	@Value("${openai.api.url}")
+	@Value("${diffusionai.api.url}")
 	private String apiUrl;
 
-	@Value("${openai.api.create-image-url}")
-	private String createImageUrl;
+	@Value("${diffusionai.api.key}")
+	private String apiKey;
 
-	@Value("${openai.api.key}")
-	private String openAiKey;
-
-	@Bean(name = "openAiRestTemplate")
+	@Bean(name = "diffusionAiRestTemplate")
 	public RestTemplate template() {
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.getInterceptors().add(((request, body, execution) -> {
-			request.getHeaders().add("Authorization", "Bearer " + openAiKey);
+			request.getHeaders().add("Content-Type", "application/json");
 			return execution.execute(request, body);
 		}));
 		return restTemplate;
