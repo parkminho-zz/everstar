@@ -4,7 +4,7 @@ import { MyPage } from 'pages/MyPage';
 import { EverstarPage } from 'pages/EverstarPage';
 import { TutorialPage } from 'pages/TutorialPage';
 import { EarthPage } from 'pages/EarthPage';
-import { SplashPage } from 'pages/SplashPage';
+import { SplashPageRedirector } from 'pages/SplashPageRedirector';
 import { SignUpPage } from 'pages/SignUpPage';
 import { LoginPage } from 'pages/LoginPage';
 import { OAuthCallback } from 'pages/OAuthCallback';
@@ -18,15 +18,15 @@ function App() {
       <Router>
         <div>
           <Routes>
-            <Route path="/" element={<SplashPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup/:userEmail*" element={<SignUpPage />} />
-            <Route path="/tutorial" element={<TutorialPage />}></Route>
-            <Route path="/earth/*" element={<EarthPage />}></Route>
-            <Route path="/everstar/:pet/*" element={<EverstarPage />}></Route>
-            <Route path="/pets/*" element={<EarthPage />}></Route>
-            <Route path="/mypage/*" element={<MyPage />}></Route>
-            <Route path="/oauth/*" element={<OAuthCallback />} />
+            <Route path='/' element={<SplashPageRedirector />} />
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/signup/:userEmail*' element={<SignUpPage />} />
+            <Route path='/tutorial' element={<TutorialPage />} />
+            <Route path='/earth/*' element={<EarthPage />} />
+            <Route path='/everstar/:pet/*' element={<EverstarPage />} />
+            <Route path='/pets/*' element={<EarthPage />} />
+            <Route path='/mypage/*' element={<MyPage />} />
+            <Route path='/oauth/*' element={<OAuthCallback />} />
           </Routes>
         </div>
       </Router>

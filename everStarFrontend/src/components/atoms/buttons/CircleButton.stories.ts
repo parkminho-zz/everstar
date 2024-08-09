@@ -22,10 +22,11 @@ const meta = {
       control: {
         type: 'select',
         options: [
+          'plus',
           'mic',
           'micOff',
           'phone',
-          'phoneStrop',
+          'phoneStop',
           'video',
           'videoOff',
           'settings',
@@ -42,6 +43,11 @@ const meta = {
       description: '버튼 비활성화 여부',
       defaultValue: true,
     },
+    label: {
+      control: 'text',
+      description: '호버 시 표시할 텍스트',
+      defaultValue: '',
+    },
     onClick: { action: 'clicked', description: '버튼 클릭 이벤트' },
   },
   args: {
@@ -57,6 +63,7 @@ export const Focus: Story = {
     theme: 'focus',
     disabled: false,
     icon: 'mic',
+    label: '마이크 켜기',
   },
 };
 
@@ -65,6 +72,7 @@ export const Hover: Story = {
     theme: 'hover',
     disabled: false,
     icon: 'mic',
+    label: '마이크 켜기',
   },
 };
 
@@ -73,6 +81,7 @@ export const White: Story = {
     theme: 'white',
     disabled: false,
     icon: 'mic',
+    label: '마이크 켜기',
   },
 };
 
@@ -81,5 +90,6 @@ export const Disabled: Story = {
     theme: 'white',
     disabled: true,
     icon: 'mic',
+    label: '마이크 켜기',
   },
 };
