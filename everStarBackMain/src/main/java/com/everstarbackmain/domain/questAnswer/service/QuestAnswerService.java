@@ -67,6 +67,8 @@ public class QuestAnswerService {
 		Quest quest = questRepository.findById(questId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_QUEST_EXCEPTION));
 
+		questScheduler.scheduleNextDayQuest(user, petId);
+
 		if (requestDto.getType().equals(QuestType.TEXT.getType())) {
 			QuestAnswer questAnswer = QuestAnswer.createTextQuestAnswer(pet, quest, requestDto);
 			questAnswerRepository.save(questAnswer);
@@ -87,7 +89,6 @@ public class QuestAnswerService {
 		questAnswerRepository.save(questAnswer);
 		plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
 
-		questScheduler.scheduleNextDayQuest(user, petId);
 	}
 
 	private void plusPetQuestIndexByTextType(User user, Pet pet, Quest quest, QuestAnswer questAnswer) {
