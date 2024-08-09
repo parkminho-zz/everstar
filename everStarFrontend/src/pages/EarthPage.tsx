@@ -13,7 +13,7 @@ import { LetterWriteTemplate } from 'components/templates/LetterWriteTemplate';
 import { LetterReWriteTemplate } from 'components/templates/LetterReWriteTemplate';
 import { QuestTemplate } from 'components/templates/QuestTemplate';
 import { QuestOpenviduTemplate } from 'components/templates/QuestOpenviduTemplate';
-import { OpenViduAppWrapper } from 'components/templates/openvidu/OpenViduApp';
+import { OpenViduApp } from 'components/templates/openvidu/OpenViduApp';
 import bgImage from 'assets/images/bg-earth.webp';
 
 export const EarthPage: React.FC = () => {
