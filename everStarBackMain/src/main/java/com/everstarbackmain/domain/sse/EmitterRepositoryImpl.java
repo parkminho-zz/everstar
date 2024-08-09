@@ -1,6 +1,9 @@
 package com.everstarbackmain.domain.sse;
 
+import static java.util.Optional.*;
+
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Repository;
@@ -23,8 +26,8 @@ public class EmitterRepositoryImpl implements EmitterRepository {
 	}
 
 	@Override
-	public SseEmitter findEmitterByPetId(Long petId) {
-		return emitters.get(petId); // 단일 Emitter 반환
+	public Optional<SseEmitter> findById(Long petId) {
+		return ofNullable(emitters.get(petId));
 	}
 
 	@Override
