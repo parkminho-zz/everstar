@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const LetterWriteTemplate: React.FC = () => {
   const [text, setText] = useState('');
-  const [image, setImage] = useState<File | null>(null); // 파일 상태
+  const [image, setImage] = useState<File | null>(); // 파일 상태
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
 
@@ -47,8 +47,12 @@ export const LetterWriteTemplate: React.FC = () => {
 
       if (image) {
         formData.append('image', image);
+      } else {
+        const emptyFile = new File([new Blob()], '', { type: 'image/jpeg' });
+        formData.append('image', emptyFile);
       }
-
+      console.log('requestDto: ', formData.get('requestDto'));
+      console.log('image: : ', formData.get('image'));
       // formData를 사용하여 letterPost 호출
       letterPost(formData, {
         onSuccess: (data) => {
