@@ -2,6 +2,7 @@ package com.everstarbackmain.domain.sse;
 
 import java.io.IOException;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -19,26 +20,26 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class SseService {
 
-	private static final Long TIMEOUT_MILLI_SEC = 60 * 1000L;
+	private static final Long TIMEOUT_SEC = 60L * 1000 * 60;
 	private final EmitterRepositoryImpl emitterRepository;
 	private final PetRepository petRepository;
 
-	public SseEmitter connect(User user, Long id, String lastEventId) {
+	public SseEmitter connect(User user, Long id) {
 		Pet pet = petRepository.findByUserAndIdAndIsDeleted(user, id, false).
 			orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
-		SseEmitter emitter = createEmitter(pet.getId(), lastEventId);
+		SseEmitter emitter = createEmitter(pet.getId());
 		sendToClient(pet, emitter);
 		return emitter;
 	}
 
-	private SseEmitter createEmitter(Long petId, String lastEventId) {
-		SseEmitter emitter = new SseEmitter(TIMEOUT_MILLI_SEC);
+	private SseEmitter createEmitter(Long petId) {
+		SseEmitter emitter = new SseEmitter(TIMEOUT_SEC);
 		emitterRepository.save(petId, emitter);
 
 		emitter.onCompletion(() -> emitterRepository.deleteByPetId(petId)); // 네트워크 오류
 		emitter.onTimeout(() -> emitterRepository.deleteByPetId(petId)); // 시간 초과
-		emitter.onError(e -> emitterRepository.deleteByPetId(petId)); // 오류
+		emitter.onError((e) -> emitterRepository.deleteByPetId(petId)); // 오류
 
 		return emitter;
 	}
@@ -49,8 +50,7 @@ public class SseService {
 				String data = generateDataMessage(pet);
 				emitter.send(SseEmitter.event()
 					.id(String.valueOf(pet.getId()))
-					.name("earthSse")
-					.data(data));
+					.data(data, MediaType.APPLICATION_JSON));
 			} catch (IOException e) {
 				emitterRepository.deleteByPetId(pet.getId());
 				emitter.completeWithError(e);
