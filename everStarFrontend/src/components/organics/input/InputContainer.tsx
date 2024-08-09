@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
 import { LetterCard } from 'components/molecules/cards/LetterCard/LetterCard';
 import { Textbox } from 'components/molecules/input/Textbox';
@@ -23,6 +23,16 @@ export interface InputContainerProps {
   smallButtonText: string;
   showPrimaryButton?: boolean;
   isRtc?: boolean;
+  onLeftIconClick?: () => void; // 추가된 속성
+  primaryButtonDisabled?: boolean;
+  ghostText?: string;
+  onImageChange?: (image: string) => void;
+  selectedImage?: string;
+  onButtonClick?: () => void;
+  onButtonClick2?: () => void;
+  onTextChange?: (text: string) => void;
+  value?: string;
+  handleReplyClick?: () => void;
 }
 
 export const InputContainer: React.FC<InputContainerProps> = ({
@@ -37,38 +47,38 @@ export const InputContainer: React.FC<InputContainerProps> = ({
   letterCardClassName = 'font-body !kor-subtitle-subtitle3', // 여기서 폰트 변경
   centered = true,
   customText = '', // 기본값 설정
-  textboxLabel,
+  textboxLabel = '',
   largeButtonText,
   smallButtonText,
   dateTime,
   showPrimaryButton = true,
   isRtc = false,
+  onLeftIconClick, // 추가된 속성
+  primaryButtonDisabled = false,
+  ghostText,
+  onTextChange,
+  onButtonClick,
+  onButtonClick2,
+  handleReplyClick,
 }) => {
   const navigate = useNavigate();
+  const [text, setText] = useState('');
+
+  const handleTextChange = (text: string) => {
+    setText(text);
+    if (onTextChange) onTextChange(text);
+  };
+
   const handleButtonClick = () => {
-    console.log('Primary Button Clicked');
+    if (onButtonClick) {
+      onButtonClick();
+    }
   };
 
-  const handleReplyClick = () => {
-    console.log('답장하기 버튼 클릭');
-  };
-
-  const getRtc = async () => {
-    await fetch(`https://i11b101.p.ssafy.io/api/sessions`, {
-      method: 'POST',
-    })
-      .then((response) => response.text())
-      .then((data) => {
-        console.log('Response Data:', data);
-        if (data) {
-          navigate(`/earth/openvidu/sessionid/${data}`);
-        } else {
-          console.error('Session ID is undefined');
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+  const handleButtonClick2 = () => {
+    if (onButtonClick2) {
+      onButtonClick2();
+    }
   };
 
   return (
@@ -78,7 +88,11 @@ export const InputContainer: React.FC<InputContainerProps> = ({
         style={{ maxHeight: '742px', overflowY: 'auto' }}
       >
         {/* Modal Header */}
-        <ModalHeader text={headerText} showLeftIcon={true} />
+        <ModalHeader
+          text={headerText}
+          showLeftIcon={true}
+          onLeftIconClick={onLeftIconClick}
+        />
 
         {/* Content */}
         <div className='flex flex-col items-center w-full gap-8'>
@@ -88,7 +102,9 @@ export const InputContainer: React.FC<InputContainerProps> = ({
               <LetterCard
                 name={myName ? `${myName}에게` : undefined}
                 type='send'
-                color={letterCardType === 'receive' ? 'bgorange' : letterCardColor}
+                color={
+                  letterCardType === 'receive' ? 'bgorange' : letterCardColor
+                }
                 state={letterCardState}
                 message={letterCardMessage}
                 className={letterCardClassName}
@@ -106,7 +122,13 @@ export const InputContainer: React.FC<InputContainerProps> = ({
           </div>
 
           {isRtc && (
-            <PrimaryButton theme='white' size='large' disabled={false} icon={null} onClick={getRtc}>
+            <PrimaryButton
+              theme='white'
+              size='large'
+              disabled={false}
+              icon={null}
+              onClick={() => navigate('/earth/openvidu/sessionid')}
+            >
               화상통화 해보기
             </PrimaryButton>
           )}
@@ -127,7 +149,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
                   <PrimaryButton
                     theme='white'
                     size='large'
-                    disabled={false}
+                    disabled={primaryButtonDisabled}
                     onClick={handleReplyClick}
                   >
                     답장하기
@@ -137,7 +159,15 @@ export const InputContainer: React.FC<InputContainerProps> = ({
             ) : (
               <div className='flex flex-col justify-center w-full'>
                 {/* Textbox */}
-                <Textbox type='large' className='' label={textboxLabel} showStar={false} />
+                <Textbox
+                  type='large'
+                  className=''
+                  label={textboxLabel}
+                  showStar={false}
+                  ghostText={ghostText}
+                  value={text}
+                  onChange={(e) => handleTextChange(e.target.value)}
+                />
 
                 {/* Large Primary Button */}
                 {showPrimaryButton && (
@@ -145,7 +175,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
                     <PrimaryButton
                       theme='white'
                       size='large'
-                      onClick={handleButtonClick}
+                      onClick={handleButtonClick2}
                       disabled={false}
                       icon={null}
                     >

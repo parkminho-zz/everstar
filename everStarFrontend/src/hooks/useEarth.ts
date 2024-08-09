@@ -16,25 +16,21 @@ import {
 export const useFetchLetterPost = (
   token: string,
   petId: number,
-  options?: UseMutationOptions<
-    Letter,
-    Error,
-    { content: string; image: string }
-  >
+  options?: UseMutationOptions<Letter, Error, FormData>
 ) => {
   const queryClient = useQueryClient();
 
-  return useMutation<Letter, Error, { content: string; image: string }>({
-    mutationFn: (data) => {
-      return fetchLetterPost(data, token, petId);
+  return useMutation<Letter, Error, FormData>({
+    mutationFn: (formData: FormData) => {
+      return fetchLetterPost(formData, token, petId);
     },
     ...options,
     onSuccess: (data) => {
-      console.log('Successfully post pet:', data);
+      console.log('Successfully posted letter:', data);
       queryClient.invalidateQueries({ queryKey: ['Letter', petId] });
     },
     onError: (error) => {
-      console.error('Error adding pet:', error);
+      console.error('Error posting letter:', error);
     },
   });
 };
@@ -56,15 +52,12 @@ export const useFetchLetterPet = () => {
   });
 };
 
-export const useFetchLetterPetDetail = () => {
+export const useFetchLetterPetDetail = (letterId: number) => {
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
   const token = useSelector((state: RootState) => state.auth.accessToken);
-  const letterId = useSelector(
-    (state: RootState) => state.pet.petDetails?.userId
-  );
 
   return useQuery({
-    queryKey: ['LetterPet', petId],
+    queryKey: ['LetterPet', petId, letterId],
     queryFn: async () => {
       if (!petId || !token) {
         throw new Error('Missing petId or token');
@@ -74,8 +67,17 @@ export const useFetchLetterPetDetail = () => {
         token,
         Number(letterId)
       );
+
+      if (letter.data.userLetter === null) {
+        letter.data.userLetter = {};
+        letter.data.userLetter.content = '';
+        letter.data.userLetter.createdAt = '';
+        letter.data.userLetter.imageUrl = '';
+        letter.data.userLetter.petName = '';
+      }
+      console.log(letter);
       return letter;
     },
-    enabled: !!token && petId !== null,
+    enabled: !!letterId && !!petId && !!token,
   });
 };

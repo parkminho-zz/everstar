@@ -25,6 +25,9 @@ const LetterBox: React.FC<LetterBoxProps> = ({
   currentPage,
   itemsPerPage,
 }) => {
+  const handleClick = (id: number) => {
+    onLetterClick(id);
+  };
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1199 });
 
@@ -49,7 +52,9 @@ const LetterBox: React.FC<LetterBoxProps> = ({
     <div className='flex flex-wrap items-center justify-center p-8 align-content-center'>
       <div className={`grid ${getGridClassName()} gap-8`}>
         {displayedLetters === undefined || displayedLetters?.length === 0 ? (
-          <div className='text-center text-gray-500 col-span-full'>편지가 없습니다.</div>
+          <div className='text-center text-gray-500 col-span-full'>
+            편지가 없습니다.
+          </div>
         ) : (
           displayedLetters.map((letter) => (
             <LetterCard
@@ -60,7 +65,7 @@ const LetterBox: React.FC<LetterBoxProps> = ({
               name={letter.name}
               sendMessage={letter.sendMessage}
               dateTime={letter.dateTime}
-              onClick={() => onLetterClick(letter.id)}
+              onClick={() => handleClick(letter.id)}
             />
           ))
         )}

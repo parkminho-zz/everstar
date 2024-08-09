@@ -1,12 +1,39 @@
 import config from 'config';
 
 export interface Letter {
-  content: string;
+  requestDto: string;
   image: string;
 }
 
+export const fetchLetterRePost = async (
+  data: FormData,
+  token: string,
+  petId: number,
+  letterId: number
+) => {
+  const response = await fetch(
+    `${config.API_BASE_URL}/api/pets/${petId}/letters/${letterId}`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: data,
+    }
+  );
+
+  console.log('Response status:', response.status);
+  if (!response.ok) {
+    throw new Error('편지 보내기에 실패했습니다');
+  }
+
+  const result = await response.json();
+  console.log('post letter response:', result);
+  return result;
+};
+
 export const fetchLetterPost = async (
-  data: { content: string; image: string },
+  data: FormData,
   token: string,
   petId: number
 ) => {
@@ -17,7 +44,7 @@ export const fetchLetterPost = async (
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(data),
+      body: data,
     }
   );
 
