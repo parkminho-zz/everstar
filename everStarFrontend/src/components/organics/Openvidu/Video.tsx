@@ -9,6 +9,14 @@ interface Props {
 export const Video: React.FC<Props> = ({ streamManager }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
+  const fun = () => {
+    console.log('fnction');
+  };
+
+  useEffect(() => {
+    fun();
+  }, []);
+
   useEffect(() => {
     if (streamManager && videoRef.current) {
       streamManager.addVideoElement(videoRef.current);
