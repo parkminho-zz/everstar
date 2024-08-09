@@ -25,9 +25,10 @@ public class QuestScheduler {
 	// 다음 날 퀘스트 스케줄링
 	public void scheduleNextDayQuest(User user, Long petId) {
 		LocalTime questReceptionTime = user.getQuestReceptionTime();
-		LocalDateTime nextQuestTime = LocalDateTime.of(LocalDate.now().plusDays(1), questReceptionTime);
+		// LocalDateTime nextQuestTime = LocalDateTime.of(LocalDate.now().plusDays(1), questReceptionTime);
+		LocalDateTime nextQuestTime = LocalDateTime.now().plusSeconds(60);
 		Date nextQuestDate = Date.from(nextQuestTime.atZone(ZoneId.systemDefault()).toInstant());
 
-		taskScheduler.schedule(() -> questService.receiveQuest(user, petId), nextQuestDate);
+		taskScheduler.schedule(() -> questService.changePetQuestCompleted(petId), nextQuestDate);
 	}
 }

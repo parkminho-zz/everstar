@@ -3,12 +3,9 @@ package com.everstarbackmain.domain.pet.repository;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.everstarbackmain.domain.everstar.responsedto.EverStarPetSearchResponseDto;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.user.model.User;
 
