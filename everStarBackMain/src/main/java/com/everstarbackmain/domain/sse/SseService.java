@@ -19,18 +19,17 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class SseService {
 
-	private static final Long TIMEOUT_SEC = 10L;
+	private static final Long TIMEOUT_SEC =  60L;
 	private final EmitterRepositoryImpl emitterRepository;
 	private final PetRepository petRepository;
 
 	// 지구별 접속시 SSE pet과 연결
 	public SseEmitter connect(User user, Long id, String lastEventId) {
-		Pet pet = petRepository.findByUserAndIdAndIsDeleted(user, id,false).orElseThrow(() -> new ExceptionResponse(
-			CustomException.NOT_FOUND_PET_EXCEPTION));
+		Pet pet = petRepository.findByUserAndIdAndIsDeleted(user, id,false).
+			orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
 		SseEmitter emitter = createEmitter(pet.getId(), lastEventId);
-
-		sendToClient(pet);
+		sendToClient(pet, emitter);
 		return emitter;
 	}
 
@@ -46,23 +45,28 @@ public class SseService {
 		return emitter;
 	}
 
-	public void sendToClient(Pet pet) {
-		SseEmitter emitter = emitterRepository.findEmitterByPetId(pet.getId());
+	public void sendToClient(Pet pet, SseEmitter emitter) {
 		if (emitter != null) {
 			try {
-				String data;
-				if (pet.getQuestIndex() == 50) {
-					data = "영원별에 메모리얼북이 완성 됐어요.";
-				}  else if (pet.getIsQuestCompleted()) {
-					data = "퀘스트를 완료했어요.";
-				} else {
-					data = pet.getQuestIndex() + " 번째 퀘스트가 도착했어요.";
-				}
-				emitter.send(SseEmitter.event().id(String.valueOf(pet.getId())).name("earthSse").data(data));
+				String data = generateDataMessage(pet);
+				emitter.send(SseEmitter.event()
+					.id(String.valueOf(pet.getId()))
+					.name("earthSse")
+					.data(data));
 			} catch (IOException e) {
 				emitterRepository.deleteByPetId(pet.getId());
 				emitter.completeWithError(e);
 			}
+		}
+    }
+
+	private String generateDataMessage(Pet pet) {
+		if (pet.getQuestIndex() == 50) {
+			return "영원별에 메모리얼북이 완성 됐어요.";
+		} else if (pet.getIsQuestCompleted()) {
+			return "퀘스트를 완료했어요.";
+		} else {
+			return pet.getQuestIndex() + " 번째 퀘스트가 도착했어요.";
 		}
 	}
 }
