@@ -42,6 +42,7 @@ public class SecurityConfig {
 			.requestMatchers("/api/pets/**").hasRole("USER")
 			.requestMatchers("/api/accounts/users/**").hasRole("USER")
 			.requestMatchers("/api/everstar/**").hasRole("USER")
+			.requestMatchers("/api/earth/connect/**").hasRole("USER")
 			.requestMatchers("/api/notifications/**").hasRole("USER")
 			.requestMatchers("api/sessions/**").permitAll()
 			.anyRequest().authenticated()

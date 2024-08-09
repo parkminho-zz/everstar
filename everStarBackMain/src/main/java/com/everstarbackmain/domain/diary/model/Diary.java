@@ -52,7 +52,8 @@ public class Diary extends BaseTimeEntity {
 		isDeleted = false;
 	}
 
-	public static Diary createDiaryHasImage(MemorialBook memorialBook, CreateDiaryRequestDto requestDto, String imageUrl) {
+	public static Diary createDiaryHasImage(MemorialBook memorialBook, CreateDiaryRequestDto requestDto,
+		String imageUrl) {
 		return Diary.builder()
 			.memorialBook(memorialBook)
 			.title(requestDto.getTitle())

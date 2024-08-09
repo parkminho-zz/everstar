@@ -26,9 +26,12 @@ public class CheeringMessageDeleteController {
 	private final HttpResponseUtil responseUtil;
 
 	@DeleteMapping("/{cheeringMessage-id}")
-	ResponseEntity<Map<String, Object>> deleteCheeringMessage(Authentication authentication,  @PathVariable("pet-id") Long petId, @PathVariable("cheeringMessage-id") Long cheeringMessageId) {
+	ResponseEntity<Map<String, Object>> deleteCheeringMessage(Authentication authentication,
+		@PathVariable("pet-id") Long petId,
+		@PathVariable("cheeringMessage-id") Long cheeringMessageId) {
 		cheeringMessageService.deleteCheeringMessage(authentication, petId, cheeringMessageId);
-		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(SuccessCheeringMessageMessage.SUCCESS_DELETE_CHEERINGMESSAGE);
+		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
+			SuccessCheeringMessageMessage.SUCCESS_DELETE_CHEERINGMESSAGE);
 
 		log.info("main server - response : {}", response);
 

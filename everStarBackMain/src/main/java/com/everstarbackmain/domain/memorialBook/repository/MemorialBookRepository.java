@@ -9,5 +9,6 @@ import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 public interface MemorialBookRepository extends JpaRepository<MemorialBook, Long> {
 
 	Optional<MemorialBook> findByIdAndIsDeleted(Long id, boolean isDeleted);
+
 	Optional<MemorialBook> findByPetIdAndIsDeleted(Long petId, boolean isDeleted);
 }

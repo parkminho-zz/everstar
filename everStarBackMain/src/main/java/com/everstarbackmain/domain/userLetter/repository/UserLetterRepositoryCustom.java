@@ -1,6 +1,5 @@
 package com.everstarbackmain.domain.userLetter.repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.everstarbackmain.domain.pet.model.Pet;

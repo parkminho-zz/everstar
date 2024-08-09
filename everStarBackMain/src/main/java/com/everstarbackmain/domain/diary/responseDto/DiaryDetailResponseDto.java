@@ -21,7 +21,7 @@ public class DiaryDetailResponseDto {
 	private String imageUrl;
 	private LocalDateTime createdTime;
 
-	public static DiaryDetailResponseDto createDiaryDetailResponseDto (Diary diary) {
+	public static DiaryDetailResponseDto createDiaryDetailResponseDto(Diary diary) {
 		return DiaryDetailResponseDto.builder()
 			.id(diary.getId())
 			.memorialBookId(diary.getMemorialBook().getId())

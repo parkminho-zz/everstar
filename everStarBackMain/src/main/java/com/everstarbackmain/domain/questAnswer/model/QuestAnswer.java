@@ -2,7 +2,6 @@ package com.everstarbackmain.domain.questAnswer.model;
 
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.quest.model.Quest;
-import com.everstarbackmain.domain.quest.model.QuestType;
 import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
 
@@ -73,7 +72,8 @@ public class QuestAnswer extends BaseTimeEntity {
 			.build();
 	}
 
-	public static QuestAnswer createImageQuestAnswer(Pet pet, Quest quest, CreateAnswerRequestDto requestDto, String imageUrl) {
+	public static QuestAnswer createImageQuestAnswer(Pet pet, Quest quest, CreateAnswerRequestDto requestDto,
+		String imageUrl) {
 		return QuestAnswer.builder()
 			.pet(pet)
 			.quest(quest)
@@ -82,7 +82,8 @@ public class QuestAnswer extends BaseTimeEntity {
 			.build();
 	}
 
-	public static QuestAnswer createTextImageQuestAnswer(Pet pet, Quest quest, CreateAnswerRequestDto requestDto, String imageUrl) {
+	public static QuestAnswer createTextImageQuestAnswer(Pet pet, Quest quest, CreateAnswerRequestDto requestDto,
+		String imageUrl) {
 		return QuestAnswer.builder()
 			.pet(pet)
 			.quest(quest)

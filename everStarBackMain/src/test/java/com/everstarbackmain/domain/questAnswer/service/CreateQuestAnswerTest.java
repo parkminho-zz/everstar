@@ -36,6 +36,7 @@ import com.everstarbackmain.domain.pet.requestdto.CreatePetRequestDto;
 import com.everstarbackmain.domain.quest.model.Quest;
 import com.everstarbackmain.domain.quest.model.QuestType;
 import com.everstarbackmain.domain.quest.repository.QuestRepository;
+import com.everstarbackmain.domain.quest.util.QuestScheduler;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswerType;
 import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;
@@ -100,6 +101,9 @@ public class CreateQuestAnswerTest {
 
 	@Mock
 	private PrincipalDetails principalDetails;
+
+	@Mock
+	private QuestScheduler questScheduler;
 
 	private User user;
 	private Pet pet;

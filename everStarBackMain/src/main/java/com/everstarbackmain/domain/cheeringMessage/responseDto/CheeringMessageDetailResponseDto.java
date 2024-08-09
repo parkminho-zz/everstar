@@ -19,7 +19,8 @@ public class CheeringMessageDetailResponseDto {
 	private String petName;
 	private Color color;
 
-	public static CheeringMessageDetailResponseDto createCheeringMessageDetailResponseDto(CheeringMessage cheeringMessage) {
+	public static CheeringMessageDetailResponseDto createCheeringMessageDetailResponseDto(
+		CheeringMessage cheeringMessage) {
 		return CheeringMessageDetailResponseDto.builder()
 			.content(cheeringMessage.getContent())
 			.isAnonymous(cheeringMessage.getIsAnonymous())

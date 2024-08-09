@@ -48,7 +48,8 @@ public class UserLetter extends BaseTimeEntity {
 		this.is_deleted = false;
 	}
 
-	public static UserLetter writeLetterHasImage(Pet pet, WriteLetterRequestDto writeLetterRequestDto, String imageUrl) {
+	public static UserLetter writeLetterHasImage(Pet pet, WriteLetterRequestDto writeLetterRequestDto,
+		String imageUrl) {
 		return UserLetter.builder()
 			.pet(pet)
 			.content(writeLetterRequestDto.getContent())
