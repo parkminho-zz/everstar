@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const LetterWriteTemplate: React.FC = () => {
   const [text, setText] = useState('');
-  const [image, setImage] = useState<File | null>(); // 파일 상태
+  const [image, setImage] = useState<File | null>();
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
 
@@ -67,6 +67,7 @@ export const LetterWriteTemplate: React.FC = () => {
       console.error('Required data is missing');
     }
   };
+
   const handleButtonClick2 = async () => {
     document.getElementById('photoInput')?.click();
   };

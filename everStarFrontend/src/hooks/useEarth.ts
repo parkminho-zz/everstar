@@ -10,8 +10,32 @@ import {
   fetchLetterPet,
   fetchLetterPetDetail,
   fetchLetterPost,
+  fetchLetterRePost,
   Letter,
 } from 'api/earthApi';
+
+export const useFetchLetterRePost = (
+  token: string,
+  petId: number,
+  letterId: number,
+  options?: UseMutationOptions<Letter, Error, FormData>
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation<Letter, Error, FormData>({
+    mutationFn: (formData: FormData) => {
+      return fetchLetterRePost(formData, token, petId, letterId);
+    },
+    ...options,
+    onSuccess: (data) => {
+      console.log('Successfully posted letter:', data);
+      queryClient.invalidateQueries({ queryKey: ['Letter', letterId] });
+    },
+    onError: (error) => {
+      console.error('Error posting letter:', error);
+    },
+  });
+};
 
 export const useFetchLetterPost = (
   token: string,
