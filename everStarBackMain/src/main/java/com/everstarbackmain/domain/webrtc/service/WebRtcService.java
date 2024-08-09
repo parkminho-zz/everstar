@@ -60,5 +60,4 @@ public class WebRtcService {
 		}
 		return connection.getToken();
 	}
-
 }

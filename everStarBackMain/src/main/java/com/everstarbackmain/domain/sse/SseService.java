@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class SseService {
 
-	private static final Long TIMEOUT_SEC = 60L;
+	private static final Long TIMEOUT_MILLI_SEC = 60L;
 	private final EmitterRepositoryImpl emitterRepository;
 	private final PetRepository petRepository;
 
@@ -33,12 +33,12 @@ public class SseService {
 	}
 
 	private SseEmitter createEmitter(Long petId, String lastEventId) {
-		SseEmitter emitter = new SseEmitter(TIMEOUT_SEC);
+		SseEmitter emitter = new SseEmitter(TIMEOUT_MILLI_SEC);
 		emitterRepository.save(petId, emitter);
 
 		emitter.onCompletion(() -> emitterRepository.deleteByPetId(petId)); // 네트워크 오류
 		emitter.onTimeout(() -> emitterRepository.deleteByPetId(petId)); // 시간 초과
-		emitter.onError((e) -> emitterRepository.deleteByPetId(petId)); // 오류
+		emitter.onError(e -> emitterRepository.deleteByPetId(petId)); // 오류
 
 		return emitter;
 	}
