@@ -35,15 +35,11 @@ export const OpenViduApp = () => {
   const [mainStreamManager, setMainStreamManager] = useState<StreamManager | undefined>(undefined);
   const [publisher, setPublisher] = useState<Publisher | undefined>(undefined);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
-  const [screensharingStream, setScreensharingStream] = useState<StreamManager | undefined>(
-    undefined
-  );
 
   const [isAudioMuted, setIsAudioMuted] = useState<boolean>(false);
   const [isVideoMuted, setIsVideoMuted] = useState<boolean>(false);
   const [isSpeakerMuted, setIsSpeakerMuted] = useState<boolean>(false);
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
-  const [screensharing, setScreensharing] = useState<boolean>(false);
   const [exitClick, setExitClick] = useState<boolean>(false);
   const [, setCurrentVideoDevice] = useState<MediaDeviceInfo | Device | undefined>(undefined);
 
@@ -90,7 +86,7 @@ export const OpenViduApp = () => {
   const handleChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
     if (name.length > 10) {
-      alert('10글자 이내로 다시 입력하세요');
+      alert('이름이 너무 길어요. 10글자 이내로 다시 입력하세요');
       setUserNameOk(false);
     } else {
       setUserNameOk(true);
@@ -183,12 +179,13 @@ export const OpenViduApp = () => {
     if (session) {
       session.disconnect();
     }
-
     setSession(undefined);
     setSubscribers([]);
-    setMyUserName('Participant' + Math.floor(Math.random() * 100));
+    setMyUserName('방문자' + Math.floor(Math.random() * 100));
     setMainStreamManager(undefined);
     setPublisher(undefined);
+
+    navigate('/earth/openvidu');
   };
 
   const toggleAudio = () => {
@@ -221,77 +218,6 @@ export const OpenViduApp = () => {
   const toggleExit = () => {
     setExitClick(!exitClick);
     leaveSession();
-  };
-
-  const publishScreenShare = () => {
-    if (!screensharing && session) {
-      // 화면 공유를 시작할 때
-      const OVScreen = new OpenVidu();
-      const sessionScreen = OVScreen.initSession();
-
-      createToken(mySessionId)
-        .then((token) => {
-          sessionScreen
-            .connect(token)
-            .then(() => {
-              const publisherScreen = OVScreen.initPublisher(undefined, {
-                videoSource: 'screen', // 화면 공유
-                publishAudio: false, // 오디오 없음
-                mirror: false,
-              });
-
-              publisherScreen.once('accessAllowed', () => {
-                console.log('화면 공유 접근 허용됨');
-                setScreensharingStream(publisherScreen);
-                setScreensharing(true);
-
-                // 화면 공유 스트림을 구독
-                const screenSubscriber = sessionScreen.subscribe(
-                  publisherScreen.stream,
-                  'subscriber'
-                );
-                setSubscribers((prevSubscribers) => [...prevSubscribers, screenSubscriber]);
-
-                // 화면 공유 스트림이 종료되었을 때 처리
-                publisherScreen.stream
-                  .getMediaStream()
-                  .getVideoTracks()[0]
-                  .addEventListener('ended', () => {
-                    console.log('화면 공유 종료됨');
-                    sessionScreen.unpublish(publisherScreen);
-                    setSubscribers((prevSubscribers) =>
-                      prevSubscribers.filter((sub) => sub !== screenSubscriber)
-                    ); // 구독자 배열에서 제거
-                    setScreensharingStream(undefined);
-                    setScreensharing(false);
-                  });
-
-                // 화면 공유 스트림을 세션에 게시
-                sessionScreen.publish(publisherScreen);
-              });
-
-              publisherScreen.once('accessDenied', () => {
-                console.warn('화면 공유: 접근 거부됨');
-              });
-            })
-            .catch((error) => {
-              console.error('화면 공유 연결 오류:', error);
-            });
-        })
-        .catch((error) => {
-          console.error('화면 공유 토큰 생성 오류:', error);
-        });
-    } else {
-      // 화면 공유를 중지할 때
-      if (screensharingStream && session) {
-        session.unpublish(screensharingStream as Publisher);
-        setSubscribers((prevSubscribers) =>
-          prevSubscribers.filter((sub) => sub !== screensharingStream)
-        ); // 구독자 배열에서 제거
-        setScreensharingStream(undefined);
-      }
-      setScreensharing(false);
-    }
   };
 
   const getToken = async (): Promise<string> => {
@@ -395,13 +321,6 @@ export const OpenViduApp = () => {
             <h1 id='session-title' className='kor-h-h2'>
               채널명 {mySessionId}
             </h1>
-            <input
-              className='w-[200px] h-[40px] border rounded-md shadow-md mr-0 hover:shadow-md cursor-pointer'
-              type='button'
-              id='buttonClip'
-              onClick={clip}
-              value='Copy URL'
-            />
           </div>
           <div className='flex flex-row items-center justify-center w-full h-4/5'>
             <div className='flex flex-col items-center justify-center w-1/6 gap-8 h-4/5'>
@@ -410,18 +329,21 @@ export const OpenViduApp = () => {
                 onClick={toggleAudio}
                 icon={isAudioMuted ? 'micOff' : 'mic'}
                 disabled={false}
+                label={isAudioMuted ? '마이크켜기' : '마이크끄기'}
               />
               <CircleButton
                 theme={isVideoMuted ? 'white' : 'hover'}
                 onClick={toggleVideo}
                 icon={isVideoMuted ? 'videoOff' : 'video'}
                 disabled={false}
+                label={isVideoMuted ? '비디오켜기' : '비디오끄기'}
               />
               <CircleButton
                 theme={isSpeakerMuted ? 'white' : 'hover'}
                 onClick={toggleSpeaker}
                 icon={isSpeakerMuted ? 'phoneStop' : 'phone'}
                 disabled={false}
+                label={isSpeakerMuted ? '스피커켜기' : '스피커끄기'}
               />
             </div>
             <div className='flex flex-row w-full gap-4 h-4/5'>
@@ -437,11 +359,6 @@ export const OpenViduApp = () => {
                   <UserVideoComponent streamManager={sub} />
                 </div>
               ))}
-              {screensharingStream !== undefined ? (
-                <div className='box-border stream-container col-md-3'>
-                  <UserVideoComponent streamManager={screensharingStream} />
-                </div>
-              ) : null}
             </div>
             <div className='flex flex-col items-center justify-center w-1/6 gap-8 h-4/5'>
               <CircleButton
@@ -449,18 +366,21 @@ export const OpenViduApp = () => {
                 onClick={toggleChat}
                 icon={'chat'}
                 disabled={false}
+                label={isChatOpen ? '채팅닫기' : '채팅열기'}
               />
               <CircleButton
-                theme={screensharing ? 'white' : 'hover'}
-                onClick={publishScreenShare}
+                theme={'white'}
+                onClick={clip}
                 icon={'share'}
-                disabled={screensharing}
+                disabled={false}
+                label={'초대하기'}
               />
               <CircleButton
                 theme={exitClick ? 'hover' : 'white'}
                 onClick={toggleExit}
                 icon={'exit'}
                 disabled={false}
+                label={'나가기'}
               />
             </div>
             {isChatOpen && (

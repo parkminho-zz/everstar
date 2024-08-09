@@ -32,7 +32,7 @@ export const EarthPage: React.FC = () => {
     >
       <Header type='earth' className='top-0 z-50' />
       <div className='flex flex-col flex-grow'>
-        <div className='flex-grow'>
+        <div className='flex items-center justify-center flex-grow h-full'>
           <Routes>
             <Route
               path='/'
@@ -89,7 +89,6 @@ export const EarthPage: React.FC = () => {
               }
             />
             <Route path='openvidu/sessionid/:sessionId' element={<OpenViduApp />} />
-            {/* <Route path='openvidu/sessionid' element={<OpenViduAppWrapper />} /> */}
           </Routes>
         </div>
         <Footer className='w-full mt-auto' />

@@ -71,6 +71,10 @@ export const EarthMain: React.FC<EarthMainProps> = ({
 
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
 
+  const getOpenvidu = () => {
+    navigate(`/earth/openvidu`);
+  };
+
   return (
     <div className='relative flex flex-col items-center justify-center min-h-screen'>
       <Rainbow className={getRainbowStyle()} color={getColor(fill)} />
@@ -87,6 +91,14 @@ export const EarthMain: React.FC<EarthMainProps> = ({
           showMusicControl={false}
           className={className}
         />
+        <button
+          className='bg-white h-[50px] w-[200px] shadow-lg rounded-md mt-4'
+          onClick={getOpenvidu}
+        >
+          임시버튼
+          <br />
+          오픈비두 질문으로 이동
+        </button>
       </div>
     </div>
   );

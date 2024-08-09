@@ -33,6 +33,7 @@ interface ICircleButtonProps {
   theme: CircleButtonTheme;
   disabled: boolean;
   icon: RtcIconTheme;
+  label?: string;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -51,7 +52,7 @@ const iconMap: Record<RtcIconTheme, React.ComponentType<any>> = {
   exit: ExitIcon,
 };
 
-export function CircleButton({ theme, icon, onClick, disabled }: ICircleButtonProps) {
+export function CircleButton({ theme, icon, label, onClick, disabled }: ICircleButtonProps) {
   const getBgPath = () => {
     if (disabled) return CircleDisabled;
     switch (theme) {
@@ -74,20 +75,23 @@ export function CircleButton({ theme, icon, onClick, disabled }: ICircleButtonPr
   const IconComponent = iconMap[icon];
 
   return (
-    <button
-      className='relative flex items-center justify-center rounded-lg px-4 w-[120px] h-[120px]'
-      disabled={disabled}
-      onClick={onClick}
-    >
-      <img
-        src={getBgPath()}
-        alt='circle button background'
-        className='absolute inset-0 w-full h-full'
-        style={{ zIndex: 0 }}
-      />
-      <div className='relative flex items-center justify-center' style={{ zIndex: 1 }}>
-        <IconComponent size={24} color={getColor()} />
-      </div>
-    </button>
+    <div className='flex flex-col text-center'>
+      <button
+        className='relative flex items-center justify-center rounded-lg px-4 w-[120px] h-[120px]'
+        disabled={disabled}
+        onClick={onClick}
+      >
+        <img
+          src={getBgPath()}
+          alt='circle button background'
+          className='absolute inset-0 w-full h-full'
+          style={{ zIndex: 0 }}
+        />
+        <div className='relative flex items-center justify-center' style={{ zIndex: 1 }}>
+          <IconComponent size={24} color={getColor()} />
+        </div>
+      </button>
+      {label && <span className='mt-[-10px]'>{label}</span>}
+    </div>
   );
 }
