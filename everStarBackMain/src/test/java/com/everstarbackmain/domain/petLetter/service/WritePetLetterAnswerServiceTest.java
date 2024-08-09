@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.everstarbackmain.domain.notification.util.NotificationUtil;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
@@ -47,6 +48,9 @@ public class WritePetLetterAnswerServiceTest {
 	@Mock
 	private SmsCertificationUtil smsCertificationUtil;
 
+	@Mock
+	private NotificationUtil notificationUtil;
+
 	private User user;
 	private Pet pet;
 	private WriteLetterRequestDto requestDto;
@@ -60,8 +64,8 @@ public class WritePetLetterAnswerServiceTest {
 		pet = Pet.createPet(user, new CreatePetRequestDto("petName", 10,
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
-		requestDto = new WriteLetterRequestDto("dd", "dd");
-		userLetter = UserLetter.writeLetterHasImage(pet, requestDto);
+		requestDto = new WriteLetterRequestDto("dd");
+		userLetter = UserLetter.writeLetterHasImage(pet, requestDto, "image");
 		userLetter = UserLetter.writeLetterHasNotImage(pet, requestDto);
 	}
 

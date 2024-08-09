@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
@@ -29,6 +30,7 @@ import com.everstarbackmain.domain.userLetter.model.UserLetter;
 import com.everstarbackmain.domain.userLetter.repository.UserLetterRepository;
 import com.everstarbackmain.domain.userLetter.requestDto.WriteLetterRequestDto;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
+import com.everstarbackmain.global.util.S3UploadUtil;
 
 @ExtendWith(MockitoExtension.class)
 public class WriteLetterServiceTest {
@@ -51,6 +53,12 @@ public class WriteLetterServiceTest {
 	@Mock
 	private PrincipalDetails principalDetails;
 
+	@Mock
+	private MultipartFile file;
+
+	@Mock
+	private S3UploadUtil s3UploadUtil;
+
 	private WriteLetterRequestDto requestDto;
 	private WriteLetterRequestDto noImageRequestDto;
 	private User user;
@@ -66,9 +74,9 @@ public class WriteLetterServiceTest {
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
 
-		requestDto = new WriteLetterRequestDto("dd", "dd");
+		requestDto = new WriteLetterRequestDto("dd");
 		noImageRequestDto = new WriteLetterRequestDto("dd");
-		userLetter = UserLetter.writeLetterHasImage(pet, requestDto);
+		userLetter = UserLetter.writeLetterHasImage(pet, requestDto, "imgUrl");
 	}
 
 	@Test
@@ -82,7 +90,7 @@ public class WriteLetterServiceTest {
 
 		//then
 		Assertions.assertThatNoException()
-			.isThrownBy(() -> userLetterService.writeLetter(authentication, id, requestDto));
+			.isThrownBy(() -> userLetterService.writeLetter(authentication, id, requestDto, file));
 	}
 
 	@Test
@@ -96,6 +104,6 @@ public class WriteLetterServiceTest {
 
 		//then
 		Assertions.assertThatNoException()
-			.isThrownBy(() -> userLetterService.writeLetter(authentication, id, noImageRequestDto));
+			.isThrownBy(() -> userLetterService.writeLetter(authentication, id, noImageRequestDto, file));
 	}
 }

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -22,14 +21,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.everstarbackmain.domain.aiAnswer.repository.AiAnswerRepository;
 import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 import com.everstarbackmain.domain.memorialBook.util.MemorialBookScheduler;
+import com.everstarbackmain.domain.pet.repository.PetPersonalityRepository;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.quest.model.Quest;
 import com.everstarbackmain.domain.quest.model.QuestType;
 import com.everstarbackmain.domain.quest.repository.QuestRepository;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswerType;
+import com.everstarbackmain.domain.questAnswer.model.QuestAnswerTypeNo;
 import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
@@ -62,10 +64,16 @@ class QuestAnswerServiceTest {
 	private PetRepository petRepository;
 
 	@Mock
+	private PetPersonalityRepository petPersonalityRepository;
+
+	@Mock
 	private MemorialBookScheduler memorialBookScheduler;
 
 	@Mock
 	private QuestAnswerRepository questAnswerRepository;
+
+	@Mock
+	private AiAnswerRepository aiAnswerRepository;
 
 	@Mock
 	private SentimentAnalysisRepository sentimentAnalysisRepository;
@@ -90,11 +98,15 @@ class QuestAnswerServiceTest {
 
 	private User user;
 	private Pet pet;
+	private List<String> petPersonalities;
 	private MemorialBook memorialBook;
 	private SentimentAnalysis sentimentAnalysis;
 	private SentimentAnalysisResult sentimentAnalysisResult;
 	private Quest quest;
 	private CreateAnswerRequestDto createAnswerRequestDto;
+	private CreateAnswerRequestDto createTextAnswerRequestDto;
+	private QuestAnswer textQuestAnswer;
+	private QuestAnswer textImageToTextAnswer;
 
 	@BeforeEach
 	public void setup() {
@@ -103,50 +115,18 @@ class QuestAnswerServiceTest {
 		pet = Pet.createPet(user, new CreatePetRequestDto("petName", 10,
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
+		petPersonalities = List.of("개구쟁이, 귀염둥이");
 		memorialBook = MemorialBook.createMemorialBook(pet);
 		sentimentAnalysis = SentimentAnalysis.createSentimentAnalysis(pet);
 		sentimentAnalysisResult = SentimentAnalysisResult.createSentimentAnalysisResult(0.1, 0.3, 0.6);
 		quest = new Quest("content", QuestType.TEXT);
 		createAnswerRequestDto = new CreateAnswerRequestDto("content", QuestAnswerType.TEXT_IMAGE.getType());
+		createTextAnswerRequestDto = new CreateAnswerRequestDto("content", QuestAnswerType.TEXT.getType());
+		textQuestAnswer = QuestAnswer.createTextQuestAnswer(pet, quest, createTextAnswerRequestDto);
+		textImageToTextAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, createAnswerRequestDto, "imageUrl");
+
 
 		ReflectionTestUtils.setField(pet, "id", 1L);
-	}
-
-	@Test
-	@DisplayName("퀘스트_답변_생성_성공_테스트")
-	public void 퀘스트_답변_생성_성공_테스트() {
-		// given
-		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
-		given(authentication.getPrincipal()).willReturn(principalDetails);
-		given(principalDetails.getUser()).willReturn(user);
-		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
-		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
-
-		// when
-		questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
-
-		// then
-		BDDMockito.then(questAnswerRepository).should(times(1)).save(any(QuestAnswer.class));
-		BDDMockito.then(s3UploadUtil).should(times(1)).saveFile(imageFile);
-	}
-
-	@Test
-	@DisplayName("퀘스트_답변_생성_퀘스트_없음_예외_테스트")
-	public void 퀘스트_답변_생성_퀘스트_없음_예외_테스트() {
-		// given
-		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
-		given(authentication.getPrincipal()).willReturn(principalDetails);
-		given(principalDetails.getUser()).willReturn(user);
-		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
-		given(questRepository.findById(anyLong())).willReturn(Optional.empty());
-
-		// when
-		ExceptionResponse exceptionResponse = assertThrows(ExceptionResponse.class, () -> {
-			questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
-		});
-
-		// then
-		assertEquals(CustomException.NOT_FOUND_QUEST_EXCEPTION, exceptionResponse.getCustomException());
 	}
 
 	@Test
@@ -306,6 +286,76 @@ class QuestAnswerServiceTest {
 
 		// then
 		assertEquals(CustomException.OPENAI_API_EXCEPTION, exceptionResponse.getCustomException());
+	}
+
+	@Test
+	@DisplayName("퀘스트_답변_생성_후_TEXT_TO_TEXT_타입일_경우_관련_OPENAI_API_호출_테스트")
+	public void 퀘스트_답변_생성_후_TEXT_TO_TEXT_타입일_경우_관련_OPENAI_API_호출_테스트() {
+		given(authentication.getPrincipal()).willReturn(principalDetails);
+		given(principalDetails.getUser()).willReturn(user);
+		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
+		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
+		given(petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(
+			petPersonalities);
+		ReflectionTestUtils.setField(quest, "id", 2L);
+
+		mockStatic(QuestAnswerTypeNo.class);
+		given(QuestAnswerTypeNo.findTypeByQuestNumber(anyLong())).willReturn(
+			Optional.of(QuestAnswerTypeNo.TEXT_TO_TEXT.getType()));
+		mockStatic(QuestAnswer.class);
+		given(QuestAnswer.createTextQuestAnswer(any(), any(), any())).willReturn(textQuestAnswer);
+
+		// when
+		questAnswerService.createQuestAnswer(authentication, 1L, 2L, createTextAnswerRequestDto, null);
+
+		// then
+		verify(openAiClient).writePetTextToTextAnswer(user, pet, petPersonalities, quest, textQuestAnswer);
+	}
+
+	@Test
+	@DisplayName("퀘스트_답변_생성_후_TEXT_IMAGE_TO_TEXT_타입일_경우_관련_OPENAI_API_호출_테스트")
+	public void 퀘스트_답변_생성_후_TEXT_IMAGE_TO_TEXT_타입일_경우_관련_OPENAI_API_호출_테스트() {
+		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
+		given(authentication.getPrincipal()).willReturn(principalDetails);
+		given(principalDetails.getUser()).willReturn(user);
+		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
+		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
+		given(petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(
+			petPersonalities);
+		given(s3UploadUtil.saveFile(any())).willReturn("imageUrl");
+		ReflectionTestUtils.setField(quest, "id", 37L);
+
+		given(QuestAnswerTypeNo.findTypeByQuestNumber(anyLong())).willReturn(
+			Optional.of(QuestAnswerTypeNo.TEXT_IMAGE_TO_TEXT.getType()));
+		given(QuestAnswer.createTextImageQuestAnswer(any(), any(), any(), anyString())).willReturn(textImageToTextAnswer);
+
+		// when
+		questAnswerService.createQuestAnswer(authentication, 1L, 37L, createAnswerRequestDto, imageFile);
+
+		// then
+		verify(openAiClient).writePetTextImageToTextAnswer(user, pet, petPersonalities, quest, textImageToTextAnswer, "imageUrl");
+	}
+
+	@Test
+	@DisplayName("퀘스트_답변_생성_후_TEXT_IMAGE_TO_TEXT_타입일_경우_관련_OPENAI_API_호출_테스트")
+	public void 퀘스트_답변_생성_후_TEXT_TO_IMAGE_ART_타입일_경우_관련_OPENAI_API_호출_테스트() {
+		given(authentication.getPrincipal()).willReturn(principalDetails);
+		given(principalDetails.getUser()).willReturn(user);
+		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
+		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
+		given(petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(
+			petPersonalities);
+		ReflectionTestUtils.setField(quest, "id", 44L);
+
+		given(QuestAnswerTypeNo.findTypeByQuestNumber(anyLong())).willReturn(
+			Optional.of(QuestAnswerTypeNo.TEXT_TO_IMAGE_ART.getType()));
+		given(QuestAnswer.createTextImageQuestAnswer(any(), any(), any(), anyString())).willReturn(textQuestAnswer);
+
+		// when
+		questAnswerService.createQuestAnswer(authentication, 1L, 44L, createTextAnswerRequestDto, null);
+
+		// then
+		verify(openAiClient).writePetTextToImageAnswer(pet, quest, textQuestAnswer);
 	}
 
 }

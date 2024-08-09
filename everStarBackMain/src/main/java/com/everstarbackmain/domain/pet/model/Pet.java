@@ -142,4 +142,8 @@ public class Pet extends BaseTimeEntity {
 		int randomMinutes = 1 + random.nextInt(5);
 		return LocalDateTime.now().plusWeeks(randomMinutes);
 	}
+
+	public void updateProfileImage(String profileImageUrl) {
+		this.profileImageUrl = profileImageUrl;
+	}
 }

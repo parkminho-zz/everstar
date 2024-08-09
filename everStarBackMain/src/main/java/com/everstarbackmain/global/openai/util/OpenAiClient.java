@@ -1,11 +1,14 @@
 package com.everstarbackmain.global.openai.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import com.everstarbackmain.domain.quest.model.Quest;
+import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 import com.everstarbackmain.global.openai.model.ChatGPTRequest;
 import com.everstarbackmain.global.openai.model.ChatGPTResponse;
 import com.everstarbackmain.domain.pet.model.Pet;
@@ -15,6 +18,11 @@ import com.everstarbackmain.domain.userLetter.model.UserLetter;
 import com.everstarbackmain.global.config.OpenAiConfig;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
+import com.everstarbackmain.global.openai.model.Content;
+import com.everstarbackmain.global.openai.model.ImageGPTRequest;
+import com.everstarbackmain.global.openai.model.ImageGPTResponse;
+import com.everstarbackmain.global.openai.model.OpenAiPrompt;
+import com.everstarbackmain.global.openai.model.TextImageGPTRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,44 +34,12 @@ public class OpenAiClient {
 
 	private final RestTemplate restTemplate;
 	private final OpenAiConfig openAiConfig;
-	private final String ANALYSIS_TOTAL_SENTIMENT_PROMPT =
-		"7주간의 각 주차별 감정 분석 결과를 입력으로 받아서 사용자의 감정이 어떻게 변화하였는지를 알려줍니다. " +
-			"0에 가까울수록 부정적인 감정을 겪었고, 100에 가까울수록 긍정적인 감정을 겪었습니다." +
-			"몇주차인지는 언급하지 않고, 자연스러운 흐름으로 일상생활과 연관지어서 부드러운 문장으로 알려줍니다. 최대 3문장으로 요약해서 알려줍니다.";
-
-	private final String WRITE_PET_LETTER_ANSWER_PROMPT =
-		"당신의 애완동물 %s가 보내는 답장입니다. 편지를 분석하여 %s의 관점에서 감동적이고 공감할 수 있는 답장을 작성해 주세요.\n\n" +
-			"편지 내용: \"%s\"\n\n" +
-			"애완동물 이름: \"%s\"\n" +
-			"작성자 이름: \"%s\"\n\n" +
-			"답장을 작성할 때 고려 사항:\n" +
-			"1. 애완동물이 직접 말하는 것처럼 작성해 주세요.\n" +
-			"2. 편지에 언급된 추억에 감사해 주세요.\n" +
-			"3. 사랑의 메시지를 전달해 주세요.\n" +
-			"4. 따뜻하고 진심 어린 톤으로 작성해 주세요.\n" +
-			"5. 너무 딱딱하지 않게 문장이 부드럽게 작성해주세요\n" +
-			"6. 최대 varchar(255)로 글자를 작성해 주세요.\n\n" +
-			"감사합니다.";
-
-	private final String WRITE_PET_LETTER_PROMPT =
-		"당신의 애완동물 %s가 보내는 답장입니다. 편지를 분석하여 %s의 관점에서 감동적이고 공감할 수 있는 답장을 작성해 주세요.\n\n" +
-			"편지 내용: \"%s\"\n\n" +
-			"애완동물 이름: \"%s\"\n" +
-			"작성자 이름: \"%s\"\n\n" +
-			"답장을 작성할 때 고려 사항:\n" +
-			"1. 애완동물이 직접 말하는 것처럼 작성해 주세요.\n" +
-			"2. 편지에 언급된 추억에 감사해 주세요.\n" +
-			"3. 사랑의 메시지를 전달해 주세요.\n" +
-			"4. 따뜻하고 진심 어린 톤으로 작성해 주세요.\n" +
-			"5. 너무 딱딱하지 않게 문장이 부드럽게 11살에서 12살이 작성한 것 처럼작성해 주세요.\n" +
-			"6. 최대 varchar(255)로 글자를 작성해 주세요.\n\n" +
-			"감사합니다.";
 
 	public String analysisTotalSentiment(SentimentAnalysis sentimentAnalysis) {
 		String userInput = parseAnalysisToJsonString(sentimentAnalysis);
 
 		ChatGPTRequest request = ChatGPTRequest.createChatGPTRequest(openAiConfig.getModel(),
-			ANALYSIS_TOTAL_SENTIMENT_PROMPT, userInput);
+			OpenAiPrompt.ANALYSIS_TOTAL_SENTIMENT_PROMPT.getPrompt(), userInput);
 		ChatGPTResponse response = restTemplate.postForObject(openAiConfig.getApiUrl(), request, ChatGPTResponse.class);
 
 		if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
@@ -87,7 +63,7 @@ public class OpenAiClient {
 		}
 
 		String result = response.getChoices().get(0).getMessage().getContent();
-		log.info("main server - openai api total sentiment analysis response : {}", result);
+		log.info("main server - openai api write pet letter answer response : {}", result);
 
 		return result;
 	}
@@ -104,7 +80,7 @@ public class OpenAiClient {
 		}
 
 		String result = response.getChoices().get(0).getMessage().getContent();
-		log.info("main server - openai api total sentiment analysis response : {}", result);
+		log.info("main server - openai api write pet letter response : {}", result);
 
 		return result;
 	}
@@ -136,7 +112,7 @@ public class OpenAiClient {
 
 		String letterContent = userLetter.getContent();
 
-		String prompt = String.format(WRITE_PET_LETTER_ANSWER_PROMPT, petName, petName, letterContent, petName,
+		String prompt = String.format(OpenAiPrompt.WRITE_PET_LETTER_ANSWER_PROMPT.getPrompt(), petName, petName, letterContent, petName,
 			userName);
 		return prompt;
 	}
@@ -146,9 +122,80 @@ public class OpenAiClient {
 		User user = pet.getUser();
 		String userName = user.getUserName();
 
-		String prompt = String.format(WRITE_PET_LETTER_ANSWER_PROMPT, petName, petName, content, petName, userName);
+		String prompt = String.format(OpenAiPrompt.WRITE_PET_LETTER_ANSWER_PROMPT.getPrompt(), petName, petName, content, petName, userName);
 		return prompt;
 	}
 
+	public String writePetTextToTextAnswer(User user, Pet pet, List<String> petPersonalities, Quest quest, QuestAnswer questAnswer) {
+		String prompt = createPetTextToTextAnswerPrompt(user, pet, petPersonalities, quest, questAnswer);
+
+		ChatGPTRequest request = new ChatGPTRequest(openAiConfig.getModel(), prompt);
+		ChatGPTResponse response = restTemplate.postForObject(openAiConfig.getApiUrl(), request, ChatGPTResponse.class);
+
+		if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
+			throw new ExceptionResponse(CustomException.OPENAI_API_EXCEPTION);
+		}
+
+		String result = response.getChoices().get(0).getMessage().getContent();
+		log.info("main server - openai api pet text answer response : {}", result);
+
+		return result;
+	}
+
+	private String createPetTextToTextAnswerPrompt(User user, Pet pet, List<String> petPersonalities, Quest quest, QuestAnswer questAnswer) {
+		String petName = pet.getName();
+		String personalities = String.join(", ", petPersonalities);
+		String prompt = String.format(OpenAiPrompt.WRITE_PET_TEXT_TO_TEXT_ANSWER_PROMPT.getPrompt(), petName, petName,
+			quest.getContent(), questAnswer.getContent(), petName, pet.getRelationship(), personalities, user.getUserName());
+		return prompt;
+	}
+
+	public String writePetTextImageToTextAnswer(User user, Pet pet, List<String> petPersonalities, Quest quest,
+		QuestAnswer questAnswer, String imageUrl) {
+		String prompt = createPetTextImageToTextAnswerPrompt(user, pet, petPersonalities, quest, questAnswer);
+
+		List<Content> contents = new ArrayList<>();
+		contents.add(Content.createTextContent(prompt));
+		contents.add(Content.createImageContent(imageUrl));
+
+		TextImageGPTRequest request = new TextImageGPTRequest(openAiConfig.getModel(), contents);
+		ChatGPTResponse response = restTemplate.postForObject(openAiConfig.getApiUrl(), request, ChatGPTResponse.class);
+
+		if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
+			throw new ExceptionResponse(CustomException.OPENAI_API_EXCEPTION);
+		}
+
+		String result = response.getChoices().get(0).getMessage().getContent();
+		log.info("main server - openai api pet text image answer response : {}", result);
+
+		return result;
+	}
+
+	private String createPetTextImageToTextAnswerPrompt(User user, Pet pet, List<String> petPersonalities, Quest quest, QuestAnswer questAnswer) {
+		String petName = pet.getName();
+		String personalities = String.join(", ", petPersonalities);
+		String prompt = String.format(OpenAiPrompt.WRITE_PET_TEXT_IMAGE_TO_TEXT_ANSWER_PROMPT.getPrompt(), petName, petName,
+			quest.getContent(), questAnswer.getContent(), petName, pet.getRelationship(), personalities, user.getUserName());
+		return prompt;
+	}
+
+	public String writePetTextToImageAnswer(Pet pet, Quest quest, QuestAnswer questAnswer) {
+		String prompt = createPetTextToImageAnswerPrompt(pet, quest, questAnswer);
+
+		ImageGPTRequest request = new ImageGPTRequest(prompt);
+		ImageGPTResponse response = restTemplate.postForObject(openAiConfig.getCreateImageUrl(), request, ImageGPTResponse.class);
+
+		if (response == null || response.getData() == null || response.getData().isEmpty()) {
+			throw new ExceptionResponse(CustomException.OPENAI_API_EXCEPTION);
+		}
+
+		return response.getData().get(0).getB64_json();
+	}
+
+	private String createPetTextToImageAnswerPrompt(Pet pet, Quest quest, QuestAnswer questAnswer) {
+		String prompt = String.format(OpenAiPrompt.WRITE_PET_TEXT_TO_IMAGE_ANSWER_PROMPT.getPrompt(),
+			quest.getContent(), questAnswer.getContent(), pet.getSpecies());
+		return prompt;
+	}
 }
 

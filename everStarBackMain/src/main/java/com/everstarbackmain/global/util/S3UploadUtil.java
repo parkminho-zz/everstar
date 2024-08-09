@@ -1,7 +1,9 @@
 package com.everstarbackmain.global.util;
 
 import java.io.IOException;
+import java.util.Base64;
 
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,5 +35,16 @@ public class S3UploadUtil {
 			throw new ExceptionResponse(CustomException.S3_UPLOAD_EXCEPTION);
 		}
 		return amazonS3.getUrl(s3Config.getBucket(), originalFilename).toString();
+	}
+
+	public String uploadS3ByEncodedFile(String encodedFile) {
+		byte[] decodedBytes = Base64.getDecoder().decode(encodedFile);
+		MultipartFile decodedImageFile = new MockMultipartFile(
+			"image",
+			"image.png",
+			"image/png",
+			decodedBytes
+		);
+		return saveFile(decodedImageFile);
 	}
 }

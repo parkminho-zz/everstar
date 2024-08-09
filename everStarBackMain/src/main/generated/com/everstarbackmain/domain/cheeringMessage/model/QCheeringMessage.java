@@ -28,6 +28,8 @@ public class QCheeringMessage extends EntityPathBase<CheeringMessage> {
 
     public final StringPath behindPetRelationship = createString("behindPetRelationship");
 
+    public final EnumPath<Color> color = createEnum("color", Color.class);
+
     public final StringPath content = createString("content");
 
     //inherited

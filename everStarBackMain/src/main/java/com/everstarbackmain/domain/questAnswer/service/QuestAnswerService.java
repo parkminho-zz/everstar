@@ -1,7 +1,6 @@
 package com.everstarbackmain.domain.questAnswer.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
@@ -9,12 +8,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.everstarbackmain.domain.aiAnswer.model.AiAnswer;
+import com.everstarbackmain.domain.aiAnswer.model.AiAnswerType;
+import com.everstarbackmain.domain.aiAnswer.repository.AiAnswerRepository;
+import com.everstarbackmain.domain.aiAnswer.requestdto.CreateAiAnswerRequestDto;
 import com.everstarbackmain.domain.memorialBook.util.MemorialBookScheduler;
+import com.everstarbackmain.domain.pet.repository.PetPersonalityRepository;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.quest.model.Quest;
 import com.everstarbackmain.domain.quest.model.QuestType;
 import com.everstarbackmain.domain.quest.repository.QuestRepository;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
+import com.everstarbackmain.domain.questAnswer.model.QuestAnswerTypeNo;
 import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
@@ -40,7 +45,9 @@ public class QuestAnswerService {
 
 	private final QuestRepository questRepository;
 	private final QuestAnswerRepository questAnswerRepository;
+	private final AiAnswerRepository aiAnswerRepository;
 	private final PetRepository petRepository;
+	private final PetPersonalityRepository petPersonalityRepository;
 	private final SentimentAnalysisRepository sentimentAnalysisRepository;
 	private final MemorialBookScheduler memorialBookScheduler;
 	private final NaverCloudClient naverCloudClient;
@@ -50,7 +57,7 @@ public class QuestAnswerService {
 	@Transactional
 	public void createQuestAnswer(Authentication authentication, Long petId, Long questId,
 		CreateAnswerRequestDto requestDto, MultipartFile imageFile) {
-		User user = ((PrincipalDetails) authentication.getPrincipal()).getUser();
+		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 
 		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
@@ -61,7 +68,7 @@ public class QuestAnswerService {
 		if (requestDto.getType().equals(QuestType.TEXT.getType())) {
 			QuestAnswer questAnswer = QuestAnswer.createTextQuestAnswer(pet, quest, requestDto);
 			questAnswerRepository.save(questAnswer);
-			plusPetQuestIndex(user, pet);
+			plusPetQuestIndexByTextType(user, pet, quest, questAnswer);
 			return;
 		}
 
@@ -69,17 +76,17 @@ public class QuestAnswerService {
 			String imageUrl = s3UploadUtil.saveFile(imageFile);
 			QuestAnswer questAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, requestDto, imageUrl);
 			questAnswerRepository.save(questAnswer);
-			plusPetQuestIndex(user, pet);
+			plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
 			return;
 		}
 
 		String imageUrl = s3UploadUtil.saveFile(imageFile);
 		QuestAnswer questAnswer = QuestAnswer.createImageQuestAnswer(pet, quest, requestDto, imageUrl);
 		questAnswerRepository.save(questAnswer);
-		plusPetQuestIndex(user, pet);
+		plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
 	}
 
-	private void plusPetQuestIndex(User user, Pet pet) {
+	private void plusPetQuestIndexByTextType(User user, Pet pet, Quest quest, QuestAnswer questAnswer) {
 		pet.plusQuestIndex();
 		int petQuestIndex = pet.getQuestIndex();
 
@@ -91,6 +98,25 @@ public class QuestAnswerService {
 			memorialBookScheduler.scheduleMemorialBookActivation(user, pet.getId());
 			analysisTotalQuestAnswer(pet.getId());
 		}
+
+		requestAiAnswerByTextType(user, pet, quest, questAnswer);
+	}
+
+	private void plusPetQuestIndexByImageType(User user, Pet pet, Quest quest, QuestAnswer questAnswer, String imageUrl,
+		MultipartFile imageFile) {
+		pet.plusQuestIndex();
+		int petQuestIndex = pet.getQuestIndex();
+
+		if (petQuestIndex % 7 == 0) {
+			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex);
+		}
+
+		if (petQuestIndex == 49) {
+			memorialBookScheduler.scheduleMemorialBookActivation(user, pet.getId());
+			analysisTotalQuestAnswer(pet.getId());
+		}
+
+		requestAiAnswerByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
 	}
 
 	private void analyseWeeklyQuestAnswer(Long petId, int petQuestIndex) {
@@ -113,4 +139,52 @@ public class QuestAnswerService {
 
 		sentimentAnalysis.addTotalResult(openAiClient.analysisTotalSentiment(sentimentAnalysis));
 	}
+
+	private void requestAiAnswerByTextType(User user, Pet pet, Quest quest, QuestAnswer questAnswer) {
+		Long questId = quest.getId();
+		List<String> personalities = petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(
+			pet.getId(), false);
+
+		QuestAnswerTypeNo.findTypeByQuestNumber(questId).ifPresentOrElse(type -> {
+			if (type.equals(QuestAnswerTypeNo.TEXT_TO_TEXT.getType())) {
+				String aiAnswerResponse = openAiClient.writePetTextToTextAnswer(user, pet, personalities, quest,
+					questAnswer);
+				AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
+					CreateAiAnswerRequestDto.createTextAiAnswerRequestDto(aiAnswerResponse,
+						AiAnswerType.TEXT.getType()));
+				aiAnswerRepository.save(aiAnswer);
+			}
+
+			if (type.equals(QuestAnswerTypeNo.TEXT_TO_IMAGE_ART.getType())) {
+				String encodedAiAnswerResponse = openAiClient.writePetTextToImageAnswer(pet, quest, questAnswer);
+				String uploadedImageUrl = s3UploadUtil.uploadS3ByEncodedFile(encodedAiAnswerResponse);
+				AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
+					CreateAiAnswerRequestDto.createImageAiAnswerRequestDto(uploadedImageUrl, AiAnswerType.IMAGE.getType()));
+				aiAnswerRepository.save(aiAnswer);
+			}
+
+		}, () -> {
+		});
+	}
+
+	private void requestAiAnswerByImageType(User user, Pet pet, Quest quest, QuestAnswer questAnswer, String imageUrl,
+		MultipartFile imageFile) {
+		Long questId = quest.getId();
+		List<String> personalities = petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(
+			pet.getId(), false);
+
+		QuestAnswerTypeNo.findTypeByQuestNumber(questId).ifPresentOrElse(type -> {
+			if (type.equals(QuestAnswerTypeNo.TEXT_IMAGE_TO_TEXT.getType())) {
+				String aiAnswerResponse = openAiClient.writePetTextImageToTextAnswer(user, pet, personalities, quest,
+					questAnswer, imageUrl);
+				AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
+					CreateAiAnswerRequestDto.createTextAiAnswerRequestDto(aiAnswerResponse,
+						AiAnswerType.TEXT.getType()));
+				aiAnswerRepository.save(aiAnswer);
+			}
+
+		}, () -> {
+		});
+	}
+
 }

@@ -3,6 +3,7 @@ package com.everstarbackmain.domain.userLetter.service;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;
@@ -17,6 +18,7 @@ import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
+import com.everstarbackmain.global.util.S3UploadUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,21 +33,32 @@ public class UserLetterService {
 	private final PetRepository petRepository;
 	private final PetLetterRepository petLetterRepository;
 	private final PetLetterScheduler petLetterScheduler;
+	private final S3UploadUtil s3UploadUtil;
 
 	@Transactional
-	public void writeLetter(Authentication authentication, Long petId, WriteLetterRequestDto requestDto) {
+	public void writeLetter(Authentication authentication, Long petId, WriteLetterRequestDto requestDto,
+		MultipartFile image) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 
 		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
-		UserLetter userLetter = writeUserLetter(pet, requestDto);
+		if (image != null) {
+			String imageUrl = s3UploadUtil.saveFile(image);
+			UserLetter userLetter = writeUserLetter(pet, requestDto, imageUrl);
+			userLetterRepository.save(userLetter);
+			petLetterScheduler.schedulePetLetter(userLetter);
+			return;
+		}
+
+		UserLetter userLetter = writeUserLetterNoImage(pet, requestDto);
 		userLetterRepository.save(userLetter);
 		petLetterScheduler.schedulePetLetter(userLetter);
 	}
 
 	@Transactional
-	public void writeLetterAnswer(Authentication authentication, Long petId, Long petLetterId, WriteLetterRequestDto requestDto) {
+	public void writeLetterAnswer(Authentication authentication, Long petId, Long petLetterId,
+		WriteLetterRequestDto requestDto, MultipartFile image) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
@@ -60,17 +73,26 @@ public class UserLetterService {
 			throw new ExceptionResponse(CustomException.NOT_ACCESS_SEND_LETTER_ANSWER);
 		}
 
-		UserLetter userLetter = writeUserLetter(pet, requestDto);
+		if (image != null) {
+			String imageUrl = s3UploadUtil.saveFile(image);
+			UserLetter userLetter = writeUserLetter(pet, requestDto, imageUrl);
+			userLetterRepository.save(userLetter);
+			petLetter.fetchReplyLetter(userLetter);
+			return;
+		}
+
+		UserLetter userLetter = writeUserLetterNoImage(pet, requestDto);
 		userLetterRepository.save(userLetter);
 		petLetter.fetchReplyLetter(userLetter);
 	}
 
-	private UserLetter writeUserLetter(Pet pet, WriteLetterRequestDto requestDto) {
-		if (requestDto.getImageUrl() == null) {
-			UserLetter userLetter = UserLetter.writeLetterHasNotImage(pet, requestDto);
-			return userLetter;
-		}
-		UserLetter userLetter = UserLetter.writeLetterHasImage(pet, requestDto);
+	private UserLetter writeUserLetter(Pet pet, WriteLetterRequestDto requestDto, String imgUrl) {
+		UserLetter userLetter = UserLetter.writeLetterHasImage(pet, requestDto, imgUrl);
+		return userLetter;
+	}
+
+	private UserLetter writeUserLetterNoImage(Pet pet, WriteLetterRequestDto requestDto) {
+		UserLetter userLetter = UserLetter.writeLetterHasNotImage(pet, requestDto);
 		return userLetter;
 	}
 }

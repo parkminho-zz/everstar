@@ -18,12 +18,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
@@ -65,6 +67,9 @@ public class UserLetterControllerTest {
 	@Mock
 	private Authentication authentication;
 
+	@Mock
+	private MultipartFile file;
+
 	private User user;
 	private Pet pet;
 	private UserLetter userLetter;
@@ -79,26 +84,32 @@ public class UserLetterControllerTest {
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
 
-		requestDto = new WriteLetterRequestDto("dd", "dd");
-		userLetter = UserLetter.writeLetterHasImage(pet, requestDto);
+		requestDto = new WriteLetterRequestDto("dd");
+		userLetter = UserLetter.writeLetterHasImage(pet, requestDto, "image");
 	}
 
 	@Test
 	@DisplayName("유저 편지 쓰기 성공 테스트")
 	@WithMockAuthUser(email = "test@gmail.com", role = Role.ROLE_USER)
 	public void 유저_편지_쓰기_성공_테스트() throws Exception {
-		//given
+		// given
 		String requestBody = objectMapper.writeValueAsString(requestDto);
-		Map<String, Object> response = new HashMap<>();
-		response.put("data", SuccessUserLetterMessage.SUCCESS_WRITE_LETTER);
+		MockMultipartFile file = new MockMultipartFile("image", "test.jpg", "image/jpeg",
+			"test image content".getBytes());
+		MockMultipartFile requestDtoFile = new MockMultipartFile("requestDto", "", "application/json",
+			requestBody.getBytes());
 
-		BDDMockito.doNothing().when(userLetterService).writeLetter(authentication, 1L, requestDto);
+		// Mocking the service method
+		BDDMockito.doNothing().when(userLetterService).writeLetter(authentication, 1L, requestDto, file);
 
-		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/api/pets/1/letters")
+		// when
+		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.multipart("/api/pets/1/letters")
+			.file(file)  // 파일 추가
+			.file(requestDtoFile)  // JSON 데이터 추가
 			.with(SecurityMockMvcRequestPostProcessors.csrf())
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(requestBody));
+			.contentType(MediaType.MULTIPART_FORM_DATA));
 
+		// then
 		result.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
@@ -110,12 +121,18 @@ public class UserLetterControllerTest {
 		Map<String, Object> response = new HashMap<>();
 		response.put("data", SuccessUserLetterMessage.SUCCESS_WRITE_LETTER_ANSWER);
 
-		BDDMockito.doNothing().when(userLetterService).writeLetterAnswer(authentication, 1L, 1L, requestDto);
+		MockMultipartFile file = new MockMultipartFile("image", "test.jpg", "image/jpeg",
+			"test image content".getBytes());
+		MockMultipartFile requestDtoFile = new MockMultipartFile("requestDto", "", "application/json",
+			requestBody.getBytes());
 
-		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/api/pets/1/letters/1")
+		BDDMockito.doNothing().when(userLetterService).writeLetterAnswer(authentication, 1L, 1L, requestDto, file);
+
+		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.multipart("/api/pets/1/letters/1")
+			.file(file)  // 파일 추가
+			.file(requestDtoFile)  // JSON 데이터 추가
 			.with(SecurityMockMvcRequestPostProcessors.csrf())
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(requestBody));
+			.contentType(MediaType.MULTIPART_FORM_DATA));
 
 		result.andExpect(MockMvcResultMatchers.status().isOk());
 	}

@@ -54,9 +54,9 @@ public class SseService {
 				if (pet.getIsQuestCompleted()) {
 					data = "퀘스트를 완료했어요.";
 				} else {
-					data = pet.getQuestIndex() + "번째 퀘스트가 도착했어요.";
+					data = pet.getQuestIndex() + " 번째 퀘스트가 도착했어요.";
 				}
-				emitter.send(SseEmitter.event().id(String.valueOf(pet.getId())).name("sse").data(data));
+				emitter.send(SseEmitter.event().id(String.valueOf(pet.getId())).name("questIndex").data(data));
 			} catch (IOException e) {
 				emitterRepository.deleteByPetId(pet.getId());
 				emitter.completeWithError(e);
