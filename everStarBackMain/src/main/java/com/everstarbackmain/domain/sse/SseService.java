@@ -39,7 +39,7 @@ public class SseService {
 
 		emitter.onCompletion(() -> emitterRepository.deleteByPetId(petId)); // 네트워크 오류
 		emitter.onTimeout(() -> emitterRepository.deleteByPetId(petId)); // 시간 초과
-		emitter.onError((e) -> emitterRepository.deleteByPetId(petId)); // 오류
+		emitter.onError(e -> emitterRepository.deleteByPetId(petId)); // 오류
 
 		return emitter;
 	}
