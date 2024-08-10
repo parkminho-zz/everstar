@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.everstarbackmain.domain.aiAnswer.repository.AiAnswerRepository;
 import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 import com.everstarbackmain.domain.memorialBook.util.MemorialBookScheduler;
+import com.everstarbackmain.domain.notification.util.NotificationUtil;
 import com.everstarbackmain.domain.pet.repository.PetPersonalityRepository;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.quest.model.Quest;
@@ -103,6 +104,9 @@ class QuestAnswerServiceTest {
 
 	@Mock
 	private QuestScheduler questScheduler;
+
+	@Mock
+	private NotificationUtil notificationUtil;
 
 	private User user;
 	private Pet pet;
@@ -241,7 +245,7 @@ class QuestAnswerServiceTest {
 
 		// when
 		ExceptionResponse exceptionResponse = assertThrows(ExceptionResponse.class, () -> {
-			questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
+			questAnswerService.createQuestAnswer(authentication, 1L, 7L, createAnswerRequestDto, imageFile);
 		});
 
 		// then

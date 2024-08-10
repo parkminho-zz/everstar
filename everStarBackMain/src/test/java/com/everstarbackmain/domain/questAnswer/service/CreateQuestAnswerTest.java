@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.everstarbackmain.domain.aiAnswer.repository.AiAnswerRepository;
 import com.everstarbackmain.domain.memorialBook.util.MemorialBookScheduler;
+import com.everstarbackmain.domain.notification.util.NotificationUtil;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.repository.PetPersonalityRepository;
@@ -104,6 +105,9 @@ public class CreateQuestAnswerTest {
 
 	@Mock
 	private QuestScheduler questScheduler;
+
+	@Mock
+	private NotificationUtil notificationUtil;
 
 	private User user;
 	private Pet pet;
