@@ -70,6 +70,10 @@ public class QuestAnswerService {
 		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId,user, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
+		if (pet.getIsQuestCompleted()) {
+			throw new ExceptionResponse(CustomException.ALREADY_COMPLETED_QUEST_EXCEPTION);
+		}
+
 		Quest quest = questRepository.findById(questId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_QUEST_EXCEPTION));
 
