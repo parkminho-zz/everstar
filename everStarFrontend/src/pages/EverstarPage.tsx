@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Routes, Route, useNavigate, useParams, useLocation } from 'react-router-dom';
+import React, { useEffect, useState, useMemo } from 'react';
+import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import { EverStarMain } from 'components/templates/EverStarMain';
 import { EverStarCheerMessage } from 'components/templates/EverStarCheerMessage';
 import { EverStarSearchStar } from 'components/templates/EverStarSearchStar';
@@ -8,8 +8,8 @@ import { Footer } from 'components/molecules/Footer/Footer';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
 import bgImage from 'assets/images/bg-everstar.webp';
-import { useFetchOtherPetDetails } from 'hooks/useEverStar';
-import { getMemorialBooks, updateMemorialBookOpenStatus } from 'api/memorialBookApi';
+import { useFetchOtherPetDetails, useFetchCheeringPet } from 'hooks/useEverStar';
+import { useFetchMemorialBooks, useUpdateMemorialBookOpenStatus } from 'hooks/useMemorialBooks';
 import { MemorialBook } from 'components/templates/MemorialBook';
 
 interface PetProfile {
@@ -22,156 +22,107 @@ interface PetProfile {
   questIndex: number;
 }
 
-interface MemorialBookProfile {
-  id: number;
-  psychologicalTestResult: string | null;
-  isOpen: boolean;
-  isActive: boolean;
-}
-
 export const EverstarPage: React.FC = () => {
   const params = useParams<{ pet?: string }>();
-  const location = useLocation();
   const navigate = useNavigate();
   const currentPetId = useSelector((state: RootState) => state.pet.petDetails?.id);
-  const token = useSelector((state: RootState) => state.auth.accessToken);
-  const [petProfile, setPetProfile] = useState<PetProfile | null>(null);
-  const [memorialBookProfile, setMemorialBookProfile] = useState<MemorialBookProfile | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [loadError, setLoadError] = useState<string | null>(null);
+
+  const petId = useMemo(
+    () =>
+      params.pet
+        ? parseInt(params.pet, 10)
+        : currentPetId || parseInt(sessionStorage.getItem('defaultPetId') || '0', 10),
+    [params.pet, currentPetId],
+  );
+
+  const { data: petDetails, isLoading: isPetDetailsLoading } = useFetchOtherPetDetails(petId);
+  const { data: memorialBooks, isLoading: isMemorialBooksLoading } = useFetchMemorialBooks(petId);
+  const { data: cheerData, isLoading: isCheerLoading } = useFetchCheeringPet();
+
   const [toggleStatus, setToggleStatus] = useState<'on' | 'off' | undefined>(undefined);
 
-  const petId = params.pet
-    ? parseInt(params.pet, 10)
-    : currentPetId || parseInt(sessionStorage.getItem('defaultPetId') || '0', 10);
-
-  // Fetch pet details and memorial books when component mounts or when petId/token changes
-  const { data: petDetails, isLoading: isPetDetailsLoading } = useFetchOtherPetDetails(petId!);
-
+  // Toggle 상태 및 pet & MemorialBook 상태 통합 관리
   useEffect(() => {
-    const fetchMemorialBooks = async () => {
-      try {
-        if (petId && token) {
-          const response = await getMemorialBooks(petId, token);
-          const { id, psychologicalTestResult, isOpen, isActive } = response.data;
-          setMemorialBookProfile({
-            id,
-            psychologicalTestResult,
-            isOpen,
-            isActive,
-          });
-          setToggleStatus(isActive ? (isOpen ? 'on' : 'off') : undefined);
-        }
-      } catch (error) {
-        console.error('Error loading memorial books:', error);
-        setLoadError('Error loading memorial books.');
-        setMemorialBookProfile({
-          id: 0,
-          psychologicalTestResult: null,
-          isOpen: false,
-          isActive: false,
-        });
-        setToggleStatus(undefined);
-      }
-    };
-
-    if (!params.pet && petId) {
+    if (!params.pet && petId && !sessionStorage.getItem('initialNavigation')) {
       sessionStorage.setItem('defaultPetId', petId.toString());
+      sessionStorage.setItem('initialNavigation', 'true');
       navigate(`/everstar/${petId}`);
     }
 
-    if (petDetails && petDetails.data) {
-      const {
-        name,
-        age,
-        description,
-        memorialDate,
-        petPersonalities,
-        profileImageUrl,
-        questIndex,
-      } = petDetails.data;
-      setPetProfile({
-        name,
-        age,
-        description,
-        date: memorialDate,
-        tagList: petPersonalities,
-        avatarUrl: profileImageUrl,
-        questIndex,
+    if (memorialBooks && memorialBooks.data) {
+      const { isOpen, isActive } = memorialBooks.data;
+      const newToggleStatus = isActive ? (isOpen ? 'on' : 'off') : undefined;
+
+      // 상태 업데이트가 필요할 때만 업데이트
+      if (newToggleStatus !== toggleStatus) {
+        setToggleStatus(newToggleStatus);
+      }
+    }
+  }, [params.pet, petId, memorialBooks, navigate]);
+
+  // MemorialBook 상태 변경 시 서버 업데이트
+  const { mutate: updateMemorialBookStatus } = useUpdateMemorialBookOpenStatus({
+    onSuccess: (data, variables) => {
+      setToggleStatus((prevStatus) => {
+        const updatedStatus = variables.isOpen ? 'on' : 'off';
+        // 중복 업데이트 방지
+        if (prevStatus === updatedStatus) {
+          return prevStatus;
+        }
+        return updatedStatus;
       });
-    } else if (petDetails === null) {
-      console.error('Pet details data is missing:', petDetails);
-      setLoadError('Error loading pet details.');
-    }
+    },
+  });
 
-    fetchMemorialBooks();
-    setIsLoading(isPetDetailsLoading);
-
-    // Logic to retrieve pet details from session storage if necessary
-    const storedPetDetails = sessionStorage.getItem('petDetails');
-    const diffPet = sessionStorage.getItem('diffPetDetails');
-    if (Number(petId) === Number(params.pet)) {
-      if (storedPetDetails) {
-        try {
-          const petDetails = JSON.parse(storedPetDetails);
-          setPetProfile({
-            name: petDetails.name || 'Unknown',
-            age: petDetails.age || 0,
-            date: petDetails.memorialDate || 'Unknown',
-            description: petDetails.introduction || 'No description',
-            tagList: petDetails.petPersonalities || [],
-            avatarUrl: petDetails.profileImageUrl || '',
-            questIndex: petDetails.questIndex || 0,
-          });
-        } catch (error) {
-          console.error('Error parsing pet details:', error);
-        }
-      }
-    } else if (Number(petId) !== Number(params.pet)) {
-      if (diffPet) {
-        try {
-          const diffPetDetails = JSON.parse(diffPet);
-          setPetProfile({
-            name: diffPetDetails.name || 'Unknown',
-            age: diffPetDetails.age || 0,
-            date: diffPetDetails.memorialDate || 'Unknown',
-            description: diffPetDetails.introduction || 'No description',
-            tagList: diffPetDetails.petPersonalities || [],
-            avatarUrl: diffPetDetails.profileImageUrl || '',
-            questIndex: diffPetDetails.questIndex || 0,
-          });
-        } catch (error) {
-          console.error('Error parsing pet details:', error);
-        }
-      }
-    }
-  }, [location, petId, params.pet, petDetails, isPetDetailsLoading, navigate, token]);
-
-  const handleToggle = async (status: 'off' | 'on') => {
-    if (memorialBookProfile && token) {
-      try {
-        await updateMemorialBookOpenStatus(petId!, memorialBookProfile.id, status === 'on', token);
-        setMemorialBookProfile((prev) => (prev ? { ...prev, isOpen: status === 'on' } : null));
-        setToggleStatus(status);
-      } catch (error) {
-        console.error('Error updating memorial book status:', error);
-      }
+  const handleToggle = (status: 'on' | 'off') => {
+    if (memorialBooks && memorialBooks.data && status !== toggleStatus) {
+      updateMemorialBookStatus({
+        petId,
+        memorialBookId: memorialBooks.data.id,
+        isOpen: status === 'on',
+      });
     }
   };
 
-  if (isLoading) {
+  if (isPetDetailsLoading || isMemorialBooksLoading || isCheerLoading) {
     return <div>Loading...</div>;
   }
 
-  if (loadError) {
-    console.error(loadError);
+  if (!petDetails || !memorialBooks) {
     return <div>Error loading data.</div>;
   }
 
-  const buttonDisabled =
-    !memorialBookProfile || !memorialBookProfile.isActive || !memorialBookProfile.isOpen;
+  const petProfile: PetProfile = {
+    name: petDetails.name,
+    age: petDetails.age,
+    description: petDetails.introduction,
+    date: petDetails.memorialDate,
+    tagList: petDetails.petPersonalities,
+    avatarUrl: petDetails.profileImageUrl,
+    questIndex: petDetails.questIndex,
+  };
 
+  const buttonDisabled = !memorialBooks.data.isActive || !memorialBooks.data.isOpen;
   const isOwner = petId === currentPetId;
+
+  const postItCards =
+    cheerData?.data?.content?.map(
+      (item: {
+        content: string;
+        petName: string;
+        color: string;
+        cheeringMessageId: number;
+        petId: number;
+      }) => ({
+        contents: item.content || '',
+        name: item.petName || '',
+        color: item.color.toLowerCase() || '',
+        cheeringMessageId: item.cheeringMessageId,
+        petId: item.petId,
+      }),
+    ) || [];
+
+  const totalPages = Math.ceil(postItCards.length / 10);
 
   return (
     <div
@@ -188,7 +139,7 @@ export const EverstarPage: React.FC = () => {
                 <EverStarMain
                   petProfile={petProfile}
                   buttonDisabled={buttonDisabled}
-                  memorialBookProfile={memorialBookProfile}
+                  memorialBookProfile={memorialBooks.data}
                   petId={petId ?? 0}
                   handleToggle={isOwner ? handleToggle : undefined}
                   toggleStatus={toggleStatus}
@@ -199,7 +150,11 @@ export const EverstarPage: React.FC = () => {
               path="message"
               element={
                 petProfile ? (
-                  <EverStarCheerMessage profile={petProfile} postItCards={[]} totalPages={0} />
+                  <EverStarCheerMessage
+                    profile={petProfile}
+                    postItCards={postItCards}
+                    totalPages={totalPages}
+                  />
                 ) : (
                   <div>Loading...</div>
                 )
