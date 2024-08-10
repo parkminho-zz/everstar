@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ProgressCard } from 'components/organics/ProgressCard/ProgressCard';
 import { ViewMemorialBook } from 'components/organics/ViewMemorialBook/ViewMemorialBook';
 import { useNavigate } from 'react-router-dom';
@@ -34,6 +34,15 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   toggleStatus,
 }) => {
   const navigate = useNavigate();
+  const [localToggleStatus, setLocalToggleStatus] = useState<'on' | 'off' | undefined>(
+    toggleStatus,
+  );
+
+  useEffect(() => {
+    if (toggleStatus !== localToggleStatus) {
+      setLocalToggleStatus(toggleStatus);
+    }
+  }, [toggleStatus]);
 
   const handleButtonClick = () => {
     navigate('/earth');
@@ -42,6 +51,15 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   const handleViewMemorialBookClick = () => {
     if (memorialBookProfile?.isActive && memorialBookProfile?.isOpen) {
       navigate(`/everstar/${petId}/memorialbook/${memorialBookProfile.id}`);
+    }
+  };
+
+  const handleToggleChange = (status: 'on' | 'off') => {
+    if (status !== localToggleStatus) {
+      setLocalToggleStatus(status);
+      if (handleToggle) {
+        handleToggle(status);
+      }
     }
   };
 
@@ -71,15 +89,11 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
           onClick={handleViewMemorialBookClick}
           BookVariant="book-close"
           showIcon={false}
-          toggleStatus={toggleStatus}
-          onToggleChange={handleToggle}
-        >
-          {buttonDisabled
-            ? '메모리얼북을 열람하실 수 없습니다.'
-            : memorialBookProfile?.isActive
-              ? '메모리얼북 열람하기'
-              : '아직 활성화되지 않았습니다'}
-        </ViewMemorialBook>
+          toggleStatus={localToggleStatus}
+          onToggleChange={handleToggleChange}
+          showToggle={handleToggle !== undefined} // 내가 아닌 경우 또는 활성화되지 않은 경우 토글 버튼 숨기기
+          isActive={memorialBookProfile?.isActive} // MemorialBook의 활성화 상태 전달
+        />
       </div>
     </div>
   );
