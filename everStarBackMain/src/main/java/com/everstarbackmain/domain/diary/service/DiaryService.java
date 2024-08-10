@@ -36,7 +36,7 @@ public class DiaryService {
 		MemorialBook memorialBook = memorialBookRepository.findByIdAndIsDeleted(memorialBookId, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_MEMORIAL_BOOK_EXCEPTION));
 
-		if (user.getId() != memorialBook.getPet().getUser().getId()) {
+		if (!user.getId().equals(memorialBook.getPet().getUser().getId())) {
 			throw new ExceptionResponse(CustomException.NOT_MY_MEMORIAL_BOOK_EXCEPTION);
 		}
 
