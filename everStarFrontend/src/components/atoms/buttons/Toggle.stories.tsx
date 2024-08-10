@@ -12,7 +12,6 @@ const meta: Meta<typeof Toggle> = {
       defaultValue: 'on',
     },
     className: { control: 'text' },
-    ellipse: { control: 'text' },
   },
 };
 
@@ -23,7 +22,7 @@ type Story = StoryObj<typeof Toggle>;
 // 기본 스토리
 export const Default: Story = {
   args: {
-    status: "off",
+    status: 'off',
     className: '',
   },
 };
