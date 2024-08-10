@@ -144,10 +144,11 @@ class QuestAnswerServiceTest {
 		for (int i = 0; i < 47; i++) {
 			pet.plusQuestIndex();
 		}
+		pet.setFalseIsQuestCompleted();
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
-		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
+		given(petRepository.findByIdAndUserAndIsDeleted(1L, user, false)).willReturn(Optional.of(pet));
 		given(sentimentAnalysisRepository.findByPetId(anyLong())).willReturn(Optional.of(sentimentAnalysis));
 		given(naverCloudClient.analyseSentiment(anyString())).willReturn(Optional.of(sentimentAnalysisResult).get());
 		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
@@ -166,11 +167,12 @@ class QuestAnswerServiceTest {
 		for (int i = 0; i < 5; i++) {
 			pet.plusQuestIndex();
 		}
+		pet.setFalseIsQuestCompleted();
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		SentimentAnalysis sentimentAnalysis = mock(SentimentAnalysis.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
-		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
+		given(petRepository.findByIdAndUserAndIsDeleted(1L, user, false)).willReturn(Optional.of(pet));
 		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIdsAndIsDeleted(anyLong(), anyInt(), anyInt(),
 			anyBoolean()))
 			.willReturn(List.of("answer1", "answer2", "answer3", "answer4", "answer5", "answer6", "answer7"));
@@ -197,11 +199,12 @@ class QuestAnswerServiceTest {
 		for (int i = 0; i < 5; i++) {
 			pet.plusQuestIndex();
 		}
+		pet.setFalseIsQuestCompleted();
 
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
-		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
+		given(petRepository.findByIdAndUserAndIsDeleted(1L, user, false)).willReturn(Optional.of(pet));
 		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIdsAndIsDeleted(anyLong(), anyInt(), anyInt(),
 			anyBoolean()))
 			.willReturn(List.of("answer1", "answer2", "answer3", "answer4", "answer5", "answer6", "answer7"));
@@ -225,11 +228,11 @@ class QuestAnswerServiceTest {
 		for (int i = 0; i < 5; i++) {
 			pet.plusQuestIndex();
 		}
-
+		pet.setFalseIsQuestCompleted();
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
-		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
+		given(petRepository.findByIdAndUserAndIsDeleted(1L, user, false)).willReturn(Optional.of(pet));
 		given(questAnswerRepository.findContentByPetIdAndSpecificQuestIdsAndIsDeleted(anyLong(), anyInt(), anyInt(),
 			anyBoolean()))
 			.willReturn(List.of("answer1", "answer2", "answer3", "answer4", "answer5", "answer6", "answer7"));
@@ -241,7 +244,7 @@ class QuestAnswerServiceTest {
 
 		// when
 		ExceptionResponse exceptionResponse = assertThrows(ExceptionResponse.class, () -> {
-			questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
+			questAnswerService.createQuestAnswer(authentication, 1L, 7L, createAnswerRequestDto, imageFile);
 		});
 
 		// then
@@ -255,10 +258,11 @@ class QuestAnswerServiceTest {
 		for (int i = 0; i < 47; i++) {
 			pet.plusQuestIndex();
 		}
+		pet.setFalseIsQuestCompleted();
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
-		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
+		given(petRepository.findByIdAndUserAndIsDeleted(anyLong(), any(), anyBoolean())).willReturn(Optional.of(pet));
 		given(sentimentAnalysisRepository.findByPetId(anyLong())).willReturn(Optional.of(sentimentAnalysis));
 		given(naverCloudClient.analyseSentiment(anyString())).willReturn(Optional.of(sentimentAnalysisResult).get());
 		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
@@ -277,10 +281,12 @@ class QuestAnswerServiceTest {
 		for (int i = 0; i < 47; i++) {
 			pet.plusQuestIndex();
 		}
+		pet.setFalseIsQuestCompleted();
+
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
-		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
+		given(petRepository.findByIdAndUserAndIsDeleted(1L, user, false)).willReturn(Optional.of(pet));
 		given(sentimentAnalysisRepository.findByPetId(anyLong())).willReturn(Optional.of(sentimentAnalysis));
 		given(naverCloudClient.analyseSentiment(anyString())).willReturn(Optional.of(sentimentAnalysisResult).get());
 		given(openAiClient.analysisTotalSentiment(any(SentimentAnalysis.class)))
@@ -301,7 +307,7 @@ class QuestAnswerServiceTest {
 	public void 퀘스트_답변_생성_후_TEXT_TO_TEXT_타입일_경우_관련_OPENAI_API_호출_테스트() {
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
-		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
+		given(petRepository.findByIdAndUserAndIsDeleted(1L, user, false)).willReturn(Optional.of(pet));
 		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
 		given(petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(
 			petPersonalities);
@@ -326,7 +332,7 @@ class QuestAnswerServiceTest {
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
-		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
+		given(petRepository.findByIdAndUserAndIsDeleted(1L, user, false)).willReturn(Optional.of(pet));
 		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
 		given(petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(
 			petPersonalities);
@@ -349,7 +355,7 @@ class QuestAnswerServiceTest {
 	public void 퀘스트_답변_생성_후_TEXT_TO_IMAGE_ART_타입일_경우_관련_OPENAI_API_호출_테스트() {
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
-		given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(pet));
+		given(petRepository.findByIdAndUserAndIsDeleted(1L, user, false)).willReturn(Optional.of(pet));
 		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
 		given(petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(
 			petPersonalities);
