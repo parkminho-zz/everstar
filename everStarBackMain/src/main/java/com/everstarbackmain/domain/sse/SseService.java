@@ -64,7 +64,7 @@ public class SseService {
 		} else if (pet.getIsQuestCompleted()) {
 			return "퀘스트를 완료했어요.";
 		} else {
-			return pet.getQuestIndex() + " 번째 퀘스트가 도착했어요.";
+			return pet.getQuestIndex().toString();
 		}
 	}
 }
