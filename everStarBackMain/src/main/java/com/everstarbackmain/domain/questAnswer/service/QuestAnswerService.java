@@ -133,7 +133,7 @@ public class QuestAnswerService {
 			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex - 1);
 		}
 
-		if (petQuestIndex == 49) {
+		if (petQuestIndex == 50) {
 			memorialBookScheduler.scheduleMemorialBookActivation(user, pet.getId());
 			analysisTotalQuestAnswer(pet.getId());
 		}
