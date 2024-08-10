@@ -83,12 +83,11 @@ public class QuestAnswerService {
 		Quest quest = questRepository.findById(questId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_QUEST_EXCEPTION));
 
-		questScheduler.scheduleNextDayQuest(user, petId);
-
 		if (requestDto.getType().equals(QuestType.TEXT.getType())) {
 			QuestAnswer questAnswer = QuestAnswer.createTextQuestAnswer(pet, quest, requestDto);
 			questAnswerRepository.save(questAnswer);
 			plusPetQuestIndexByTextType(user, pet, quest, questAnswer);
+			questScheduler.scheduleNextDayQuest(user, petId);
 			return;
 		}
 
@@ -97,6 +96,7 @@ public class QuestAnswerService {
 			QuestAnswer questAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, requestDto, imageUrl);
 			questAnswerRepository.save(questAnswer);
 			plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
+			questScheduler.scheduleNextDayQuest(user, petId);
 			return;
 		}
 
@@ -104,6 +104,7 @@ public class QuestAnswerService {
 		QuestAnswer questAnswer = QuestAnswer.createImageQuestAnswer(pet, quest, requestDto, imageUrl);
 		questAnswerRepository.save(questAnswer);
 		plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
+		questScheduler.scheduleNextDayQuest(user, petId);
 
 	}
 
@@ -111,11 +112,11 @@ public class QuestAnswerService {
 		pet.plusQuestIndex();
 		int petQuestIndex = pet.getQuestIndex();
 
-		if (petQuestIndex % 7 == 0) {
-			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex);
+		if ((petQuestIndex - 1) % 7 == 0) {
+			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex - 1);
 		}
 
-		if (petQuestIndex == 49) {
+		if (petQuestIndex == 50) {
 			memorialBookScheduler.scheduleMemorialBookActivation(user, pet.getId());
 			analysisTotalQuestAnswer(pet.getId());
 		}
@@ -128,8 +129,8 @@ public class QuestAnswerService {
 		pet.plusQuestIndex();
 		int petQuestIndex = pet.getQuestIndex();
 
-		if (petQuestIndex % 7 == 0) {
-			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex);
+		if ((petQuestIndex - 1) % 7 == 0) {
+			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex - 1);
 		}
 
 		if (petQuestIndex == 49) {
