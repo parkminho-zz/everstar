@@ -32,7 +32,7 @@ public class DiaryController {
 	@PostMapping
 	public ResponseEntity<Map<String, Object>> createDiary(@PathVariable("memorialbook-id") Long memorialBookId,
 		Authentication authentication, @RequestPart @Valid CreateDiaryRequestDto requestDto,
-		@RequestPart(required = false) MultipartFile imageFile) {
+		@RequestPart(name = "imageFile",required = false) MultipartFile imageFile) {
 		diaryService.createDiary(authentication, memorialBookId, requestDto, imageFile);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessDiaryMessage.SUCCESS_CREATE_DIARY);

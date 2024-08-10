@@ -72,21 +72,22 @@ public class QuestAnswerService {
 		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId,user, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
+		if (!pet.getQuestIndex().equals(questId.intValue())) {
+			throw new ExceptionResponse(CustomException.QUEST_INDEX_NOT_MATCH_EXCEPTION);
+		}
+
 		if (pet.getIsQuestCompleted()) {
 			throw new ExceptionResponse(CustomException.ALREADY_COMPLETED_QUEST_EXCEPTION);
 		}
 
-		// TODO: pet의 quest index가 요청 받은 quest index와 일치하는지 검증 및 예외처리
-
 		Quest quest = questRepository.findById(questId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_QUEST_EXCEPTION));
-
-		questScheduler.scheduleNextDayQuest(user, petId);
 
 		if (requestDto.getType().equals(QuestType.TEXT.getType())) {
 			QuestAnswer questAnswer = QuestAnswer.createTextQuestAnswer(pet, quest, requestDto);
 			questAnswerRepository.save(questAnswer);
 			plusPetQuestIndexByTextType(user, pet, quest, questAnswer);
+			questScheduler.scheduleNextDayQuest(user, petId);
 			return;
 		}
 
@@ -95,6 +96,7 @@ public class QuestAnswerService {
 			QuestAnswer questAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, requestDto, imageUrl);
 			questAnswerRepository.save(questAnswer);
 			plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
+			questScheduler.scheduleNextDayQuest(user, petId);
 			return;
 		}
 
@@ -102,6 +104,7 @@ public class QuestAnswerService {
 		QuestAnswer questAnswer = QuestAnswer.createImageQuestAnswer(pet, quest, requestDto, imageUrl);
 		questAnswerRepository.save(questAnswer);
 		plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
+		questScheduler.scheduleNextDayQuest(user, petId);
 
 	}
 
@@ -109,11 +112,11 @@ public class QuestAnswerService {
 		pet.plusQuestIndex();
 		int petQuestIndex = pet.getQuestIndex();
 
-		if (petQuestIndex % 7 == 0) {
-			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex);
+		if ((petQuestIndex - 1) % 7 == 0) {
+			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex - 1);
 		}
 
-		if (petQuestIndex == 49) {
+		if (petQuestIndex == 50) {
 			memorialBookScheduler.scheduleMemorialBookActivation(user, pet.getId());
 			analysisTotalQuestAnswer(pet.getId());
 		}
@@ -126,11 +129,11 @@ public class QuestAnswerService {
 		pet.plusQuestIndex();
 		int petQuestIndex = pet.getQuestIndex();
 
-		if (petQuestIndex % 7 == 0) {
-			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex);
+		if ((petQuestIndex - 1) % 7 == 0) {
+			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex - 1);
 		}
 
-		if (petQuestIndex == 49) {
+		if (petQuestIndex == 50) {
 			memorialBookScheduler.scheduleMemorialBookActivation(user, pet.getId());
 			analysisTotalQuestAnswer(pet.getId());
 		}

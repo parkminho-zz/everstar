@@ -31,8 +31,8 @@ public class QuestAnswerController {
 	@PostMapping("/pets/{pet-id}/quests/{quest-id}/answers")
 	public ResponseEntity<Map<String, Object>> createQuestAnswer(Authentication authentication,
 		@PathVariable("pet-id") Long petId, @PathVariable("quest-id") Long questId,
-		@RequestPart(required = false) CreateAnswerRequestDto requestDto,
-		@RequestPart(required = false) MultipartFile imageFile) {
+		@RequestPart(name = "requestDto", required = false) CreateAnswerRequestDto requestDto,
+		@RequestPart(name = "imageFile", required = false) MultipartFile imageFile) {
 		questAnswerService.createQuestAnswer(authentication, petId, questId, requestDto, imageFile);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
 			SuccessQuestAnswerMessage.SUCCESS_CREATE_QUEST_ANSWER);

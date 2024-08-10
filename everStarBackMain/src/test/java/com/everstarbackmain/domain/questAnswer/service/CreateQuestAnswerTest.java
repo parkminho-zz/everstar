@@ -113,6 +113,7 @@ public class CreateQuestAnswerTest {
 	private Pet pet;
 	private Quest quest;
 	private CreateAnswerRequestDto createAnswerRequestDto;
+	private QuestAnswer questAnswer;
 
 	@BeforeEach
 	public void setup() {
@@ -123,6 +124,7 @@ public class CreateQuestAnswerTest {
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
 		quest = new Quest("content", QuestType.TEXT);
 		createAnswerRequestDto = new CreateAnswerRequestDto("content", QuestAnswerType.TEXT_IMAGE.getType());
+		questAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, createAnswerRequestDto, "imageUrl");
 
 		ReflectionTestUtils.setField(pet, "id", 1L);
 	}
@@ -136,6 +138,7 @@ public class CreateQuestAnswerTest {
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findByIdAndUserAndIsDeleted(1L, user, false)).willReturn(Optional.of(pet));
 		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
+		given(s3UploadUtil.saveFile(any())).willReturn("imageUrl");
 
 		// when
 		questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
