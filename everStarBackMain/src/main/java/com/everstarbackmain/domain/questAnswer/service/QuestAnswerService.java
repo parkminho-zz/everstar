@@ -74,6 +74,8 @@ public class QuestAnswerService {
 			throw new ExceptionResponse(CustomException.ALREADY_COMPLETED_QUEST_EXCEPTION);
 		}
 
+		// TODO: pet의 quest index가 요청 받은 quest index와 일치하는지 검증 및 예외처리
+
 		Quest quest = questRepository.findById(questId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_QUEST_EXCEPTION));
 
