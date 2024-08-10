@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { ProgressCard } from 'components/organics/ProgressCard/ProgressCard';
 import { ViewMemorialBook } from 'components/organics/ViewMemorialBook/ViewMemorialBook';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store/Store';
 
 interface EverStarMainProps {
   petProfile: {
@@ -24,6 +22,7 @@ interface EverStarMainProps {
   } | null;
   petId: number;
   handleToggle?: (status: 'off' | 'on') => void;
+  toggleStatus?: 'on' | 'off' | undefined; // New prop for toggleStatus
 }
 
 export const EverStarMain: React.FC<EverStarMainProps> = ({
@@ -32,13 +31,12 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   memorialBookProfile: initialMemorialBookProfile,
   petId,
   handleToggle,
+  toggleStatus, // Receive toggleStatus prop
 }) => {
   const navigate = useNavigate();
   const [petProfile, setPetProfile] = useState(initialPetProfile);
   const [memorialBookProfile, setMemorialBookProfile] = useState(initialMemorialBookProfile);
   const [isLoading, setIsLoading] = useState(true);
-
-  const currentPetId = useSelector((state: RootState) => state.pet.petDetails?.id);
 
   useEffect(() => {
     const storedPetDetails = sessionStorage.getItem('petDetails');
@@ -104,28 +102,6 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
     }
   };
 
-  // toggleStatus 설정
-  let toggleStatus: 'off' | 'on' | undefined;
-  if (memorialBookProfile && memorialBookProfile.isActive && petId === currentPetId) {
-    toggleStatus = memorialBookProfile.isOpen ? 'on' : 'off';
-  } else {
-    toggleStatus = undefined; // 빈 문자열 대신 undefined로 설정
-  }
-
-  const memorialBookUnavailableMessage = !memorialBookProfile
-    ? '메모리얼북 정보가 없습니다'
-    : !memorialBookProfile.isActive
-      ? '아직 활성화되지 않았습니다'
-      : !memorialBookProfile.isOpen
-        ? '공개되지 않았습니다'
-        : '메모리얼북 열람하기';
-
-  // theme 설정: 메시지에 따라 'white' 또는 'focus'로 설정
-  const memorialBookTheme =
-    !memorialBookProfile || !memorialBookProfile.isActive || !memorialBookProfile.isOpen
-      ? 'white'
-      : 'focus';
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -150,16 +126,20 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
       )}
       <div className="flex flex-col items-center mt-20">
         <ViewMemorialBook
-          theme={memorialBookTheme} // theme을 설정
+          theme={buttonDisabled ? 'white' : 'focus'}
           size="large"
           disabled={buttonDisabled}
           onClick={handleViewMemorialBookClick}
           BookVariant="book-close"
           showIcon={false}
-          toggleStatus={toggleStatus} // toggleStatus에 undefined 설정 가능
+          toggleStatus={toggleStatus} // Use toggleStatus from props
           onToggleChange={handleToggleStatus}
         >
-          {memorialBookUnavailableMessage}
+          {buttonDisabled
+            ? '메모리얼북 정보가 없습니다'
+            : memorialBookProfile?.isActive
+              ? '메모리얼북 열람하기'
+              : '아직 활성화되지 않았습니다'}
         </ViewMemorialBook>
       </div>
     </div>

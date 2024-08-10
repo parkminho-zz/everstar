@@ -2,7 +2,7 @@ import React from 'react';
 import { BookIcons } from 'components/atoms/symbols/Book/BookIcons';
 import { Toggle } from 'components/atoms/buttons/Toggle';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
-
+import { Lable } from 'components/atoms/texts/Lable';
 type ViewMemorialBookTheme = 'focus' | 'hover' | 'white';
 
 export interface ViewMemorialBookProps {
@@ -44,9 +44,13 @@ export const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
       <PrimaryButton theme={theme} size={size} disabled={disabled} onClick={onClick}>
         {children}
       </PrimaryButton>
+
       {toggleStatus && (
-        <div className="relative z-10 flex justify-center my-6">
-          <Toggle status={toggleStatus} onChange={handleToggle} />
+        <div className="relative z-10 flex flex-col items-center justify-center my-6">
+          <Lable prop="메모리얼북 공개 상태" show={false} font="default" />
+          <div className="mt-2">
+            <Toggle status={toggleStatus} onChange={handleToggle} />
+          </div>
         </div>
       )}
     </div>
