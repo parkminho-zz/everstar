@@ -158,7 +158,7 @@ class QuestAnswerServiceTest {
 		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
 
 		// when
-		questAnswerService.createQuestAnswer(authentication, 1L, 49L, createAnswerRequestDto, imageFile);
+		questAnswerService.createQuestAnswer(authentication, 1L, 49L, createTextAnswerRequestDto, null);
 
 		// then
 		verify(memorialBookScheduler).scheduleMemorialBookActivation(user, 1L);
@@ -200,7 +200,7 @@ class QuestAnswerServiceTest {
 	@DisplayName("네이버_감정분석_API_예외_처리_테스트")
 	public void 네이버_감정분석_API_예외_처리_테스트() {
 		// given
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 6; i++) {
 			pet.plusQuestIndex();
 		}
 		pet.setFalseIsQuestCompleted();
@@ -218,7 +218,7 @@ class QuestAnswerServiceTest {
 
 		// when
 		ExceptionResponse exceptionResponse = assertThrows(ExceptionResponse.class, () -> {
-			questAnswerService.createQuestAnswer(authentication, 1L, 6L, createAnswerRequestDto, imageFile);
+			questAnswerService.createQuestAnswer(authentication, 1L, 7L, createAnswerRequestDto, imageFile);
 		});
 
 		// then
@@ -229,7 +229,7 @@ class QuestAnswerServiceTest {
 	@DisplayName("감정분석_NOT_FOUND_예외_처리_테스트")
 	public void 감정분석_NOT_FOUND_예외_처리_테스트() {
 		// given
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 6; i++) {
 			pet.plusQuestIndex();
 		}
 		pet.setFalseIsQuestCompleted();
@@ -248,7 +248,7 @@ class QuestAnswerServiceTest {
 
 		// when
 		ExceptionResponse exceptionResponse = assertThrows(ExceptionResponse.class, () -> {
-			questAnswerService.createQuestAnswer(authentication, 1L, 6L, createAnswerRequestDto, imageFile);
+			questAnswerService.createQuestAnswer(authentication, 1L, 7L, createAnswerRequestDto, imageFile);
 		});
 
 		// then
@@ -259,12 +259,10 @@ class QuestAnswerServiceTest {
 	@DisplayName("퀘스트_49일차_답변_생성_후_OPENAI_API_메서드_호출_테스트")
 	public void 퀘스트_49일차_답변_생성_후_OPENAI_API_메서드_호출_테스트() {
 		// given
-		for (int i = 0; i < 47; i++) {
+		for (int i = 0; i < 48; i++) {
 			pet.plusQuestIndex();
 		}
-		System.out.println("pet quest index: " + pet.getQuestIndex());
 		pet.setFalseIsQuestCompleted();
-		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findByIdAndUserAndIsDeleted(anyLong(), any(), anyBoolean())).willReturn(Optional.of(pet));
@@ -273,7 +271,7 @@ class QuestAnswerServiceTest {
 		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
 
 		// when
-		questAnswerService.createQuestAnswer(authentication, 1L, 48L, createAnswerRequestDto, imageFile);
+		questAnswerService.createQuestAnswer(authentication, 1L, 49L, createTextAnswerRequestDto, null);
 
 		// then
 		verify(openAiClient).analysisTotalSentiment(sentimentAnalysis);
@@ -283,12 +281,11 @@ class QuestAnswerServiceTest {
 	@DisplayName("퀘스트_49일차_답변_생성_후_OPENAI_API_EXCEPTION_발생_테스트")
 	public void 퀘스트_49일차_답변_생성_후_OPENAI_API_EXCEPTION_발생_테스트() {
 		// given
-		for (int i = 0; i < 47; i++) {
+		for (int i = 0; i < 48; i++) {
 			pet.plusQuestIndex();
 		}
 		pet.setFalseIsQuestCompleted();
 
-		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findByIdAndUserAndIsDeleted(anyLong(), any(), anyBoolean())).willReturn(Optional.of(pet));
@@ -300,7 +297,7 @@ class QuestAnswerServiceTest {
 
 		// when
 		ExceptionResponse exceptionResponse = assertThrows(ExceptionResponse.class, () -> {
-			questAnswerService.createQuestAnswer(authentication, 1L, 48L, createAnswerRequestDto, imageFile);
+			questAnswerService.createQuestAnswer(authentication, 1L, 49L, createTextAnswerRequestDto, null);
 		});
 
 		// then
@@ -317,6 +314,8 @@ class QuestAnswerServiceTest {
 		given(petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(
 			petPersonalities);
 		ReflectionTestUtils.setField(quest, "id", 2L);
+		ReflectionTestUtils.setField(pet, "questIndex", 2);
+		ReflectionTestUtils.setField(pet, "isQuestCompleted", false);
 
 		mockStatic(QuestAnswerTypeNo.class);
 		given(QuestAnswerTypeNo.findTypeByQuestNumber(anyLong())).willReturn(
@@ -343,6 +342,8 @@ class QuestAnswerServiceTest {
 			petPersonalities);
 		given(s3UploadUtil.saveFile(any())).willReturn("imageUrl");
 		ReflectionTestUtils.setField(quest, "id", 37L);
+		ReflectionTestUtils.setField(pet, "questIndex", 37);
+		ReflectionTestUtils.setField(pet, "isQuestCompleted", false);
 
 		given(QuestAnswerTypeNo.findTypeByQuestNumber(anyLong())).willReturn(
 			Optional.of(QuestAnswerTypeNo.TEXT_IMAGE_TO_TEXT.getType()));
@@ -365,6 +366,8 @@ class QuestAnswerServiceTest {
 		given(petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(
 			petPersonalities);
 		ReflectionTestUtils.setField(quest, "id", 44L);
+		ReflectionTestUtils.setField(pet, "questIndex", 44);
+		ReflectionTestUtils.setField(pet, "isQuestCompleted", false);
 
 		given(QuestAnswerTypeNo.findTypeByQuestNumber(anyLong())).willReturn(
 			Optional.of(QuestAnswerTypeNo.TEXT_TO_IMAGE_ART.getType()));
