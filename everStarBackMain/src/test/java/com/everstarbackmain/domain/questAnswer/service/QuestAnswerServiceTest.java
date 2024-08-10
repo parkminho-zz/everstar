@@ -141,7 +141,7 @@ class QuestAnswerServiceTest {
 	@DisplayName("퀘스트_49일차_답변_생성_후_스케줄링_메서드_호출_테스트")
 	public void 퀘스트_49일차_답변_생성_후_스케줄링_메서드_호출_테스트() {
 		// given
-		for (int i = 0; i < 47; i++) {
+		for (int i = 0; i < 48; i++) {
 			pet.plusQuestIndex();
 		}
 		pet.setFalseIsQuestCompleted();
@@ -154,7 +154,7 @@ class QuestAnswerServiceTest {
 		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
 
 		// when
-		questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
+		questAnswerService.createQuestAnswer(authentication, 1L, 49L, createAnswerRequestDto, imageFile);
 
 		// then
 		verify(memorialBookScheduler).scheduleMemorialBookActivation(user, 1L);
@@ -164,7 +164,7 @@ class QuestAnswerServiceTest {
 	@DisplayName("퀘스트_답변_분석_메서드_호출_테스트")
 	public void 퀘스트_답변_분석_메서드_호출_테스트() {
 		// given
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 6; i++) {
 			pet.plusQuestIndex();
 		}
 		pet.setFalseIsQuestCompleted();
@@ -183,7 +183,7 @@ class QuestAnswerServiceTest {
 		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
 
 		// when
-		questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
+		questAnswerService.createQuestAnswer(authentication, 1L, 7L, createAnswerRequestDto, imageFile);
 
 		// then
 		verify(naverCloudClient, times(1)).analyseSentiment(anyString());
@@ -214,7 +214,7 @@ class QuestAnswerServiceTest {
 
 		// when
 		ExceptionResponse exceptionResponse = assertThrows(ExceptionResponse.class, () -> {
-			questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
+			questAnswerService.createQuestAnswer(authentication, 1L, 6L, createAnswerRequestDto, imageFile);
 		});
 
 		// then
@@ -244,7 +244,7 @@ class QuestAnswerServiceTest {
 
 		// when
 		ExceptionResponse exceptionResponse = assertThrows(ExceptionResponse.class, () -> {
-			questAnswerService.createQuestAnswer(authentication, 1L, 7L, createAnswerRequestDto, imageFile);
+			questAnswerService.createQuestAnswer(authentication, 1L, 6L, createAnswerRequestDto, imageFile);
 		});
 
 		// then
@@ -258,6 +258,7 @@ class QuestAnswerServiceTest {
 		for (int i = 0; i < 47; i++) {
 			pet.plusQuestIndex();
 		}
+		System.out.println("pet quest index: " + pet.getQuestIndex());
 		pet.setFalseIsQuestCompleted();
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
@@ -268,7 +269,7 @@ class QuestAnswerServiceTest {
 		given(questRepository.findById(anyLong())).willReturn(Optional.of(quest));
 
 		// when
-		questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
+		questAnswerService.createQuestAnswer(authentication, 1L, 48L, createAnswerRequestDto, imageFile);
 
 		// then
 		verify(openAiClient).analysisTotalSentiment(sentimentAnalysis);
@@ -295,7 +296,7 @@ class QuestAnswerServiceTest {
 
 		// when
 		ExceptionResponse exceptionResponse = assertThrows(ExceptionResponse.class, () -> {
-			questAnswerService.createQuestAnswer(authentication, 1L, 1L, createAnswerRequestDto, imageFile);
+			questAnswerService.createQuestAnswer(authentication, 1L, 48L, createAnswerRequestDto, imageFile);
 		});
 
 		// then
