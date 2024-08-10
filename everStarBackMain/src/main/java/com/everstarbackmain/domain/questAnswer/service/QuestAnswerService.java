@@ -17,6 +17,7 @@ import com.everstarbackmain.domain.aiAnswer.model.AiAnswerType;
 import com.everstarbackmain.domain.aiAnswer.repository.AiAnswerRepository;
 import com.everstarbackmain.domain.aiAnswer.requestdto.CreateAiAnswerRequestDto;
 import com.everstarbackmain.domain.memorialBook.util.MemorialBookScheduler;
+import com.everstarbackmain.domain.notification.util.NotificationUtil;
 import com.everstarbackmain.domain.pet.repository.PetPersonalityRepository;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.quest.model.Quest;
@@ -61,6 +62,7 @@ public class QuestAnswerService {
 	private final OpenAiClient openAiClient;
 	private final DiffusionAiClient diffusionAiClient;
 	private final S3UploadUtil s3UploadUtil;
+	private final NotificationUtil notificationUtil;
 
 	@Transactional
 	public void createQuestAnswer(Authentication authentication, Long petId, Long questId,
@@ -179,6 +181,8 @@ public class QuestAnswerService {
 					CreateAiAnswerRequestDto.createImageAiAnswerRequestDto(uploadedImageUrl,
 						AiAnswerType.IMAGE.getType()));
 				aiAnswerRepository.save(aiAnswer);
+
+				notificationUtil.sendImageAiAnswerNotification(user, uploadedImageUrl);
 			}
 
 		}, () -> {
@@ -219,6 +223,8 @@ public class QuestAnswerService {
 					CreateAiAnswerRequestDto.createImageAiAnswerRequestDto(uploadedImageUrl,
 						AiAnswerType.IMAGE.getType()));
 				aiAnswerRepository.save(aiAnswer);
+
+				notificationUtil.sendImageAiAnswerNotification(user, imageUrl);
 			}
 
 		}, () -> {

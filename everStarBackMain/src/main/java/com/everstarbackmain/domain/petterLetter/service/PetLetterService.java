@@ -83,6 +83,6 @@ public class PetLetterService {
 	private void sendNotification(UserLetter userLetter) {
 		Pet pet = userLetter.getPet();
 		User user = pet.getUser();
-		notificationUtil.sendPetLetterNotification(user, pet.getName());
+		notificationUtil.sendPetLetterNotification(user);
 	}
 }
