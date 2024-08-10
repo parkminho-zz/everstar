@@ -3,6 +3,7 @@ import { useQuery, useMutation, UseMutationOptions, useQueryClient } from '@tans
 import { fetchPets, fetchPetDetails, addPet, updateProfileImage, Pet, PetInfo } from 'api/petApi';
 import { useDispatch } from 'react-redux';
 import { setPets, addPet as addPetAction, setPetDetails } from 'store/slices/petSlice';
+import { useState, useEffect } from 'react';
 
 export const useFetchPets = (token: string) => {
   const dispatch = useDispatch();
@@ -76,4 +77,21 @@ export const useUpdateProfileImage = (
       console.error('Error updating profile image:', error);
     },
   });
+};
+
+export const useLocalPetDetails = (petId: number, token: string) => {
+  const [localPetDetails, setLocalPetDetails] = useState<PetInfo | null>(null);
+
+  const fetchDetails = async () => {
+    const details = await fetchPetDetails(petId, token);
+    setLocalPetDetails(details);
+  };
+
+  useEffect(() => {
+    if (petId) {
+      fetchDetails();
+    }
+  }, [petId]);
+
+  return { localPetDetails, refetch: fetchDetails };
 };
