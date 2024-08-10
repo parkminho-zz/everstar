@@ -67,7 +67,7 @@ public class QuestAnswerService {
 		CreateAnswerRequestDto requestDto, MultipartFile imageFile) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 
-		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
+		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId,user, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
 		Quest quest = questRepository.findById(questId)
