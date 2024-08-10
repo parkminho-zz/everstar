@@ -39,7 +39,7 @@ public class SseService {
 
 		emitter.onCompletion(() -> emitterRepository.deleteByPetId(petId)); // 네트워크 오류
 		emitter.onTimeout(() -> emitterRepository.deleteByPetId(petId)); // 시간 초과
-		emitter.onError((e) -> emitterRepository.deleteByPetId(petId)); // 오류
+		emitter.onError(e -> emitterRepository.deleteByPetId(petId)); // 오류
 
 		return emitter;
 	}
@@ -64,7 +64,7 @@ public class SseService {
 		} else if (pet.getIsQuestCompleted()) {
 			return "퀘스트를 완료했어요.";
 		} else {
-			return pet.getQuestIndex() + " 번째 퀘스트가 도착했어요.";
+			return pet.getQuestIndex().toString();
 		}
 	}
 }

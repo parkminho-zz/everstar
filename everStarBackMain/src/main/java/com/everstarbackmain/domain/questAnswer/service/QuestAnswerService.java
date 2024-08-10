@@ -67,8 +67,14 @@ public class QuestAnswerService {
 		CreateAnswerRequestDto requestDto, MultipartFile imageFile) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 
-		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
+		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId,user, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+
+		if (pet.getIsQuestCompleted()) {
+			throw new ExceptionResponse(CustomException.ALREADY_COMPLETED_QUEST_EXCEPTION);
+		}
+
+		// TODO: pet의 quest index가 요청 받은 quest index와 일치하는지 검증 및 예외처리
 
 		Quest quest = questRepository.findById(questId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_QUEST_EXCEPTION));
