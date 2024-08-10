@@ -34,7 +34,8 @@ public enum CustomException {
 	NOT_FOUND_SENTIMENT_ANALYSIS_EXCEPTION(404, "NotFoundSentimentAnalysisException", "감정 분석 결과가 존재하지 않습니다."),
 	NOT_FOUND_QUEST_EXCEPTION(404, "NotFoundQuestException", "퀘스트가 존재하지 않습니다."),
 	ALL_QUESTS_COMPLETED_EXCEPTION(400, "AllQuestsCompleted", "모든	퀘스트를 완료 하셨습니다! 앞으로 영원별을 추억하며 행복하시길 바랍니다♥"),
-	ALREADY_COMPLETED_QUEST_EXCEPTION(400, "AlreadyCompletedQuestException", "이미 완료된 퀘스트입니다!")
+	ALREADY_COMPLETED_QUEST_EXCEPTION(400, "AlreadyCompletedQuestException", "이미 완료된 퀘스트입니다!"),
+	QUEST_INDEX_NOT_MATCH_EXCEPTION(400, "QuestIndexNotMatchException", "현재 퀘스트와 일치하지 않습니다.")
 	;
 
 
