@@ -7,19 +7,17 @@ interface MemorialBookCoverProps {
   src?: string;
 }
 
-export const MemorialBookCover: React.FC<MemorialBookCoverProps> = ({
-  className,
-}) => {
+export const MemorialBookCover: React.FC<MemorialBookCoverProps> = ({ className, src }) => {
   return (
     <div
       className={`flex w-[360px] h-[508px] items-center justify-center relative border border-solid border-black shadow-[0px_4px_4px_#00000040] ${className}`}
     >
       <AtomBookcover />
       <Avatar
-        src=''
-        size='large'
-        name='memorial'
-        className='!absolute !left-[78px] !top-[151px]'
+        src={src}
+        size="large"
+        name="memorial"
+        className="!absolute !left-[78px] !top-[151px]"
       />
     </div>
   );

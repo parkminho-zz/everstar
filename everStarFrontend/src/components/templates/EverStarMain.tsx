@@ -136,7 +136,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
           onToggleChange={handleToggleStatus}
         >
           {buttonDisabled
-            ? '메모리얼북 정보가 없습니다'
+            ? '메모리얼북을 열람하실 수 없습니다.'
             : memorialBookProfile?.isActive
               ? '메모리얼북 열람하기'
               : '아직 활성화되지 않았습니다'}

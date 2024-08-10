@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // useNavigate 추가
 import { SignUpForm } from 'components/organics/SignUpForm/SignUpForm';
 import { PhoneNumberModal } from 'components/organics/PhoneNumberModal/PhoneNumberModal';
-import {
-  useSendVerificationCode,
-  useVerifyAuthCode,
-  useJoinUser,
-} from 'hooks/useAuth';
+import { useSendVerificationCode, useVerifyAuthCode, useJoinUser } from 'hooks/useAuth';
 
 interface UserInfo {
   email: string;
@@ -28,6 +25,7 @@ export const SignUp: React.FC = () => {
     questReceptionTime: '',
   });
 
+  const navigate = useNavigate(); // useNavigate 훅 사용
   const { mutate: mutateSendCode } = useSendVerificationCode();
   const { mutate: mutateVerifyCode } = useVerifyAuthCode();
   const { mutate: mutateJoinUser } = useJoinUser();
@@ -84,6 +82,9 @@ export const SignUp: React.FC = () => {
       {
         onSuccess: () => {
           mutateJoinUser(formData, {
+            onSuccess: () => {
+              navigate('/tutorial'); // 튜토리얼 라우터로 이동
+            },
             onError: (error: unknown) => {
               const err = error as Error;
               console.error('Error joining user:', err.message);
@@ -102,12 +103,12 @@ export const SignUp: React.FC = () => {
   };
 
   return (
-    <div className='flex items-center justify-center flex-grow'>
+    <div className="flex items-center justify-center flex-grow">
       <SignUpForm
-        headerText='회원가입'
-        smallButtonText=''
+        headerText="회원가입"
+        smallButtonText=""
         showPrimaryButton={true}
-        text='회원가입을 위해 정보를 입력해주세요.'
+        text="회원가입을 위해 정보를 입력해주세요."
         onButtonClick={handleSignUpButtonClick}
       />
       <PhoneNumberModal
@@ -115,7 +116,7 @@ export const SignUp: React.FC = () => {
         onClose={handleCloseModal}
         onResend={handleResend}
         onVerify={handleVerifyAndJoin}
-        text='인증번호를 <br /> 입력해 주세요'
+        text="인증번호를 <br /> 입력해 주세요"
       />
     </div>
   );

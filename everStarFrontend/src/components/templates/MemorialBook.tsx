@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   MemorialBook as OrganicsMemorialBook,
   PageType,
@@ -11,12 +11,16 @@ import { useFetchMemorialBookById } from 'hooks/useMemorialBooks';
 import { useParams } from 'react-router-dom';
 import { MemorialBookDiaryModal } from 'components/organics/MemorialBook/MemorialBookDiaryModal';
 
-const parseMemorialBookData = (data: MemorialBookDetailsResponse): PageType[] => {
+const parseMemorialBookData = (
+  data: MemorialBookDetailsResponse,
+  avatarUrl: string | undefined,
+): PageType[] => {
   const { quests, questAnswers, aiAnswers, diaries, sentimentAnalysis, pet } = data;
   const pages: PageType[] = [];
 
   pages.push({
     type: 'cover',
+    src: avatarUrl,
   });
 
   const sentimentResults = [
@@ -77,7 +81,22 @@ const parseMemorialBookData = (data: MemorialBookDetailsResponse): PageType[] =>
   return pages;
 };
 
-export const MemorialBook: React.FC = () => {
+const loadImages = (element: HTMLElement) => {
+  const images = element.querySelectorAll('img');
+  const promises = Array.from(images).map((img) => {
+    return new Promise<void>((resolve, reject) => {
+      if (img.complete) {
+        resolve();
+      } else {
+        img.onload = () => resolve();
+        img.onerror = () => reject();
+      }
+    });
+  });
+  return Promise.all(promises);
+};
+
+export const MemorialBook: React.FC<{ avatarUrl?: string }> = ({ avatarUrl }) => {
   const params = useParams<{ pet?: string; memorialBookId?: string }>();
   const petId = params.pet ? parseInt(params.pet, 10) : 0;
   const memorialBookId = params.memorialBookId ? parseInt(params.memorialBookId, 10) : 0;
@@ -85,7 +104,28 @@ export const MemorialBook: React.FC = () => {
   const memorialBookRef = useRef<HTMLDivElement>(null);
   const { data: memorialBookDetails, isLoading } = useFetchMemorialBookById(petId, memorialBookId);
 
+  const [pages, setPages] = useState<PageType[]>([]);
   const [isDiaryModalOpen, setIsDiaryModalOpen] = useState(false);
+
+  // 새로운 useEffect 추가: avatarUrl이 변경될 때 강제로 리렌더링
+  useEffect(() => {
+    if (memorialBookDetails) {
+      const parsedPages = parseMemorialBookData(memorialBookDetails.data, avatarUrl);
+      setPages(parsedPages);
+    }
+  }, [memorialBookDetails, avatarUrl]); // avatarUrl이 변경될 때마다 다시 데이터를 파싱
+
+  // avatarUrl이 변경될 때 강제로 리렌더링 트리거
+  useEffect(() => {
+    if (memorialBookRef.current) {
+      memorialBookRef.current.style.opacity = '0';
+      setTimeout(() => {
+        if (memorialBookRef.current) {
+          memorialBookRef.current.style.opacity = '1';
+        }
+      }, 0);
+    }
+  }, [avatarUrl]);
 
   const handleDownloadPdf = async () => {
     if (memorialBookRef.current) {
@@ -98,9 +138,16 @@ export const MemorialBook: React.FC = () => {
 
       for (let i = 0; i < book.length; i++) {
         const page = book[i] as HTMLElement;
+        await loadImages(page);
         page.style.display = 'block';
-        const canvas = await html2canvas(page, { scale: 2 });
-        const imgData = canvas.toDataURL('image/png');
+
+        const canvas = await html2canvas(page, {
+          scale: 2,
+          useCORS: true,
+          logging: true,
+        });
+
+        const imgData = canvas.toDataURL('image/png', 1.0);
         const imgProps = pdf.getImageProperties(imgData);
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
@@ -111,6 +158,7 @@ export const MemorialBook: React.FC = () => {
         }
         page.style.display = 'none';
       }
+
       pdf.save('memorial-book.pdf');
     }
   };
@@ -127,16 +175,12 @@ export const MemorialBook: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  const pages = memorialBookDetails ? parseMemorialBookData(memorialBookDetails.data) : [];
-
   return (
     <div>
       <div className="relative z-10 my-4" ref={memorialBookRef}>
         <OrganicsMemorialBook pages={pages} />
       </div>
       <div className="relative z-10 flex justify-center m-4 space-x-4">
-        {' '}
-        {/* 버튼 간 간격 추가 */}
         <PrimaryButton
           theme="white"
           size="medium"
