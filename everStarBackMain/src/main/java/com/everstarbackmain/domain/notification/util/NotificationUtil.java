@@ -26,17 +26,47 @@ public class NotificationUtil {
 	private final NotificationRepository notificationRepository;
 
 	@Transactional
-	public void sendPetLetterNotification(User user, String petName) {
+	public void sendPetLetterNotification(User user) {
 		List<Notification> notifications = notificationRepository.findByUser(user);
-		sendNotification(notifications, petName);
+		sendNotification(notifications);
 	}
 
-	private void sendNotification(List<Notification> notifications, String petName) {
+	private void sendNotification(List<Notification> notifications) {
 		for (Notification notification : notifications) {
 			Message message = Message.builder()
 				.setWebpushConfig(WebpushConfig.builder()
 					.setNotification(WebpushNotification.builder()
-						.setTitle(petName + "에게 편지가 왔어요")
+						.setTitle("편지")
+						.build())
+					.build())
+				.setToken(notification.getDeviceToken())
+				.build();
+
+			try {
+				FirebaseMessaging.getInstance().sendAsync(message).get();
+			} catch (ExecutionException e) {
+				log.error("main server - error : {}", e.getMessage());
+				notificationRepository.delete(notification);
+			} catch (InterruptedException e) {
+				log.error("main server - error : {}", e.getMessage());
+				notificationRepository.delete(notification);
+			}
+		}
+	}
+
+	@Transactional
+	public void sendImageAiAnswerNotification(User user, String imageUrl) {
+		List<Notification> notifications = notificationRepository.findByUser(user);
+		sendImageAiAnswerNotification(notifications, imageUrl);
+	}
+
+	private void sendImageAiAnswerNotification(List<Notification> notifications, String imageUrl) {
+		for (Notification notification : notifications) {
+			Message message = Message.builder()
+				.setWebpushConfig(WebpushConfig.builder()
+					.setNotification(WebpushNotification.builder()
+						.setTitle("카툰화")
+						.setBody(imageUrl)
 						.build())
 					.build())
 				.setToken(notification.getDeviceToken())
