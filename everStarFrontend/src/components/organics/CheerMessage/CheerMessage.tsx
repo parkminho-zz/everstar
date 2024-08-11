@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ProfileCard } from 'components/molecules/cards/ProfileCard/ProfileCard';
 import { PostItCard } from 'components/molecules/cards/PostItCard/PostItCard';
 import { PostItPlusCard } from 'components/molecules/cards/PostItPlusCard/PostItPlusCard';
@@ -68,13 +68,13 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     cheeringMessageId: number;
   }) => {
     createCheeringPet(formData, {
-      onSuccess: (newCheeringMessage) => {
+      onSuccess: (data) => {
         const newPostItCard = {
           contents: formData.content,
           name: petName || '',
           color: formData.color.toLowerCase(),
           petId: Number(petId),
-          cheeringMessageId: Number(params.pet),
+          cheeringMessageId: Number(data),
         };
         setPostItCards([...postItCards, newPostItCard]);
       },
@@ -198,7 +198,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
 
   return (
     <div className='relative flex flex-col items-center p-12'>
-      <div className='absolute inset-0 z-0'>
+      <div className='absolute inset-0 z-9999'>
         <Glass
           currentPage={currentPage}
           totalPages={totalPagesCalculated}
@@ -207,7 +207,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
           className='w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5'
         />
       </div>
-      <div className='relative z-10 w-full max-w-screen-lg p-6 bg-gray-100 rounded-lg shadow-md'>
+      <div className='relative w-full max-w-screen-lg p-6 bg-gray-100 rounded-lg shadow-md z-9'>
         <div className='flex'>
           <div className='flex-shrink-0 mr-4'>
             <ProfileCard

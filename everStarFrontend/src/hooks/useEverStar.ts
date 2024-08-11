@@ -25,7 +25,11 @@ interface UpdatePetIntroductionVariables {
 }
 
 // 훅 추가
-export const useFetchPetsByName = (petname: string, page: number = 0, size: number = 10) => {
+export const useFetchPetsByName = (
+  petname: string,
+  page: number = 0,
+  size: number = 10
+) => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
 
   return useQuery({
@@ -132,16 +136,12 @@ export const useFetchPetPost = (
   >
 ) => {
   const queryClient = useQueryClient();
-
   return useMutation<
     Cheering,
     Error,
     { content: string; color: string; isAnonymous: boolean }
   >({
     mutationFn: (data) => {
-      console.log(1);
-      console.log(data);
-      console.log(paramsId);
       return fetchPetPost(data, token, petId, paramsId);
     },
     ...options,
