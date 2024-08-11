@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import { EverStarMain } from 'components/templates/EverStarMain';
 import { EverStarCheerMessage } from 'components/templates/EverStarCheerMessage';
@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
 import bgImage from 'assets/images/bg-everstar.webp';
 import { useFetchOtherPetDetails, useFetchCheeringPet } from 'hooks/useEverStar';
-import { useFetchMemorialBooks, useUpdateMemorialBookOpenStatus } from 'hooks/useMemorialBooks';
+import { useFetchMemorialBooks } from 'hooks/useMemorialBooks';
 import { MemorialBook } from 'components/templates/MemorialBook';
 
 interface PetProfile {
@@ -39,50 +39,13 @@ export const EverstarPage: React.FC = () => {
   const { data: memorialBooks, isLoading: isMemorialBooksLoading } = useFetchMemorialBooks(petId);
   const { data: cheerData, isLoading: isCheerLoading } = useFetchCheeringPet();
 
-  const [toggleStatus, setToggleStatus] = useState<'on' | 'off' | undefined>(undefined);
-
-  // Toggle 상태 및 pet & MemorialBook 상태 통합 관리
   useEffect(() => {
     if (!params.pet && petId && !sessionStorage.getItem('initialNavigation')) {
       sessionStorage.setItem('defaultPetId', petId.toString());
       sessionStorage.setItem('initialNavigation', 'true');
       navigate(`/everstar/${petId}`);
     }
-
-    if (memorialBooks && memorialBooks.data) {
-      const { isOpen, isActive } = memorialBooks.data;
-      const newToggleStatus = isActive ? (isOpen ? 'on' : 'off') : undefined;
-
-      // 상태 업데이트가 필요할 때만 업데이트
-      if (newToggleStatus !== toggleStatus) {
-        setToggleStatus(newToggleStatus);
-      }
-    }
-  }, [params.pet, petId, memorialBooks, navigate]);
-
-  // MemorialBook 상태 변경 시 서버 업데이트
-  const { mutate: updateMemorialBookStatus } = useUpdateMemorialBookOpenStatus({
-    onSuccess: (data, variables) => {
-      setToggleStatus((prevStatus) => {
-        const updatedStatus = variables.isOpen ? 'on' : 'off';
-        // 중복 업데이트 방지
-        if (prevStatus === updatedStatus) {
-          return prevStatus;
-        }
-        return updatedStatus;
-      });
-    },
-  });
-
-  const handleToggle = (status: 'on' | 'off') => {
-    if (memorialBooks && memorialBooks.data && status !== toggleStatus) {
-      updateMemorialBookStatus({
-        petId,
-        memorialBookId: memorialBooks.data.id,
-        isOpen: status === 'on',
-      });
-    }
-  };
+  }, [params.pet, petId, navigate]);
 
   if (isPetDetailsLoading || isMemorialBooksLoading || isCheerLoading) {
     return <div>Loading...</div>;
@@ -101,9 +64,6 @@ export const EverstarPage: React.FC = () => {
     avatarUrl: petDetails.profileImageUrl,
     questIndex: petDetails.questIndex,
   };
-
-  const buttonDisabled = !memorialBooks.data.isActive || !memorialBooks.data.isOpen;
-  const isOwner = petId === currentPetId;
 
   const postItCards =
     cheerData?.data?.content?.map(
@@ -138,11 +98,9 @@ export const EverstarPage: React.FC = () => {
               element={
                 <EverStarMain
                   petProfile={petProfile}
-                  buttonDisabled={buttonDisabled}
+                  buttonDisabled={!memorialBooks.data.isActive || !memorialBooks.data.isOpen}
                   memorialBookProfile={memorialBooks.data}
                   petId={petId ?? 0}
-                  handleToggle={isOwner ? handleToggle : undefined}
-                  toggleStatus={toggleStatus}
                 />
               }
             />

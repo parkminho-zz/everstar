@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ProgressCard } from 'components/organics/ProgressCard/ProgressCard';
 import { ViewMemorialBook } from 'components/organics/ViewMemorialBook/ViewMemorialBook';
 import { useNavigate } from 'react-router-dom';
+import { useUpdateMemorialBookOpenStatus } from 'hooks/useMemorialBooks';
 
 interface EverStarMainProps {
   petProfile: {
@@ -21,45 +22,42 @@ interface EverStarMainProps {
     isActive: boolean;
   } | null;
   petId: number;
-  handleToggle?: (status: 'off' | 'on') => void;
-  toggleStatus?: 'on' | 'off' | undefined;
 }
 
 export const EverStarMain: React.FC<EverStarMainProps> = ({
   petProfile,
-  buttonDisabled,
   memorialBookProfile,
   petId,
-  handleToggle,
-  toggleStatus,
 }) => {
   const navigate = useNavigate();
-  const [localToggleStatus, setLocalToggleStatus] = useState<'on' | 'off' | undefined>(
-    toggleStatus,
+  const [toggleStatus, setToggleStatus] = useState<'on' | 'off' | undefined>(
+    memorialBookProfile?.isOpen ? 'on' : 'off',
   );
 
-  useEffect(() => {
-    if (toggleStatus !== localToggleStatus) {
-      setLocalToggleStatus(toggleStatus);
-    }
-  }, [toggleStatus]);
+  const { mutate: updateMemorialBookStatus } = useUpdateMemorialBookOpenStatus({
+    onSuccess: (data, variables) => {
+      setToggleStatus(variables.isOpen ? 'on' : 'off');
+    },
+  });
 
   const handleButtonClick = () => {
     navigate('/earth');
   };
 
   const handleViewMemorialBookClick = () => {
-    if (memorialBookProfile?.isActive && memorialBookProfile?.isOpen) {
+    if (memorialBookProfile) {
       navigate(`/everstar/${petId}/memorialbook/${memorialBookProfile.id}`);
     }
   };
 
   const handleToggleChange = (status: 'on' | 'off') => {
-    if (status !== localToggleStatus) {
-      setLocalToggleStatus(status);
-      if (handleToggle) {
-        handleToggle(status);
-      }
+    if (status !== toggleStatus && memorialBookProfile) {
+      setToggleStatus(status);
+      updateMemorialBookStatus({
+        petId,
+        memorialBookId: memorialBookProfile.id,
+        isOpen: status === 'on',
+      });
     }
   };
 
@@ -75,7 +73,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
         buttonTheme="white"
         buttonSize="large"
         buttonDisabled={false}
-        buttonText={'지구별로 가기'}
+        buttonText="지구별로 가기"
         buttonIcon="SmallEarthImg"
         onButtonClick={handleButtonClick}
         showMusicControl={false}
@@ -83,16 +81,12 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
       />
       <div className="flex flex-col items-center mt-20">
         <ViewMemorialBook
-          theme={buttonDisabled ? 'white' : 'focus'}
-          size="large"
-          disabled={buttonDisabled}
           onClick={handleViewMemorialBookClick}
-          BookVariant="book-close"
-          showIcon={false}
-          toggleStatus={localToggleStatus}
+          toggleStatus={toggleStatus}
           onToggleChange={handleToggleChange}
-          showToggle={handleToggle !== undefined} // 내가 아닌 경우 또는 활성화되지 않은 경우 토글 버튼 숨기기
-          isActive={memorialBookProfile?.isActive} // MemorialBook의 활성화 상태 전달
+          isActive={memorialBookProfile?.isActive}
+          isOpen={memorialBookProfile?.isOpen}
+          isOwner={true} // Assuming the owner is always the one viewing this component
         />
       </div>
     </div>

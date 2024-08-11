@@ -49,8 +49,5 @@ export const Default: Story = {
       isActive: true,
     },
     petId: 1,
-    handleToggle: (status: 'off' | 'on') => {
-      alert(`Toggle status changed to: ${status}`);
-    },
   },
 };
