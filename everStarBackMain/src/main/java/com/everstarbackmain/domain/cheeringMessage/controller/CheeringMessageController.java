@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.everstarbackmain.domain.cheeringMessage.message.SuccessCheeringMessageMessage;
 import com.everstarbackmain.domain.cheeringMessage.requestDto.CreateCheeringMessageRequestDto;
+import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageDetailResponseDto;
 import com.everstarbackmain.domain.cheeringMessage.service.CheeringMessageService;
 import com.everstarbackmain.global.util.HttpResponseUtil;
 
@@ -32,9 +33,9 @@ public class CheeringMessageController {
 	public ResponseEntity<Map<String, Object>> creatCheeringMessage(Authentication authentication,
 		@PathVariable("pet-id") Long petId, @PathVariable("find_pet-id") Long findPetId,
 		@Valid @RequestBody CreateCheeringMessageRequestDto requestDto) {
-		cheeringMessageService.createCheeringMessage(authentication, petId, findPetId, requestDto);
+		CheeringMessageDetailResponseDto responseDto = cheeringMessageService.createCheeringMessage(authentication, petId, findPetId, requestDto);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
-			SuccessCheeringMessageMessage.SUCCESS_CREATE_CHEERINGMESSAGE);
+			responseDto);
 
 		log.info("main server - request : {}", requestDto);
 		log.info("main server - response : {}", response);

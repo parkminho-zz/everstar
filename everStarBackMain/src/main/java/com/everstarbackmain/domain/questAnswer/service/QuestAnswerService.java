@@ -3,19 +3,16 @@ package com.everstarbackmain.domain.questAnswer.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.everstarbackmain.domain.aiAnswer.model.AiAnswer;
-import com.everstarbackmain.domain.aiAnswer.model.AiAnswerType;
-import com.everstarbackmain.domain.aiAnswer.repository.AiAnswerRepository;
-import com.everstarbackmain.domain.aiAnswer.requestdto.CreateAiAnswerRequestDto;
+import com.everstarbackmain.domain.aiAnswer.event.RequestTextImageToImageAiAnswerEvent;
+import com.everstarbackmain.domain.aiAnswer.event.RequestTextImageToTextAiAnswerEvent;
+import com.everstarbackmain.domain.aiAnswer.event.RequestTextToImageAiAnswerEvent;
+import com.everstarbackmain.domain.aiAnswer.event.RequestTextToTextAiAnswerEvent;
 import com.everstarbackmain.domain.memorialBook.util.MemorialBookScheduler;
 import com.everstarbackmain.domain.notification.util.NotificationUtil;
 import com.everstarbackmain.domain.pet.repository.PetPersonalityRepository;
@@ -27,8 +24,11 @@ import com.everstarbackmain.domain.quest.util.QuestScheduler;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswerTypeNo;
 import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
+<<<<<<< HEAD
 import com.everstarbackmain.domain.sse.SseService;
 import com.everstarbackmain.global.diffusionai.util.DiffusionAiClient;
+=======
+>>>>>>> 0ccc692d70da9d1bd02bf32b3b79cb7ae7290ae2
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;
@@ -53,7 +53,6 @@ public class QuestAnswerService {
 
 	private final QuestRepository questRepository;
 	private final QuestAnswerRepository questAnswerRepository;
-	private final AiAnswerRepository aiAnswerRepository;
 	private final PetRepository petRepository;
 	private final PetPersonalityRepository petPersonalityRepository;
 	private final SentimentAnalysisRepository sentimentAnalysisRepository;
@@ -61,10 +60,10 @@ public class QuestAnswerService {
 	private final QuestScheduler questScheduler;
 	private final NaverCloudClient naverCloudClient;
 	private final OpenAiClient openAiClient;
-	private final DiffusionAiClient diffusionAiClient;
 	private final S3UploadUtil s3UploadUtil;
 	private final NotificationUtil notificationUtil;
 	private final SseService sseService;
+	private final ApplicationEventPublisher eventPublisher;
 
 	@Transactional
 	public void createQuestAnswer(Authentication authentication, Long petId, Long questId,
@@ -173,23 +172,12 @@ public class QuestAnswerService {
 
 		QuestAnswerTypeNo.findTypeByQuestNumber(questId).ifPresentOrElse(type -> {
 			if (type.equals(QuestAnswerTypeNo.TEXT_TO_TEXT.getType())) {
-				String aiAnswerResponse = openAiClient.writePetTextToTextAnswer(user, pet, personalities, quest,
-					questAnswer);
-				AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
-					CreateAiAnswerRequestDto.createTextAiAnswerRequestDto(aiAnswerResponse,
-						AiAnswerType.TEXT.getType()));
-				aiAnswerRepository.save(aiAnswer);
+				eventPublisher.publishEvent(
+					new RequestTextToTextAiAnswerEvent(user, pet, personalities, quest, questAnswer));
 			}
 
 			if (type.equals(QuestAnswerTypeNo.TEXT_TO_IMAGE_ART.getType())) {
-				String encodedAiAnswerResponse = openAiClient.writePetTextToImageAnswer(pet, quest, questAnswer);
-				String uploadedImageUrl = s3UploadUtil.uploadS3ByEncodedFile(encodedAiAnswerResponse);
-				AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
-					CreateAiAnswerRequestDto.createImageAiAnswerRequestDto(uploadedImageUrl,
-						AiAnswerType.IMAGE.getType()));
-				aiAnswerRepository.save(aiAnswer);
-
-				notificationUtil.sendImageAiAnswerNotification(user, uploadedImageUrl);
+				eventPublisher.publishEvent(new RequestTextToImageAiAnswerEvent(user, pet, quest, questAnswer));
 			}
 
 		}, () -> {
@@ -204,44 +192,18 @@ public class QuestAnswerService {
 
 		QuestAnswerTypeNo.findTypeByQuestNumber(questId).ifPresentOrElse(type -> {
 			if (type.equals(QuestAnswerTypeNo.TEXT_IMAGE_TO_TEXT.getType())) {
-				String aiAnswerResponse = openAiClient.writePetTextImageToTextAnswer(user, pet, personalities, quest,
-					questAnswer, imageUrl);
-				AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
-					CreateAiAnswerRequestDto.createTextAiAnswerRequestDto(aiAnswerResponse,
-						AiAnswerType.TEXT.getType()));
-				aiAnswerRepository.save(aiAnswer);
+				eventPublisher.publishEvent(new RequestTextImageToTextAiAnswerEvent(user, pet, personalities, quest,
+					questAnswer, imageUrl));
 			}
 
 			if (type.equals(QuestAnswerTypeNo.TEXT_IMAGE_TO_IMAGE_ART.getType()) ||
 				type.equals(QuestAnswerTypeNo.TEXT_IMAGE_TO_IMAGE_PICTURE.getType())) {
-				String responseImageUrl = diffusionAiClient.writePetTextImageToImageAnswer(questAnswer, imageUrl);
-
-				byte[] imageBytes = downloadImage(responseImageUrl);
-
-				MultipartFile decodedImageFile = new MockMultipartFile(
-					"image",
-					"image.png",
-					"image/png",
-					imageBytes
-				);
-
-				String uploadedImageUrl = s3UploadUtil.saveFile(decodedImageFile);
-				AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
-					CreateAiAnswerRequestDto.createImageAiAnswerRequestDto(uploadedImageUrl,
-						AiAnswerType.IMAGE.getType()));
-				aiAnswerRepository.save(aiAnswer);
-
-				notificationUtil.sendImageAiAnswerNotification(user, imageUrl);
+				eventPublisher.publishEvent(
+					new RequestTextImageToImageAiAnswerEvent(user, pet, quest, questAnswer, imageUrl));
 			}
 
 		}, () -> {
 		});
-	}
-
-	private byte[] downloadImage(String imageUrl) {
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<byte[]> response = restTemplate.exchange(imageUrl, HttpMethod.GET, null, byte[].class);
-		return response.getBody();
 	}
 
 }

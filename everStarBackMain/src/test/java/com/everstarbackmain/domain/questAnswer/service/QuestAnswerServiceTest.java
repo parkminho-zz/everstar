@@ -14,13 +14,21 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.security.core.Authentication;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.everstarbackmain.domain.aiAnswer.event.RequestTextImageToTextAiAnswerEvent;
+import com.everstarbackmain.domain.aiAnswer.event.RequestTextToImageAiAnswerEvent;
+import com.everstarbackmain.domain.aiAnswer.event.RequestTextToTextAiAnswerEvent;
 import com.everstarbackmain.domain.aiAnswer.repository.AiAnswerRepository;
 import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 import com.everstarbackmain.domain.memorialBook.util.MemorialBookScheduler;
@@ -55,6 +63,7 @@ import com.everstarbackmain.global.security.auth.PrincipalDetails;
 import com.everstarbackmain.global.util.S3UploadUtil;
 
 @ExtendWith(MockitoExtension.class)
+@RecordApplicationEvents
 class QuestAnswerServiceTest {
 
 	@InjectMocks
@@ -107,6 +116,9 @@ class QuestAnswerServiceTest {
 
 	@Mock
 	private NotificationUtil notificationUtil;
+
+	@Mock
+	ApplicationEventPublisher applicationEventPublisher;
 
 	private User user;
 	private Pet pet;
@@ -305,8 +317,8 @@ class QuestAnswerServiceTest {
 	}
 
 	@Test
-	@DisplayName("퀘스트_답변_생성_후_TEXT_TO_TEXT_타입일_경우_관련_OPENAI_API_호출_테스트")
-	public void 퀘스트_답변_생성_후_TEXT_TO_TEXT_타입일_경우_관련_OPENAI_API_호출_테스트() {
+	@DisplayName("퀘스트_답변_생성_후_TEXT_TO_TEXT_타입일_경우_관련_이벤트_발행_테스트")
+	public void 퀘스트_답변_생성_후_TEXT_TO_TEXT_타입일_경우_관련_이벤트_발행_테스트() {
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findByIdAndUserAndIsDeleted(anyLong(), any(), anyBoolean())).willReturn(Optional.of(pet));
@@ -317,22 +329,26 @@ class QuestAnswerServiceTest {
 		ReflectionTestUtils.setField(pet, "questIndex", 2);
 		ReflectionTestUtils.setField(pet, "isQuestCompleted", false);
 
-		mockStatic(QuestAnswerTypeNo.class);
-		given(QuestAnswerTypeNo.findTypeByQuestNumber(anyLong())).willReturn(
-			Optional.of(QuestAnswerTypeNo.TEXT_TO_TEXT.getType()));
-		mockStatic(QuestAnswer.class);
-		given(QuestAnswer.createTextQuestAnswer(any(), any(), any())).willReturn(textQuestAnswer);
+		try (MockedStatic<QuestAnswerTypeNo> questAnswerTypeNoMock = mockStatic(QuestAnswerTypeNo.class);
+			 MockedStatic<QuestAnswer> questAnswerMock = mockStatic(QuestAnswer.class)) {
 
-		// when
-		questAnswerService.createQuestAnswer(authentication, 1L, 2L, createTextAnswerRequestDto, null);
+			questAnswerTypeNoMock.when(() -> QuestAnswerTypeNo.findTypeByQuestNumber(2L))
+				.thenReturn(Optional.of(QuestAnswerTypeNo.TEXT_TO_TEXT.getType()));
 
-		// then
-		verify(openAiClient).writePetTextToTextAnswer(user, pet, petPersonalities, quest, textQuestAnswer);
+			questAnswerMock.when(() -> QuestAnswer.createTextQuestAnswer(any(), any(), any()))
+				.thenReturn(textQuestAnswer);
+
+			// when
+			questAnswerService.createQuestAnswer(authentication, 1L, 2L, createTextAnswerRequestDto, null);
+
+			// then
+			verify(applicationEventPublisher).publishEvent(any(RequestTextToTextAiAnswerEvent.class));
+		}
 	}
 
 	@Test
-	@DisplayName("퀘스트_답변_생성_후_TEXT_IMAGE_TO_TEXT_타입일_경우_관련_OPENAI_API_호출_테스트")
-	public void 퀘스트_답변_생성_후_TEXT_IMAGE_TO_TEXT_타입일_경우_관련_OPENAI_API_호출_테스트() {
+	@DisplayName("퀘스트_답변_생성_후_TEXT_IMAGE_TO_TEXT_타입일_경우_관련_이벤트_발행_테스트")
+	public void 퀘스트_답변_생성_후_TEXT_IMAGE_TO_TEXT_타입일_경우_관련_이벤트_발행_테스트() {
 		MultipartFile imageFile = Mockito.mock(MultipartFile.class);
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
@@ -345,20 +361,26 @@ class QuestAnswerServiceTest {
 		ReflectionTestUtils.setField(pet, "questIndex", 37);
 		ReflectionTestUtils.setField(pet, "isQuestCompleted", false);
 
-		given(QuestAnswerTypeNo.findTypeByQuestNumber(anyLong())).willReturn(
-			Optional.of(QuestAnswerTypeNo.TEXT_IMAGE_TO_TEXT.getType()));
-		given(QuestAnswer.createTextImageQuestAnswer(any(), any(), any(), anyString())).willReturn(textImageToTextAnswer);
+		try (MockedStatic<QuestAnswerTypeNo> questAnswerTypeNoMock = mockStatic(QuestAnswerTypeNo.class);
+			 MockedStatic<QuestAnswer> questAnswerMock = mockStatic(QuestAnswer.class)) {
 
-		// when
-		questAnswerService.createQuestAnswer(authentication, 1L, 37L, createAnswerRequestDto, imageFile);
+			questAnswerTypeNoMock.when(() -> QuestAnswerTypeNo.findTypeByQuestNumber(37L))
+				.thenReturn(Optional.of(QuestAnswerTypeNo.TEXT_IMAGE_TO_TEXT.getType()));
 
-		// then
-		verify(openAiClient).writePetTextImageToTextAnswer(user, pet, petPersonalities, quest, textImageToTextAnswer, "imageUrl");
+			questAnswerMock.when(() -> QuestAnswer.createTextImageQuestAnswer(any(), any(), any(), anyString()))
+				.thenReturn(textImageToTextAnswer);
+
+			// when
+			questAnswerService.createQuestAnswer(authentication, 1L, 37L, createAnswerRequestDto, imageFile);
+
+			// then
+			verify(applicationEventPublisher).publishEvent(any(RequestTextImageToTextAiAnswerEvent.class));
+		}
 	}
 
 	@Test
-	@DisplayName("퀘스트_답변_생성_후_TEXT_TO_IMAGE_ART_타입일_경우_관련_OPENAI_API_호출_테스트")
-	public void 퀘스트_답변_생성_후_TEXT_TO_IMAGE_ART_타입일_경우_관련_OPENAI_API_호출_테스트() {
+	@DisplayName("퀘스트_답변_생성_후_TEXT_TO_IMAGE_ART_타입일_경우_관련_이벤트_발행_테스트")
+	public void 퀘스트_답변_생성_후_TEXT_TO_IMAGE_ART_타입일_경우_관련_이벤트_발행_테스트() {
 		given(authentication.getPrincipal()).willReturn(principalDetails);
 		given(principalDetails.getUser()).willReturn(user);
 		given(petRepository.findByIdAndUserAndIsDeleted(anyLong(), any(), anyBoolean())).willReturn(Optional.of(pet));
@@ -369,15 +391,21 @@ class QuestAnswerServiceTest {
 		ReflectionTestUtils.setField(pet, "questIndex", 44);
 		ReflectionTestUtils.setField(pet, "isQuestCompleted", false);
 
-		given(QuestAnswerTypeNo.findTypeByQuestNumber(anyLong())).willReturn(
-			Optional.of(QuestAnswerTypeNo.TEXT_TO_IMAGE_ART.getType()));
-		given(QuestAnswer.createTextImageQuestAnswer(any(), any(), any(), anyString())).willReturn(textQuestAnswer);
+		try (MockedStatic<QuestAnswerTypeNo> questAnswerTypeNoMock = mockStatic(QuestAnswerTypeNo.class);
+			 MockedStatic<QuestAnswer> questAnswerMock = mockStatic(QuestAnswer.class)) {
 
-		// when
-		questAnswerService.createQuestAnswer(authentication, 1L, 44L, createTextAnswerRequestDto, null);
+			questAnswerTypeNoMock.when(() -> QuestAnswerTypeNo.findTypeByQuestNumber(44L))
+				.thenReturn(Optional.of(QuestAnswerTypeNo.TEXT_TO_IMAGE_ART.getType()));
 
-		// then
-		verify(openAiClient).writePetTextToImageAnswer(pet, quest, textQuestAnswer);
+			questAnswerMock.when(() -> QuestAnswer.createTextImageQuestAnswer(any(), any(), any(), anyString()))
+				.thenReturn(textQuestAnswer);
+
+			// when
+			questAnswerService.createQuestAnswer(authentication, 1L, 44L, createTextAnswerRequestDto, null);
+
+			// then
+			verify(applicationEventPublisher).publishEvent(any(RequestTextToImageAiAnswerEvent.class));
+		}
 	}
 
 }

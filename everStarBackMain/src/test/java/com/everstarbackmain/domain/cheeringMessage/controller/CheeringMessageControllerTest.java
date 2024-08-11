@@ -26,8 +26,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.everstarbackmain.domain.cheeringMessage.message.SuccessCheeringMessageMessage;
+import com.everstarbackmain.domain.cheeringMessage.model.CheeringMessage;
 import com.everstarbackmain.domain.cheeringMessage.model.Color;
 import com.everstarbackmain.domain.cheeringMessage.requestDto.CreateCheeringMessageRequestDto;
+import com.everstarbackmain.domain.cheeringMessage.responseDto.CheeringMessageDetailResponseDto;
 import com.everstarbackmain.domain.cheeringMessage.service.CheeringMessageService;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
@@ -68,6 +70,8 @@ public class CheeringMessageControllerTest {
 	private User user;
 	private Pet pet;
 	private CreateCheeringMessageRequestDto requestDto;
+	private CheeringMessage cheeringMessage;
+	private CheeringMessageDetailResponseDto responseDto;
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -79,6 +83,8 @@ public class CheeringMessageControllerTest {
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
 
 		requestDto = new CreateCheeringMessageRequestDto("content", Color.BLUE, true);
+		cheeringMessage = CheeringMessage.createAnonymousCheeringMessage(requestDto, pet);
+		responseDto = CheeringMessageDetailResponseDto.createCheeringMessageDetailResponseDto(cheeringMessage);
 	}
 
 	@Test
@@ -87,7 +93,7 @@ public class CheeringMessageControllerTest {
 	public void 응원_메시지_성공_테스트() throws Exception {
 		//given
 		Map<String, Object> response = new HashMap<>();
-		BDDMockito.doNothing().when(cheeringMessageService).createCheeringMessage(authentication, 1L, 1L, requestDto);
+		BDDMockito.given(cheeringMessageService.createCheeringMessage(authentication, 1L, 1L, requestDto)).willReturn(responseDto);
 		String requestBody = objectMapper.writeValueAsString(requestDto);
 		response.put("data", SuccessCheeringMessageMessage.SUCCESS_CREATE_CHEERINGMESSAGE);
 
