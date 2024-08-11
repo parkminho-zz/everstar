@@ -24,11 +24,7 @@ import com.everstarbackmain.domain.quest.util.QuestScheduler;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswerTypeNo;
 import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
-<<<<<<< HEAD
 import com.everstarbackmain.domain.sse.SseService;
-import com.everstarbackmain.global.diffusionai.util.DiffusionAiClient;
-=======
->>>>>>> 0ccc692d70da9d1bd02bf32b3b79cb7ae7290ae2
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;
