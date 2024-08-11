@@ -24,6 +24,7 @@ import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.util.S3UploadUtil;
+import com.vane.badwordfiltering.BadWordFiltering;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,7 +67,8 @@ public class PetService {
 
 	@Transactional
 	public void updatePetIntroduction(User user, Long petId, UpdatePetIntroductionDto requestDto) {
-		String newIntroduction = requestDto.getIntroduction();
+		BadWordFiltering badWordFiltering = new BadWordFiltering("♡");
+		String newIntroduction = badWordFiltering.change(requestDto.getIntroduction(), new String[]{"_", "-", "1", " "});
 		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 		log.info("main server - Logged-in User ID: {}", user.getId());
