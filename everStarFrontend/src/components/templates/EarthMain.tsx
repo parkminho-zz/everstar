@@ -148,7 +148,6 @@ export const EarthMain: React.FC<EarthMainProps> = ({
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getOpenvidu = () => {
     navigate(`/earth/openvidu`);
   };
