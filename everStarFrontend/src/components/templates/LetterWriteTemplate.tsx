@@ -73,27 +73,28 @@ export const LetterWriteTemplate: React.FC = () => {
   };
 
   return (
-    <div className='w-full h-full'>
+    <div className="w-full h-full">
       <InteractiveForm
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={(newPage) => console.log('Page changed to:', newPage)}
-        headerText='편지 쓰기'
-        textboxLabel='내용'
-        largeButtonText='이미지 추가'
-        smallButtonText='작성 완료'
+        headerText="편지 쓰기"
+        textboxLabel="내용"
+        largeButtonText="이미지 추가"
+        smallButtonText="작성 완료"
         showPrimaryButton={true}
-        customText='사랑하는 반려동물에게<br /> 편지를 보내보세요.'
-        ghostText='편지 내용'
+        customText="사랑하는 반려동물에게<br /> 편지를 보내보세요."
+        ghostText="편지 내용"
         onTextChange={handleTextChange}
         onButtonClick={handleButtonClick}
         onButtonClick2={handleButtonClick2}
         value={text}
+        onLeftIconClick={() => navigate(-1)}
       />
       <input
-        type='file'
-        id='photoInput'
-        accept='image/*'
+        type="file"
+        id="photoInput"
+        accept="image/*"
         onChange={handleImageChange}
         style={{ display: 'none' }}
       />
