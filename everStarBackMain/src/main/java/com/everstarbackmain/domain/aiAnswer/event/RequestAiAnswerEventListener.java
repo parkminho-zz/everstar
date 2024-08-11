@@ -36,7 +36,6 @@ public class RequestAiAnswerEventListener {
 
 	private final AiAnswerRepository aiAnswerRepository;
 	private final OpenAiClient openAiClient;
-	private final DiffusionAiClient diffusionAiClient;
 	private final NotificationUtil notificationUtil;
 	private final S3UploadUtil s3UploadUtil;
 
@@ -106,24 +105,14 @@ public class RequestAiAnswerEventListener {
 		QuestAnswer questAnswer = event.getQuestAnswer();
 		String imageUrl = event.getImageUrl();
 
-		String responseImageUrl = diffusionAiClient.writePetTextImageToImageAnswer(questAnswer, imageUrl);
-
-		byte[] imageBytes = downloadImage(responseImageUrl);
-
-		MultipartFile decodedImageFile = new MockMultipartFile(
-			"image",
-			"image.png",
-			"image/png",
-			imageBytes
-		);
-
-		String uploadedImageUrl = s3UploadUtil.saveFile(decodedImageFile);
+		String encodedAiAnswerResponse = openAiClient.writePetTextImageToImageAnswer(questAnswer, imageUrl);
+		String uploadedImageUrl = s3UploadUtil.uploadS3ByEncodedFile(encodedAiAnswerResponse);
 		AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
 			CreateAiAnswerRequestDto.createImageAiAnswerRequestDto(uploadedImageUrl,
 				AiAnswerType.IMAGE.getType()));
 		aiAnswerRepository.save(aiAnswer);
 
-		notificationUtil.sendImageAiAnswerNotification(user, imageUrl);
+		notificationUtil.sendImageAiAnswerNotification(user, uploadedImageUrl);
 	}
 
 	private byte[] downloadImage(String imageUrl) {
