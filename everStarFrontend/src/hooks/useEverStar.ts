@@ -31,7 +31,7 @@ export const useFetchPetsByName = (petname: string, page: number = 0, size: numb
       }
       return fetchPetsByName(petname, page, size, token);
     },
-    enabled: !!token && petname.length > 2, // 3글자 이상 입력해야 쿼리가 활성화됨
+    enabled: !!token
   });
 };
 
