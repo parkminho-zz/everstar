@@ -1,17 +1,10 @@
 import React, { useState } from 'react';
-import {
-  CheerMessage,
-  CheerMessageProps,
-} from 'components/organics/CheerMessage/CheerMessage';
+import { CheerMessage, CheerMessageProps } from 'components/organics/CheerMessage/CheerMessage';
 import { useFetchCheeringPet } from 'hooks/useEverStar';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store/Store';
 
 export const EverStarCheerMessage: React.FC<
   Omit<CheerMessageProps, 'currentPage' | 'onPageChange'>
 > = (props) => {
-  const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
-
   const { data, isLoading, isError } = useFetchCheeringPet();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,9 +17,6 @@ export const EverStarCheerMessage: React.FC<
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error loading data</div>;
 
-  console.log(data);
-
-  // data.data.content 배열을 매핑
   const postItCards =
     data?.data?.content?.map(
       (item: {
@@ -40,17 +30,18 @@ export const EverStarCheerMessage: React.FC<
         name: item.petName || '',
         color: item.color.toLowerCase() || '',
         cheeringMessageId: item.cheeringMessageId,
-        petId: petId,
-      })
+        petId: item.petId,
+      }),
     ) || [];
 
-  console.log('Mapped postItCards:', postItCards);
+  const totalPages = Math.ceil(postItCards.length / 10); // 예시로 페이지 수 계산
 
   return (
     <div>
       <CheerMessage
         {...props}
         postItCards={postItCards}
+        totalPages={totalPages}
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
