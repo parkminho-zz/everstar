@@ -87,6 +87,8 @@ export const EarthPage: React.FC = () => {
                 />
               }
             />
+            <Route path='openvidu/sessionid' element={<OpenViduApp />} />
+
             <Route path='openvidu/sessionid/:sessionId' element={<OpenViduApp />} />
           </Routes>
         </div>

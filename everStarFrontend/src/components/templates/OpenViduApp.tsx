@@ -48,9 +48,13 @@ export const OpenViduApp = () => {
   useEffect(() => {
     console.log('구독자 수 변경: ', subscribers);
   }, [subscribers.length]);
-  useEffect(() => {
-    console.log('세션아이디 params:', sessionId);
-  }, [sessionId]);
+
+  // useEffect(() => {
+  //   console.log('세션아이디 params:', sessionId);
+  //   if (sessionId === undefined) {
+  //     createSession();
+  //   }
+  // }, [sessionId]);
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {

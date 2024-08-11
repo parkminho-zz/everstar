@@ -69,6 +69,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
 
+<<<<<<< HEAD
   const [letterCardVisible, setLetterCardVisible] = useState(false);
   const [letterMessage, setLetterMessage] = useState('');
   const [modalState, setModalState] = useState(false);
@@ -110,6 +111,9 @@ export const EarthMain: React.FC<EarthMainProps> = ({
       payload
     );
   });
+=======
+  const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
+>>>>>>> 7350c5fdef20ce518bad51439ba71b487e597f70
 
   const handleButtonClick = () => {
     onButtonClick();
@@ -147,8 +151,6 @@ export const EarthMain: React.FC<EarthMainProps> = ({
       return 'absolute left-0 bottom-0 w-[1280px] h-[1024px] mb-[-70px]';
     }
   };
-
-  const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
 
   const getOpenvidu = () => {
     navigate(`/earth/openvidu`);

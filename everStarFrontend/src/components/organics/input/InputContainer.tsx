@@ -3,7 +3,11 @@ import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
 import { LetterCard } from 'components/molecules/cards/LetterCard/LetterCard';
 import { Textbox } from 'components/molecules/input/Textbox';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+
+const APPLICATION_SERVER_URL =
+  process.env.NODE_ENV === 'production' ? '' : 'https://i11b101.p.ssafy.io/';
 
 export interface InputContainerProps {
   headerText: string;
@@ -81,6 +85,19 @@ export const InputContainer: React.FC<InputContainerProps> = ({
     }
   };
 
+  const getOpenVidu = async (): Promise<string> => {
+    const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions`, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    return response.data;
+  };
+
+  const handleRtcButtonClick = async () => {
+    const sessionId = await getOpenVidu();
+
+    navigate(`/earth/openvidu/sessionid/${sessionId}`);
+  };
   return (
     <div className='flex justify-center p-6 bg-gray-100'>
       <div
@@ -88,11 +105,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
         style={{ maxHeight: '742px', overflowY: 'auto' }}
       >
         {/* Modal Header */}
-        <ModalHeader
-          text={headerText}
-          showLeftIcon={true}
-          onLeftIconClick={onLeftIconClick}
-        />
+        <ModalHeader text={headerText} showLeftIcon={true} onLeftIconClick={onLeftIconClick} />
 
         {/* Content */}
         <div className='flex flex-col items-center w-full gap-8'>
@@ -102,9 +115,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
               <LetterCard
                 name={myName ? `${myName}에게` : undefined}
                 type='send'
-                color={
-                  letterCardType === 'receive' ? 'bgorange' : letterCardColor
-                }
+                color={letterCardType === 'receive' ? 'bgorange' : letterCardColor}
                 state={letterCardState}
                 message={letterCardMessage}
                 className={letterCardClassName}
@@ -127,7 +138,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
               size='large'
               disabled={false}
               icon={null}
-              onClick={() => navigate('/earth/openvidu/sessionid')}
+              onClick={handleRtcButtonClick}
             >
               화상통화 해보기
             </PrimaryButton>

@@ -1,145 +1,99 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ProgressCard } from 'components/organics/ProgressCard/ProgressCard';
-import { BookIcons } from 'components/atoms/symbols/Book/BookIcons';
+import { ViewMemorialBook } from 'components/organics/ViewMemorialBook/ViewMemorialBook';
 import { useNavigate } from 'react-router-dom';
-import { useFetchOtherPetDetails } from 'hooks/useEverStar';
-
-type ViewMemorialBookTheme = 'focus' | 'hover' | 'white';
-type ViewMemorialBookSize = 'large' | 'medium' | 'small';
 
 interface EverStarMainProps {
-  title: string;
-  fill: number;
-  className?: string;
-  buttonTheme: ViewMemorialBookTheme;
-  buttonSize: ViewMemorialBookSize;
+  petProfile: {
+    name: string;
+    age: number;
+    date: string;
+    description: string;
+    tagList: string[];
+    avatarUrl: string;
+    questIndex: number;
+  } | null;
   buttonDisabled: boolean;
-  buttonText: string;
-  onButtonClick: () => void;
+  memorialBookProfile: {
+    id: number;
+    psychologicalTestResult: string | null;
+    isOpen: boolean;
+    isActive: boolean;
+  } | null;
+  petId: number;
+  handleToggle?: (status: 'off' | 'on') => void;
+  toggleStatus?: 'on' | 'off' | undefined;
 }
-
-interface ViewMemorialBookProps {
-  theme: ViewMemorialBookTheme;
-  size: ViewMemorialBookSize;
-  disabled: boolean;
-  children: string;
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
-}
-
-const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
-  theme,
-  size,
-  children,
-  onClick,
-  disabled,
-}) => {
-  const focus = 'bg-mainprimary text-greyscalewhite hover:bg-bgorange';
-  const white = 'bg-white text-mainsecondary hover:bg-bgorange';
-  const hover = 'bg-bgorange text-mainsecondary hover:bg-mainprimary';
-  const disabledStyle =
-    'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
-
-  const color: Record<ViewMemorialBookTheme, string> = {
-    focus,
-    white,
-    hover,
-  };
-
-  const large = 'w-[320px] h-[64px]';
-  const medium = 'w-[134px] h-[48px]';
-  const small = 'w-[106px] h-[40px]';
-
-  const sizeStyle: Record<ViewMemorialBookSize, string> = {
-    large,
-    medium,
-    small,
-  };
-
-  const getTextStyle = () => {
-    switch (size) {
-      case 'large':
-        return 'kor-h-h4';
-      case 'medium':
-        return 'kor-subtitle-subtitle3';
-      case 'small':
-        return 'kor-p-p5';
-      default:
-        return '';
-    }
-  };
-
-  return (
-    <button
-      className={`
-        flex
-        items-center
-        justify-between
-        rounded-lg
-        px-2
-        ${disabledStyle}
-        ${color[theme]}
-        ${sizeStyle[size]}
-      `}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>
-        {children}
-      </span>
-    </button>
-  );
-};
 
 export const EverStarMain: React.FC<EverStarMainProps> = ({
-  title,
-  fill,
-  buttonTheme,
-  buttonSize,
+  petProfile,
   buttonDisabled,
-  buttonText,
-  onButtonClick,
-  className,
+  memorialBookProfile,
+  petId,
+  handleToggle,
+  toggleStatus,
 }) => {
-  useFetchOtherPetDetails();
   const navigate = useNavigate();
+  const [localToggleStatus, setLocalToggleStatus] = useState<'on' | 'off' | undefined>(
+    toggleStatus,
+  );
+
+  useEffect(() => {
+    if (toggleStatus !== localToggleStatus) {
+      setLocalToggleStatus(toggleStatus);
+    }
+  }, [toggleStatus]);
 
   const handleButtonClick = () => {
-    onButtonClick();
     navigate('/earth');
   };
 
-  const isDisabled = fill < 49;
-  const progressButtonText = isDisabled
-    ? '아직 메모리얼북을 열람할 수 없어요'
-    : '메모리얼북 열람하기';
-  const progressButtonTheme = isDisabled ? 'white' : 'focus';
+  const handleViewMemorialBookClick = () => {
+    if (memorialBookProfile?.isActive && memorialBookProfile?.isOpen) {
+      navigate(`/everstar/${petId}/memorialbook/${memorialBookProfile.id}`);
+    }
+  };
+
+  const handleToggleChange = (status: 'on' | 'off') => {
+    if (status !== localToggleStatus) {
+      setLocalToggleStatus(status);
+      if (handleToggle) {
+        handleToggle(status);
+      }
+    }
+  };
+
+  if (!petProfile) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen'>
+    <div className="flex flex-col items-center justify-center min-h-screen">
       <ProgressCard
-        title={title}
-        fill={fill}
-        buttonTheme={buttonTheme}
-        buttonSize={buttonSize}
-        buttonDisabled={buttonDisabled}
-        buttonText={buttonText}
-        buttonIcon='SmallEarthImg'
+        title={petProfile.name}
+        fill={petProfile.questIndex}
+        buttonTheme="white"
+        buttonSize="large"
+        buttonDisabled={false}
+        buttonText={'지구별로 가기'}
+        buttonIcon="SmallEarthImg"
         onButtonClick={handleButtonClick}
-        className={className}
-        showMusicControl={true}
+        showMusicControl={false}
+        className=""
       />
-      <div className='flex flex-col items-center mt-20'>
-        <BookIcons variant='book-close' />
-        <div className='mt-3'>
-          <ViewMemorialBook
-            theme={progressButtonTheme}
-            size='large'
-            disabled={isDisabled}
-            onClick={() => alert('버튼 클릭됨')}
-          >
-            {progressButtonText}
-          </ViewMemorialBook>
-        </div>
+      <div className="flex flex-col items-center mt-20">
+        <ViewMemorialBook
+          theme={buttonDisabled ? 'white' : 'focus'}
+          size="large"
+          disabled={buttonDisabled}
+          onClick={handleViewMemorialBookClick}
+          BookVariant="book-close"
+          showIcon={false}
+          toggleStatus={localToggleStatus}
+          onToggleChange={handleToggleChange}
+          showToggle={handleToggle !== undefined} // 내가 아닌 경우 또는 활성화되지 않은 경우 토글 버튼 숨기기
+          isActive={memorialBookProfile?.isActive} // MemorialBook의 활성화 상태 전달
+        />
       </div>
     </div>
   );

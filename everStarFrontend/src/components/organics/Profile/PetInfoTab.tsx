@@ -1,40 +1,51 @@
-// src/components/organics/Profile/PetInfoTab.tsx
 import React, { useState, useEffect } from 'react';
 import { Select } from 'components/molecules/input/Select';
 import { Avatar } from 'components/atoms/symbols/Avatar/Avatar';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { InputField } from 'components/organics/input/InputFields';
 import { Tag } from 'components/atoms/buttons/Tag';
-
-export interface PetInfo {
-  id: number;
-  userId: number;
-  name: string;
-  age: number;
-  memorialDate: string;
-  species: string;
-  gender: string;
-  relationship: string;
-  profileImageUrl: string;
-  personalities: string[];
-}
+import { fetchPetDetails, PetInfo } from 'api/petApi';
 
 export interface PetInfoTabProps {
   petOptions: string[];
   petInfo: { [key: string]: PetInfo };
   onPetSelect: (name: string) => void;
+  token: string;
 }
 
-export const PetInfoTab: React.FC<PetInfoTabProps> = ({ petOptions, petInfo, onPetSelect }) => {
+export const PetInfoTab: React.FC<PetInfoTabProps> = ({
+  petOptions,
+  petInfo,
+  onPetSelect,
+  token,
+}) => {
   const [selectedPet, setSelectedPet] = useState<string | null>(null);
-  const [currentPet, setCurrentPet] = useState<PetInfo | null>(null);
+  const [localPetDetails, setLocalPetDetails] = useState<PetInfo | null>(null);
+
+  const handlePetSelect = async (option: string | number) => {
+    const petName = option as string;
+    setSelectedPet(petName);
+
+    const petDetails = petInfo[petName];
+    if (petDetails) {
+      try {
+        const fetchedDetails = await fetchPetDetails(petDetails.id, token); // API 호출
+        setLocalPetDetails(fetchedDetails); // 로컬 상태로 관리
+      } catch (error) {
+        console.error('Failed to fetch pet details:', error);
+      }
+    }
+    onPetSelect(petName);
+  };
 
   useEffect(() => {
     if (selectedPet) {
-      onPetSelect(selectedPet);
-      setCurrentPet(petInfo[selectedPet]);
+      const petDetails = petInfo[selectedPet];
+      if (petDetails) {
+        setLocalPetDetails(petDetails);
+      }
     }
-  }, [selectedPet, petInfo, onPetSelect]);
+  }, [selectedPet, petInfo]);
 
   return (
     <>
@@ -43,13 +54,13 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({ petOptions, petInfo, onP
         options={petOptions}
         title="반려동물을 선택해주세요"
         starshow={false}
-        onOptionSelect={(option) => setSelectedPet(option as string)}
+        onOptionSelect={handlePetSelect}
         infoText="반려동물을 선택해주세요"
         showLabel={false}
       />
-      {currentPet && (
+      {localPetDetails && (
         <>
-          <Avatar size="medium" src={currentPet.profileImageUrl} name={currentPet.name} />
+          <Avatar size="medium" src={localPetDetails.profileImageUrl} name={localPetDetails.name} />
           <PrimaryButton
             theme="white"
             size="medium"
@@ -65,7 +76,7 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({ petOptions, petInfo, onP
             showValidationText={false}
             starshow={false}
             state="disable"
-            text={currentPet.name}
+            text={localPetDetails.name}
             showCheckIcon={false}
             className=""
           />
@@ -75,7 +86,7 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({ petOptions, petInfo, onP
             showValidationText={false}
             starshow={false}
             state="disable"
-            text={currentPet.age.toString()}
+            text={localPetDetails.age.toString()}
             showCheckIcon={false}
             className=""
           />
@@ -85,7 +96,7 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({ petOptions, petInfo, onP
             showValidationText={false}
             starshow={false}
             state="disable"
-            text={currentPet.gender}
+            text={localPetDetails.gender}
             showCheckIcon={false}
             className=""
           />
@@ -95,7 +106,7 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({ petOptions, petInfo, onP
             showValidationText={false}
             starshow={false}
             state="disable"
-            text={currentPet.species}
+            text={localPetDetails.species}
             showCheckIcon={false}
             className=""
           />
@@ -105,7 +116,7 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({ petOptions, petInfo, onP
             showValidationText={false}
             starshow={false}
             state="disable"
-            text={currentPet.relationship}
+            text={localPetDetails.relationship}
             showCheckIcon={false}
             className=""
           />
@@ -115,12 +126,12 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({ petOptions, petInfo, onP
             showValidationText={false}
             starshow={false}
             state="disable"
-            text={new Date(currentPet.memorialDate).toLocaleDateString()}
+            text={new Date(localPetDetails.memorialDate).toLocaleDateString()}
             showCheckIcon={false}
             className=""
           />
           <div className="flex justify-center space-x-5">
-            {currentPet.personalities.map((trait, index) => (
+            {localPetDetails.personalities.map((trait, index) => (
               <Tag key={index} className="greyscalewhite">
                 #{trait}
               </Tag>
