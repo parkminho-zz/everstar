@@ -13,8 +13,9 @@ public enum CustomException {
 	OPENAI_API_EXCEPTION(400, "OpenAiException", "OpenAI API 사용 중 예외가 발생했습니다."),
 	NOT_ACTIVATED_MEMORIAL_BOOK_EXCEPTION(400, "NotActivatedMemorialBookException", "메모리얼북이 활성화 상태가 아닙니다."),
 	OPENVIDU_EXCEPTION(400, "OpenviduException", "Openvidu 사용 중 예외가 발생하였습니다."),
-	NOT_FOUND_SESSION_EXCEPTION(401, "NotFoundSessionException", "세션이 존재하지 않습니다."),
+	NOT_EQUAL_PET_QUEST_INDEX_AND_QUEST_NUMBER(400, "NotEqualPetQuestIndexAndQuestNumber", "반려동물의 퀘스트 순서와 조회하려는 퀘스트 번호가 다릅니다. "),
 
+	NOT_FOUND_SESSION_EXCEPTION(401, "NotFoundSessionException", "세션이 존재하지 않습니다."),
 	EXPIRED_JWT_EXCEPTION(401, "ExpiredJwtException", "토큰이 만료했습니다."),
 	NOT_VALID_JWT_EXCEPTION(401, "NotValidJwtException", "토큰이 유효하지 않습니다."),
 

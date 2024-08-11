@@ -28,8 +28,15 @@ public class QuestService {
 
 	public QuestDetailResponseDto getQuestDetail(Long petId, Long questId) {
 
+		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+
 		Quest quest = questRepository.findById(questId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_QUEST_EXCEPTION));
+
+		if (!pet.getQuestIndex().equals(questId.intValue())) {
+			throw new ExceptionResponse(CustomException.NOT_EQUAL_PET_QUEST_INDEX_AND_QUEST_NUMBER);
+		}
 
 		return QuestDetailResponseDto.createQuestDetailResponseDto(quest);
 	}
