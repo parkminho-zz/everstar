@@ -13,10 +13,11 @@ const APPLICATION_SERVER_URL =
 export const QuestOpenviduTemplate: React.FC = () => {
   const { questid } = useParams<{ questid: string }>();
 
-  const customLetterCardMessage = 'dd';
   const navigate = useNavigate();
   const [text, setText] = useState('');
   const [image, setImage] = useState<File | null>();
+  const [questContent, setQuestContent] = useState('');
+  const [loading, setLoading] = useState(true);
   const [didOpenvidu] = useState<boolean>(() => {
     return sessionStorage.getItem(`didOpenvidu${questid}`) === 'true';
   });
@@ -27,6 +28,33 @@ export const QuestOpenviduTemplate: React.FC = () => {
     console.log('이미지!!!!: ', image);
     console.log('오픈비두 클릭했는지 여부: ', didOpenvidu);
   }, [image]);
+
+  useEffect(() => {
+    getQuest();
+  }, []);
+
+  const getQuest = async () => {
+    try {
+      const response = await axios.get(
+        `https://i11b101.p.ssafy.io/api/pets/${petId}/quests/${questid}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (response.data) {
+        console.log('성공:', response.data.data.content);
+        setQuestContent(response.data.data.content);
+      }
+    } catch (error) {
+      console.error('퀘스트 데이터를 가져오는 중 오류 발생:', error);
+    } finally {
+      setLoading(false); // 데이터 로딩 후 로딩 상태 업데이트
+    }
+  };
 
   const handleSubmit = async () => {
     const status = await answerOpenviduQuestion();
@@ -55,11 +83,11 @@ export const QuestOpenviduTemplate: React.FC = () => {
         formData.append('requestDto', requestDtoBlob);
 
         if (image) {
-          formData.append('image', image);
+          formData.append('imageFile', image);
           console.log('이미지 잘 들어갔니?');
         } else {
           const emptyFile = new File([new Blob()], '', { type: 'image/jpeg' });
-          formData.append('image', emptyFile);
+          formData.append('imageFile', emptyFile);
         }
 
         try {
@@ -116,6 +144,11 @@ export const QuestOpenviduTemplate: React.FC = () => {
     navigate(`/earth/openvidu/sessionid/${sessionId}`);
   };
 
+    // 로딩 중이거나 퀘스트 데이터가 없으면 로딩 스피너 또는 빈 화면을 보여줌
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className='relative flex items-center justify-center min-h-screen'>
       <Glass
@@ -129,7 +162,7 @@ export const QuestOpenviduTemplate: React.FC = () => {
           currentPage={1}
           totalPages={1}
           onPageChange={() => console.log('이동')}
-          letterCardMessage={customLetterCardMessage}
+          letterCardMessage={questContent}
           headerText='오늘의 질문'
           letterCardType='default'
           letterCardColor='white'

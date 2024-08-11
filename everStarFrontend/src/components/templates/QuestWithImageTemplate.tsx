@@ -69,13 +69,13 @@ export const QuestWithImageTemplate = () => {
         console.log('이미지 잘 들어갔니?');
       } else {
         const emptyFile = new File([new Blob()], '', { type: 'image/jpeg' });
-        formData.append('image', emptyFile);
+        formData.append('imageFile', emptyFile);
       }
 
       try {
         // POST 요청을 FormData와 함께 전송
         const response = await axios.post(
-          `http://localhost:8081/api/pets/${petId}/quests/${questid}/answers`,
+          `https://i11b101.p.ssafy.io/api/pets/${petId}/quests/${questid}/answers`,
           formData,
           {
             headers: {
