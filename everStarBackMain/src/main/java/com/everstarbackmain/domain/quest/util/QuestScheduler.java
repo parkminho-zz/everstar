@@ -24,7 +24,7 @@ public class QuestScheduler {
 	public void scheduleNextDayQuest(User user, Long petId) {
 		LocalTime questReceptionTime = user.getQuestReceptionTime();
 		// LocalDateTime nextQuestTime = LocalDateTime.of(LocalDate.now().plusDays(1), questReceptionTime);
-		LocalDateTime nextQuestTime = LocalDateTime.now().plusSeconds(10);
+		LocalDateTime nextQuestTime = LocalDateTime.now().plusSeconds(1);
 		Date nextQuestDate = Date.from(nextQuestTime.atZone(ZoneId.systemDefault()).toInstant());
 
 		taskScheduler.schedule(() -> questService.changePetQuestCompleted(petId), nextQuestDate);
