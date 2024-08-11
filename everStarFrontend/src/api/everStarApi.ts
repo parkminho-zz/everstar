@@ -6,16 +6,41 @@ export interface Cheering {
   isAnonymous: boolean;
 }
 
-export const fetchOtherPetDetails = async (petId: number, token: string) => {
+// 반려동물 이름으로 검색
+export const fetchPetsByName = async (
+  petname: string,
+  page: number = 0,
+  size: number = 10,
+  token: string,
+) => {
   const response = await fetch(
-    `${config.API_BASE_URL}/api/everstar/pets/${petId}`,
+    `${config.API_BASE_URL}/api/everstar/pets/search?petname=${encodeURIComponent(petname)}&page=${page}&size=${size}`,
     {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
+
+  console.log('Response status:', response.status);
+  if (!response.ok) {
+    throw new Error('반려동물 검색에 실패했습니다');
+  }
+
+  const result = await response.json();
+  console.log('Fetched pets by name:', result);
+
+  return result;
+};
+
+export const fetchOtherPetDetails = async (petId: number, token: string) => {
+  const response = await fetch(`${config.API_BASE_URL}/api/everstar/pets/${petId}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   console.log('Response status:', response.status);
   if (!response.ok) {
@@ -36,7 +61,7 @@ export const fetchCheeringPet = async (petId: number, token: string) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 
   console.log('Response status:', response.status);
@@ -53,7 +78,7 @@ export const fetchCheeringPet = async (petId: number, token: string) => {
 export const fetchCheeringPetDelete = async (
   petId: number,
   token: string,
-  cheeringMessagesId: number
+  cheeringMessagesId: number,
 ) => {
   const response = await fetch(
     `${config.API_BASE_URL}/api/pets/${petId}/cheeringMessages/${cheeringMessagesId}`,
@@ -62,7 +87,7 @@ export const fetchCheeringPetDelete = async (
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 
   console.log('Response status:', response.status);
@@ -84,7 +109,7 @@ export const fetchPetExplore = async (petId: number, token: string) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 
   console.log('Response status:', response.status);
@@ -102,7 +127,7 @@ export const fetchPetPost = async (
   data: { content: string; color: string; isAnonymous: boolean },
   token: string,
   petId: number,
-  paramsId: number
+  paramsId: number,
 ) => {
   console.log('Adding pet with token:', token);
   const response = await fetch(
@@ -114,7 +139,7 @@ export const fetchPetPost = async (
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
-    }
+    },
   );
 
   console.log('Response status:', response.status);
@@ -127,11 +152,7 @@ export const fetchPetPost = async (
   return result;
 };
 
-export const fetchPetIntroduction = async (
-  introduction: string,
-  token: string,
-  petId: number
-) => {
+export const fetchPetIntroduction = async (introduction: string, token: string, petId: number) => {
   console.log('Adding pet with token:', token);
   const response = await fetch(`${config.API_BASE_URL}/api/pets/${petId}`, {
     method: 'PUT',
