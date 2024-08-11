@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  InputContainer,
-  InputContainerProps,
-} from 'components/organics/input/InputContainer';
+import { InputContainer, InputContainerProps } from 'components/organics/input/InputContainer';
 import { Glass } from 'components/molecules/Glass/Glass';
 
 interface InteractiveFormProps extends InputContainerProps {
@@ -18,6 +15,9 @@ interface InteractiveFormProps extends InputContainerProps {
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   handleReplyClick?: () => void;
+  isRtc?: boolean;
+  handleRtcButtonClick?: () => void;
+  handleSmallButtonDisabled?: boolean;
 }
 
 export const InteractiveForm: React.FC<InteractiveFormProps> = ({
@@ -48,6 +48,9 @@ export const InteractiveForm: React.FC<InteractiveFormProps> = ({
   value = '',
   onTextChange,
   handleReplyClick,
+  isRtc,
+  handleRtcButtonClick,
+  handleSmallButtonDisabled,
 }) => {
   // const [image, setImage] = useState<string | null>(selectedImage || null);
 
@@ -89,6 +92,9 @@ export const InteractiveForm: React.FC<InteractiveFormProps> = ({
           onButtonClick={onButtonClick}
           onButtonClick2={onButtonClick2}
           handleReplyClick={handleReplyClick}
+          isRtc={isRtc}
+          handleRtcButtonClick={handleRtcButtonClick}
+          handleSmallButtonDisabled={handleSmallButtonDisabled}
         />
       </div>
     </div>

@@ -189,7 +189,7 @@ export const OpenViduApp = () => {
     setMainStreamManager(undefined);
     setPublisher(undefined);
 
-    navigate('/earth/openvidu');
+    navigate(-1);
   };
 
   const toggleAudio = () => {
