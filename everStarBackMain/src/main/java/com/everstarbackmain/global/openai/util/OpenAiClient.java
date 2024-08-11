@@ -2,6 +2,8 @@ package com.everstarbackmain.global.openai.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -200,6 +202,50 @@ public class OpenAiClient {
 		String prompt = String.format(OpenAiPrompt.WRITE_PET_TEXT_TO_IMAGE_ANSWER_PROMPT.getPrompt(),
 			quest.getContent(), questAnswer.getContent(), pet.getSpecies());
 		return prompt;
+	}
+
+	public String writePetTextImageToImageAnswer(QuestAnswer questAnswer, String imageUrl) {
+		String prompt = createPetTextImageToImageAnswerPrompt(questAnswer, imageUrl);
+
+		ImageGPTRequest request = new ImageGPTRequest(prompt);
+		ImageGPTResponse response = restTemplate.postForObject(openAiConfig.getCreateImageUrl(), request, ImageGPTResponse.class);
+
+		if (response == null || response.getData() == null || response.getData().isEmpty()) {
+			throw new ExceptionResponse(CustomException.OPENAI_API_EXCEPTION);
+		}
+
+		return response.getData().get(0).getB64_json();
+	}
+
+	private String createPetTextImageToImageAnswerPrompt(QuestAnswer questAnswer, String imageUrl) {
+		String prompt = createDalleImagePrompt(questAnswer);
+
+		List<Content> contents = new ArrayList<>();
+		contents.add(Content.createTextContent(prompt));
+		contents.add(Content.createImageContent(imageUrl));
+
+		TextImageGPTRequest request = new TextImageGPTRequest(openAiConfig.getModel(), contents);
+		ChatGPTResponse response = restTemplate.postForObject(openAiConfig.getApiUrl(), request, ChatGPTResponse.class);
+
+		if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
+			throw new ExceptionResponse(CustomException.OPENAI_API_EXCEPTION);
+		}
+
+		String result = response.getChoices().get(0).getMessage().getContent();
+		log.info("main server - Dalle 이미지 생성용 프롬프트: {}", result);
+		Pattern pattern = Pattern.compile("\"([^\"]*)\"");
+		Matcher matcher = pattern.matcher(result);
+		String extractedString = "";
+		if (matcher.find()) {
+			extractedString = matcher.group(1);
+			log.info("main server - 추출된 Dalle 이미지 생성용 프롬프트: {}", extractedString);
+		}
+
+		return extractedString;
+	}
+
+	private String createDalleImagePrompt(QuestAnswer questAnswer) {
+		return String.format(OpenAiPrompt.MAKE_DALLE_IMAGE_PROMPT.getPrompt(), questAnswer.getContent());
 	}
 }
 
