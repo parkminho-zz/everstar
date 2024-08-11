@@ -43,6 +43,7 @@ import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswerType;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswerTypeNo;
 import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
+import com.everstarbackmain.domain.sse.SseService;
 import com.everstarbackmain.global.diffusionai.util.DiffusionAiClient;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
@@ -118,7 +119,10 @@ class QuestAnswerServiceTest {
 	private NotificationUtil notificationUtil;
 
 	@Mock
-	ApplicationEventPublisher applicationEventPublisher;
+	private ApplicationEventPublisher applicationEventPublisher;
+
+	@Mock
+	private SseService sseService;
 
 	private User user;
 	private Pet pet;

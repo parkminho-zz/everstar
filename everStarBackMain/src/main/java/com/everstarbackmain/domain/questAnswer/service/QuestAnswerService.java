@@ -14,6 +14,7 @@ import com.everstarbackmain.domain.aiAnswer.event.RequestTextImageToTextAiAnswer
 import com.everstarbackmain.domain.aiAnswer.event.RequestTextToImageAiAnswerEvent;
 import com.everstarbackmain.domain.aiAnswer.event.RequestTextToTextAiAnswerEvent;
 import com.everstarbackmain.domain.memorialBook.util.MemorialBookScheduler;
+import com.everstarbackmain.domain.notification.util.NotificationUtil;
 import com.everstarbackmain.domain.pet.repository.PetPersonalityRepository;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.quest.model.Quest;
@@ -23,6 +24,7 @@ import com.everstarbackmain.domain.quest.util.QuestScheduler;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswer;
 import com.everstarbackmain.domain.questAnswer.model.QuestAnswerTypeNo;
 import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
+import com.everstarbackmain.domain.sse.SseService;
 import com.everstarbackmain.global.openai.util.OpenAiClient;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;
@@ -55,6 +57,8 @@ public class QuestAnswerService {
 	private final NaverCloudClient naverCloudClient;
 	private final OpenAiClient openAiClient;
 	private final S3UploadUtil s3UploadUtil;
+	private final NotificationUtil notificationUtil;
+	private final SseService sseService;
 	private final ApplicationEventPublisher eventPublisher;
 
 	@Transactional
@@ -93,17 +97,18 @@ public class QuestAnswerService {
 			return;
 		}
 
+		// webRTC
 		String imageUrl = s3UploadUtil.saveFile(imageFile);
 		QuestAnswer questAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, requestDto, imageUrl);
 		questAnswerRepository.save(questAnswer);
 		plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
 		questScheduler.scheduleNextDayQuest(user, petId);
-
 	}
 
 	private void plusPetQuestIndexByTextType(User user, Pet pet, Quest quest, QuestAnswer questAnswer) {
 		pet.plusQuestIndex();
 		int petQuestIndex = pet.getQuestIndex();
+		sseService.updateQuestStatusNotification(user, pet.getId());
 
 		if ((petQuestIndex - 1) % 7 == 0) {
 			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex - 1);
@@ -121,6 +126,7 @@ public class QuestAnswerService {
 		MultipartFile imageFile) {
 		pet.plusQuestIndex();
 		int petQuestIndex = pet.getQuestIndex();
+		sseService.updateQuestStatusNotification(user, pet.getId());
 
 		if ((petQuestIndex - 1) % 7 == 0) {
 			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex - 1);

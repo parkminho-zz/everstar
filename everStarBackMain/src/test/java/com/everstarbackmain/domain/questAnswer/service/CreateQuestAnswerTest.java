@@ -44,6 +44,7 @@ import com.everstarbackmain.domain.questAnswer.repository.QuestAnswerRepository;
 import com.everstarbackmain.domain.questAnswer.requestDto.CreateAnswerRequestDto;
 import com.everstarbackmain.domain.sentimentAnalysis.repository.SentimentAnalysisRepository;
 import com.everstarbackmain.domain.sentimentAnalysis.util.NaverCloudClient;
+import com.everstarbackmain.domain.sse.SseService;
 import com.everstarbackmain.domain.user.model.Gender;
 import com.everstarbackmain.domain.user.model.Role;
 import com.everstarbackmain.domain.user.model.User;
@@ -108,6 +109,9 @@ public class CreateQuestAnswerTest {
 
 	@Mock
 	private NotificationUtil notificationUtil;
+
+	@Mock
+	private SseService sseService;
 
 	private User user;
 	private Pet pet;
