@@ -21,6 +21,7 @@ import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
 import com.everstarbackmain.global.sms.SmsCertificationUtil;
+import com.vane.badwordfiltering.BadWordFiltering;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +42,8 @@ public class PetLetterService {
 	@Async
 	public void writePetLetterAnswer(UserLetter userLetter) {
 		String content = openAiClient.writePetLetterAnswer(userLetter);
-		PetLetter petLetter = PetLetter.writePetLetterAnswer(userLetter, content);
+		String filteredContent = filterBadWords(content);
+		PetLetter petLetter = PetLetter.writePetLetterAnswer(userLetter, filteredContent);
 
 		petLetterRepository.save(petLetter);
 
@@ -84,5 +86,10 @@ public class PetLetterService {
 		Pet pet = userLetter.getPet();
 		User user = pet.getUser();
 		notificationUtil.sendPetLetterNotification(user);
+	}
+
+	private String filterBadWords(String content) {
+		BadWordFiltering badWordFiltering = new BadWordFiltering("♡");
+		return badWordFiltering.change(content, new String[] {"_", "-", "1", " ", ".", "@"});
 	}
 }
