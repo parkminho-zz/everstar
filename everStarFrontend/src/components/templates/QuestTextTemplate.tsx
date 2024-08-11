@@ -33,8 +33,8 @@ export const QuestTextTemplate = () => {
       );
 
       if (response.data) {
-        console.log('성공:', response.data);
-        setQuestContent(response.data.content);
+        console.log('성공:', response.data.data.content);
+        setQuestContent(response.data.data.content);
       }
     } catch (error) {
       console.error('퀘스트 데이터를 가져오는 중 오류 발생:', error);

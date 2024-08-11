@@ -11,18 +11,44 @@ import { useNavigate } from 'react-router-dom';
 
 export const QuestWithImageTemplate = () => {
   // headerText와 letterCardMessage를 오버라이드
-  const customLetterCardMessage = 'dd';
   const navigate = useNavigate();
   const [text, setText] = useState('');
   const [image, setImage] = useState<File | null>();
+  const [questContent, setQuestContent] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const { questid } = useParams<{ questid: string }>();
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
 
   useEffect(() => {
+    getQuest();
     console.log('이미지!!!!: ', image);
   }, [image]);
+
+  const getQuest = async () => {
+    try {
+      const response = await axios.get(
+        `https://i11b101.p.ssafy.io/api/pets/${petId}/quests/${questid}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (response.data) {
+        console.log('성공:', response.data.data.content);
+        setQuestContent(response.data.data.content);
+      }
+    } catch (error) {
+      console.error('퀘스트 데이터를 가져오는 중 오류 발생:', error);
+    } finally {
+      setLoading(false); // 데이터 로딩 후 로딩 상태 업데이트
+    }
+  };
+
 
   const answerImageQuestion = async () => {
     if (text && accessToken && petId && image) {
@@ -39,7 +65,7 @@ export const QuestWithImageTemplate = () => {
       formData.append('requestDto', requestDtoBlob);
 
       if (image) {
-        formData.append('image', image);
+        formData.append('imageFile', image);
         console.log('이미지 잘 들어갔니?');
       } else {
         const emptyFile = new File([new Blob()], '', { type: 'image/jpeg' });
@@ -49,7 +75,7 @@ export const QuestWithImageTemplate = () => {
       try {
         // POST 요청을 FormData와 함께 전송
         const response = await axios.post(
-          `https://i11b101.p.ssafy.io/api/pets/${petId}/quests/${questid}/answers`,
+          `http://localhost:8081/api/pets/${petId}/quests/${questid}/answers`,
           formData,
           {
             headers: {
@@ -95,6 +121,10 @@ export const QuestWithImageTemplate = () => {
     document.getElementById('photoInput')?.click();
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className='relative flex items-center justify-center min-h-screen'>
       <Glass
@@ -113,7 +143,7 @@ export const QuestWithImageTemplate = () => {
           letterCardType='send'
           letterCardColor='white'
           letterCardState='notReceived'
-          letterCardMessage={customLetterCardMessage}
+          letterCardMessage={questContent}
           centered={true}
           textboxLabel='답변'
           largeButtonText='이미지 추가'
