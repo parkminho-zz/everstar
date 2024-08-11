@@ -1,9 +1,12 @@
 import config from 'config';
 
 export interface Cheering {
+  petId: any;
+  name: string;
   content: string;
   color: string;
   isAnonymous: boolean;
+  cheeringMessageId: any;
 }
 
 export const fetchOtherPetDetails = async (petId: number, token: string) => {
@@ -64,7 +67,6 @@ export const fetchCheeringPetDelete = async (
       },
     }
   );
-
   console.log('Response status:', response.status);
   if (!response.ok) {
     throw new Error('포스트잇 삭제 실패했다 다시해봐라');

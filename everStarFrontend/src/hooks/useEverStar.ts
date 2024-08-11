@@ -25,7 +25,6 @@ interface UpdatePetIntroductionVariables {
 
 export const useFetchCheeringPetDelete = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
-
   return useMutation({
     mutationFn: async (params: {
       petId: number;
@@ -123,6 +122,9 @@ export const useFetchPetPost = (
     { content: string; color: string; isAnonymous: boolean }
   >({
     mutationFn: (data) => {
+      console.log(1);
+      console.log(data);
+      console.log(paramsId);
       return fetchPetPost(data, token, petId, paramsId);
     },
     ...options,

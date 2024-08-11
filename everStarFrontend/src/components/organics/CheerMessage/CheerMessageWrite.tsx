@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal } from 'components/molecules/Modal/Modal';
 import { Textbox } from 'components/molecules/input/Textbox';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
@@ -26,7 +26,7 @@ export const CheerMessageWrite: React.FC<CheerMessageWriteProps> = ({
 
   const handleVerify = () => {
     onVerify(message);
-    window.location.reload();
+    setMessage('');
   };
 
   const handleToggleChange = (status: 'on' | 'off') => {
