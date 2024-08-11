@@ -17,6 +17,7 @@ import com.everstarbackmain.domain.user.model.User;
 import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
+import com.vane.badwordfiltering.BadWordFiltering;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,17 +41,24 @@ public class CheeringMessageService {
 		Pet findPet = petRepository.findByIdAndIsDeleted(findPetId, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
+		String filteredContent = filterBadWords(requestDto.getContent());
+
 		if (requestDto.getIsAnonymous()) {
-			CheeringMessage cheeringMessage = CheeringMessage.createAnonymousCheeringMessage(requestDto, findPet);
+			CheeringMessage cheeringMessage = CheeringMessage.createAnonymousCheeringMessage(requestDto, findPet,filteredContent);
 			cheeringMessageRepository.save(cheeringMessage);
 			CheeringMessageDetailResponseDto responseDto = CheeringMessageDetailResponseDto.createCheeringMessageDetailResponseDto(cheeringMessage);
 			return responseDto;
 		}
 
-		CheeringMessage cheeringMessage = CheeringMessage.createNoAnonymousCheeringMessage(requestDto, findPet, pet);
+		CheeringMessage cheeringMessage = CheeringMessage.createNoAnonymousCheeringMessage(requestDto, findPet, pet, filteredContent);
 		cheeringMessageRepository.save(cheeringMessage);
 		CheeringMessageDetailResponseDto responseDto = CheeringMessageDetailResponseDto.createCheeringMessageDetailResponseDto(cheeringMessage);
 		return responseDto;
+	}
+
+	private String filterBadWords(String content) {
+		BadWordFiltering badWordFiltering = new BadWordFiltering("♡");
+		return badWordFiltering.change(content, new String[] {"_", "-", "1", " ", ".", "@"});
 	}
 
 	public Page<CheeringMessageResponseDto> getCheeringMessages(Long findPetId, Pageable pageable) {
