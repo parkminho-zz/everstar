@@ -4,92 +4,87 @@ import { Toggle } from 'components/atoms/buttons/Toggle';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { Lable } from 'components/atoms/texts/Lable';
 
-type ViewMemorialBookTheme = 'focus' | 'hover' | 'white';
-
 export interface ViewMemorialBookProps {
-  theme: ViewMemorialBookTheme;
-  size?: 'large'; // Fixed size to 'large', made optional with a default value
-  disabled: boolean;
-  BookVariant: 'book-close' | 'book-open'; // Updated the type to match BookIconsProps
-  onClick: () => void; // Simplified onClick handler type
-  showIcon?: boolean; // Optional flag to show/hide the BookIcons
-  toggleStatus?: 'on' | 'off'; // Optional toggle status
-  onToggleChange?: (status: 'on' | 'off') => void; // Optional toggle change handler
-  showToggle?: boolean; // Show or hide the toggle button
-  isActive?: boolean; // Indicates if the MemorialBook is active
-  isOwner?: boolean; // Indicates if the current user is the owner of the MemorialBook
+  onClick: () => void;
+  toggleStatus?: 'on' | 'off';
+  onToggleChange?: (status: 'on' | 'off') => void;
+  isActive?: boolean;
+  isOpen?: boolean;
+  isOwner?: boolean;
 }
 
 export const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
-  theme,
-  size = 'large', // Default size is 'large'
   onClick,
-  disabled,
-  BookVariant = 'book-close', // Default value is now type-safe
-  showIcon = true,
   toggleStatus,
   onToggleChange,
-  showToggle = true, // Default to show the toggle button
-  isActive = true, // Default to active
-  isOwner = true, // Default to owner view
+  isActive = true,
+  isOpen = true,
+  isOwner = true,
 }) => {
-  const [localToggleStatus, setLocalToggleStatus] = useState<'on' | 'off' | undefined>(
-    toggleStatus,
-  );
-  const [buttonText, setButtonText] = useState<string>(''); // 문구를 저장할 상태
+  const [buttonText, setButtonText] = useState<string>('');
+  const [buttonTheme, setButtonTheme] = useState<'focus' | 'hover' | 'white'>('focus');
+  const [bookVariant, setBookVariant] = useState<'book-close' | 'book-open'>('book-close');
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
-  const handleToggle = (status: 'on' | 'off') => {
-    setLocalToggleStatus(status);
-    if (onToggleChange) {
-      onToggleChange(status);
+  const determineButtonText = () => {
+    if (!isActive) {
+      return '메모리얼북이 아직 활성화되지 않았어요';
+    } else if (isOwner) {
+      if (toggleStatus === 'on') {
+        return '메모리얼북을 모두가 볼 수 있어요';
+      } else if (toggleStatus === 'off') {
+        return '메모리얼북을 나만 볼 수 있어요';
+      } else {
+        return '메모리얼북이 아직 활성화 되지 않았어요';
+      }
+    } else {
+      if (toggleStatus === 'on') {
+        return '메모리얼북을 볼 수 있어요';
+      } else if (toggleStatus === 'off') {
+        return '메모리얼북은 비공개 상태에요';
+      } else {
+        return '메모리얼북이 아직 활성화 되지 않았어요';
+      }
     }
   };
 
   useEffect(() => {
-    if (toggleStatus) {
-      setLocalToggleStatus(toggleStatus);
-    }
+    setButtonText(determineButtonText());
 
-    // 문구 설정 로직
     if (!isActive) {
-      setButtonText('메모리얼북이 아직 활성화되지 않았어요');
+      setIsDisabled(true);
+      setButtonTheme('white');
+      setBookVariant('book-close');
     } else if (isOwner) {
-      // 내가 보는 경우
-      if (toggleStatus === 'on') {
-        setButtonText('메모리얼북을 모두가 볼 수 있어요');
-      } else if (toggleStatus === 'off') {
-        setButtonText('메모리얼북을 나만 볼 수 있어요');
-      } else {
-        setButtonText('메모리얼북이 아직 활성화 되지 않았어요');
-      }
+      setIsDisabled(false);
+      setButtonTheme('focus');
+      setBookVariant(isOpen ? 'book-open' : 'book-close');
+    } else if (!isOpen) {
+      setIsDisabled(true);
+      setButtonTheme('white');
+      setBookVariant('book-close');
     } else {
-      // 다른 사용자가 보는 경우
-      if (toggleStatus === 'on') {
-        setButtonText('메모리얼북을 볼 수 있어요');
-      } else if (toggleStatus === 'off') {
-        setButtonText('메모리얼북은 비공개 상태에요');
-      } else {
-        setButtonText('메모리얼북이 아직 활성화 되지 않았어요');
-      }
+      setIsDisabled(false);
+      setButtonTheme('focus');
+      setBookVariant('book-open');
     }
-  }, [toggleStatus, disabled, isActive, isOwner]);
+  }, [toggleStatus, isActive, isOwner, isOpen]);
 
   return (
     <div className="flex flex-col items-center">
-      {showIcon && (
-        <div className="mb-6">
-          <BookIcons variant={BookVariant} />
-        </div>
-      )}
-      <PrimaryButton theme={theme} size={size} disabled={disabled} onClick={onClick}>
+      <div className="mb-6">
+        <BookIcons variant={bookVariant} />
+      </div>
+      <PrimaryButton theme={buttonTheme} size="large" disabled={isDisabled} onClick={onClick}>
         {buttonText}
       </PrimaryButton>
 
-      {showToggle && localToggleStatus && (
+      {/* 조건에 따라 토글 버튼을 숨김 */}
+      {isActive && isOpen && isOwner && (
         <div className="relative z-10 flex flex-col items-center justify-center my-6">
           <Lable prop="메모리얼북 공개 상태" show={false} font="default" />
           <div className="mt-2">
-            <Toggle status={localToggleStatus} onChange={handleToggle} />
+            <Toggle status={toggleStatus || 'off'} onChange={onToggleChange} />
           </div>
         </div>
       )}

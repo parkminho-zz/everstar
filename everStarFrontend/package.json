@@ -45,6 +45,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "build:no-sourcemap": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -89,6 +90,7 @@
     "@types/event-source-polyfill": "^1.0.5",
     "@types/jspdf": "^2.0.0",
     "@types/sockjs-client": "^1.5.4",
+    "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.3",
     "eslint-plugin-storybook": "^0.8.0",
