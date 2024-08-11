@@ -31,7 +31,7 @@ public class CheeringMessageService {
 	private final PetRepository petRepository;
 
 	@Transactional
-	public void createCheeringMessage(Authentication authentication, Long petId, Long findPetId,
+	public CheeringMessageDetailResponseDto createCheeringMessage(Authentication authentication, Long petId, Long findPetId,
 		CreateCheeringMessageRequestDto requestDto) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false).orElseThrow(() -> new ExceptionResponse(
@@ -43,11 +43,14 @@ public class CheeringMessageService {
 		if (requestDto.getIsAnonymous()) {
 			CheeringMessage cheeringMessage = CheeringMessage.createAnonymousCheeringMessage(requestDto, findPet);
 			cheeringMessageRepository.save(cheeringMessage);
-			return;
+			CheeringMessageDetailResponseDto responseDto = CheeringMessageDetailResponseDto.createCheeringMessageDetailResponseDto(cheeringMessage);
+			return responseDto;
 		}
 
 		CheeringMessage cheeringMessage = CheeringMessage.createNoAnonymousCheeringMessage(requestDto, findPet, pet);
 		cheeringMessageRepository.save(cheeringMessage);
+		CheeringMessageDetailResponseDto responseDto = CheeringMessageDetailResponseDto.createCheeringMessageDetailResponseDto(cheeringMessage);
+		return responseDto;
 	}
 
 	public Page<CheeringMessageResponseDto> getCheeringMessages(Long findPetId, Pageable pageable) {

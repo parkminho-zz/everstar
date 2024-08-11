@@ -13,6 +13,7 @@ import lombok.Getter;
 @Getter
 public class CheeringMessageDetailResponseDto {
 
+	private Long id;
 	private String content;
 	private Boolean isAnonymous;
 	private String relationShip;
@@ -22,6 +23,7 @@ public class CheeringMessageDetailResponseDto {
 	public static CheeringMessageDetailResponseDto createCheeringMessageDetailResponseDto(
 		CheeringMessage cheeringMessage) {
 		return CheeringMessageDetailResponseDto.builder()
+			.id(cheeringMessage.getId())
 			.content(cheeringMessage.getContent())
 			.isAnonymous(cheeringMessage.getIsAnonymous())
 			.relationShip(cheeringMessage.getBehindPetRelationship())
