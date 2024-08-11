@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import { EverStarMain } from 'components/templates/EverStarMain';
 import { EverStarCheerMessage } from 'components/templates/EverStarCheerMessage';
@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
 import bgImage from 'assets/images/bg-everstar.webp';
 import { useFetchOtherPetDetails, useFetchCheeringPet } from 'hooks/useEverStar';
-import { useFetchMemorialBooks } from 'hooks/useMemorialBooks';
+import { useFetchMemorialBooksWithQuest } from 'hooks/useMemorialBooks';
 import { MemorialBook } from 'components/templates/MemorialBook';
 
 interface PetProfile {
@@ -36,10 +36,19 @@ export const EverstarPage: React.FC = () => {
   );
 
   const { data: petDetails, isLoading: isPetDetailsLoading } = useFetchOtherPetDetails(petId);
-  const { data: memorialBooks, isLoading: isMemorialBooksLoading } = useFetchMemorialBooks(petId);
+
+  const questIndex = petDetails?.questIndex || 0;
+
+  const { data: memorialBooks, isLoading: isMemorialBooksLoading } = useFetchMemorialBooksWithQuest(
+    petId,
+    questIndex,
+  );
+
   const { data: cheerData, isLoading: isCheerLoading } = useFetchCheeringPet();
 
-  useEffect(() => {
+  const isOwner = currentPetId === petId;
+
+  useMemo(() => {
     if (!params.pet && petId && !sessionStorage.getItem('initialNavigation')) {
       sessionStorage.setItem('defaultPetId', petId.toString());
       sessionStorage.setItem('initialNavigation', 'true');
@@ -98,9 +107,10 @@ export const EverstarPage: React.FC = () => {
               element={
                 <EverStarMain
                   petProfile={petProfile}
-                  buttonDisabled={!memorialBooks.data.isActive || !memorialBooks.data.isOpen}
-                  memorialBookProfile={memorialBooks.data}
+                  buttonDisabled={!memorialBooks?.data.isActive || !memorialBooks?.data.isOpen}
+                  memorialBookProfile={memorialBooks?.data}
                   petId={petId ?? 0}
+                  isOwner={isOwner}
                 />
               }
             />

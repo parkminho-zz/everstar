@@ -3,6 +3,7 @@ import { ProgressCard } from 'components/organics/ProgressCard/ProgressCard';
 import { ViewMemorialBook } from 'components/organics/ViewMemorialBook/ViewMemorialBook';
 import { useNavigate } from 'react-router-dom';
 import { useUpdateMemorialBookOpenStatus } from 'hooks/useMemorialBooks';
+import { DepressionSurvey } from 'components/organics/DepressionSurvey/DepressionSurvey';
 
 interface EverStarMainProps {
   petProfile: {
@@ -22,16 +23,21 @@ interface EverStarMainProps {
     isActive: boolean;
   } | null;
   petId: number;
+  isOwner: boolean; // 새로운 prop 추가
 }
 
 export const EverStarMain: React.FC<EverStarMainProps> = ({
   petProfile,
   memorialBookProfile,
   petId,
+  isOwner,
 }) => {
   const navigate = useNavigate();
   const [toggleStatus, setToggleStatus] = useState<'on' | 'off' | undefined>(
     memorialBookProfile?.isOpen ? 'on' : 'off',
+  );
+  const [isModalOpen, setIsModalOpen] = useState(
+    petProfile?.questIndex === 50 && !memorialBookProfile?.isActive && isOwner,
   );
 
   const { mutate: updateMemorialBookStatus } = useUpdateMemorialBookOpenStatus({
@@ -61,12 +67,17 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
     }
   };
 
+  const handleSurveySubmitSuccess = () => {
+    setIsModalOpen(false); // 설문 제출 성공 시 모달을 닫음
+  };
+
   if (!petProfile) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
+      {isModalOpen && <DepressionSurvey onSubmitSuccess={handleSurveySubmitSuccess} />}
       <ProgressCard
         title={petProfile.name}
         fill={petProfile.questIndex}
@@ -86,7 +97,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
           onToggleChange={handleToggleChange}
           isActive={memorialBookProfile?.isActive}
           isOpen={memorialBookProfile?.isOpen}
-          isOwner={true} // Assuming the owner is always the one viewing this component
+          isOwner={isOwner} // isOwner 값을 전달
         />
       </div>
     </div>
