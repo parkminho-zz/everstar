@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
 import bgImage from 'assets/images/bg-everstar.webp';
 import { useFetchOtherPetDetails, useFetchCheeringPet } from 'hooks/useEverStar';
-import { useFetchMemorialBooks } from 'hooks/useMemorialBooks';
+import { useFetchMemorialBooksWithQuest } from 'hooks/useMemorialBooks';
 import { MemorialBook } from 'components/templates/MemorialBook';
 
 interface PetProfile {
@@ -36,7 +36,13 @@ export const EverstarPage: React.FC = () => {
   );
 
   const { data: petDetails, isLoading: isPetDetailsLoading } = useFetchOtherPetDetails(petId);
-  const { data: memorialBooks, isLoading: isMemorialBooksLoading } = useFetchMemorialBooks(petId);
+
+  // questIndex를 포함한 새로운 훅 사용
+  const { data: memorialBooks, isLoading: isMemorialBooksLoading } = useFetchMemorialBooksWithQuest(
+    petId,
+    petDetails?.questIndex || 0,
+  );
+
   const { data: cheerData, isLoading: isCheerLoading } = useFetchCheeringPet();
 
   useEffect(() => {

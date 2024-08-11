@@ -12,6 +12,22 @@ import {
 import { RootState } from 'store/Store';
 import { setMemorialBookDetails, setLoading, setError } from 'store/slices/memorialBookSlice';
 
+// Fetch the memorial book for a given pet and refetch when questIndex changes
+export const useFetchMemorialBooksWithQuest = (petId: number, questIndex: number) => {
+  const token = useSelector((state: RootState) => state.auth.accessToken);
+
+  return useQuery<{ data: MemorialBookResponse }, Error>({
+    queryKey: ['memorialBooks', petId, questIndex], // questIndex 포함
+    queryFn: async () => {
+      if (!petId || !token) {
+        throw new Error('Missing petId or token');
+      }
+      return getMemorialBooks(petId, token);
+    },
+    enabled: !!token && petId !== null,
+  });
+};
+
 // Fetch the memorial book for a given pet
 export const useFetchMemorialBooks = (petId: number) => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
