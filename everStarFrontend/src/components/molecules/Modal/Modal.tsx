@@ -7,7 +7,7 @@ import {
 interface ModalProps extends ModalHeaderProps {
   isOpen: boolean;
   onClose: () => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   height?: string; // 선택적 height prop 추가
 }
 

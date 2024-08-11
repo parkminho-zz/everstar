@@ -106,5 +106,6 @@ export const ReceivedLetter: Story = {
     dateTime: '2024-07-24 10:00:00',
     className: '', // 기본 폰트 설정
     centered: false,
+    visible: true,
   },
 };

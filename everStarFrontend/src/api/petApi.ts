@@ -36,7 +36,6 @@ interface ApiResponse {
 }
 
 export const fetchPets = async (token: string): Promise<Pet[]> => {
-  console.log('Fetching pets with token:', token);
   const response = await fetch(`${config.API_BASE_URL}/api/pets`, {
     method: 'GET',
     headers: {
@@ -44,18 +43,15 @@ export const fetchPets = async (token: string): Promise<Pet[]> => {
     },
   });
 
-  console.log('Response status:', response.status);
   if (!response.ok) {
     throw new Error('반려동물 정보를 가져오는 데 실패했습니다');
   }
 
   const result: ApiResponse = await response.json();
-  console.log('Fetched pets:', result);
   return result.data;
 };
 
 export const fetchPetDetails = async (petId: number, token: string): Promise<PetInfo> => {
-  console.log(`Fetching pet details for petId ${petId} with token:`, token);
   const response = await fetch(`${config.API_BASE_URL}/api/pets/${petId}`, {
     method: 'GET',
     headers: {
@@ -63,15 +59,11 @@ export const fetchPetDetails = async (petId: number, token: string): Promise<Pet
     },
   });
 
-  console.log('Response status:', response.status);
   if (!response.ok) {
     throw new Error('반려동물 상세 정보를 가져오는 데 실패했습니다');
   }
 
   const result = await response.json();
-  console.log('Fetched pet details:', result);
-
-  // Transform the data to fit the PetInfo interface
   const petDetails: PetInfo = {
     id: result.data.id,
     userId: result.data.userId,
@@ -82,14 +74,13 @@ export const fetchPetDetails = async (petId: number, token: string): Promise<Pet
     gender: result.data.gender,
     relationship: result.data.relationship,
     profileImageUrl: result.data.profileImageUrl,
-    personalities: result.data.petPersonalities, // Convert petPersonalities to personalities
+    personalities: result.data.petPersonalities,
   };
 
   return petDetails;
 };
 
-export const addPet = async (formData: FormData, token: string) => {
-  console.log('Adding pet with token:', token);
+export const addPet = async (formData: FormData, token: string): Promise<Pet> => {
   const response = await fetch(`${config.API_BASE_URL}/api/pets`, {
     method: 'POST',
     headers: {
@@ -98,12 +89,28 @@ export const addPet = async (formData: FormData, token: string) => {
     body: formData,
   });
 
-  console.log('Response status:', response.status);
   if (!response.ok) {
     throw new Error('반려동물을 추가하는 데 실패했습니다');
   }
 
   const data = await response.json();
-  console.log('Added pet response:', data);
   return data;
+};
+
+export const updateProfileImage = async (
+  petId: number,
+  formData: FormData,
+  token: string,
+): Promise<void> => {
+  const response = await fetch(`${config.API_BASE_URL}/api/pets/${petId}/profile-image`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error('프로필 이미지를 업데이트하는 데 실패했습니다');
+  }
 };

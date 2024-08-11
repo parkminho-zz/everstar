@@ -1,4 +1,3 @@
-// src/components/organics/ProgressCard/ProgressCard.tsx
 import React from 'react';
 import { CurrentLocation } from 'components/molecules/EverStar/CurrentLocation/CurrentLocation';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
@@ -57,9 +56,17 @@ export const ProgressCard: React.FC<ProgressCardProps> = ({
 }) => {
   const getIcon = () => {
     if (buttonIcon === 'SmallEarthImg') {
-      return <LogoIcons variant='small-earth-img' />;
+      return <LogoIcons variant="small-earth-img" />;
     } else {
-      return <LogoIcons variant='small-star-img' />;
+      return <LogoIcons variant="small-star-img" />;
+    }
+  };
+
+  const getType = () => {
+    if (buttonIcon === 'SmallEarthImg') {
+      return 'everstar';
+    } else {
+      return 'earth';
     }
   };
 
@@ -67,9 +74,9 @@ export const ProgressCard: React.FC<ProgressCardProps> = ({
     <div
       className={`relative flex flex-col items-center w-[340px] p-4 bg-[#f3f6fb] shadow-[0px_4px_4px_#00000040] ${className}`}
     >
-      <div className='flex items-center justify-center w-full gap-6 mb-4'>
-        <div className='w-fit font-kor-h-h2 text-greyscaleblack-100'>
-          <CurrentLocation title={title} type='everstar' />
+      <div className="flex items-center justify-center w-full gap-6 mb-4">
+        <div className="w-fit font-kor-h-h2 text-greyscaleblack-100">
+          <CurrentLocation title={title} type={getType()} />
         </div>
       </div>
 
@@ -83,12 +90,12 @@ export const ProgressCard: React.FC<ProgressCardProps> = ({
         {buttonText}
       </PrimaryButton>
 
-      <div className='flex flex-col items-center gap-4 p-2 mt-4 bg-white rounded-xl w-full'>
+      <div className="flex flex-col items-center w-full gap-4 p-2 mt-4 bg-white rounded-xl">
         {showMusicControl && <MusicControlButton duration={190} />}
-        <div className='flex flex-col items-start gap-[8px] p-4 relative bg-white rounded-xl w-full'>
-          <ProgressBar className='w-full' fill={fill} />
+        <div className="flex flex-col items-start gap-[8px] p-4 relative bg-white rounded-xl w-full">
+          <ProgressBar className="w-full" fill={fill} />
         </div>
-        <div className='text-center w-full mt-2 font-kor-p-p2'>
+        <div className="w-full mt-2 text-center font-kor-p-p2">
           {title}
           {getMessage(fill)}
         </div>

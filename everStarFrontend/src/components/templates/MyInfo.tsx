@@ -1,82 +1,47 @@
 import React, { useEffect, useMemo, useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from 'store/Store';
-import { useFetchPets, useFetchPetDetails } from 'hooks/usePets';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/Store';
+import { useFetchPets } from 'hooks/usePets';
 import { useFetchUserInfo } from 'hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import {
-  setPets,
-  setSelectedPetId,
-  setPetDetails,
-} from 'store/slices/petSlice';
-import { setUser } from 'store/slices/authSlice';
 import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
 import { Tab } from 'components/molecules/Tab/Tab';
 import { UserInfoTab } from 'components/organics/Profile/UserInfoTab';
 import { PetInfoTab } from 'components/organics/Profile/PetInfoTab';
 import { Glass } from 'components/molecules/Glass/Glass';
+import { useLocalPetDetails } from 'hooks/usePets';
 
 export const MyInfo: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const pets = useSelector((state: RootState) => state.pet.pets);
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
-  const selectedPetId = useSelector(
-    (state: RootState) => state.pet.selectedPetId,
-  );
   const [activeTab, setActiveTab] = useState<'one' | 'two'>('one');
-  const [initialPetId] = useState<number | null>(selectedPetId);
+  const [selectedPetId, setSelectedPetId] = useState<number | null>(null);
 
   const {
     data: petsData,
     isLoading: isPetsLoading,
     error: petsError,
   } = useFetchPets(token);
-  const {
-    data: userData,
-    isLoading: isUserLoading,
-    error: userError,
-  } = useFetchUserInfo(token);
-
-  const {
-    mutate: fetchPetDetails,
-    data: petDetailsData,
-    error: petDetailsError,
-  } = useFetchPetDetails(selectedPetId ?? 0, token);
+  const { isLoading: isUserLoading, error: userError } =
+    useFetchUserInfo(token);
+  const { localPetDetails, refetch } = useLocalPetDetails(
+    selectedPetId ?? 0,
+    token
+  );
 
   useEffect(() => {
-    if (petsData) {
-      dispatch(setPets(petsData));
+    if (petsData && petsData.length > 0) {
+      setSelectedPetId(petsData[0].id); // 첫 번째 펫을 기본으로 선택
     }
-  }, [petsData, dispatch]);
-
-  useEffect(() => {
-    if (userData) {
-      dispatch(setUser(userData));
-    }
-  }, [userData, dispatch]);
+  }, [petsData]);
 
   useEffect(() => {
     if (selectedPetId !== null) {
-      fetchPetDetails();
+      refetch();
     }
-  }, [selectedPetId, fetchPetDetails]);
-
-  useEffect(() => {
-    if (selectedPetId !== null && petDetailsData) {
-      console.log('Fetched pet details:', petDetailsData);
-      console.log('Personalities:', petDetailsData.personalities);
-      dispatch(setPetDetails(petDetailsData));
-    }
-  }, [selectedPetId, petDetailsData, dispatch]);
-
-  useEffect(() => {
-    // Cleanup function to reset the selectedPetId to the initialPetId on unmount
-    return () => {
-      dispatch(setSelectedPetId(initialPetId));
-    };
-  }, [dispatch, initialPetId]);
+  }, [selectedPetId, refetch]);
 
   const getGenderText = useCallback((gender: string) => {
     switch (gender) {
@@ -92,41 +57,37 @@ export const MyInfo: React.FC = () => {
   const petOptions = useMemo(() => pets.map((pet) => pet.name), [pets]);
 
   const petInfo = useMemo(() => {
-    if (!petDetailsData) return {};
+    if (!localPetDetails) return {};
     return {
-      [petDetailsData.name]: {
-        id: petDetailsData.id,
-        userId: petDetailsData.userId,
-        name: petDetailsData.name,
-        age: petDetailsData.age,
-        memorialDate: petDetailsData.memorialDate || 'unknown',
-        gender: getGenderText(petDetailsData.gender) || 'unknown',
-        species: petDetailsData.species || 'unknown',
-        relationship: petDetailsData.relationship,
-        personalities: petDetailsData.personalities || [],
-        profileImageUrl: petDetailsData.profileImageUrl,
+      [localPetDetails.name]: {
+        id: localPetDetails.id,
+        userId: localPetDetails.userId,
+        name: localPetDetails.name,
+        age: localPetDetails.age,
+        memorialDate: localPetDetails.memorialDate || 'unknown',
+        gender: getGenderText(localPetDetails.gender) || 'unknown',
+        species: localPetDetails.species || 'unknown',
+        relationship: localPetDetails.relationship,
+        personalities: localPetDetails.personalities || [],
+        profileImageUrl: localPetDetails.profileImageUrl,
       },
     };
-  }, [petDetailsData, getGenderText]);
+  }, [localPetDetails, getGenderText]);
 
   const onPetSelect = useCallback(
     (name: string) => {
       const selectedPet = pets.find((pet) => pet.name === name);
       if (selectedPet && selectedPet.id !== selectedPetId) {
-        dispatch(setSelectedPetId(selectedPet.id));
-        fetchPetDetails();
+        setSelectedPetId(selectedPet.id);
         setActiveTab('two'); // 반려동물을 선택하면 탭을 전환
       }
     },
-    [dispatch, pets, selectedPetId, fetchPetDetails],
+    [pets, selectedPetId]
   );
 
   if (isPetsLoading || isUserLoading) return <div>로딩 중...</div>;
   if (petsError) return <div className='text-red-500'>{petsError.message}</div>;
   if (userError) return <div className='text-red-500'>{userError.message}</div>;
-  if (petDetailsError)
-    return <div className='text-red-500'>{petDetailsError.message}</div>;
-  if (!userInfo) return <div>사용자 정보를 불러오는 중...</div>;
 
   const handleButtonClick = () => {
     console.log('Primary Button Clicked');
@@ -172,6 +133,7 @@ export const MyInfo: React.FC = () => {
                 petOptions={petOptions}
                 petInfo={petInfo}
                 onPetSelect={onPetSelect}
+                token={token}
               />
             )}
           </div>
