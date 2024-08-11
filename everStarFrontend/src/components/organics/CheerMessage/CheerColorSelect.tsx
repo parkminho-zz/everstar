@@ -23,13 +23,12 @@ export const CheerColorSelect: React.FC<CheerColorSelectProps> = ({
   const [selectedColor, setSelectedColor] = useState<string>('');
 
   const colorOptions: (string | number)[] = [
-    '빨간색',
-    '주황색',
-    '노란색',
+    '분홍색',
     '초록색',
     '파란색',
-    '남색',
     '보라색',
+    '회색',
+    '노란색',
   ];
 
   const handleOptionSelect = (option: string | number) => {

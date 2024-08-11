@@ -26,6 +26,7 @@ export const CheerMessageWrite: React.FC<CheerMessageWriteProps> = ({
 
   const handleVerify = () => {
     onVerify(message);
+    setMessage('');
   };
 
   const handleToggleChange = (status: 'on' | 'off') => {

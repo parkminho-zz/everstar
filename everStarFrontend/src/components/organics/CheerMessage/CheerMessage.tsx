@@ -48,6 +48,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
   const [selectedColor, setSelectedColor] = useState<string>(''); // 색상 상태 추가
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
+  const petName = useSelector((state: RootState) => state.pet.petDetails?.name);
   const params = useParams(); //params.pet 사용
 
   const cardsPerPage = 12;
@@ -62,10 +63,20 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     content: string;
     color: string;
     isAnonymous: boolean;
+    name: string;
+    petId: number;
+    cheeringMessageId: number;
   }) => {
     createCheeringPet(formData, {
-      onSuccess: (newCheeringMessage) => {
-        console.log(newCheeringMessage);
+      onSuccess: (data) => {
+        const newPostItCard = {
+          contents: formData.content,
+          name: petName || '',
+          color: formData.color.toLowerCase(),
+          petId: Number(petId),
+          cheeringMessageId: Number(data),
+        };
+        setPostItCards([...postItCards, newPostItCard]);
       },
       onError: (error) => {
         console.error('응원 메시지 생성 실패:', error);
@@ -99,6 +110,10 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
 
   const handleCloseIntroduceWriteModal = () => {
     setIntroduceWriteModalOpen(false);
+    const petIntroduce = JSON.parse(
+      sessionStorage.getItem('petDetails') || '{}'
+    );
+    profile.description = petIntroduce.introduction;
   };
 
   const handleVerifyIntroduceWrite = () => {
@@ -119,7 +134,28 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
   };
 
   const handleCheerColorSelect = (color: string) => {
-    setSelectedColor(color); // 선택된 색상 저장
+    switch (color) {
+      case '분홍색':
+        setSelectedColor('PINK');
+        break;
+      case '초록색':
+        setSelectedColor('GREEN');
+        break;
+      case '파란색':
+        setSelectedColor('BLUE');
+        break;
+      case '보라색':
+        setSelectedColor('PURPLE');
+        break;
+      case '회색':
+        setSelectedColor('GRAY');
+        break;
+      case '노란색':
+        setSelectedColor('YELLOW');
+        break;
+      default:
+        break;
+    }
   };
 
   const handleCloseCheerMessageWriteModal = () => {
@@ -129,9 +165,11 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
   const handleVerifyCheerMessageWrite = (message: string) => {
     handleCreate({
       content: message,
-      // color: selectedColor,
-      color: 'BLUE',
+      name: 'hi',
+      color: selectedColor,
       isAnonymous: false,
+      petId: 0,
+      cheeringMessageId: 0,
     });
     setCheerMessageWriteModalOpen(false);
   };
@@ -140,7 +178,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     const startIdx = (currentPage - 1) * cardsPerPage;
     const endIdx = startIdx + cardsPerPage;
     const cardsToShow = postItCards.slice(startIdx, endIdx);
-
+    console.log(cardsToShow);
     return cardsToShow.map((card, index) => (
       <PostItCard
         key={startIdx + index}
@@ -148,7 +186,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
         name={card.name}
         color={card.color as never}
         onDelete={() =>
-          handleDelete(startIdx + index, card.petId, card.cheeringMessageId)
+          handleDelete(startIdx + index, Number(petId), card.cheeringMessageId)
         }
       />
     ));
@@ -160,7 +198,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
 
   return (
     <div className='relative flex flex-col items-center p-12'>
-      <div className='absolute inset-0 z-0'>
+      <div className='absolute inset-0 z-9999'>
         <Glass
           currentPage={currentPage}
           totalPages={totalPagesCalculated}
@@ -169,7 +207,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
           className='w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5'
         />
       </div>
-      <div className='relative z-10 w-full max-w-screen-lg p-6 bg-gray-100 rounded-lg shadow-md'>
+      <div className='relative w-full max-w-screen-lg p-6 bg-gray-100 rounded-lg shadow-md z-9'>
         <div className='flex'>
           <div className='flex-shrink-0 mr-4'>
             <ProfileCard

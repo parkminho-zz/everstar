@@ -33,6 +33,7 @@ export const IntroduceWrite: React.FC<IntroduceWriteProps> = ({
       );
       petDetails.introduction = message;
       sessionStorage.setItem('petDetails', JSON.stringify(petDetails));
+      setMessage('');
       onClose();
     },
     onError: (error) => {

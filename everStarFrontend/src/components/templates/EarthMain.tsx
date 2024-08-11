@@ -152,9 +152,6 @@ export const EarthMain: React.FC<EarthMainProps> = ({
     }
   };
 
-
-
-
   const getOpenvidu = () => {
     navigate(`/earth/openvidu`);
   };
@@ -168,11 +165,14 @@ export const EarthMain: React.FC<EarthMainProps> = ({
 
     console.log(111);
     console.log(petId);
-    const eventSource = new EventSource(`https://i11b101.p.ssafy.io/api/earth/connect/${petId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const eventSource = new EventSource(
+      `https://i11b101.p.ssafy.io/api/earth/connect/${petId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
 
     eventSource.onmessage = (event) => {
       // 이벤트 데이터 처리
@@ -216,18 +216,18 @@ export const EarthMain: React.FC<EarthMainProps> = ({
             오픈비두 질문으로 이동
           </button> */}
           {(quest.length === 1 || quest.length === 2) && (
-          <button
-            className='bg-white h-[50px] w-[200px] shadow-lg rounded-md mt-4'
-            onClick={() => answerQuest(quest)}
-          >
-            {quest}번째 퀘스트가 도착했습니다.
-          </button>
-        )}
-        {quest.length >= 3 && (
-          <button disabled onClick={() => answerQuest(quest)}>
-            퀘스트를 완료했습니다.
-          </button>
-        )}
+            <button
+              className='bg-white h-[50px] w-[200px] shadow-lg rounded-md mt-4'
+              onClick={() => answerQuest(quest)}
+            >
+              {quest}번째 퀘스트가 도착했습니다.
+            </button>
+          )}
+          {quest.length >= 3 && (
+            <button disabled onClick={() => answerQuest(quest)}>
+              퀘스트를 완료했습니다.
+            </button>
+          )}
         </div>
       </div>
       <div className='fixed right-12 bottom-14'>
