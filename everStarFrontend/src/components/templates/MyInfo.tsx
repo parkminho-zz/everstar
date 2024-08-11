@@ -23,7 +23,7 @@ export const MyInfo: React.FC = () => {
   const pets = useSelector((state: RootState) => state.pet.pets);
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const selectedPetId = useSelector(
-    (state: RootState) => state.pet.selectedPetId,
+    (state: RootState) => state.pet.selectedPetId
   );
   const [activeTab, setActiveTab] = useState<'one' | 'two'>('one');
   const [initialPetId] = useState<number | null>(selectedPetId);
@@ -118,7 +118,7 @@ export const MyInfo: React.FC = () => {
         setActiveTab('two'); // 반려동물을 선택하면 탭을 전환
       }
     },
-    [dispatch, pets, selectedPetId, fetchPetDetails],
+    [dispatch, pets, selectedPetId, fetchPetDetails]
   );
 
   if (isPetsLoading || isUserLoading) return <div>로딩 중...</div>;

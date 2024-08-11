@@ -22,6 +22,18 @@ export const MyinfoMove: React.FC<EverStarSearchStarProps> = () => {
 
   return (
     <div className='relative flex flex-col items-center justify-center w-full min-h-screen'>
+      {/* <div
+        className='absolute inset-0 rounded-[20px] overflow-hidden border-[0.5px] border-solid '
+        style={{
+          backgroundImage: `url(${glassBackground})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          // width: '100%',
+          // height: '100%',
+          // zIndex: 1,
+          // borderRadius: '40px',
+        }}
+      ></div> */}
       <Glass
         currentPage={1}
         totalPages={1}
