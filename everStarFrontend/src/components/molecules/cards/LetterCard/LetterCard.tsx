@@ -16,6 +16,7 @@ export interface ILetterProps {
   className?: string;
   centered?: boolean;
   onClick?: () => void;
+  visible?: boolean;
 }
 
 export const LetterCard = ({
@@ -29,10 +30,13 @@ export const LetterCard = ({
   className,
   centered = false,
   onClick,
+  visible = true,
 }: ILetterProps) => {
+  if (!visible) return null;
+
   const getState = () => {
-    if (state === 'received') return '완료';
-    else return '답장을 쓸 수 있어요!';
+    if (state === 'received') return '읽음';
+    else return '아직 읽지 않았어요!!';
   };
 
   const getTextColor = () => {

@@ -1,13 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Rainbow } from 'components/atoms/symbols/Rainbow/Rainbow';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
 import { ProgressCard } from 'components/organics/ProgressCard/ProgressCard';
+import { LetterCard } from 'components/molecules/cards/LetterCard/LetterCard';
+import { initializeApp } from 'firebase/app';
+import { getMessaging, onMessage } from 'firebase/messaging';
+import { firebaseConfig } from 'firebase-messaging-sw';
+import { Modal } from 'components/molecules/Modal/Modal';
 
 type ViewMemorialBookSize = 'large' | 'medium' | 'small';
-type RainbowColor = 'none' | 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'indigo' | 'violet';
+type RainbowColor =
+  | 'none'
+  | 'red'
+  | 'orange'
+  | 'yellow'
+  | 'green'
+  | 'blue'
+  | 'indigo'
+  | 'violet';
 
 interface EarthMainProps {
   title: string;
@@ -50,10 +63,53 @@ export const EarthMain: React.FC<EarthMainProps> = ({
   buttonIcon,
   className,
 }) => {
+  const app = initializeApp(firebaseConfig);
+  const messaging = getMessaging(app);
   const navigate = useNavigate();
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
 
+  const [letterCardVisible, setLetterCardVisible] = useState(false);
+  const [letterMessage, setLetterMessage] = useState('');
+  const [modalState, setModalState] = useState(false);
+
+  useEffect(() => {
+    const isMessageSeen = localStorage.getItem('isMessageSeen');
+    const isMessage = localStorage.getItem('isMessage');
+    if (isMessage !== null) {
+      setLetterMessage(isMessage);
+    }
+    if (isMessageSeen !== 'true' && isMessageSeen !== null) {
+      setLetterCardVisible(true);
+    }
+  }, [letterCardVisible, letterMessage]);
+
+  onMessage(messaging, (payload) => {
+    setLetterCardVisible(true);
+
+    switch (payload.notification?.title) {
+      case '카툰화':
+        setLetterMessage('카툰이 도착했어요');
+        localStorage.setItem('isMessage', '카툰이 도착했어요');
+        localStorage.setItem('isMessageSeen', 'false');
+        break;
+
+      case '편지':
+        setLetterMessage('편지가 도착했어요');
+        localStorage.setItem('isMessage', '편지가 도착했어요');
+        localStorage.setItem('isMessageSeen', 'false');
+        break;
+
+      default:
+        return;
+    }
+
+    console.log(
+      'Message received (foreground). : ',
+      // payload.notification?.title
+      payload
+    );
+  });
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
 
   const handleButtonClick = () => {
@@ -61,6 +117,28 @@ export const EarthMain: React.FC<EarthMainProps> = ({
     navigate(`/everstar/${petId}`);
   };
 
+  const handleLetterCardClick = () => {
+    const type = localStorage.getItem('isMessage');
+
+    switch (type) {
+      case '편지가 도착했어요':
+        setLetterCardVisible(false);
+        localStorage.setItem('isMessageSeen', 'true');
+        break;
+
+      case '카툰이 도착했어요':
+        setLetterCardVisible(false);
+        localStorage.setItem('isMessageSeen', 'true');
+        setModalState(true);
+        break;
+
+      default:
+        break;
+    }
+  };
+  const Modalclose = () => {
+    setModalState(false);
+  };
   const getRainbowStyle = () => {
     if (isMobile) {
       return 'absolute right-0 bottom-0 w-[375px] h-[667px] mb-48 mr-[-20px] ';
@@ -76,29 +154,51 @@ export const EarthMain: React.FC<EarthMainProps> = ({
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen">
-      <Rainbow className={getRainbowStyle()} color={getColor(fill)} />
-      <div className="relative z-10 flex flex-col items-center justify-center flex-grow">
-        <ProgressCard
-          title={title}
-          fill={fill}
-          buttonTheme="white"
-          buttonSize={buttonSize}
-          buttonDisabled={buttonDisabled}
-          buttonText={buttonText}
-          buttonIcon={buttonIcon}
-          onButtonClick={handleButtonClick}
-          showMusicControl={false}
-          className={className}
+    <div>
+      <div className='relative flex flex-col items-center justify-center min-h-screen'>
+        <Rainbow className={getRainbowStyle()} color={getColor(fill)} />
+        <div className='relative z-10 flex flex-col items-center justify-center flex-grow'>
+          <ProgressCard
+            title={title}
+            fill={fill}
+            buttonTheme='white'
+            buttonSize={buttonSize}
+            buttonDisabled={buttonDisabled}
+            buttonText={buttonText}
+            buttonIcon={buttonIcon}
+            onButtonClick={handleButtonClick}
+            showMusicControl={false}
+            className={className}
+          />
+          <button
+            className='bg-white h-[50px] w-[200px] shadow-lg rounded-md mt-4'
+            onClick={getOpenvidu}
+          >
+            임시버튼
+            <br />
+            오픈비두 질문으로 이동
+          </button>
+        </div>
+      </div>
+      <div className='fixed right-12 bottom-14'>
+        <LetterCard
+          type='receive'
+          color='gray'
+          state='received'
+          name='알림'
+          message={letterMessage}
+          dateTime=''
+          className='h-5'
+          centered={true}
+          visible={letterCardVisible}
+          onClick={handleLetterCardClick}
         />
-        <button
-          className="bg-white h-[50px] w-[200px] shadow-lg rounded-md mt-4"
-          onClick={getOpenvidu}
-        >
-          임시버튼
-          <br />
-          오픈비두 질문으로 이동
-        </button>
+      </div>
+      <div>
+        <Modal isOpen={modalState} onClose={Modalclose} text=''>
+          <img src='https://picsum.photos/500/500' alt='Description' />
+          <p>한번밖에 볼 수 없어요! 추후 메모리얼북이 완성 시 확인 가능해요!</p>
+        </Modal>
       </div>
     </div>
   );
