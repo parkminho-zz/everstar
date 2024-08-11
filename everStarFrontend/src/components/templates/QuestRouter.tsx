@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { QuestTextTemplate } from './QuestTextTemplate';
 import { QuestWithImageTemplate } from './QuestWithImageTemplate';
 import { useNavigate } from 'react-router-dom';
+import QuestPuzzle from './QuestPuzzle';
 
 const TextQuestArray = [
   '1',
@@ -62,7 +63,7 @@ export const QuestRouter: React.FC = () => {
   }
 
   if (TextQuestArray.includes(questid)) {
-    return <QuestTextTemplate />;
+    return <QuestPuzzle />;
   } else if (ImageQuestArray.includes(questid)) {
     return <QuestWithImageTemplate />;
   } else if (OpenViduQuestArray.includes(questid)) {
