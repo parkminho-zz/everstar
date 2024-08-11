@@ -8,6 +8,7 @@ import {
   createDiary,
   MemorialBookResponse,
   MemorialBookDetailsResponse,
+  updatePsychologicalTestResult,
 } from '../api/memorialBookApi';
 import { RootState } from 'store/Store';
 import { setMemorialBookDetails, setLoading, setError } from 'store/slices/memorialBookSlice';
@@ -152,6 +153,41 @@ export const useCreateDiary = (
     },
     onError: (error: Error, variables, context) => {
       console.error('Error creating diary:', error);
+      if (options?.onError) {
+        options.onError(error, variables, context);
+      }
+    },
+    ...options,
+  });
+};
+
+export const useUpdatePsychologicalTestResult = (
+  options?: UseMutationOptions<
+    void,
+    Error,
+    { petId: number; memorialBookId: number; testResult: string }
+  >,
+) => {
+  const queryClient = useQueryClient();
+  const token = useSelector((state: RootState) => state.auth.accessToken);
+
+  return useMutation<void, Error, { petId: number; memorialBookId: number; testResult: string }>({
+    mutationFn: ({ petId, memorialBookId, testResult }) => {
+      if (!token) {
+        throw new Error('토큰이 없습니다');
+      }
+      return updatePsychologicalTestResult(petId, memorialBookId, testResult, token);
+    },
+    onSuccess: (data, variables, context) => {
+      queryClient.invalidateQueries({
+        queryKey: ['memorialBook', variables.petId, variables.memorialBookId],
+      });
+      if (options?.onSuccess) {
+        options.onSuccess(data, variables, context);
+      }
+    },
+    onError: (error: Error, variables, context) => {
+      console.error('Error updating psychological test result:', error);
       if (options?.onError) {
         options.onError(error, variables, context);
       }
