@@ -72,16 +72,6 @@ public class QuestAnswer extends BaseTimeEntity {
 			.build();
 	}
 
-	public static QuestAnswer createImageQuestAnswer(Pet pet, Quest quest, CreateAnswerRequestDto requestDto,
-		String imageUrl) {
-		return QuestAnswer.builder()
-			.pet(pet)
-			.quest(quest)
-			.imageUrl(imageUrl)
-			.type(QuestAnswerType.valueOf(requestDto.getType()))
-			.build();
-	}
-
 	public static QuestAnswer createTextImageQuestAnswer(Pet pet, Quest quest, CreateAnswerRequestDto requestDto,
 		String imageUrl) {
 		return QuestAnswer.builder()

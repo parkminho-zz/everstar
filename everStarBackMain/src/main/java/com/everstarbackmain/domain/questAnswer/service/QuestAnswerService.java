@@ -101,7 +101,7 @@ public class QuestAnswerService {
 		}
 
 		String imageUrl = s3UploadUtil.saveFile(imageFile);
-		QuestAnswer questAnswer = QuestAnswer.createImageQuestAnswer(pet, quest, requestDto, imageUrl);
+		QuestAnswer questAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, requestDto, imageUrl);
 		questAnswerRepository.save(questAnswer);
 		plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
 		questScheduler.scheduleNextDayQuest(user, petId);
