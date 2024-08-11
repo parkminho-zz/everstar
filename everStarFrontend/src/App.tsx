@@ -8,6 +8,7 @@ import { SplashPageRedirector } from 'pages/SplashPageRedirector';
 import { SignUpPage } from 'pages/SignUpPage';
 import { LoginPage } from 'pages/LoginPage';
 import { OAuthCallback } from 'pages/OAuthCallback';
+import { PrivateRoute, PetDetailsRoute } from 'ProtectedRoutes';
 import './firebase-messaging-sw';
 
 const queryClient = new QueryClient();
@@ -16,19 +17,57 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <div>
-          <Routes>
-            <Route path='/' element={<SplashPageRedirector />} />
-            <Route path='/login' element={<LoginPage />} />
-            <Route path='/signup/:userEmail*' element={<SignUpPage />} />
-            <Route path='/tutorial' element={<TutorialPage />} />
-            <Route path='/earth/*' element={<EarthPage />} />
-            <Route path='/everstar/:pet/*' element={<EverstarPage />} />
-            <Route path='/pets/*' element={<EarthPage />} />
-            <Route path='/mypage/*' element={<MyPage />} />
-            <Route path='/oauth/*' element={<OAuthCallback />} />
-          </Routes>
-        </div>
+        <Routes>
+          {/* 로그인 없이 접근 가능한 경로들 */}
+          <Route path="/" element={<SplashPageRedirector />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup/:userEmail*" element={<SignUpPage />} />
+          <Route path="/tutorial" element={<TutorialPage />} />
+          <Route path="/oauth/*" element={<OAuthCallback />} />
+
+          {/* 보호된 경로들 */}
+          {/* Profile 경로는 로그인만 필요 */}
+          <Route
+            path="/mypage/*"
+            element={
+              <PrivateRoute>
+                <MyPage />
+              </PrivateRoute>
+            }
+          />
+
+          {/* 아래 경로들은 로그인과 PetDetails가 모두 필요 */}
+          <Route
+            path="/earth/*"
+            element={
+              <PrivateRoute>
+                <PetDetailsRoute>
+                  <EarthPage />
+                </PetDetailsRoute>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/everstar/:pet/*"
+            element={
+              <PrivateRoute>
+                <PetDetailsRoute>
+                  <EverstarPage />
+                </PetDetailsRoute>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/pets/*"
+            element={
+              <PrivateRoute>
+                <PetDetailsRoute>
+                  <EarthPage />
+                </PetDetailsRoute>
+              </PrivateRoute>
+            }
+          />
+        </Routes>
       </Router>
     </QueryClientProvider>
   );

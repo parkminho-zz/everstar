@@ -6,6 +6,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
+import { RootState } from 'store/Store';
 
 import {
   fetchCheeringPet,
@@ -15,13 +16,29 @@ import {
   Cheering,
   fetchPetPost,
   fetchPetIntroduction,
+  fetchPetsByName,
 } from '../api/everStarApi';
-import { RootState } from 'store/Store';
 
 interface UpdatePetIntroductionVariables {
   introduction: string;
   petId: number;
 }
+
+// 훅 추가
+export const useFetchPetsByName = (petname: string, page: number = 0, size: number = 10) => {
+  const token = useSelector((state: RootState) => state.auth.accessToken);
+
+  return useQuery({
+    queryKey: ['fetchPetsByName', petname, page, size],
+    queryFn: async () => {
+      if (!token) {
+        throw new Error('토큰이 없습니다. 인증이 필요합니다.');
+      }
+      return fetchPetsByName(petname, page, size, token);
+    },
+    enabled: !!token && petname.length > 2, // 3글자 이상 입력해야 쿼리가 활성화됨
+  });
+};
 
 export const useFetchCheeringPetDelete = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
