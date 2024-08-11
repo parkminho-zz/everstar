@@ -43,9 +43,7 @@ public class PetService {
 	private final S3UploadUtil s3UploadUtil;
 
 	@Transactional
-	public void createPet(User user, CreatePetRequestDto createPetRequestDto,
-		MultipartFile profileImage) {
-
+	public void createPet(User user, CreatePetRequestDto createPetRequestDto, MultipartFile profileImage) {
 		String profileImageUrl = s3UploadUtil.saveFile(profileImage);
 		Pet pet = Pet.createPet(user, createPetRequestDto, profileImageUrl);
 		petRepository.save(pet);
@@ -67,19 +65,14 @@ public class PetService {
 
 	@Transactional
 	public void updatePetIntroduction(User user, Long petId, UpdatePetIntroductionDto requestDto) {
-		BadWordFiltering badWordFiltering = new BadWordFiltering("♡");
-		String newIntroduction = badWordFiltering.change(requestDto.getIntroduction(), new String[]{"_", "-", "1", " "});
-		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
-			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
-		log.info("main server - Logged-in User ID: {}", user.getId());
-		log.info("main server - Pet Owner: {}", pet.getUser().getId());
-		log.info("main server - Pet ID: {}", petId);
+		String filteredNewIntroduction = filterBadWords(requestDto.getIntroduction());
+		Pet pet = getPetByIdAndUser(petId, user);
 
-		if (newIntroduction != null && !newIntroduction.isEmpty()) {
-			pet.updatePetIntroduction(newIntroduction);
-			return;
-		}
-		pet.updatePetIntroduction(pet.getName() + " 의 사랑스런 소개글을 작성 해주세요");
+		pet.updatePetIntroduction(
+			filteredNewIntroduction != null && !filteredNewIntroduction.isEmpty()
+				? filteredNewIntroduction
+				: pet.getName() + " 의 사랑스런 소개글을 작성 해주세요♥"
+		);
 	}
 
 	private void createMemorialBook(Pet pet) {
@@ -101,12 +94,7 @@ public class PetService {
 	}
 
 	public MyPagePetInfoResponseDto getMyPetInfo(User user, Long petId) {
-		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
-			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
-		log.info("main server - Logged-in User ID: {}", user.getId());
-		log.info("main server - Pet Owner: {}", pet.getUser().getId());
-		log.info("main server - Pet ID: {}", petId);
-
+		Pet pet = getPetByIdAndUser(petId, user);
 		List<String> petPersonalities = petPersonalityRepository.findPersonalityValuesByPetIdAndIsDeleted(petId, false);
 		return MyPagePetInfoResponseDto.createMyPagePetInfoDto(pet, petPersonalities);
 	}
@@ -114,10 +102,19 @@ public class PetService {
 	@Transactional
 	public void updatePetProfileImage(User user, Long petId, MultipartFile profileImage) {
 		String profileImageUrl = s3UploadUtil.saveFile(profileImage);
-
-		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
-			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
-
+		Pet pet = getPetByIdAndUser(petId, user);
 		pet.updateProfileImage(profileImageUrl);
 	}
+
+	// 리팩토링일 위한 별도 매서드 분리
+	private String filterBadWords(String content) {
+		BadWordFiltering badWordFiltering = new BadWordFiltering("♡");
+		return badWordFiltering.change(content, new String[] {"_", "-", "1", " ", ".", "@"});
+	}
+
+	private Pet getPetByIdAndUser(Long petId, User user) {
+		return petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+	}
+
 }
