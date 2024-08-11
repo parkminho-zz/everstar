@@ -7,7 +7,7 @@ import { Footer } from 'components/molecules/Footer/Footer';
 import { LetterColor, LetterState } from 'components/molecules/cards/LetterCard/LetterCard';
 import { LetterDetailTemplate } from 'components/templates/LetterDetailTemplate';
 import { LetterWriteTemplate } from 'components/templates/LetterWriteTemplate';
-import { QuestTemplate } from 'components/templates/QuestTemplate';
+import { QuestRouter } from 'components/templates/QuestRouter';
 import { QuestOpenviduTemplate } from 'components/templates/QuestOpenviduTemplate';
 import { OpenViduApp } from 'components/templates/OpenViduApp';
 import bgImage from 'assets/images/bg-earth.webp';
@@ -61,34 +61,9 @@ export const EarthPage: React.FC = () => {
             />
             <Route path='letter' element={<LetterWriteTemplate />} />
             <Route path='letter/:id' element={<LetterDetailTemplate />} />
-            <Route
-              path='quest/:questid'
-              element={
-                <QuestTemplate
-                  letterCardColor='white'
-                  letterCardType='default'
-                  headerText={'오늘의 질문'}
-                  letterCardMessage='Q. 뚜뚜와 놀았던 이야기를 해주세요'
-                  textboxLabel={'내용'}
-                  showPrimaryButton={false}
-                  largeButtonText={'이미지 추가'}
-                  smallButtonText={'작성완료'}
-                />
-              }
-            />
-            <Route
-              path='openvidu'
-              element={
-                <QuestOpenviduTemplate
-                  headerText='오늘의 질문'
-                  textboxLabel='내용'
-                  largeButtonText='이미지 삽입'
-                  smallButtonText='제출'
-                />
-              }
-            />
+            <Route path='quest/:questid' element={<QuestRouter />} />
+            <Route path='openvidu/:questid' element={<QuestOpenviduTemplate />} />
             <Route path='openvidu/sessionid' element={<OpenViduApp />} />
-
             <Route path='openvidu/sessionid/:sessionId' element={<OpenViduApp />} />
           </Routes>
         </div>

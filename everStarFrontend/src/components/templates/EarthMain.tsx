@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 import { useMediaQuery } from 'react-responsive';
 import { Rainbow } from 'components/atoms/symbols/Rainbow/Rainbow';
 import { useNavigate } from 'react-router-dom';
@@ -63,6 +64,8 @@ export const EarthMain: React.FC<EarthMainProps> = ({
   buttonIcon,
   className,
 }) => {
+  const [quest, setQuest] = useState('');
+
   const app = initializeApp(firebaseConfig);
   const messaging = getMessaging(app);
   const navigate = useNavigate();
@@ -111,7 +114,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
     );
   });
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
-
+  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
   const handleButtonClick = () => {
     onButtonClick();
     navigate(`/everstar/${petId}`);
@@ -149,10 +152,44 @@ export const EarthMain: React.FC<EarthMainProps> = ({
     }
   };
 
+
+
+
   const getOpenvidu = () => {
     navigate(`/earth/openvidu`);
   };
 
+  const answerQuest = (questId: string) => {
+    navigate(`/earth/quest/${questId}`);
+  };
+
+  useEffect(() => {
+    const EventSource = EventSourcePolyfill || NativeEventSource;
+
+    console.log(111);
+    console.log(petId);
+    const eventSource = new EventSource(`https://i11b101.p.ssafy.io/api/earth/connect/${petId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    eventSource.onmessage = (event) => {
+      // 이벤트 데이터 처리
+      console.log(event.data);
+      if (event.data.length != 0 && event.data !== 'dummy') {
+        console.log(event.data);
+        if (quest !== event.data) {
+          setQuest(event.data);
+        }
+      }
+    };
+
+    return () => {
+      // 컴포넌트가 언마운트될 때 SSE 연결 해제
+      eventSource.close();
+    };
+  }, []);
   return (
     <div>
       <div className='relative flex flex-col items-center justify-center min-h-screen'>
@@ -170,14 +207,27 @@ export const EarthMain: React.FC<EarthMainProps> = ({
             showMusicControl={false}
             className={className}
           />
-          <button
+          {/* <button
             className='bg-white h-[50px] w-[200px] shadow-lg rounded-md mt-4'
             onClick={getOpenvidu}
           >
             임시버튼
             <br />
             오픈비두 질문으로 이동
+          </button> */}
+          {(quest.length === 1 || quest.length === 2) && (
+          <button
+            className='bg-white h-[50px] w-[200px] shadow-lg rounded-md mt-4'
+            onClick={() => answerQuest(quest)}
+          >
+            {quest}번째 퀘스트가 도착했습니다.
           </button>
+        )}
+        {quest.length >= 3 && (
+          <button disabled onClick={() => answerQuest(quest)}>
+            퀘스트를 완료했습니다.
+          </button>
+        )}
         </div>
       </div>
       <div className='fixed right-12 bottom-14'>

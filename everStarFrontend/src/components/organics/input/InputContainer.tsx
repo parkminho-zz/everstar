@@ -3,11 +3,6 @@ import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
 import { LetterCard } from 'components/molecules/cards/LetterCard/LetterCard';
 import { Textbox } from 'components/molecules/input/Textbox';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? '' : 'https://i11b101.p.ssafy.io/';
 
 export interface InputContainerProps {
   headerText: string;
@@ -27,6 +22,7 @@ export interface InputContainerProps {
   smallButtonText: string;
   showPrimaryButton?: boolean;
   isRtc?: boolean;
+  handleRtcButtonClick?: () => void;
   onLeftIconClick?: () => void; // 추가된 속성
   primaryButtonDisabled?: boolean;
   ghostText?: string;
@@ -37,6 +33,7 @@ export interface InputContainerProps {
   onTextChange?: (text: string) => void;
   value?: string;
   handleReplyClick?: () => void;
+  handleSmallButtonDisabled?: boolean;
 }
 
 export const InputContainer: React.FC<InputContainerProps> = ({
@@ -57,6 +54,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
   dateTime,
   showPrimaryButton = true,
   isRtc = false,
+  handleRtcButtonClick,
   onLeftIconClick, // 추가된 속성
   primaryButtonDisabled = false,
   ghostText,
@@ -64,8 +62,8 @@ export const InputContainer: React.FC<InputContainerProps> = ({
   onButtonClick,
   onButtonClick2,
   handleReplyClick,
+  handleSmallButtonDisabled = false,
 }) => {
-  const navigate = useNavigate();
   const [text, setText] = useState('');
 
   const handleTextChange = (text: string) => {
@@ -85,19 +83,6 @@ export const InputContainer: React.FC<InputContainerProps> = ({
     }
   };
 
-  const getOpenVidu = async (): Promise<string> => {
-    const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions`, {
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-    return response.data;
-  };
-
-  const handleRtcButtonClick = async () => {
-    const sessionId = await getOpenVidu();
-
-    navigate(`/earth/openvidu/sessionid/${sessionId}`);
-  };
   return (
     <div className='flex justify-center p-6 bg-gray-100'>
       <div
@@ -201,7 +186,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
                     theme='white'
                     size='small'
                     onClick={handleButtonClick}
-                    disabled={false}
+                    disabled={handleSmallButtonDisabled}
                     icon={null}
                   >
                     {smallButtonText}
