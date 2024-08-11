@@ -1,5 +1,10 @@
 import { useSelector } from 'react-redux';
-import { UseMutationOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  UseMutationOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
 import {
@@ -22,11 +27,19 @@ export const useFetchCheeringPetDelete = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
 
   return useMutation({
-    mutationFn: async (params: { petId: number; cheeringMessageId: number }) => {
+    mutationFn: async (params: {
+      petId: number;
+      cheeringMessageId: number;
+    }) => {
       if (!token) {
         throw new Error('토큰이 없습니다');
       }
-      return fetchCheeringPetDelete(params.petId, token, params.cheeringMessageId);
+      console.log(params);
+      return fetchCheeringPetDelete(
+        params.petId,
+        token,
+        params.cheeringMessageId
+      );
     },
     onSuccess: () => {
       console.log('응원 메시지 삭제 성공');
@@ -100,11 +113,15 @@ export const useFetchPetPost = (
     Cheering,
     Error,
     { content: string; color: string; isAnonymous: boolean }
-  >,
+  >
 ) => {
   const queryClient = useQueryClient();
 
-  return useMutation<Cheering, Error, { content: string; color: string; isAnonymous: boolean }>({
+  return useMutation<
+    Cheering,
+    Error,
+    { content: string; color: string; isAnonymous: boolean }
+  >({
     mutationFn: (data) => {
       return fetchPetPost(data, token, petId, paramsId);
     },
@@ -120,7 +137,7 @@ export const useFetchPetPost = (
 };
 
 export const useUpdatePetIntroduction = (
-  options?: UseMutationOptions<unknown, Error, UpdatePetIntroductionVariables>,
+  options?: UseMutationOptions<unknown, Error, UpdatePetIntroductionVariables>
 ) => {
   const queryClient = useQueryClient();
   const token = useSelector((state: RootState) => state.auth.accessToken);

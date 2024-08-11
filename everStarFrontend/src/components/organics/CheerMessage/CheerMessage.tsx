@@ -78,6 +78,8 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     petId: number,
     cheeringMessageId: number
   ) => {
+    console.log(cheeringMessageId);
+    console.log(petId);
     deleteCheeringPet(
       { petId, cheeringMessageId },
       {
@@ -140,7 +142,6 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     const startIdx = (currentPage - 1) * cardsPerPage;
     const endIdx = startIdx + cardsPerPage;
     const cardsToShow = postItCards.slice(startIdx, endIdx);
-
     return cardsToShow.map((card, index) => (
       <PostItCard
         key={startIdx + index}
@@ -148,7 +149,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
         name={card.name}
         color={card.color as never}
         onDelete={() =>
-          handleDelete(startIdx + index, card.petId, card.cheeringMessageId)
+          handleDelete(startIdx + index, Number(petId), card.cheeringMessageId)
         }
       />
     ));

@@ -123,7 +123,7 @@ export const fetchPetPost = async (
   }
 
   const result = await response.json();
-  console.log('Added pet response:', result);
+  console.log('Added postIt response:', result);
   return result;
 };
 
