@@ -14,15 +14,27 @@ import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j(topic = "elk")
 public class SseService {
 
-	private static final Long TIMEOUT_SEC = 60L * 1000 * 60;
+	private static final Long TIMEOUT_SEC = 5L * 1000 * 60;
 	private final EmitterRepositoryImpl emitterRepository;
 	private final PetRepository petRepository;
+
+	@Transactional
+	public void updateQuestStatusNotification(User user, Long petId) {
+		Pet pet = petRepository.findByUserAndIdAndIsDeleted(user, petId, false)
+			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
+		SseEmitter sseEmitter = emitterRepository.findById(petId)
+			.orElseThrow(() -> new IllegalStateException("Emitter not found"));
+
+		sendToClient(pet, sseEmitter);
+	}
 
 	public SseEmitter connect(User user, Long id) {
 		Pet pet = petRepository.findByUserAndIdAndIsDeleted(user, id, false).
@@ -30,40 +42,56 @@ public class SseService {
 
 		SseEmitter emitter = createEmitter(pet.getId());
 		sendToClient(pet, emitter);
+		log.info("SseEmitter connected success!");
 		return emitter;
 	}
 
 	private SseEmitter createEmitter(Long petId) {
-		SseEmitter emitter = new SseEmitter(TIMEOUT_SEC);
-		emitterRepository.save(petId, emitter);
+		SseEmitter sseEmitter = new SseEmitter(TIMEOUT_SEC);
+		emitterRepository.save(petId, sseEmitter);
 
-		emitter.onCompletion(() -> emitterRepository.deleteByPetId(petId)); // 네트워크 오류
-		emitter.onTimeout(() -> emitterRepository.deleteByPetId(petId)); // 시간 초과
-		emitter.onError(e -> emitterRepository.deleteByPetId(petId)); // 오류
-
-		return emitter;
+		sseEmitter.onCompletion(() -> {
+			log.info("main-sever: sse timeout");
+			sseEmitter.complete();
+			emitterRepository.deleteByPetId(petId);
+		});
+		sseEmitter.onTimeout(() -> {
+			log.info("main-server: sse complete");
+			sseEmitter.complete();
+			emitterRepository.deleteByPetId(petId);
+		}); // 시간 초과
+		sseEmitter.onError(throwable -> {
+			log.info("main-server: sse error");
+			sseEmitter.complete();
+			emitterRepository.deleteByPetId(petId);
+		}); // 오류
+		log.info("main-server: sse create Emitter complete");
+		return sseEmitter;
 	}
 
-	public void sendToClient(Pet pet, SseEmitter emitter) {
-		if (emitter != null) {
+	public void sendToClient(Pet pet, SseEmitter sseEmitter) {
+		if (sseEmitter != null) {
 			try {
 				String data = generateDataMessage(pet);
-				emitter.send(SseEmitter.event()
+				sseEmitter.send(SseEmitter.event()
 					.id(String.valueOf(pet.getId()))
 					.data(data, MediaType.APPLICATION_JSON));
+				log.info("SseEmitter send message success!");
 			} catch (IOException e) {
 				emitterRepository.deleteByPetId(pet.getId());
-				emitter.completeWithError(e);
+				sseEmitter.completeWithError(e);
+				log.info("SseEmitter send message error!");
 			}
 		}
 	}
 
 	private String generateDataMessage(Pet pet) {
-		if (pet.getQuestIndex() == 50) {
-			return "영원별에 메모리얼북이 완성 됐어요.";
-		} else if (pet.getIsQuestCompleted()) {
+		if (pet.getIsQuestCompleted()) {
 			return "퀘스트를 완료했어요.";
+		} else if (pet.getQuestIndex() == 50) {
+			return "영원별에 메모리얼북이 완성 됐어요.";
 		} else {
+			log.info("SseEmitter generate message success!");
 			return pet.getQuestIndex().toString();
 		}
 	}

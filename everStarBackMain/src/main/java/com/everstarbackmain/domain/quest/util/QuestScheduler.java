@@ -5,6 +5,8 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +26,7 @@ public class QuestScheduler {
 	public void scheduleNextDayQuest(User user, Long petId) {
 		LocalTime questReceptionTime = user.getQuestReceptionTime();
 		// LocalDateTime nextQuestTime = LocalDateTime.of(LocalDate.now().plusDays(1), questReceptionTime);
-		LocalDateTime nextQuestTime = LocalDateTime.now().plusSeconds(1);
+		LocalDateTime nextQuestTime = LocalDateTime.now().plusSeconds(15);
 		Date nextQuestDate = Date.from(nextQuestTime.atZone(ZoneId.systemDefault()).toInstant());
 
 		taskScheduler.schedule(() -> questService.changePetQuestCompleted(petId), nextQuestDate);
