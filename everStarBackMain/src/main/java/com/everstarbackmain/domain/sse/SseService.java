@@ -51,19 +51,19 @@ public class SseService {
 		emitterRepository.save(petId, sseEmitter);
 
 		sseEmitter.onCompletion(() -> {
-			log.info("main-sever: sse timeout");
-			sseEmitter.complete();
+			log.info("main-sever: sse completion");
 			emitterRepository.deleteByPetId(petId);
+			sseEmitter.complete();
 		});
 		sseEmitter.onTimeout(() -> {
-			log.info("main-server: sse complete");
-			sseEmitter.complete();
+			log.info("main-server: sse timeout");
 			emitterRepository.deleteByPetId(petId);
+			sseEmitter.complete();
 		}); // 시간 초과
 		sseEmitter.onError(throwable -> {
 			log.info("main-server: sse error");
-			sseEmitter.complete();
 			emitterRepository.deleteByPetId(petId);
+			sseEmitter.complete();
 		}); // 오류
 		log.info("main-server: sse create Emitter complete");
 		return sseEmitter;
@@ -79,7 +79,7 @@ public class SseService {
 				log.info("SseEmitter send message success!");
 			} catch (IOException e) {
 				emitterRepository.deleteByPetId(pet.getId());
-				sseEmitter.completeWithError(e);
+				log.error("main server - error , {}", e.getMessage());
 				log.info("SseEmitter send message error!");
 			}
 		}

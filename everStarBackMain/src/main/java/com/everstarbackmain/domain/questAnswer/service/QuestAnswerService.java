@@ -108,7 +108,6 @@ public class QuestAnswerService {
 	private void plusPetQuestIndexByTextType(User user, Pet pet, Quest quest, QuestAnswer questAnswer) {
 		pet.plusQuestIndex();
 		int petQuestIndex = pet.getQuestIndex();
-		sseService.updateQuestStatusNotification(user, pet.getId());
 
 		if ((petQuestIndex - 1) % 7 == 0) {
 			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex - 1);
