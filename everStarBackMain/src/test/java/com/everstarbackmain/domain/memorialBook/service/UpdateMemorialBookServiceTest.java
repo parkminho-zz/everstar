@@ -172,6 +172,7 @@ class UpdateMemorialBookServiceTest {
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
 		MemorialBook otherMemorialBook = MemorialBook.createMemorialBook(otherPet);
 		MemorialBookTestResultRequestDto requestDto = new MemorialBookTestResultRequestDto(10);
+		ReflectionTestUtils.setField(otherUser, "id", 1L);
 
 		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(otherMemorialBook));
 		BDDMockito.given(petRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(otherPet));
