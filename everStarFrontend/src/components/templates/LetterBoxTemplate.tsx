@@ -4,6 +4,8 @@ import { Glass } from 'components/molecules/Glass/Glass';
 import { LetterBox } from 'components/organics/LetterBox/LetterBox';
 import { useNavigate } from 'react-router-dom';
 import { useFetchLetterPet } from 'hooks/useEarth';
+import bgImage from 'assets/images/bg-login.webp';
+import { SplashTemplate } from './SplashTemplate';
 
 interface Letter {
   id: number;
@@ -33,7 +35,26 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
   const { data, isLoading, isError } = useFetchLetterPet();
 
   // 로딩 및 오류 상태 처리
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return (
+      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+        <img
+          src={bgImage}
+          alt='Background'
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+        <SplashTemplate
+          type='LetterBoxRocket'
+          className='z-10 w-full h-full '
+        />
+      </div>
+    );
+  }
   if (isError) return <div>Error loading data</div>;
 
   const petLetters =

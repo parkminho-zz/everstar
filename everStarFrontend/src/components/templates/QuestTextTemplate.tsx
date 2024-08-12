@@ -6,6 +6,8 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
 import { useNavigate } from 'react-router-dom';
+import bgImage from 'assets/images/bg-login.webp';
+import { SplashTemplate } from './SplashTemplate';
 
 export const QuestTextTemplate = () => {
   const navigate = useNavigate();
@@ -90,7 +92,21 @@ export const QuestTextTemplate = () => {
 
   // 로딩 중이거나 퀘스트 데이터가 없으면 로딩 스피너 또는 빈 화면을 보여줌
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+        <img
+          src={bgImage}
+          alt='Background'
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+        <SplashTemplate type='quest' className='z-10 w-full h-full ' />
+      </div>
+    );
   }
 
   return (
@@ -120,6 +136,7 @@ export const QuestTextTemplate = () => {
           onTextChange={handleTextChange}
           value={text}
           onButtonClick={handleSubmit}
+          onLeftIconClick={() => navigate(-1)}
         />
       </div>
     </div>

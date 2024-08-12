@@ -17,72 +17,71 @@ export interface UserInfoTabProps {
 
 export const UserInfoTab: React.FC<UserInfoTabProps> = ({
   userInfo,
-  smallButtonText,
   onButtonClick,
 }) => {
   return (
     <>
       <InputField
-        label="이름"
+        label='이름'
         showLabel={true}
         showValidationText={false}
         starshow={false}
-        state="disable"
+        state='disable'
         text={userInfo.name}
         showCheckIcon={false}
-        className=""
+        className=''
       />
       <InputField
-        label="생년월일"
+        label='생년월일'
         showLabel={true}
         showValidationText={false}
         starshow={false}
-        state="disable"
+        state='disable'
         text={userInfo.birthdate}
         showCheckIcon={false}
-        className=""
+        className=''
       />
       <InputField
-        label="성별"
+        label='성별'
         showLabel={true}
         showValidationText={false}
         starshow={false}
-        state="disable"
+        state='disable'
         text={userInfo.gender}
         showCheckIcon={false}
-        className=""
+        className=''
       />
       <InputField
-        label="이메일"
+        label='이메일'
         showLabel={true}
         showValidationText={false}
         starshow={false}
-        state="disable"
+        state='disable'
         text={userInfo.email}
         showCheckIcon={false}
-        className=""
+        className=''
       />
       <InputField
-        label="전화번호"
+        label='전화번호'
         showLabel={true}
         showValidationText={false}
         starshow={false}
-        state="default"
+        state='disable'
         text={userInfo.phone}
-        showCheckIcon={true}
-        className=""
-        placeholder="전화번호를 입력해 주세요"
+        showCheckIcon={false}
+        className=''
+        placeholder='전화번호를 입력해 주세요'
       />
-      <div className="flex justify-end w-full">
+      <div className='flex justify-between w-full'>
         <PrimaryButton
-          theme="white"
-          size="small"
+          theme='white'
+          size='large'
           onClick={onButtonClick}
           disabled={false}
           icon={null}
-          hug={true}
+          hug={false}
         >
-          {smallButtonText}
+          로그아웃
         </PrimaryButton>
       </div>
     </>

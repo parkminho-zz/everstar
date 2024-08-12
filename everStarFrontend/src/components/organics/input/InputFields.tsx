@@ -16,6 +16,7 @@ interface InputFieldProps {
   placeholder?: string;
   readOnlyState?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void; // onKeyDown 핸들러 추가
 }
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -30,6 +31,7 @@ export const InputField: React.FC<InputFieldProps> = ({
   placeholder,
   readOnlyState,
   onChange,
+  onKeyDown,
 }) => {
   const [inputState, setInputState] = useState(state);
   const [inputText, setInputText] = useState(text);
@@ -66,9 +68,16 @@ export const InputField: React.FC<InputFieldProps> = ({
   }
 
   return (
-    <div className={`w-80 flex flex-col items-start gap-2 relative ${className}`}>
+    <div
+      className={`w-80 flex flex-col items-start gap-2 relative ${className}`}
+    >
       {showLabel && (
-        <Lable className='!flex-[0_0_auto]' prop={label} show={starshow} font='default' />
+        <Lable
+          className='!flex-[0_0_auto]'
+          prop={label}
+          show={starshow}
+          font='default'
+        />
       )}
       <div
         className={`flex items-center px-4 py-2 relative w-full flex-col rounded-xl gap-2 self-stretch h-14 overflow-hidden justify-center
@@ -84,13 +93,17 @@ export const InputField: React.FC<InputFieldProps> = ({
             onFocus={handleFocus}
             onBlur={handleBlur}
             onChange={handleChange}
+            onKeyDown={onKeyDown}
             className={`flex-1 ${inputState === 'disable' ? 'bg-[#f0f2f6] text-[#c3c9d3]' : 'bg-white text-black'} border-none outline-none`}
             disabled={inputState === 'disable'}
             placeholder={placeholder}
             readOnly={readOnlyState}
           />
           {showCheckIcon && (
-            <CheckIcon size={24} color={inputState === 'done' ? 'orange' : 'gray'} />
+            <CheckIcon
+              size={24}
+              color={inputState === 'done' ? 'orange' : 'gray'}
+            />
           )}
         </div>
       </div>
@@ -112,12 +125,15 @@ InputField.propTypes = {
   showValidationText: PropTypes.bool.isRequired,
   starshow: PropTypes.bool.isRequired,
   state: PropTypes.oneOf(['default', 'focus', 'disable', 'done', 'error'])
-    .isRequired as PropTypes.Validator<'default' | 'focus' | 'disable' | 'done' | 'error'>,
+    .isRequired as PropTypes.Validator<
+    'default' | 'focus' | 'disable' | 'done' | 'error'
+  >,
   text: PropTypes.string.isRequired,
   className: PropTypes.string,
   showCheckIcon: PropTypes.bool.isRequired,
   placeholder: PropTypes.string,
   onChange: PropTypes.func,
+  onKeyDown: PropTypes.func,
 };
 
 export type { InputFieldProps };

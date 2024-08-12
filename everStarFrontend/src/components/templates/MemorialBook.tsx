@@ -10,12 +10,15 @@ import { MemorialBookDetailsResponse } from 'api/memorialBookApi';
 import { useFetchMemorialBookById } from 'hooks/useMemorialBooks';
 import { useParams } from 'react-router-dom';
 import { MemorialBookDiaryModal } from 'components/organics/MemorialBook/MemorialBookDiaryModal';
+import bgImage from 'assets/images/bg-login.webp';
+import { SplashTemplate } from './SplashTemplate';
 
 const parseMemorialBookData = (
   data: MemorialBookDetailsResponse,
-  avatarUrl: string | undefined,
+  avatarUrl: string | undefined
 ): PageType[] => {
-  const { quests, questAnswers, aiAnswers, diaries, sentimentAnalysis, pet } = data;
+  const { quests, questAnswers, aiAnswers, diaries, sentimentAnalysis, pet } =
+    data;
   const pages: PageType[] = [];
 
   pages.push({
@@ -41,7 +44,9 @@ const parseMemorialBookData = (
   });
 
   quests.forEach((quest) => {
-    const questAnswer = questAnswers.find((answer) => answer.questId === quest.id);
+    const questAnswer = questAnswers.find(
+      (answer) => answer.questId === quest.id
+    );
     const aiAnswer = aiAnswers.find((answer) => answer.questId === quest.id);
 
     if (quest.type === 'TEXT' && questAnswer && aiAnswer) {
@@ -96,12 +101,17 @@ const loadImages = (element: HTMLElement) => {
   return Promise.all(promises);
 };
 
-export const MemorialBook: React.FC<{ avatarUrl?: string }> = ({ avatarUrl }) => {
+export const MemorialBook: React.FC<{ avatarUrl?: string }> = ({
+  avatarUrl,
+}) => {
   const params = useParams<{ pet?: string; memorialBookId?: string }>();
   const petId = params.pet ? parseInt(params.pet, 10) : 0;
-  const memorialBookId = params.memorialBookId ? parseInt(params.memorialBookId, 10) : 0;
+  const memorialBookId = params.memorialBookId
+    ? parseInt(params.memorialBookId, 10)
+    : 0;
 
   const memorialBookRef = useRef<HTMLDivElement>(null);
+
   const {
     data: memorialBookDetails,
     isLoading,
@@ -115,7 +125,10 @@ export const MemorialBook: React.FC<{ avatarUrl?: string }> = ({ avatarUrl }) =>
   // 새로운 useEffect 추가: avatarUrl이 변경될 때 강제로 리렌더링
   useEffect(() => {
     if (memorialBookDetails) {
-      const parsedPages = parseMemorialBookData(memorialBookDetails.data, avatarUrl);
+      const parsedPages = parseMemorialBookData(
+        memorialBookDetails.data,
+        avatarUrl
+      );
       setPages(parsedPages);
     }
   }, [memorialBookDetails, avatarUrl]);
@@ -174,18 +187,31 @@ export const MemorialBook: React.FC<{ avatarUrl?: string }> = ({ avatarUrl }) =>
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+        <img
+          src={bgImage}
+          alt='Background'
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+        <SplashTemplate type='book' className='z-10 w-full h-full ' />
+      </div>
+    );
   }
-
   return (
     <div>
-      <div className="relative z-10 my-4" ref={memorialBookRef}>
+      <div className='relative z-10 my-4' ref={memorialBookRef}>
         <OrganicsMemorialBook pages={pages} />
       </div>
-      <div className="relative z-10 flex justify-center m-4 space-x-4">
+      <div className='relative z-10 flex justify-center m-4 space-x-4'>
         <PrimaryButton
-          theme="white"
-          size="medium"
+          theme='white'
+          size='medium'
           onClick={handleDownloadPdf}
           disabled={false}
           icon={null}
@@ -193,8 +219,8 @@ export const MemorialBook: React.FC<{ avatarUrl?: string }> = ({ avatarUrl }) =>
           PDF로 만들기
         </PrimaryButton>
         <PrimaryButton
-          theme="white"
-          size="medium"
+          theme='white'
+          size='medium'
           onClick={handleWriteDiary}
           disabled={false}
           icon={null}

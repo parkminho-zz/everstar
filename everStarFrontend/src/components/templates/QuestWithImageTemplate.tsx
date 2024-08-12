@@ -8,12 +8,15 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
 import { useNavigate } from 'react-router-dom';
+import bgImage from 'assets/images/bg-login.webp';
+import { SplashTemplate } from './SplashTemplate';
 
 export const QuestWithImageTemplate = () => {
   // headerText와 letterCardMessage를 오버라이드
   const navigate = useNavigate();
   const [text, setText] = useState('');
   const [image, setImage] = useState<File | null>();
+  const [imageText, setImageText] = useState('이미지 추가');
   const [questContent, setQuestContent] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -23,7 +26,11 @@ export const QuestWithImageTemplate = () => {
 
   useEffect(() => {
     getQuest();
+
     console.log('이미지!!!!: ', image);
+    if (image) {
+      setImageText(image.name);
+    }
   }, [image]);
 
   const getQuest = async () => {
@@ -48,7 +55,6 @@ export const QuestWithImageTemplate = () => {
       setLoading(false); // 데이터 로딩 후 로딩 상태 업데이트
     }
   };
-
 
   const answerImageQuestion = async () => {
     if (text && accessToken && petId && image) {
@@ -122,7 +128,24 @@ export const QuestWithImageTemplate = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+        <img
+          src={bgImage}
+          alt='Background'
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+        <SplashTemplate
+          type='LetterBoxRocket'
+          className='z-10 w-full h-full '
+        />
+      </div>
+    );
   }
 
   return (
@@ -146,13 +169,14 @@ export const QuestWithImageTemplate = () => {
           letterCardMessage={questContent}
           centered={true}
           textboxLabel='답변'
-          largeButtonText='이미지 추가'
+          largeButtonText={imageText}
           smallButtonText='작성완료'
           showPrimaryButton={true}
           onTextChange={handleTextChange}
           value={text}
           onButtonClick={handleSubmit}
           onButtonClick2={handleButtonClick2}
+          onLeftIconClick={() => navigate(-1)}
         />
         <input
           type='file'
