@@ -31,7 +31,7 @@ export const ProgressBar: React.FC<Props> = ({ fill, className }) => {
 
   return (
     <div className={`flex flex-col items-start ${className}`}>
-      <div className='w-60 bg-[#edededcc] relative h-1'>
+      <div className="w-full bg-[#edededcc] relative h-1">
         <div className={`h-1 ${getFillColor()}`} style={{ width }} />
       </div>
     </div>

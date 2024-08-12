@@ -102,10 +102,15 @@ export const MemorialBook: React.FC<{ avatarUrl?: string }> = ({ avatarUrl }) =>
   const memorialBookId = params.memorialBookId ? parseInt(params.memorialBookId, 10) : 0;
 
   const memorialBookRef = useRef<HTMLDivElement>(null);
-  const { data: memorialBookDetails, isLoading } = useFetchMemorialBookById(petId, memorialBookId);
+  const {
+    data: memorialBookDetails,
+    isLoading,
+    refetch,
+  } = useFetchMemorialBookById(petId, memorialBookId); // refetch 추가
 
   const [pages, setPages] = useState<PageType[]>([]);
   const [isDiaryModalOpen, setIsDiaryModalOpen] = useState(false);
+  const [isDiaryUpdated, setIsDiaryUpdated] = useState(false); // 새로운 상태 추가
 
   // 새로운 useEffect 추가: avatarUrl이 변경될 때 강제로 리렌더링
   useEffect(() => {
@@ -113,19 +118,16 @@ export const MemorialBook: React.FC<{ avatarUrl?: string }> = ({ avatarUrl }) =>
       const parsedPages = parseMemorialBookData(memorialBookDetails.data, avatarUrl);
       setPages(parsedPages);
     }
-  }, [memorialBookDetails, avatarUrl]); // avatarUrl이 변경될 때마다 다시 데이터를 파싱
+  }, [memorialBookDetails, avatarUrl]);
 
-  // avatarUrl이 변경될 때 강제로 리렌더링 트리거
+  // diary 업데이트 감지
   useEffect(() => {
-    if (memorialBookRef.current) {
-      memorialBookRef.current.style.opacity = '0';
-      setTimeout(() => {
-        if (memorialBookRef.current) {
-          memorialBookRef.current.style.opacity = '1';
-        }
-      }, 0);
+    if (isDiaryUpdated) {
+      refetch(); // 데이터 다시 불러오기
+      alert('저장이 완료되었어요.');
+      setIsDiaryUpdated(false); // 상태 초기화
     }
-  }, [avatarUrl]);
+  }, [isDiaryUpdated, refetch]);
 
   const handleDownloadPdf = async () => {
     if (memorialBookRef.current) {
@@ -201,7 +203,11 @@ export const MemorialBook: React.FC<{ avatarUrl?: string }> = ({ avatarUrl }) =>
         </PrimaryButton>
       </div>
 
-      <MemorialBookDiaryModal isOpen={isDiaryModalOpen} onClose={handleCloseDiaryModal} />
+      <MemorialBookDiaryModal
+        isOpen={isDiaryModalOpen}
+        onClose={handleCloseDiaryModal}
+        onSuccess={() => setIsDiaryUpdated(true)} // 일기 작성 후 상태 업데이트
+      />
     </div>
   );
 };

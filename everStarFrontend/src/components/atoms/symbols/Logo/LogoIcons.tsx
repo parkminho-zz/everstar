@@ -14,12 +14,14 @@ interface LogoIconsProps {
     | 'small-earth'
     | 'small-earth-img'
     | 'vertical-earth'
+    | 'middle-earth' // 추가된 옵션
     | 'small-star'
     | 'small-star-img'
     | 'star'
     | 'vertical-star'
-    | 'earth-text' // 추가된 부분
-    | 'star-text'; // 추가된 부분
+    | 'middle-star' // 추가된 옵션
+    | 'earth-text'
+    | 'star-text';
   onClick?: () => void;
   className?: string;
   onMouseEnter?: () => void;
@@ -31,10 +33,12 @@ const iconMap = {
   'small-earth': SmallEarthIcon,
   'small-earth-img': SmallEarthImg,
   'vertical-earth': VerticalEarthIcon,
+  'middle-earth': EarthIcon, // middle-earth는 earth를 사용하되 크기만 조절
   'small-star': SmallStarIcon,
   'small-star-img': SmallStarImg,
   star: StarIcon,
   'vertical-star': VerticalStarIcon,
+  'middle-star': StarIcon, // middle-star는 star를 사용하되 크기만 조절
 };
 
 export const LogoIcons: React.FC<LogoIconsProps> = ({
@@ -91,7 +95,9 @@ export const LogoIcons: React.FC<LogoIconsProps> = ({
       );
     } else {
       const IconComponent = iconMap[variant as keyof typeof iconMap];
-      return <IconComponent className={className} />;
+      const sizeStyle = variant.startsWith('middle') ? { width: '100px', height: '50px' } : {};
+
+      return <IconComponent className={className} style={sizeStyle} />;
     }
   };
 
