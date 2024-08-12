@@ -6,9 +6,15 @@ import { Textbox } from 'components/molecules/input/Textbox';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { Modal } from 'components/molecules/Modal/Modal';
 
-export const MemorialBookDiaryModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
+// 여기서 onSuccess를 추가하여 prop 타입을 정의합니다.
+export const MemorialBookDiaryModal: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  onSuccess?: () => void;
+}> = ({
   isOpen,
   onClose,
+  onSuccess, // onSuccess prop 추가
 }) => {
   const { pet, memorialBookId } = useParams<{ pet: string; memorialBookId: string }>();
   const navigate = useNavigate();
@@ -21,6 +27,11 @@ export const MemorialBookDiaryModal: React.FC<{ isOpen: boolean; onClose: () => 
     onSuccess: () => {
       navigate(`/everstar/${pet}/memorialbook/${memorialBookId}`);
       onClose();
+
+      if (onSuccess) {
+        // onSuccess 콜백이 있으면 호출
+        onSuccess();
+      }
     },
     onError: (error) => {
       alert(error.message); // 에러 메시지를 alert로 출력
@@ -48,11 +59,6 @@ export const MemorialBookDiaryModal: React.FC<{ isOpen: boolean; onClose: () => 
   };
 
   const handleSaveDiary = () => {
-    console.log('petId:', pet);
-    console.log('memorialBookId:', memorialBookId);
-    console.log('title:', title);
-    console.log('content:', content);
-
     if (pet && memorialBookId && title && content) {
       createDiaryMutation.mutate({
         petId: parseInt(pet, 10),
@@ -74,7 +80,7 @@ export const MemorialBookDiaryModal: React.FC<{ isOpen: boolean; onClose: () => 
           label="제목"
           showLabel={true}
           showValidationText={false}
-          starshow={false}
+          starshow={true}
           state="default"
           text={title}
           placeholder="제목을 입력해주세요."

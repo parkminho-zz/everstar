@@ -4,6 +4,7 @@ import { ReactComponent as Postit } from 'assets/symbols/postit.svg';
 interface PostitIconsProps {
   variant: 'postit' | 'postit-text';
   text?: string;
+  size?: number; // 아이콘의 크기를 설정할 수 있는 prop
   onClick?: () => void;
   className?: string;
   onMouseEnter?: () => void;
@@ -13,6 +14,7 @@ interface PostitIconsProps {
 export const PostitIcons: React.FC<PostitIconsProps> = ({
   variant,
   text,
+  size = 24, // 기본 크기를 24px로 설정
   onClick,
   className,
   onMouseEnter,
@@ -24,6 +26,8 @@ export const PostitIcons: React.FC<PostitIconsProps> = ({
         position: 'relative',
         display: 'inline-block',
         textAlign: 'center',
+        width: `${size}px`, // Div의 크기를 아이콘 크기에 맞게 조정
+        height: `${size}px`,
       }}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
@@ -34,16 +38,16 @@ export const PostitIcons: React.FC<PostitIconsProps> = ({
         <div
           style={{
             position: 'relative',
-            width: '24px',
-            height: '24px',
+            width: `${size}px`,
+            height: `${size}px`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             fontFamily: "'Noto_Sans-Bold',Helvetica",
             fontWeight: 'bold',
-            fontSize: '8px',
+            fontSize: `${size / 3}px`, // 텍스트 크기도 아이콘 크기에 맞게 조정
             color: 'black',
-            lineHeight: '8px',
+            lineHeight: `${size / 3}px`,
             textAlign: 'center',
             whiteSpace: 'nowrap',
           }}
@@ -51,7 +55,12 @@ export const PostitIcons: React.FC<PostitIconsProps> = ({
           {text || '텍스트'}
         </div>
       ) : (
-        <Postit className="w-6 h-6" />
+        <Postit
+          style={{
+            width: `${size}px`, // SVG 아이콘의 크기 조정
+            height: `${size}px`,
+          }}
+        />
       )}
     </div>
   );

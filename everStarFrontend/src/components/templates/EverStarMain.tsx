@@ -4,6 +4,7 @@ import { ViewMemorialBook } from 'components/organics/ViewMemorialBook/ViewMemor
 import { useNavigate } from 'react-router-dom';
 import { useUpdateMemorialBookOpenStatus } from 'hooks/useMemorialBooks';
 import { DepressionSurvey } from 'components/organics/DepressionSurvey/DepressionSurvey';
+import { MainActionComponent } from 'components/organics/MainActionComponent/MainActionComponent'; // MainActionComponent 임포트
 
 interface EverStarMainProps {
   petProfile: {
@@ -82,7 +83,6 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
         <DepressionSurvey onSubmitSuccess={handleSurveySubmitSuccess} />
       )}
       <ProgressCard
-        title={petProfile.name}
         fill={petProfile.questIndex}
         buttonTheme='white'
         buttonSize='large'
@@ -90,9 +90,16 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
         buttonText='지구별로 가기'
         buttonIcon='SmallEarthImg'
         onButtonClick={handleButtonClick}
-        showMusicControl={false}
         className=''
       />
+
+      {/* MainActionComponent 추가 */}
+      <MainActionComponent
+        type='everstar' // 예시로 'everstar' 타입을 사용
+        profileImageUrl={petProfile.avatarUrl}
+        fill={petProfile.questIndex} // ProgressCard와 동일한 fill 값을 사용
+      />
+
       <div className='flex flex-col items-center mt-20'>
         <ViewMemorialBook
           onClick={handleViewMemorialBookClick}
