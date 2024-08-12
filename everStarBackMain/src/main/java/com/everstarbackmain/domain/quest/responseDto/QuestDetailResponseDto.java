@@ -16,11 +16,12 @@ public class QuestDetailResponseDto {
 	private String content;
 	private String type;
 
-	public static QuestDetailResponseDto createQuestDetailResponseDto(Quest quest) {
+	public static QuestDetailResponseDto createQuestDetailResponseDto(Quest quest, String petName) {
 		return QuestDetailResponseDto.builder()
 			.id(quest.getId())
-			.content(quest.getContent())
+			.content(quest.getContent().replace("(이름)", petName))
 			.type(quest.getType().getType())
 			.build();
 	}
+
 }
