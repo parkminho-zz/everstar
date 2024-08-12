@@ -1,6 +1,5 @@
 package com.everstarbackmain.domain.diary.model;
 
-import com.everstarbackmain.domain.diary.requestDto.CreateDiaryRequestDto;
 import com.everstarbackmain.domain.memorialBook.model.MemorialBook;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
 

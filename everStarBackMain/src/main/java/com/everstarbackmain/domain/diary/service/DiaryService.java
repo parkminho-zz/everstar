@@ -45,7 +45,6 @@ public class DiaryService {
 			throw new ExceptionResponse(CustomException.NOT_ACTIVATED_MEMORIAL_BOOK_EXCEPTION);
 		}
 
-		// 제목과 내용을 필터링
 		String filteredTitle = filterBadWords(createDiaryRequestDto.getTitle());
 		String filteredContent = filterBadWords(createDiaryRequestDto.getContent());
 
@@ -60,7 +59,7 @@ public class DiaryService {
 	}
 
 	private String filterBadWords(String content) {
-		BadWordFiltering badWordFiltering = new BadWordFiltering("♡");
+		BadWordFiltering badWordFiltering = new BadWordFiltering();
 		return badWordFiltering.change(content, new String[] {"_", "-", "1", " ", ".", "@"});
 	}
 }
