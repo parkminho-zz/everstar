@@ -38,7 +38,7 @@ public class QuestService {
 			throw new ExceptionResponse(CustomException.NOT_EQUAL_PET_QUEST_INDEX_AND_QUEST_NUMBER);
 		}
 
-		return QuestDetailResponseDto.createQuestDetailResponseDto(quest);
+		return QuestDetailResponseDto.createQuestDetailResponseDto(quest, pet.getName());
 	}
 
 	@Transactional

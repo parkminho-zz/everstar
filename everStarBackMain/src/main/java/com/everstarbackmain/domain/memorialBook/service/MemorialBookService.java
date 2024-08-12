@@ -138,13 +138,15 @@ public class MemorialBookService {
 		SentimentAnalysis sentimentAnalysis, List<Quest> quests, List<QuestAnswer> questAnswers,
 		List<AiAnswer> aiAnswers, List<Diary> diaries) {
 
+		String petName = pet.getName();
+
 		return MemorialBookDetailResponseDto.builder()
 			.memorialBook(MemorialBookInfoResponseDto.createMemorialBookDetailResponseDto(memorialBook))
 			.pet(PetDetailResponseDto.createPetDetailResponseDto(pet))
 			.sentimentAnalysis(
 				SentimentAnalysisDetailResponseDto.createSentimentAnalysisDetailResponseDto(sentimentAnalysis))
 			.quests(quests.stream()
-				.map(QuestDetailResponseDto::createQuestDetailResponseDto)
+				.map(quest -> QuestDetailResponseDto.createQuestDetailResponseDto(quest, petName))
 				.collect(Collectors.toList()))
 			.questAnswers(questAnswers.stream()
 				.map(QuestAnswerDetailResponseDto::createQuestAnswerDetailResponseDto)

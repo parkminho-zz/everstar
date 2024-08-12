@@ -61,7 +61,8 @@ public class OpenAiClient {
 	public String writePetLetterAnswer(UserLetter userLetter) {
 		String prompt = createPetLetterAnswerPrompt(userLetter);
 
-		ChatGPTRequest request = new ChatGPTRequest(openAiConfig.getModel(), prompt);
+		ChatGPTRequest request = ChatGPTRequest.createChatGPTRequest(openAiConfig.getModel(),
+			String.format(OpenAiPrompt.PET_LETTER_SYSTEM_PROMPT.getPrompt(), userLetter.getPet().getSpecies()), prompt);
 		ChatGPTResponse response = restTemplate.postForObject(openAiConfig.getApiUrl(), request, ChatGPTResponse.class);
 
 		if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
@@ -78,7 +79,8 @@ public class OpenAiClient {
 		String contents = combineLetters(userLetters);
 		String prompt = createPetLetterPrompt(contents, pet);
 
-		ChatGPTRequest request = new ChatGPTRequest(openAiConfig.getModel(), prompt);
+		ChatGPTRequest request = ChatGPTRequest.createChatGPTRequest(openAiConfig.getModel(),
+			String.format(OpenAiPrompt.PET_LETTER_SYSTEM_PROMPT.getPrompt(), pet.getSpecies()), prompt);
 		ChatGPTResponse response = restTemplate.postForObject(openAiConfig.getApiUrl(), request, ChatGPTResponse.class);
 
 		if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
@@ -200,7 +202,7 @@ public class OpenAiClient {
 
 	private String createPetTextToImageAnswerPrompt(Pet pet, Quest quest, QuestAnswer questAnswer) {
 		String prompt = String.format(OpenAiPrompt.WRITE_PET_TEXT_TO_IMAGE_ANSWER_PROMPT.getPrompt(),
-			quest.getContent(), questAnswer.getContent(), pet.getSpecies());
+			questAnswer.getContent(), pet.getSpecies());
 		return prompt;
 	}
 
@@ -225,20 +227,25 @@ public class OpenAiClient {
 		contents.add(Content.createImageContent(imageUrl));
 
 		TextImageGPTRequest request = new TextImageGPTRequest(openAiConfig.getModel(), contents);
-		ChatGPTResponse response = restTemplate.postForObject(openAiConfig.getApiUrl(), request, ChatGPTResponse.class);
-
-		if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
-			throw new ExceptionResponse(CustomException.OPENAI_API_EXCEPTION);
-		}
-
-		String result = response.getChoices().get(0).getMessage().getContent();
-		log.info("main server - Dalle 이미지 생성용 프롬프트: {}", result);
-		Pattern pattern = Pattern.compile("\"([^\"]*)\"");
-		Matcher matcher = pattern.matcher(result);
 		String extractedString = "";
-		if (matcher.find()) {
-			extractedString = matcher.group(1);
-			log.info("main server - 추출된 Dalle 이미지 생성용 프롬프트: {}", extractedString);
+
+		while (true) {
+			ChatGPTResponse response = restTemplate.postForObject(openAiConfig.getApiUrl(), request, ChatGPTResponse.class);
+
+			if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
+				throw new ExceptionResponse(CustomException.OPENAI_API_EXCEPTION);
+			}
+
+			String result = response.getChoices().get(0).getMessage().getContent();
+			log.info("main server - Dalle 이미지 생성용 프롬프트: {}", result);
+			Pattern pattern = Pattern.compile("\"([^\"]*)\"");
+			Matcher matcher = pattern.matcher(result);
+
+			if (matcher.find()) {
+				extractedString = matcher.group(1);
+				log.info("main server - 추출된 Dalle 이미지 생성용 프롬프트: {}", extractedString);
+				break;
+			}
 		}
 
 		return extractedString;
