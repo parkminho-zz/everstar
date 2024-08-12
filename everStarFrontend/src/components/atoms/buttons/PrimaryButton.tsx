@@ -1,5 +1,8 @@
 import React from 'react';
-import { ArrowIcon, ArrowIconProps } from 'components/atoms/icons/Arrow/ArrowIcon';
+import {
+  ArrowIcon,
+  ArrowIconProps,
+} from 'components/atoms/icons/Arrow/ArrowIcon';
 import { Lable } from 'components/atoms/texts/Lable';
 
 type PrimaryButtonTheme = 'focus' | 'hover' | 'white';
@@ -22,7 +25,8 @@ interface IPrimaryButtonProps {
 const focus = 'bg-mainprimary text-greyscalewhite hover:bg-bgorange';
 const white = 'bg-white text-mainsecondary hover:bg-bgorange';
 const hover = 'bg-bgorange text-mainsecondary hover:bg-mainprimary';
-const disabledStyle = 'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
+const disabledStyle =
+  'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60';
 const shadowStyle = 'shadow-[0px_4px_8px_#dbe5ec99,0px_0px_1px_1px_#dbe5ec99]';
 
 const color: Record<PrimaryButtonTheme, string> = {
@@ -49,7 +53,7 @@ export function PrimaryButton({
   children = '',
   onClick,
   disabled,
-  icon = <ArrowIcon color="black" direction="right" size={24} />,
+  icon = <ArrowIcon color='black' direction='right' size={24} />,
   hug = false,
   label,
   showLabelStar = false,
@@ -98,7 +102,12 @@ export function PrimaryButton({
   return (
     <div className={`flex flex-col items-start ${fullWidth ? 'w-full' : ''}`}>
       {label && (
-        <Lable prop={label} show={showLabelStar} font="default" className="mb-1 text-left" />
+        <Lable
+          prop={label}
+          show={showLabelStar}
+          font='default'
+          className='mb-1 text-left'
+        />
       )}
       <button
         id={id}
@@ -106,8 +115,10 @@ export function PrimaryButton({
         disabled={disabled}
         onClick={onClick}
       >
-        <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>{children}</span>
-        {icon && <span className="ml-auto">{renderIcon()}</span>}
+        <span className={`flex-grow mx-auto text-center ${getTextStyle()}`}>
+          {children}
+        </span>
+        {icon && <span className='ml-auto'>{renderIcon()}</span>}
       </button>
     </div>
   );

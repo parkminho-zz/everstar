@@ -66,9 +66,9 @@ export const LetterboxIcons: React.FC<LetterboxIconsProps> = ({
             <svg
               width={size / 1.5} // Alert 아이콘의 크기를 size에 비례하여 조정
               height={size / 1.5}
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+              viewBox='0 0 16 16'
+              fill='none'
+              xmlns='http://www.w3.org/2000/svg'
               style={{
                 position: 'absolute',
                 top: 0,
@@ -76,15 +76,15 @@ export const LetterboxIcons: React.FC<LetterboxIconsProps> = ({
                 transform: `translate(${size / 4}px, -${size / 4}px)`, // 크기에 맞게 위치 조정
               }}
             >
-              <circle cx="8" cy="8" r="8" fill="#FF9078" />
+              <circle cx='8' cy='8' r='8' fill='#FF9078' />
               <text
-                x="8"
-                y="8"
-                textAnchor="middle"
-                fill="#1F2329"
+                x='8'
+                y='8'
+                textAnchor='middle'
+                fill='#1F2329'
                 fontSize={`${size / 5}px`} // 텍스트 크기 조정
-                fontFamily="Arial"
-                dy=".3em"
+                fontFamily='Arial'
+                dy='.3em'
               >
                 {number}
               </text>

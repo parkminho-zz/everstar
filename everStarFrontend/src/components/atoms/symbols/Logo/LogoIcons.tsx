@@ -95,7 +95,9 @@ export const LogoIcons: React.FC<LogoIconsProps> = ({
       );
     } else {
       const IconComponent = iconMap[variant as keyof typeof iconMap];
-      const sizeStyle = variant.startsWith('middle') ? { width: '100px', height: '50px' } : {};
+      const sizeStyle = variant.startsWith('middle')
+        ? { width: '100px', height: '50px' }
+        : {};
 
       return <IconComponent className={className} style={sizeStyle} />;
     }
