@@ -76,7 +76,7 @@ public class WriteLetterServiceTest {
 
 		requestDto = new WriteLetterRequestDto("dd");
 		noImageRequestDto = new WriteLetterRequestDto("dd");
-		userLetter = UserLetter.writeLetterHasImage(pet, requestDto, "imgUrl");
+		userLetter = UserLetter.writeLetterHasImage(pet, "filteredContent", "imgUrl");
 	}
 
 	@Test

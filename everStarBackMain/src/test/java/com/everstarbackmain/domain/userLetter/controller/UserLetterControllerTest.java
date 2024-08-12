@@ -85,7 +85,7 @@ public class UserLetterControllerTest {
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
 
 		requestDto = new WriteLetterRequestDto("dd");
-		userLetter = UserLetter.writeLetterHasImage(pet, requestDto, "image");
+		userLetter = UserLetter.writeLetterHasImage(pet, "filteredContent", "image");
 	}
 
 	@Test
