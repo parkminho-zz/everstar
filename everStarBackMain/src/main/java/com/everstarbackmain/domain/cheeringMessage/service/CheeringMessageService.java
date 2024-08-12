@@ -57,7 +57,7 @@ public class CheeringMessageService {
 	}
 
 	private String filterBadWords(String content) {
-		BadWordFiltering badWordFiltering = new BadWordFiltering("♡");
+		BadWordFiltering badWordFiltering = new BadWordFiltering();
 		return badWordFiltering.change(content, new String[] {"_", "-", "1", " ", ".", "@"});
 	}
 
