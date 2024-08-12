@@ -106,9 +106,8 @@ public class PetService {
 		pet.updateProfileImage(profileImageUrl);
 	}
 
-	// 리팩토링일 위한 별도 매서드 분리
 	private String filterBadWords(String content) {
-		BadWordFiltering badWordFiltering = new BadWordFiltering("♡");
+		BadWordFiltering badWordFiltering = new BadWordFiltering();
 		return badWordFiltering.change(content, new String[] {"_", "-", "1", " ", ".", "@"});
 	}
 
