@@ -29,6 +29,7 @@ export interface MainActionComponentProps {
   name?: string;
   age?: number;
   description?: string;
+  onProfileClick?: () => void; // 프로필 클릭 핸들러를 선택적으로 설정
 }
 
 export const MainActionComponent: React.FC<MainActionComponentProps> = ({
@@ -42,6 +43,7 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
   name = '',
   age,
   description = '',
+  onProfileClick,
 }) => {
   const navigate = useNavigate();
   const params = useParams();
@@ -50,7 +52,6 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
 
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
-
   // Quest state and handlers
   const [quest, setQuest] = useState<string>('');
 
@@ -125,6 +126,7 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
         return `${quest}번째 퀘스트가 도착했습니다`;
     }
   };
+
   useEffect(() => {
     const EventSource = EventSourcePolyfill || NativeEventSource;
 
@@ -153,11 +155,6 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
       eventSource.close();
     };
   }, [quest, petId, accessToken]);
-  useEffect(() => {
-    // Example to set quest, replace this with actual event source logic
-    const fakeQuestId = '1';
-    setQuest(fakeQuestId);
-  }, []);
 
   return (
     <div className='main-container w-full h-full bg-[#ffffff6b] rounded-[20px] overflow-hidden border-[0.5px] border-solid border-white shadow-[0px_4px_4px_#00000040,0px_4px_4px_#00000040] [-webkit-backdrop-filter:blur(4px)_brightness(100%)]'>
@@ -190,7 +187,7 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
                   <LetterIcons
                     variant='letter'
                     size={iconSize}
-                    className='mb-2 pointer-events-none' // 추가된 부분
+                    className='mb-2 pointer-events-none'
                   />
                   <span className='font-kor-h-h2 text-greyscaleblack-100 font-bold pointer-events-none'>
                     편지쓰기
@@ -201,7 +198,7 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
                   <PostitIcons
                     variant='postit'
                     size={iconSize}
-                    className='mb-2 pointer-events-none' // 추가된 부분
+                    className='mb-2 pointer-events-none'
                   />
                   <span className='font-kor-h-h2 text-greyscaleblack-100 font-bold pointer-events-none'>
                     응원메시지
@@ -220,7 +217,7 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
                   <LetterboxIcons
                     variant='letterbox'
                     size={iconSize}
-                    className='mb-2 pointer-events-none' // 추가된 부분
+                    className='mb-2 pointer-events-none'
                   />
                   <span className='font-kor-h-h2 text-greyscaleblack-100 font-bold pointer-events-none'>
                     편지함
@@ -231,7 +228,7 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
                   <RocketIcons
                     variant='rocket'
                     size={iconSize}
-                    className='mb-2 pointer-events-none' // 추가된 부분
+                    className='mb-2 pointer-events-none'
                   />
                   <span className='font-kor-h-h2 text-greyscaleblack-100 font-bold pointer-events-none'>
                     탐험하기
@@ -242,13 +239,15 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
           </div>
 
           {type === 'everstar' ? (
-            <div className='flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-lg cursor-pointer hover:bg-bgorange mt-4 w-full'>
+            <div
+              className='flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-lg cursor-pointer hover:bg-bgorange mt-4 w-full'
+              onClick={onProfileClick} // 프로필 클릭 시 전달된 핸들러 호출
+            >
               <Avatar
                 iconSize={iconSize}
                 src={avatarSrc}
                 className='mr-4 pointer-events-none'
-              />{' '}
-              {/* 추가된 부분 */}
+              />
               <div className='flex flex-col items-start'>
                 <span className='font-kor-h-h2 text-greyscaleblack-100 font-bold pointer-events-none'>
                   {name} 영원별입니다.
@@ -270,14 +269,13 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
           ) : (
             <button
               className='flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-lg cursor-pointer hover:bg-bgorange mt-4 w-full'
-              onClick={handleMypageClick}
+              onClick={handleMypageClick} // 지구별에서는 마이페이지 클릭 시 전달된 핸들러 호출
             >
               <Avatar
                 iconSize={iconSize}
                 src={avatarSrc}
                 className='pointer-events-none'
-              />{' '}
-              {/* 추가된 부분 */}
+              />
               <span className='font-kor-h-h2 text-greyscaleblack-100 font-bold mt-2 pointer-events-none'>
                 마이페이지
               </span>
@@ -316,14 +314,6 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
                 >
                   {getButtonText()}
                 </PrimaryButton>
-                {/* <button
-              className='flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-lg cursor-pointer hover:bg-bgorange mt-4 w-full'
-              onClick={handleOpenviduClick}
-            >
-              <span className='font-kor-h-h2 text-greyscaleblack-100 font-bold'>
-                오픈비두
-              </span>
-            </button> */}
               </div>
             )}
           </div>

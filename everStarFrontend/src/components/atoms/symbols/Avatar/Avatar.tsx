@@ -16,6 +16,7 @@ const sizeMap = {
   small: '24px',
   medium: '120px',
   large: '180px',
+  square: '340px', // square에 대한 너비를 설정
 };
 
 export const Avatar: React.FC<AvatarProps> = ({
@@ -28,9 +29,10 @@ export const Avatar: React.FC<AvatarProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
-  // 'small', 'medium', 'large'에 대해서만 sizeMap을 참조하도록 변경
   const computedSize =
-    iconSize || sizeMap[size as 'small' | 'medium' | 'large'] || sizeMap.small;
+    iconSize ||
+    sizeMap[size as 'small' | 'medium' | 'large' | 'square'] ||
+    sizeMap.small;
 
   return (
     <div
@@ -70,7 +72,7 @@ export const Avatar: React.FC<AvatarProps> = ({
           alt='avatar'
           style={{
             width: computedSize,
-            height: computedSize,
+            height: size === 'square' ? '250px' : computedSize, // square일 때 높이를 250px로 설정
             borderRadius: size === 'square' ? '0%' : '50%',
             objectFit: 'cover', // 이미지의 비율을 유지하면서 크기에 맞게 조정
           }}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useUpdateMemorialBookOpenStatus } from 'hooks/useMemorialBooks';
 import { DepressionSurvey } from 'components/organics/DepressionSurvey/DepressionSurvey';
 import { MainActionComponent } from 'components/organics/MainActionComponent/MainActionComponent'; // MainActionComponent 임포트
-
+import { ProfileModal } from 'components/organics/ProfileModal/ProfileModal';
 interface EverStarMainProps {
   petProfile: {
     name: string;
@@ -67,6 +67,12 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
     setIsModalOpen(false);
   };
 
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+  const handleProfileClick = () => {
+    setIsProfileModalOpen(true); // 프로필 클릭 시 모달 열기
+  };
+
   //에러
   if (!petProfile) {
     return <div>Loading...</div>;
@@ -98,6 +104,15 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
           }
         }}
         isOwner={isOwner}
+        onProfileClick={handleProfileClick} // 프로필 클릭 핸들러 추가
+      />
+
+      <ProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)} // 프로필 모달 닫기
+        profileData={petProfile}
+        isOwner={isOwner}
+        onPencilClick={() => console.log('Edit profile clicked')} // PencilIcon 클릭 시 처리할 핸들러
       />
     </div>
   );
