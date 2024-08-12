@@ -67,14 +67,16 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     petId: number;
     cheeringMessageId: number;
   }) => {
+    console.log(formData);
     createCheeringPet(formData, {
       onSuccess: (data) => {
+        console.log(data.relationShip);
         const newPostItCard = {
           contents: formData.content,
-          name: petName || '',
+          name: petName + ' ' + data.relationShip || '',
           color: formData.color.toLowerCase(),
           petId: Number(petId),
-          cheeringMessageId: Number(data),
+          cheeringMessageId: Number(data.id),
         };
         setPostItCards([...postItCards, newPostItCard]);
       },
