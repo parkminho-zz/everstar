@@ -19,6 +19,7 @@ import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
 import com.everstarbackmain.global.util.S3UploadUtil;
+import com.vane.badwordfiltering.BadWordFiltering;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,15 +44,18 @@ public class UserLetterService {
 		Pet pet = petRepository.findByIdAndUserAndIsDeleted(petId, user, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
+		String filteredContent = filterBadWords(requestDto.getContent());
+
+
 		if (!image.isEmpty()) {
 			String imageUrl = s3UploadUtil.saveFile(image);
-			UserLetter userLetter = writeUserLetter(pet, requestDto, imageUrl);
+			UserLetter userLetter = writeUserLetter(pet, filteredContent, imageUrl);
 			userLetterRepository.save(userLetter);
 			petLetterScheduler.schedulePetLetter(userLetter);
 			return;
 		}
 
-		UserLetter userLetter = writeUserLetterNoImage(pet, requestDto);
+		UserLetter userLetter = writeUserLetterNoImage(pet, filteredContent);
 		userLetterRepository.save(userLetter);
 		petLetterScheduler.schedulePetLetter(userLetter);
 	}
@@ -73,26 +77,32 @@ public class UserLetterService {
 			throw new ExceptionResponse(CustomException.NOT_ACCESS_SEND_LETTER_ANSWER);
 		}
 
+		String filteredContent = filterBadWords(requestDto.getContent());
+
 		if (!image.isEmpty()) {
 			String imageUrl = s3UploadUtil.saveFile(image);
-			UserLetter userLetter = writeUserLetter(pet, requestDto, imageUrl);
+			UserLetter userLetter = writeUserLetter(pet, filteredContent, imageUrl);
 			userLetterRepository.save(userLetter);
 			petLetter.fetchReplyLetter(userLetter);
 			return;
 		}
 
-		UserLetter userLetter = writeUserLetterNoImage(pet, requestDto);
+		UserLetter userLetter = writeUserLetterNoImage(pet, filteredContent);
 		userLetterRepository.save(userLetter);
 		petLetter.fetchReplyLetter(userLetter);
 	}
 
-	private UserLetter writeUserLetter(Pet pet, WriteLetterRequestDto requestDto, String imgUrl) {
-		UserLetter userLetter = UserLetter.writeLetterHasImage(pet, requestDto, imgUrl);
+	private UserLetter writeUserLetter(Pet pet, String filteredContent, String imgUrl) {
+		UserLetter userLetter = UserLetter.writeLetterHasImage(pet, filteredContent, imgUrl);
 		return userLetter;
 	}
 
-	private UserLetter writeUserLetterNoImage(Pet pet, WriteLetterRequestDto requestDto) {
-		UserLetter userLetter = UserLetter.writeLetterHasNotImage(pet, requestDto);
+	private UserLetter writeUserLetterNoImage(Pet pet, String filteredContent) {
+		UserLetter userLetter = UserLetter.writeLetterHasNotImage(pet, filteredContent);
 		return userLetter;
+	}
+	private String filterBadWords(String content) {
+		BadWordFiltering badWordFiltering = new BadWordFiltering();
+		return badWordFiltering.change(content, new String[] {"_", "-", "1", " ", ".", "@"});
 	}
 }

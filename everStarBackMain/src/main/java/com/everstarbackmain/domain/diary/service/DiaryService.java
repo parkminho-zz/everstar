@@ -15,6 +15,7 @@ import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
 import com.everstarbackmain.global.util.S3UploadUtil;
+import com.vane.badwordfiltering.BadWordFiltering;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,14 +45,21 @@ public class DiaryService {
 			throw new ExceptionResponse(CustomException.NOT_ACTIVATED_MEMORIAL_BOOK_EXCEPTION);
 		}
 
+		String filteredTitle = filterBadWords(createDiaryRequestDto.getTitle());
+		String filteredContent = filterBadWords(createDiaryRequestDto.getContent());
+
 		if (imageFile != null && !imageFile.isEmpty()) {
 			String imageUrl = s3UploadUtil.saveFile(imageFile);
-			Diary diary = Diary.createDiaryHasImage(memorialBook, createDiaryRequestDto, imageUrl);
+			Diary diary = Diary.createDiaryHasImage(memorialBook, filteredTitle, filteredContent, imageUrl);
 			diaryRepository.save(diary);
 			return;
 		}
-
-		Diary diary = Diary.createDiaryHasNotImage(memorialBook, createDiaryRequestDto);
+		Diary diary = Diary.createDiaryHasNotImage(memorialBook, filteredTitle, filteredContent);
 		diaryRepository.save(diary);
+	}
+
+	private String filterBadWords(String content) {
+		BadWordFiltering badWordFiltering = new BadWordFiltering();
+		return badWordFiltering.change(content, new String[] {"_", "-", "1", " ", ".", "@"});
 	}
 }

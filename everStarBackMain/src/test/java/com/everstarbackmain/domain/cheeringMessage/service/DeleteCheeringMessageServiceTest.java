@@ -65,7 +65,7 @@ public class DeleteCheeringMessageServiceTest {
 			"relationship", List.of("개구쟁이", "귀염둥이")), "img");
 
 		requestDto = new CreateCheeringMessageRequestDto("content", Color.BLUE, false);
-		cheeringMessage = CheeringMessage.createAnonymousCheeringMessage(requestDto, pet);
+		cheeringMessage = CheeringMessage.createAnonymousCheeringMessage(requestDto, pet, "filteredContent");
 	}
 
 	@Test

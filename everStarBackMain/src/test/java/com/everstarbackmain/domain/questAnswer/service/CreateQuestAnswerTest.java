@@ -128,7 +128,7 @@ public class CreateQuestAnswerTest {
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
 		quest = new Quest("content", QuestType.TEXT);
 		createAnswerRequestDto = new CreateAnswerRequestDto("content", QuestAnswerType.TEXT_IMAGE.getType());
-		questAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, createAnswerRequestDto, "imageUrl");
+		questAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, createAnswerRequestDto, "flteredContent","imageUrl");
 
 		ReflectionTestUtils.setField(pet, "id", 1L);
 	}

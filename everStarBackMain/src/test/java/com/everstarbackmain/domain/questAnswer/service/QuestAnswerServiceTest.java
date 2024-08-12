@@ -150,8 +150,8 @@ class QuestAnswerServiceTest {
 		quest = new Quest("content", QuestType.TEXT);
 		createAnswerRequestDto = new CreateAnswerRequestDto("content", QuestAnswerType.TEXT_IMAGE.getType());
 		createTextAnswerRequestDto = new CreateAnswerRequestDto("content", QuestAnswerType.TEXT.getType());
-		textQuestAnswer = QuestAnswer.createTextQuestAnswer(pet, quest, createTextAnswerRequestDto);
-		textImageToTextAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, createAnswerRequestDto, "imageUrl");
+		textQuestAnswer = QuestAnswer.createTextQuestAnswer(pet, quest, createTextAnswerRequestDto,"flteredContent");
+		textImageToTextAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, createAnswerRequestDto, "flteredContent","imageUrl");
 
 
 		ReflectionTestUtils.setField(pet, "id", 1L);
@@ -339,7 +339,7 @@ class QuestAnswerServiceTest {
 			questAnswerTypeNoMock.when(() -> QuestAnswerTypeNo.findTypeByQuestNumber(2L))
 				.thenReturn(Optional.of(QuestAnswerTypeNo.TEXT_TO_TEXT.getType()));
 
-			questAnswerMock.when(() -> QuestAnswer.createTextQuestAnswer(any(), any(), any()))
+			questAnswerMock.when(() -> QuestAnswer.createTextQuestAnswer(any(), any(), any(), any()))
 				.thenReturn(textQuestAnswer);
 
 			// when
@@ -371,7 +371,7 @@ class QuestAnswerServiceTest {
 			questAnswerTypeNoMock.when(() -> QuestAnswerTypeNo.findTypeByQuestNumber(37L))
 				.thenReturn(Optional.of(QuestAnswerTypeNo.TEXT_IMAGE_TO_TEXT.getType()));
 
-			questAnswerMock.when(() -> QuestAnswer.createTextImageQuestAnswer(any(), any(), any(), anyString()))
+			questAnswerMock.when(() -> QuestAnswer.createTextImageQuestAnswer(any(), any(), any(), anyString(), anyString()))
 				.thenReturn(textImageToTextAnswer);
 
 			// when
@@ -401,7 +401,7 @@ class QuestAnswerServiceTest {
 			questAnswerTypeNoMock.when(() -> QuestAnswerTypeNo.findTypeByQuestNumber(44L))
 				.thenReturn(Optional.of(QuestAnswerTypeNo.TEXT_TO_IMAGE_ART.getType()));
 
-			questAnswerMock.when(() -> QuestAnswer.createTextImageQuestAnswer(any(), any(), any(), anyString()))
+			questAnswerMock.when(() -> QuestAnswer.createTextImageQuestAnswer(any(), any(), any(),  anyString(), anyString()))
 				.thenReturn(textQuestAnswer);
 
 			// when

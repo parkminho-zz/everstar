@@ -37,6 +37,7 @@ import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
 import com.everstarbackmain.global.util.S3UploadUtil;
+import com.vane.badwordfiltering.BadWordFiltering;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -80,8 +81,19 @@ public class QuestAnswerService {
 		Quest quest = questRepository.findById(questId)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_QUEST_EXCEPTION));
 
+		String filteredContent = filterBadWords(requestDto.getContent());
+
+		BadWordFiltering badWordFiltering = new BadWordFiltering();
+		boolean test = badWordFiltering.blankCheck(requestDto.getContent());
+		System.out.println(filteredContent);
+		System.out.println(test);
+		if (test) {
+           log.info(" 이건 욕이잖아 !! Filtered content: {}", filteredContent);
+
+        }
+
 		if (requestDto.getType().equals(QuestType.TEXT.getType())) {
-			QuestAnswer questAnswer = QuestAnswer.createTextQuestAnswer(pet, quest, requestDto);
+			QuestAnswer questAnswer = QuestAnswer.createTextQuestAnswer(pet, quest, requestDto, filteredContent);
 			questAnswerRepository.save(questAnswer);
 			plusPetQuestIndexByTextType(user, pet, quest, questAnswer);
 			questScheduler.scheduleNextDayQuest(user, petId);
@@ -90,7 +102,7 @@ public class QuestAnswerService {
 
 		if (requestDto.getType().equals(QuestType.TEXT_IMAGE.getType())) {
 			String imageUrl = s3UploadUtil.saveFile(imageFile);
-			QuestAnswer questAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, requestDto, imageUrl);
+			QuestAnswer questAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, requestDto, filteredContent, imageUrl);
 			questAnswerRepository.save(questAnswer);
 			plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
 			questScheduler.scheduleNextDayQuest(user, petId);
@@ -99,7 +111,7 @@ public class QuestAnswerService {
 
 		// webRTC
 		String imageUrl = s3UploadUtil.saveFile(imageFile);
-		QuestAnswer questAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, requestDto, imageUrl);
+		QuestAnswer questAnswer = QuestAnswer.createTextImageQuestAnswer(pet, quest, requestDto,filteredContent, imageUrl);
 		questAnswerRepository.save(questAnswer);
 		plusPetQuestIndexByImageType(user, pet, quest, questAnswer, imageUrl, imageFile);
 		questScheduler.scheduleNextDayQuest(user, petId);
@@ -108,6 +120,8 @@ public class QuestAnswerService {
 	private void plusPetQuestIndexByTextType(User user, Pet pet, Quest quest, QuestAnswer questAnswer) {
 		pet.plusQuestIndex();
 		int petQuestIndex = pet.getQuestIndex();
+		sseService.updateQuestStatusNotification(user, pet.getId());
+
 
 		if ((petQuestIndex - 1) % 7 == 0) {
 			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex - 1);
@@ -201,4 +215,8 @@ public class QuestAnswerService {
 		});
 	}
 
+	private String filterBadWords(String content) {
+		BadWordFiltering badWordFiltering = new BadWordFiltering();
+		return badWordFiltering.change(content, new String[] {"_", "-", "1", " ", ".", "@"});
+	}
 }

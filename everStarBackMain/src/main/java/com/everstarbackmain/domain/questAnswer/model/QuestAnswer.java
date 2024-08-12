@@ -63,21 +63,22 @@ public class QuestAnswer extends BaseTimeEntity {
 		isDeleted = false;
 	}
 
-	public static QuestAnswer createTextQuestAnswer(Pet pet, Quest quest, CreateAnswerRequestDto requestDto) {
+	public static QuestAnswer createTextQuestAnswer(Pet pet, Quest quest, CreateAnswerRequestDto requestDto,
+		String flteredContent) {
 		return QuestAnswer.builder()
 			.pet(pet)
 			.quest(quest)
-			.content(requestDto.getContent())
+			.content(flteredContent)
 			.type(QuestAnswerType.valueOf(requestDto.getType()))
 			.build();
 	}
 
 	public static QuestAnswer createTextImageQuestAnswer(Pet pet, Quest quest, CreateAnswerRequestDto requestDto,
-		String imageUrl) {
+		String flteredContent, String imageUrl) {
 		return QuestAnswer.builder()
 			.pet(pet)
 			.quest(quest)
-			.content(requestDto.getContent())
+			.content(flteredContent)
 			.imageUrl(imageUrl)
 			.type(QuestAnswerType.valueOf(requestDto.getType()))
 			.build();
