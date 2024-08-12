@@ -8,10 +8,7 @@ import { Footer } from 'components/molecules/Footer/Footer';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
 import bgImage from 'assets/images/bg-everstar.webp';
-import {
-  useFetchOtherPetDetails,
-  useFetchCheeringPet,
-} from 'hooks/useEverStar';
+
 import {
   useFetchOtherPetDetails,
   useFetchCheeringPet,
@@ -48,13 +45,9 @@ export const EverstarPage: React.FC = () => {
 
   const { data: petDetails, isLoading: isPetDetailsLoading } =
     useFetchOtherPetDetails(petId);
-  const { data: petDetails, isLoading: isPetDetailsLoading } =
-    useFetchOtherPetDetails(petId);
 
   const questIndex = petDetails?.questIndex || 0;
 
-  const { data: memorialBooks, isLoading: isMemorialBooksLoading } =
-    useFetchMemorialBooksWithQuest(petId, questIndex);
   const { data: memorialBooks, isLoading: isMemorialBooksLoading } =
     useFetchMemorialBooksWithQuest(petId, questIndex);
 

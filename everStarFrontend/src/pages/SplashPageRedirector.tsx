@@ -29,7 +29,6 @@ export const SplashPageRedirector = () => {
           objectFit: 'cover',
         }}
         className='absolute top-0 left-0 w-full h-full object-cover'
-        style={{ zIndex: -1 }}
       />
       {/* Splash Template */}
       <SplashTemplate type='splash' className='z-10' />
