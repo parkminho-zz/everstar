@@ -21,7 +21,7 @@ public class ChatGPTRequest {
 
 	private ChatGPTRequest(String model, String systemPrompt, String userPrompt) {
 		this.model = model;
-		this.messages.add(Message.createMessage("user", systemPrompt));
+		this.messages.add(Message.createMessage("system", systemPrompt));
 		this.messages.add(Message.createMessage("user", userPrompt));
 	}
 
