@@ -80,7 +80,7 @@ public class WriteLetterAnswerServiceTest {
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
 
 		writeLetterRequestDto = new WriteLetterRequestDto("content");
-		userLetter = UserLetter.writeLetterHasNotImage(pet, writeLetterRequestDto);
+		userLetter = UserLetter.writeLetterHasNotImage(pet, "filteredContent");
 		petLetter = PetLetter.writePetLetter(pet, "content");
 		petLetterTypeByUser = PetLetter.writePetLetterAnswer(userLetter, "content");
 		requestDto = new WriteLetterRequestDto("dd");

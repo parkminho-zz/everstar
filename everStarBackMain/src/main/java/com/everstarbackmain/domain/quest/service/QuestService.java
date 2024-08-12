@@ -46,7 +46,6 @@ public class QuestService {
 	public void changePetQuestCompleted(Long petId) {
 		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
-
 		pet.setFalseIsQuestCompleted();
 
 		// 상태 변경 후 SSE 알림 전송

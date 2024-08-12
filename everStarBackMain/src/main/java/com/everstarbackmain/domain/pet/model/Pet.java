@@ -116,8 +116,8 @@ public class Pet extends BaseTimeEntity {
 			.build();
 	}
 
-	public void updatePetIntroduction(String newIntroduction) {
-		this.introduction = newIntroduction;
+	public void updatePetIntroduction(String filteredNewIntroduction) {
+		this.introduction = filteredNewIntroduction;
 	}
 
 	// ----------------펫 퀘스트 관련 Static methods -----------------------------------------

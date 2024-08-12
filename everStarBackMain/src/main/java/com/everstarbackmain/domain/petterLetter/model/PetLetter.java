@@ -64,21 +64,21 @@ public class PetLetter extends BaseTimeEntity {
 		this.sendType = sendType;
 	}
 
-	public static PetLetter writePetLetterAnswer(UserLetter userLetter, String content) {
+	public static PetLetter writePetLetterAnswer(UserLetter userLetter, String filteredContent) {
 		return PetLetter.builder()
 			.pet(userLetter.getPet())
 			.userLetter(userLetter)
 			.isRead(false)
-			.content(content)
+			.content(filteredContent)
 			.sendType(SendType.USER)
 			.build();
 	}
 
-	public static PetLetter writePetLetter(Pet pet, String content) {
+	public static PetLetter writePetLetter(Pet pet, String filteredContent) {
 		return PetLetter.builder()
 			.pet(pet)
 			.isRead(false)
-			.content(content)
+			.content(filteredContent)
 			.sendType(SendType.PET)
 			.build();
 	}

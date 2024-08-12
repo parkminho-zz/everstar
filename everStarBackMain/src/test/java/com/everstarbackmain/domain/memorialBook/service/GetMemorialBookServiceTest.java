@@ -101,9 +101,9 @@ public class GetMemorialBookServiceTest {
 		memorialBook = MemorialBook.createMemorialBook(pet);
 		sentimentAnalysis = SentimentAnalysis.createSentimentAnalysis(pet);
 		quest = new Quest("quest content", QuestType.TEXT);
-		questAnswer = QuestAnswer.createTextQuestAnswer(pet, quest, new CreateAnswerRequestDto("content", "TEXT"));
+		questAnswer = QuestAnswer.createTextQuestAnswer(pet, quest,  new CreateAnswerRequestDto("answerContent", "TEXT"), "filteredContent");
 		aiAnswer = AiAnswer.createAiAnswer(pet, quest, CreateAiAnswerRequestDto.createTextAiAnswerRequestDto("content", "TEXT"));
-		diary = Diary.createDiaryHasImage(memorialBook, new CreateDiaryRequestDto("title", "content"), "testUrl");
+		diary = Diary.createDiaryHasImage(memorialBook, "filteredTitle", "filterdContent", "testUrl");
 
 		ReflectionTestUtils.setField(user, "id", 1L);
 		ReflectionTestUtils.setField(pet, "id", 1L);

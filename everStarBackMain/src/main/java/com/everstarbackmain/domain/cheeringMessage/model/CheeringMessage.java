@@ -66,11 +66,11 @@ public class CheeringMessage extends BaseTimeEntity {
 	}
 
 	public static CheeringMessage createNoAnonymousCheeringMessage(CreateCheeringMessageRequestDto requestDto,
-		Pet findPet, Pet pet) {
+		Pet findPet, Pet pet, String filteredContent) {
 		return CheeringMessage.builder()
 			.pet(findPet)
 			.isAnonymous(requestDto.getIsAnonymous())
-			.content(requestDto.getContent())
+			.content(filteredContent)
 			.color(requestDto.getColor())
 			.behindPetName(pet.getName())
 			.behindPetRelationship(pet.getRelationship())
@@ -78,11 +78,11 @@ public class CheeringMessage extends BaseTimeEntity {
 	}
 
 	public static CheeringMessage createAnonymousCheeringMessage(CreateCheeringMessageRequestDto requestDto,
-		Pet findPet) {
+		Pet findPet, String filteredContent) {
 		return CheeringMessage.builder()
 			.pet(findPet)
 			.isAnonymous(requestDto.getIsAnonymous())
-			.content(requestDto.getContent())
+			.content(filteredContent)
 			.color(requestDto.getColor())
 			.build();
 	}
