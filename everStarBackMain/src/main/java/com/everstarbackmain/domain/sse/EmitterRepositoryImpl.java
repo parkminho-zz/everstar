@@ -22,6 +22,7 @@ public class EmitterRepositoryImpl implements EmitterRepository {
 	@Override
 	public SseEmitter save(Long petId, SseEmitter sseEmitter) {
 		emitters.put(petId, sseEmitter);
+		log.info("main server - sse emitters size ,{}", emitters.size());
 		return sseEmitter;
 	}
 

@@ -14,9 +14,11 @@ import com.everstarbackmain.domain.quest.service.QuestService;
 import com.everstarbackmain.domain.user.model.User;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j(topic = "elk")
 public class QuestScheduler {
 
 	private final TaskScheduler taskScheduler;
@@ -29,6 +31,7 @@ public class QuestScheduler {
 		LocalDateTime nextQuestTime = LocalDateTime.now().plusSeconds(15);
 		Date nextQuestDate = Date.from(nextQuestTime.atZone(ZoneId.systemDefault()).toInstant());
 
+		log.info("Main server - schedule");
 		taskScheduler.schedule(() -> questService.changePetQuestCompleted(petId), nextQuestDate);
 	}
 }
