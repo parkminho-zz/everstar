@@ -79,7 +79,7 @@ public class RequestAiAnswerEventListener {
 	@EventListener
 	@Transactional
 	@Async
-	public void requestTextToImageAiAnswer(RequestTextImageToTextAiAnswerEvent event) {
+	public void requestTextToImageAiAnswer(RequestTextToImageAiAnswerEvent event) {
 		User user = event.getUser();
 		Pet pet = event.getPet();
 		Quest quest = event.getQuest();
