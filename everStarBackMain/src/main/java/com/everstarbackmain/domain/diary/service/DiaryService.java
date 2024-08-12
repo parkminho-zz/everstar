@@ -15,6 +15,7 @@ import com.everstarbackmain.global.exception.CustomException;
 import com.everstarbackmain.global.exception.ExceptionResponse;
 import com.everstarbackmain.global.security.auth.PrincipalDetails;
 import com.everstarbackmain.global.util.S3UploadUtil;
+import com.vane.badwordfiltering.BadWordFiltering;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,5 +54,10 @@ public class DiaryService {
 
 		Diary diary = Diary.createDiaryHasNotImage(memorialBook, createDiaryRequestDto);
 		diaryRepository.save(diary);
+	}
+
+	private String filterBadWords(String content) {
+		BadWordFiltering badWordFiltering = new BadWordFiltering("♡");
+		return badWordFiltering.change(content, new String[] {"_", "-", "1", " ", ".", "@"});
 	}
 }
