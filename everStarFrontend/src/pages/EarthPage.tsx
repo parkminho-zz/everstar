@@ -15,8 +15,51 @@ import { QuestOpenviduTemplate } from 'components/templates/QuestOpenviduTemplat
 import { OpenViduApp } from 'components/templates/OpenViduApp';
 
 import bgImage from 'assets/images/bg-earth.webp';
+import { RootState } from 'store/Store';
+import { useSelector } from 'react-redux';
+import { useFetchOtherPetDetails } from 'hooks/useEverStar';
+
+interface PetProfile {
+  name: string;
+  age: number;
+  description: string;
+  date: string;
+  tagList: string[];
+  avatarUrl: string;
+  questIndex: number;
+}
 
 export const EarthPage: React.FC = () => {
+  const PetId = useSelector((state: RootState) => state.pet.petDetails?.id);
+
+  const {
+    data: petDetails,
+    isLoading: isPetDetailsLoading,
+    error: petDetailsError,
+  } = useFetchOtherPetDetails(PetId ?? -1);
+
+  if (PetId === undefined) {
+    return <div>No Pet ID</div>;
+  }
+
+  if (isPetDetailsLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (petDetailsError || !petDetails) {
+    return <div>No pet details available.</div>;
+  }
+
+  const petProfile: PetProfile = {
+    name: petDetails.name,
+    age: petDetails.age,
+    description: petDetails.introduction,
+    date: petDetails.memorialDate,
+    tagList: petDetails.petPersonalities,
+    avatarUrl: petDetails.profileImageUrl,
+    questIndex: petDetails.questIndex,
+  };
+
   const generateLargeLetterData = (count: number) => {
     return Array.from({ length: count }, (_, index) => ({
       id: index + 1,
@@ -41,8 +84,8 @@ export const EarthPage: React.FC = () => {
               path='/'
               element={
                 <EarthMain
-                  title='지구별'
-                  fill={7}
+                  title={petDetails.name}
+                  fill={petProfile.questIndex}
                   buttonSize='large'
                   buttonDisabled={false}
                   buttonText='영원별로 이동'

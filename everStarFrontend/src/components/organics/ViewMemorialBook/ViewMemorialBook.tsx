@@ -80,7 +80,7 @@ export const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
       </PrimaryButton>
 
       {/* 조건에 따라 토글 버튼을 숨김 */}
-      {isActive && isOpen && isOwner && (
+      {isActive && isOwner && (
         <div className="relative z-10 flex flex-col items-center justify-center my-6">
           <Lable prop="메모리얼북 공개 상태" show={false} font="default" />
           <div className="mt-2">

@@ -34,6 +34,10 @@ const milestoneColors = [
 ];
 
 const getMessage = (fill: number) => {
+  if (fill >= 49) {
+    return ' 모든 무지개를 달성했어요!';
+  }
+
   for (const milestone of milestoneColors) {
     if (fill >= milestone.min && fill <= milestone.max) {
       return milestone.message;
@@ -41,7 +45,6 @@ const getMessage = (fill: number) => {
   }
   return '';
 };
-
 export const ProgressCard: React.FC<ProgressCardProps> = ({
   title,
   fill,
