@@ -61,7 +61,8 @@ public class OpenAiClient {
 	public String writePetLetterAnswer(UserLetter userLetter) {
 		String prompt = createPetLetterAnswerPrompt(userLetter);
 
-		ChatGPTRequest request = new ChatGPTRequest(openAiConfig.getModel(), prompt);
+		ChatGPTRequest request = ChatGPTRequest.createChatGPTRequest(openAiConfig.getModel(),
+			String.format(OpenAiPrompt.PET_LETTER_SYSTEM_PROMPT.getPrompt(), userLetter.getPet().getSpecies()), prompt);
 		ChatGPTResponse response = restTemplate.postForObject(openAiConfig.getApiUrl(), request, ChatGPTResponse.class);
 
 		if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
@@ -78,7 +79,8 @@ public class OpenAiClient {
 		String contents = combineLetters(userLetters);
 		String prompt = createPetLetterPrompt(contents, pet);
 
-		ChatGPTRequest request = new ChatGPTRequest(openAiConfig.getModel(), prompt);
+		ChatGPTRequest request = ChatGPTRequest.createChatGPTRequest(openAiConfig.getModel(),
+			String.format(OpenAiPrompt.PET_LETTER_SYSTEM_PROMPT.getPrompt(), pet.getSpecies()), prompt);
 		ChatGPTResponse response = restTemplate.postForObject(openAiConfig.getApiUrl(), request, ChatGPTResponse.class);
 
 		if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
