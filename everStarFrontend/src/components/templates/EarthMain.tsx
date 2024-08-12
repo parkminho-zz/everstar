@@ -51,7 +51,6 @@ const getColor = (fill: number): RainbowColor => {
 };
 
 export const EarthMain: React.FC<EarthMainProps> = ({
-  title,
   fill,
   buttonSize,
   buttonDisabled,
@@ -148,6 +147,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getOpenvidu = () => {
     navigate(`/earth/openvidu`);
   };
@@ -189,7 +189,6 @@ export const EarthMain: React.FC<EarthMainProps> = ({
         <Rainbow className={getRainbowStyle()} color={getColor(fill)} />
         <div className="relative z-10 flex flex-col items-center justify-center flex-grow">
           <ProgressCard
-            title={title}
             fill={fill}
             buttonTheme="white"
             buttonSize={buttonSize}
@@ -197,7 +196,6 @@ export const EarthMain: React.FC<EarthMainProps> = ({
             buttonText={buttonText}
             buttonIcon={buttonIcon}
             onButtonClick={handleButtonClick}
-            showMusicControl={false}
             className={className}
           />
           {/* <button
