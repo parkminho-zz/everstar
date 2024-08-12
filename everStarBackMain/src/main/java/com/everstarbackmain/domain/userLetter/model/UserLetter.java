@@ -1,6 +1,5 @@
 package com.everstarbackmain.domain.userLetter.model;
 
-import com.everstarbackmain.domain.userLetter.requestDto.WriteLetterRequestDto;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.global.entity.BaseTimeEntity;
 
@@ -48,19 +47,18 @@ public class UserLetter extends BaseTimeEntity {
 		this.is_deleted = false;
 	}
 
-	public static UserLetter writeLetterHasImage(Pet pet, WriteLetterRequestDto writeLetterRequestDto,
-		String imageUrl) {
+	public static UserLetter writeLetterHasImage(Pet pet, String filteredContent, String imageUrl) {
 		return UserLetter.builder()
 			.pet(pet)
-			.content(writeLetterRequestDto.getContent())
+			.content(filteredContent)
 			.imgUrl(imageUrl)
 			.build();
 	}
 
-	public static UserLetter writeLetterHasNotImage(Pet pet, WriteLetterRequestDto writeLetterRequestDto) {
+	public static UserLetter writeLetterHasNotImage(Pet pet, String filteredContent) {
 		return UserLetter.builder()
 			.pet(pet)
-			.content(writeLetterRequestDto.getContent())
+			.content(filteredContent)
 			.build();
 	}
 }
