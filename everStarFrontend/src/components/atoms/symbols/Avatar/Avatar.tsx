@@ -29,7 +29,8 @@ export const Avatar: React.FC<AvatarProps> = ({
   onMouseLeave,
 }) => {
   // 'small', 'medium', 'large'에 대해서만 sizeMap을 참조하도록 변경
-  const computedSize = iconSize || sizeMap[size as 'small' | 'medium' | 'large'] || sizeMap.small;
+  const computedSize =
+    iconSize || sizeMap[size as 'small' | 'medium' | 'large'] || sizeMap.small;
 
   return (
     <div
@@ -66,7 +67,7 @@ export const Avatar: React.FC<AvatarProps> = ({
       ) : (
         <img
           src={src || defaultAvatarSrc}
-          alt="avatar"
+          alt='avatar'
           style={{
             width: computedSize,
             height: computedSize,

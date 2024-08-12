@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import { ProgressCard } from 'components/organics/ProgressCard/ProgressCard';
-import { ViewMemorialBook } from 'components/organics/ViewMemorialBook/ViewMemorialBook';
-import { useNavigate } from 'react-router-dom';
 import { useUpdateMemorialBookOpenStatus } from 'hooks/useMemorialBooks';
 import { DepressionSurvey } from 'components/organics/DepressionSurvey/DepressionSurvey';
 import { MainActionComponent } from 'components/organics/MainActionComponent/MainActionComponent'; // MainActionComponent 임포트
@@ -27,13 +24,32 @@ interface EverStarMainProps {
   isOwner: boolean; // 새로운 prop 추가
 }
 
+interface EverStarMainProps {
+  petProfile: {
+    name: string;
+    age: number;
+    date: string;
+    description: string;
+    tagList: string[];
+    avatarUrl: string;
+    questIndex: number;
+  } | null;
+  memorialBookProfile: {
+    id: number;
+    psychologicalTestResult: string | null;
+    isOpen: boolean;
+    isActive: boolean;
+  } | null;
+  petId: number;
+  isOwner: boolean;
+}
+
 export const EverStarMain: React.FC<EverStarMainProps> = ({
   petProfile,
   memorialBookProfile,
   petId,
   isOwner,
 }) => {
-  const navigate = useNavigate();
   const [toggleStatus, setToggleStatus] = useState<'on' | 'off' | undefined>(
     memorialBookProfile?.isOpen ? 'on' : 'off',
   );
@@ -42,34 +58,13 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   );
 
   const { mutate: updateMemorialBookStatus } = useUpdateMemorialBookOpenStatus({
-    onSuccess: (data, variables) => {
+    onSuccess: (_, variables) => {
       setToggleStatus(variables.isOpen ? 'on' : 'off');
     },
   });
 
-  const handleButtonClick = () => {
-    navigate('/earth');
-  };
-
-  const handleViewMemorialBookClick = () => {
-    if (memorialBookProfile) {
-      navigate(`/everstar/${petId}/memorialbook/${memorialBookProfile.id}`);
-    }
-  };
-
-  const handleToggleChange = (status: 'on' | 'off') => {
-    if (status !== toggleStatus && memorialBookProfile) {
-      setToggleStatus(status);
-      updateMemorialBookStatus({
-        petId,
-        memorialBookId: memorialBookProfile.id,
-        isOpen: status === 'on',
-      });
-    }
-  };
-
   const handleSurveySubmitSuccess = () => {
-    setIsModalOpen(false); // 설문 제출 성공 시 모달을 닫음
+    setIsModalOpen(false);
   };
 
   if (!petProfile) {
@@ -77,37 +72,32 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      {isModalOpen && <DepressionSurvey onSubmitSuccess={handleSurveySubmitSuccess} />}
+    <div className='flex flex-col items-center justify-center min-h-screen'>
+      {isModalOpen && (
+        <DepressionSurvey onSubmitSuccess={handleSurveySubmitSuccess} />
+      )}
 
-      <ProgressCard
-        fill={petProfile.questIndex}
-        buttonTheme="white"
-        buttonSize="large"
-        buttonDisabled={false}
-        buttonText="지구별로 가기"
-        buttonIcon="SmallEarthImg"
-        onButtonClick={handleButtonClick}
-        className=""
-      />
-
-      {/* MainActionComponent 추가 */}
       <MainActionComponent
-        type="everstar" // 예시로 'everstar' 타입을 사용
+        type='everstar'
         profileImageUrl={petProfile.avatarUrl}
-        fill={petProfile.questIndex} // ProgressCard와 동일한 fill 값을 사용
+        fill={petProfile.questIndex}
+        name={petProfile.name}
+        age={petProfile.age}
+        description={petProfile.description}
+        memorialBookProfile={memorialBookProfile}
+        toggleStatus={toggleStatus}
+        onToggleChange={(status) => {
+          setToggleStatus(status);
+          if (memorialBookProfile) {
+            updateMemorialBookStatus({
+              petId,
+              memorialBookId: memorialBookProfile.id,
+              isOpen: status === 'on',
+            });
+          }
+        }}
+        isOwner={isOwner}
       />
-
-      <div className="flex flex-col items-center mt-20">
-        <ViewMemorialBook
-          onClick={handleViewMemorialBookClick}
-          toggleStatus={toggleStatus}
-          onToggleChange={handleToggleChange}
-          isActive={memorialBookProfile?.isActive}
-          isOpen={memorialBookProfile?.isOpen}
-          isOwner={isOwner} // isOwner 값을 전달
-        />
-      </div>
     </div>
   );
 };
