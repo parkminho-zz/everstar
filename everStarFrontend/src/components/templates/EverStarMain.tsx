@@ -67,6 +67,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
     setIsModalOpen(false);
   };
 
+  //에러
   if (!petProfile) {
     return <div>Loading...</div>;
   }

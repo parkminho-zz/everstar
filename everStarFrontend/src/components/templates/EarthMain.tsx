@@ -89,8 +89,8 @@ export const EarthMain: React.FC<EarthMainProps> = ({
 
     switch (payload.notification?.title) {
       case '카툰화':
-        setLetterMessage('카툰이 도착했어요');
-        localStorage.setItem('isMessage', '카툰이 도착했어요');
+        setLetterMessage('선물이 도착했어요');
+        localStorage.setItem('isMessage', '선물이 도착했어요');
         localStorage.setItem('isMessageSeen', 'false');
         break;
 
@@ -104,7 +104,11 @@ export const EarthMain: React.FC<EarthMainProps> = ({
         return;
     }
 
-    console.log('Message received (foreground). : ', payload);
+    console.log(
+      'Message received (foreground). : ',
+      // payload.notification?.title
+      payload,
+    );
   });
 
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
@@ -119,7 +123,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
         localStorage.setItem('isMessageSeen', 'true');
         break;
 
-      case '카툰이 도착했어요':
+      case '선물이 도착했어요':
         setLetterCardVisible(false);
         localStorage.setItem('isMessageSeen', 'true');
         setModalState(true);
@@ -202,10 +206,12 @@ export const EarthMain: React.FC<EarthMainProps> = ({
           onClick={handleLetterCardClick}
         />
       </div>
-      <Modal isOpen={modalState} onClose={Modalclose} text=''>
-        <img src='https://picsum.photos/500/500' alt='Description' />
-        <p>한번밖에 볼 수 없어요! 추후 메모리얼북이 완성 시 확인 가능해요!</p>
-      </Modal>
+      <div>
+        <Modal isOpen={modalState} onClose={Modalclose} text=''>
+          <img src='https://picsum.photos/500/500' alt='Description' />
+          <p>한번밖에 볼 수 없어요! 추후 메모리얼북이 완성 시 확인 가능해요!</p>
+        </Modal>
+      </div>
     </div>
   );
 };

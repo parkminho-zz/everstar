@@ -12,8 +12,13 @@ import {
   useFetchOtherPetDetails,
   useFetchCheeringPet,
 } from 'hooks/useEverStar';
+import {
+  useFetchOtherPetDetails,
+  useFetchCheeringPet,
+} from 'hooks/useEverStar';
 import { useFetchMemorialBooksWithQuest } from 'hooks/useMemorialBooks';
 import { MemorialBook } from 'components/templates/MemorialBook';
+import { SplashTemplate } from 'components/templates/SplashTemplate';
 
 interface PetProfile {
   name: string;
@@ -43,9 +48,13 @@ export const EverstarPage: React.FC = () => {
 
   const { data: petDetails, isLoading: isPetDetailsLoading } =
     useFetchOtherPetDetails(petId);
+  const { data: petDetails, isLoading: isPetDetailsLoading } =
+    useFetchOtherPetDetails(petId);
 
   const questIndex = petDetails?.questIndex || 0;
 
+  const { data: memorialBooks, isLoading: isMemorialBooksLoading } =
+    useFetchMemorialBooksWithQuest(petId, questIndex);
   const { data: memorialBooks, isLoading: isMemorialBooksLoading } =
     useFetchMemorialBooksWithQuest(petId, questIndex);
 
@@ -62,7 +71,21 @@ export const EverstarPage: React.FC = () => {
   }, [params.pet, petId, navigate]);
 
   if (isPetDetailsLoading || isMemorialBooksLoading || isCheerLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+        <img
+          src={bgImage}
+          alt='Background'
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+        <SplashTemplate type='everPage' className='z-10 w-full h-full ' />
+      </div>
+    );
   }
 
   if (!petDetails || !memorialBooks) {
@@ -140,7 +163,10 @@ export const EverstarPage: React.FC = () => {
                   totalPages={totalPages}
                 />
               ) : (
-                <div>Loading...</div>
+                <SplashTemplate
+                  type='everCheerRocket'
+                  className='z-10 w-full h-full '
+                />
               )
             }
           />
@@ -151,7 +177,7 @@ export const EverstarPage: React.FC = () => {
               petProfile ? (
                 <MemorialBook avatarUrl={petProfile.avatarUrl} />
               ) : (
-                <div>Loading...</div>
+                <SplashTemplate type='book' className='z-10 w-full h-full ' />
               )
             }
           />

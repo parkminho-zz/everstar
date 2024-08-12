@@ -10,6 +10,8 @@ import { UserInfoTab } from 'components/organics/Profile/UserInfoTab';
 import { PetInfoTab } from 'components/organics/Profile/PetInfoTab';
 import { Glass } from 'components/molecules/Glass/Glass';
 import { useLocalPetDetails } from 'hooks/usePets';
+import bgImage from 'assets/images/bg-login.webp';
+import { SplashTemplate } from './SplashTemplate';
 
 export const MyInfo: React.FC = () => {
   const navigate = useNavigate();
@@ -85,12 +87,32 @@ export const MyInfo: React.FC = () => {
     [pets, selectedPetId]
   );
 
-  if (isPetsLoading || isUserLoading) return <div>로딩 중...</div>;
+  if (isPetsLoading || isUserLoading) {
+    return (
+      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+        <img
+          src={bgImage}
+          alt='Background'
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+        <SplashTemplate type='myPageRocket' className='z-10 w-full h-full ' />
+      </div>
+    );
+  }
+
   if (petsError) return <div className='text-red-500'>{petsError.message}</div>;
   if (userError) return <div className='text-red-500'>{userError.message}</div>;
 
   const handleButtonClick = () => {
-    console.log('Primary Button Clicked');
+    sessionStorage.removeItem('persist:root');
+    sessionStorage.removeItem('petDetails');
+    sessionStorage.removeItem('diffPetDetails');
+    window.location.reload();
   };
 
   return (

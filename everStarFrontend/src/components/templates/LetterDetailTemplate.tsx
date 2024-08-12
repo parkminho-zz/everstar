@@ -4,6 +4,8 @@ import { InteractiveForm } from 'components/templates/InteractiveForm';
 import { useFetchLetterPetDetail, useFetchLetterRePost } from 'hooks/useEarth';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
+import bgImage from 'assets/images/bg-login.webp';
+import { SplashTemplate } from './SplashTemplate';
 
 export const LetterDetailTemplate: React.FC = () => {
   const [text, setText] = useState('');
@@ -51,7 +53,24 @@ export const LetterDetailTemplate: React.FC = () => {
   }, [letterData, petName]); // letterData 또는 petName이 변경될 때만 useEffect 실행
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+        <img
+          src={bgImage}
+          alt='Background'
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+        <SplashTemplate
+          type='LetterBoxRocket'
+          className='z-10 w-full h-full '
+        />
+      </div>
+    );
   }
 
   if (isError || !letterData) {
