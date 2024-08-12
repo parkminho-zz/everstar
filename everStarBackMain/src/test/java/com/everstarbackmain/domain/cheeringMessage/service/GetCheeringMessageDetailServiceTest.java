@@ -65,8 +65,8 @@ public class GetCheeringMessageDetailServiceTest {
 			LocalDate.of(1990, 1, 1), "species", PetGender.MALE,
 			"relationship", List.of("개구쟁이", "귀염둥이")), "profileImageUrl");
 
-		requestDto = new CreateCheeringMessageRequestDto("content", Color.BLUE, false);
-		cheeringMessage = CheeringMessage.createAnonymousCheeringMessage(requestDto, pet);
+		requestDto = new CreateCheeringMessageRequestDto("filteredContent", Color.BLUE, false);
+		cheeringMessage = CheeringMessage.createAnonymousCheeringMessage(requestDto, pet, "filteredContent");
 	}
 
 	@Test
