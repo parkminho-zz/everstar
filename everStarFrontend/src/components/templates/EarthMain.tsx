@@ -13,7 +13,15 @@ import { firebaseConfig } from 'firebase-messaging-sw';
 import { Modal } from 'components/molecules/Modal/Modal';
 
 type ViewMemorialBookSize = 'large' | 'medium' | 'small';
-type RainbowColor = 'none' | 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'indigo' | 'violet';
+type RainbowColor =
+  | 'none'
+  | 'red'
+  | 'orange'
+  | 'yellow'
+  | 'green'
+  | 'blue'
+  | 'indigo'
+  | 'violet';
 
 interface EarthMainProps {
   title: string;
@@ -88,8 +96,8 @@ export const EarthMain: React.FC<EarthMainProps> = ({
 
     switch (payload.notification?.title) {
       case '카툰화':
-        setLetterMessage('카툰이 도착했어요');
-        localStorage.setItem('isMessage', '카툰이 도착했어요');
+        setLetterMessage('선물이 도착했어요');
+        localStorage.setItem('isMessage', '선물이 도착했어요');
         localStorage.setItem('isMessageSeen', 'false');
         break;
 
@@ -106,7 +114,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
     console.log(
       'Message received (foreground). : ',
       // payload.notification?.title
-      payload,
+      payload
     );
   });
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
@@ -125,7 +133,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
         localStorage.setItem('isMessageSeen', 'true');
         break;
 
-      case '카툰이 도착했어요':
+      case '선물이 도착했어요':
         setLetterCardVisible(false);
         localStorage.setItem('isMessageSeen', 'true');
         setModalState(true);
@@ -161,11 +169,14 @@ export const EarthMain: React.FC<EarthMainProps> = ({
 
     console.log(111);
     console.log(petId);
-    const eventSource = new EventSource(`https://i11b101.p.ssafy.io/api/earth/connect/${petId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const eventSource = new EventSource(
+      `https://i11b101.p.ssafy.io/api/earth/connect/${petId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
 
     eventSource.onmessage = (event) => {
       // 이벤트 데이터 처리
@@ -185,13 +196,13 @@ export const EarthMain: React.FC<EarthMainProps> = ({
   }, []);
   return (
     <div>
-      <div className="relative flex flex-col items-center justify-center min-h-screen">
+      <div className='relative flex flex-col items-center justify-center min-h-screen'>
         <Rainbow className={getRainbowStyle()} color={getColor(fill)} />
-        <div className="relative z-10 flex flex-col items-center justify-center flex-grow">
+        <div className='relative z-10 flex flex-col items-center justify-center flex-grow'>
           <ProgressCard
             title={title}
             fill={fill}
-            buttonTheme="white"
+            buttonTheme='white'
             buttonSize={buttonSize}
             buttonDisabled={buttonDisabled}
             buttonText={buttonText}
@@ -210,7 +221,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
           </button> */}
           {(quest.length === 1 || quest.length === 2) && (
             <button
-              className="bg-white h-[50px] w-[200px] shadow-lg rounded-md mt-4"
+              className='bg-white h-[50px] w-[200px] shadow-lg rounded-md mt-4'
               onClick={() => answerQuest(quest)}
             >
               {quest}번째 퀘스트가 도착했습니다.
@@ -223,23 +234,23 @@ export const EarthMain: React.FC<EarthMainProps> = ({
           )}
         </div>
       </div>
-      <div className="fixed right-12 bottom-14">
+      <div className='fixed right-12 bottom-14'>
         <LetterCard
-          type="receive"
-          color="gray"
-          state="received"
-          name="알림"
+          type='receive'
+          color='gray'
+          state='received'
+          name='알림'
           message={letterMessage}
-          dateTime=""
-          className="h-5"
+          dateTime=''
+          className='h-5'
           centered={true}
           visible={letterCardVisible}
           onClick={handleLetterCardClick}
         />
       </div>
       <div>
-        <Modal isOpen={modalState} onClose={Modalclose} text="">
-          <img src="https://picsum.photos/500/500" alt="Description" />
+        <Modal isOpen={modalState} onClose={Modalclose} text=''>
+          <img src='https://picsum.photos/500/500' alt='Description' />
           <p>한번밖에 볼 수 없어요! 추후 메모리얼북이 완성 시 확인 가능해요!</p>
         </Modal>
       </div>

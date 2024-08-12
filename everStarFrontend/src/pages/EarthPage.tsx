@@ -19,6 +19,8 @@ import { RootState } from 'store/Store';
 import { useSelector } from 'react-redux';
 import { useFetchOtherPetDetails } from 'hooks/useEverStar';
 
+import { SplashTemplate } from 'components/templates/SplashTemplate';
+
 interface PetProfile {
   name: string;
   age: number;
@@ -43,7 +45,21 @@ export const EarthPage: React.FC = () => {
   }
 
   if (isPetDetailsLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+        <img
+          src={bgImage}
+          alt='Background'
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+        <SplashTemplate type='earthPage' className='z-10 w-full h-full ' />
+      </div>
+    );
   }
 
   if (petDetailsError || !petDetails) {

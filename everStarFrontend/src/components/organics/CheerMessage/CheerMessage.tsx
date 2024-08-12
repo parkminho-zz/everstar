@@ -213,6 +213,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
         <div className='flex'>
           <div className='flex-shrink-0 mr-4'>
             <ProfileCard
+              avatarSrc={profile.avatarUrl}
               name={profile.name}
               age={profile.age}
               date={profile.date}

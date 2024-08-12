@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { InputField } from 'components/organics/input/InputFields';
@@ -18,7 +18,7 @@ export interface SignUpFormProps {
     userName: string,
     birthDate: string,
     gender: string,
-    questReceptionTime: string,
+    questReceptionTime: string
   ) => void;
 }
 
@@ -30,7 +30,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
   onButtonClick,
 }) => {
   const { userEmail } = useParams<{ userEmail: string }>();
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     birthdate: '',
@@ -49,16 +49,34 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
     }));
   }, [userEmail]);
 
-  const handleInputChange = (field: keyof typeof formData, value: string | null) => {
+  const handleInputChange = (
+    field: keyof typeof formData,
+    value: string | null
+  ) => {
     setFormData({
       ...formData,
       [field]: value as string,
     });
   };
 
+  const handleNameChange = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (/\d/.test(e.key)) {
+      e.preventDefault(); // 숫자 입력 차단
+    }
+  };
+
+  const handlePhoneChange = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (
+      !/\d/.test(e.key) &&
+      !['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab'].includes(e.key)
+    ) {
+      e.preventDefault();
+    }
+  };
+
   useEffect(() => {
     const allFieldsFilled = Object.values(formData).every(
-      (value) => value !== '' && value !== null,
+      (value) => value !== '' && value !== null
     );
     setIsButtonDisabled(!allFieldsFilled);
   }, [formData]);
@@ -76,100 +94,116 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
         formattedData.name,
         formattedData.birthdate,
         formattedData.gender,
-        formattedData.questReceptionTime,
+        formattedData.questReceptionTime
       );
     }
   };
 
   return (
-    <div className="flex justify-center p-6">
-      <div className="flex flex-col items-center w-[360px] gap-8 p-5 bg-white rounded-lg shadow-md">
-        <ModalHeader text={headerText} showLeftIcon={true} />
-        <div className="flex flex-col w-full">
+    <div className='flex justify-center p-6'>
+      <div className='flex flex-col items-center w-[360px] gap-8 p-5 bg-white rounded-lg shadow-md'>
+        <ModalHeader
+          text={headerText}
+          showLeftIcon={true}
+          onLeftIconClick={() => navigate(-1)}
+        />
+        <div className='flex flex-col w-full'>
           <div
             className="left-0 text-left [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal]"
             dangerouslySetInnerHTML={{ __html: text.replace(/\n/g, '<br />') }}
           />
         </div>
         <InputField
-          label="이메일"
+          label='이메일'
           showLabel={true}
           showValidationText={false}
           starshow={true}
-          state="disable"
+          state='disable'
           text={formData.email}
           showCheckIcon={false}
-          className=""
+          className=''
         />
         <InputField
-          label="이름"
+          label='이름'
           showLabel={true}
           showValidationText={false}
           starshow={true}
-          state="default"
+          state='default'
           text={formData.name}
           showCheckIcon={false}
-          className=""
+          className=''
+          onKeyDown={handleNameChange}
           onChange={(e) => handleInputChange('name', e.target.value)}
         />
 
         <DateInputField
-          label="생년월일"
+          label='생년월일'
           showLabel={true}
           showValidationText={false}
           starshow={true}
-          state="default"
+          state='default'
           date={formData.birthdate ? new Date(formData.birthdate) : null}
-          placeholder="생년월일을 선택하세요"
+          placeholder='생년월일을 선택하세요'
           onChange={(date) =>
-            handleInputChange('birthdate', date ? date.toISOString().split('T')[0] : '')
+            handleInputChange(
+              'birthdate',
+              date ? date.toISOString().split('T')[0] : ''
+            )
           }
         />
 
         <Select
-          label="성별"
-          className=""
+          label='성별'
+          className=''
           options={['남성', '여성']}
-          title="성별을 선택하세요"
+          title='성별을 선택하세요'
           showLabel={true}
           starshow={true}
-          onOptionSelect={(option) => handleInputChange('gender', option as string)}
-          infoText=""
+          onOptionSelect={(option) =>
+            handleInputChange('gender', option as string)
+          }
+          infoText=''
           showIcon={true}
         />
 
         <Select
-          label="질문 받을 시간"
-          className=""
-          options={Array.from({ length: 17 }, (_, i) => `${String(i + 6).padStart(2, '0')}:00`)}
-          title="질문 받을 시간을 선택하세요"
+          label='질문 받을 시간'
+          className=''
+          options={Array.from(
+            { length: 17 },
+            (_, i) => `${String(i + 6).padStart(2, '0')}:00`
+          )}
+          title='질문 받을 시간을 선택하세요'
           showLabel={true}
           starshow={true}
-          onOptionSelect={(option) => handleInputChange('questReceptionTime', option as string)}
-          infoText="06시부터 22시까지 가능해요"
+          onOptionSelect={(option) =>
+            handleInputChange('questReceptionTime', option as string)
+          }
+          infoText='06시부터 22시까지 가능해요'
           showIcon={true}
         />
         <InputField
-          label="전화번호"
+          label='전화번호'
           showLabel={true}
           showValidationText={false}
           starshow={true}
-          state="default"
+          state='default'
           text={formData.phone}
           showCheckIcon={true}
-          className=""
-          placeholder="전화번호를 입력해 주세요"
+          className=''
+          placeholder='전화번호를 입력해 주세요'
+          onKeyDown={handlePhoneChange}
           onChange={(e) => handleInputChange('phone', e.target.value)}
         />
 
         {showPrimaryButton && (
-          <div className="flex justify-end w-full">
+          <div className='flex justify-end w-full'>
             <PrimaryButton
-              theme="white"
-              size="small"
+              theme='white'
+              size='small'
               onClick={handleSubmit}
               disabled={isButtonDisabled}
-              icon={<ArrowIcon color="black" direction="right" size={24} />}
+              icon={<ArrowIcon color='black' direction='right' size={24} />}
               hug={true}
             >
               {smallButtonText}

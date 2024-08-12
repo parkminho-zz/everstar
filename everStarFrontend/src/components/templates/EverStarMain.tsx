@@ -34,10 +34,10 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
 }) => {
   const navigate = useNavigate();
   const [toggleStatus, setToggleStatus] = useState<'on' | 'off' | undefined>(
-    memorialBookProfile?.isOpen ? 'on' : 'off',
+    memorialBookProfile?.isOpen ? 'on' : 'off'
   );
   const [isModalOpen, setIsModalOpen] = useState(
-    petProfile?.questIndex === 50 && !memorialBookProfile?.isActive && isOwner,
+    petProfile?.questIndex === 50 && !memorialBookProfile?.isActive && isOwner
   );
 
   const { mutate: updateMemorialBookStatus } = useUpdateMemorialBookOpenStatus({
@@ -71,26 +71,29 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
     setIsModalOpen(false); // 설문 제출 성공 시 모달을 닫음
   };
 
+  //에러
   if (!petProfile) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      {isModalOpen && <DepressionSurvey onSubmitSuccess={handleSurveySubmitSuccess} />}
+    <div className='flex flex-col items-center justify-center min-h-screen'>
+      {isModalOpen && (
+        <DepressionSurvey onSubmitSuccess={handleSurveySubmitSuccess} />
+      )}
       <ProgressCard
         title={petProfile.name}
         fill={petProfile.questIndex}
-        buttonTheme="white"
-        buttonSize="large"
+        buttonTheme='white'
+        buttonSize='large'
         buttonDisabled={false}
-        buttonText="지구별로 가기"
-        buttonIcon="SmallEarthImg"
+        buttonText='지구별로 가기'
+        buttonIcon='SmallEarthImg'
         onButtonClick={handleButtonClick}
         showMusicControl={false}
-        className=""
+        className=''
       />
-      <div className="flex flex-col items-center mt-20">
+      <div className='flex flex-col items-center mt-20'>
         <ViewMemorialBook
           onClick={handleViewMemorialBookClick}
           toggleStatus={toggleStatus}
