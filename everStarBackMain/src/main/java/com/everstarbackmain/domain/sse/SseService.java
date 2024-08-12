@@ -30,10 +30,11 @@ public class SseService {
 	public void updateQuestStatusNotification(User user, Long petId) {
 		Pet pet = petRepository.findByUserAndIdAndIsDeleted(user, petId, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
-		SseEmitter sseEmitter = emitterRepository.findById(petId)
-			.orElseThrow(() -> new IllegalStateException("Emitter not found"));
+		SseEmitter sseEmitter = emitterRepository.findById(petId);
 
-		sendToClient(pet, sseEmitter);
+		if(sseEmitter != null){
+			sendToClient(pet, sseEmitter);
+		}
 	}
 
 	public SseEmitter connect(User user, Long id) {
