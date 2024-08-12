@@ -51,13 +51,11 @@ public class DiaryService {
 
 		if (imageFile != null && !imageFile.isEmpty()) {
 			String imageUrl = s3UploadUtil.saveFile(imageFile);
-			// Diary diary = Diary.createDiaryHasImage(memorialBook, createDiaryRequestDto, imageUrl); // filter bad words for title, content
 			Diary diary = Diary.createDiaryHasImage(memorialBook, filteredTitle, filteredContent, imageUrl);
 			diaryRepository.save(diary);
 			return;
 		}
 		Diary diary = Diary.createDiaryHasNotImage(memorialBook, filteredTitle, filteredContent);
-		// Diary diary = Diary.createDiaryHasNotImage(memorialBook, createDiaryRequestDto); // filter bad words for title, content
 		diaryRepository.save(diary);
 	}
 
