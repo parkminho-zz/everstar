@@ -1,12 +1,14 @@
 import config from 'config';
 
 export interface Cheering {
+  id: number;
   petId: number;
   name: string;
   content: string;
   color: string;
   isAnonymous: boolean;
   cheeringMessageId: number;
+  relationShip: string;
 }
 
 // 반려동물 이름으로 검색
@@ -154,7 +156,8 @@ export const fetchPetPost = async (
 
   const result = await response.json();
   console.log('Added postIt response:', result.data);
-  return result.data.id;
+  // const abcd = { id: result.data.id, relationShip: result.data.relationShip };
+  return result.data;
 };
 
 export const fetchPetIntroduction = async (

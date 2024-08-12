@@ -25,7 +25,7 @@ export const PageIndicator: React.FC<PageIndicatorProps> = ({
   };
 
   return (
-    <div className='inline-flex items-center gap-[25px] relative'>
+    <div className='inline-flex items-center gap-[25px] relative z-10'>
       <button onClick={handlePrevClick} disabled={currentPage === 1}>
         <ArrowIcon size={24} direction='left' hover={true} />
       </button>
