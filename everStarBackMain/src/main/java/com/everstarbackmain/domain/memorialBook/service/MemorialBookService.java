@@ -83,7 +83,7 @@ public class MemorialBookService {
 		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 
-		if ((pet.getUser().getId() != user.getId()) || (petId != memorialBook.getPet().getId())) {
+		if (!(pet.getUser().getId().equals(user.getId())) || !(petId.equals(memorialBook.getPet().getId()))) {
 			throw new ExceptionResponse(CustomException.NOT_MY_MEMORIAL_BOOK_EXCEPTION);
 		}
 
@@ -97,6 +97,7 @@ public class MemorialBookService {
 
 		String resultMessage = PsychologicalTestResultMapper.getTestResultMessage(resultScore);
 		memorialBook.addPsychologicalTestResult(resultMessage);
+		memorialBook.changeTestStatus();
 	}
 
 	public MemorialBookInfoResponseDto getMemorialBookInfoByPetId(Long petId) {
@@ -120,7 +121,7 @@ public class MemorialBookService {
 			throw new ExceptionResponse(CustomException.NOT_ACTIVATED_MEMORIAL_BOOK_EXCEPTION);
 		}
 
-		if ((memorialBook.getPet().getUser().getId() != user.getId()) && !memorialBook.getIsOpen()) {
+		if (!(memorialBook.getPet().getUser().getId().equals(user.getId())) && !memorialBook.getIsOpen()) {
 			throw new ExceptionResponse(CustomException.NOT_OPEN_MEMORIAL_BOOK_EXCEPTION);
 		}
 

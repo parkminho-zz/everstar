@@ -8,7 +8,7 @@ public interface EmitterRepository {
 
 	SseEmitter save(Long petId, SseEmitter sseEmitter); // Emitter 저장
 
-	Optional<SseEmitter> findById(Long petId);  // 해당 동물 관련 Emitter 찾기
+	SseEmitter findById(Long petId);  // 해당 동물 관련 Emitter 찾기
 
 	void deleteByPetId(Long petId); // Emitter 삭제
 }

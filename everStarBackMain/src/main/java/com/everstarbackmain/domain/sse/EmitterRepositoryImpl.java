@@ -27,8 +27,8 @@ public class EmitterRepositoryImpl implements EmitterRepository {
 	}
 
 	@Override
-	public Optional<SseEmitter> findById(Long petId) {
-		return ofNullable(emitters.get(petId));
+	public SseEmitter findById(Long petId) {
+		return emitters.get(petId);
 	}
 
 	@Override

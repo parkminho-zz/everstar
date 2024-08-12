@@ -38,12 +38,16 @@ public class MemorialBook {
 	private Boolean isActive;
 
 	@Column(nullable = false)
+	private Boolean isTested;
+
+	@Column(nullable = false)
 	private Boolean isDeleted;
 
 	private MemorialBook(Pet pet) {
 		this.pet = pet;
 		isOpen = false;
 		isActive = false;
+		isTested = false;
 		isDeleted = false;
 	}
 
@@ -61,5 +65,9 @@ public class MemorialBook {
 
 	public void changeActiveStatus() {
 		isActive = !isActive;
+	}
+
+	public void changeTestStatus() {
+		isTested = true;
 	}
 }
