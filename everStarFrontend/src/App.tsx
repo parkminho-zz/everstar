@@ -19,16 +19,16 @@ function App() {
       <Router>
         <Routes>
           {/* 로그인 없이 접근 가능한 경로들 */}
-          <Route path="/" element={<SplashPageRedirector />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup/:userEmail*" element={<SignUpPage />} />
-          <Route path="/tutorial" element={<TutorialPage />} />
-          <Route path="/oauth/*" element={<OAuthCallback />} />
+          <Route path='/' element={<SplashPageRedirector />} />
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/signup/:userEmail*' element={<SignUpPage />} />
+          <Route path='/tutorial' element={<TutorialPage />} />
+          <Route path='/oauth/*' element={<OAuthCallback />} />
 
           {/* 보호된 경로들 */}
           {/* Profile 경로는 로그인만 필요 */}
           <Route
-            path="/mypage/*"
+            path='/mypage/*'
             element={
               <PrivateRoute>
                 <MyPage />
@@ -38,7 +38,7 @@ function App() {
 
           {/* 아래 경로들은 로그인과 PetDetails가 모두 필요 */}
           <Route
-            path="/earth/*"
+            path='/earth/*'
             element={
               <PrivateRoute>
                 <PetDetailsRoute>
@@ -48,7 +48,7 @@ function App() {
             }
           />
           <Route
-            path="/everstar/:pet/*"
+            path='/everstar/:pet/*'
             element={
               <PrivateRoute>
                 <PetDetailsRoute>
@@ -58,7 +58,7 @@ function App() {
             }
           />
           <Route
-            path="/pets/*"
+            path='/pets/*'
             element={
               <PrivateRoute>
                 <PetDetailsRoute>

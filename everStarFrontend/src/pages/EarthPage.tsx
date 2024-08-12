@@ -4,12 +4,16 @@ import { EarthMain } from 'components/templates/EarthMain';
 import { LetterBoxTemplate } from 'components/templates/LetterBoxTemplate';
 import { Header } from 'components/molecules/Header/Header';
 import { Footer } from 'components/molecules/Footer/Footer';
-import { LetterColor, LetterState } from 'components/molecules/cards/LetterCard/LetterCard';
+import {
+  LetterColor,
+  LetterState,
+} from 'components/molecules/cards/LetterCard/LetterCard';
 import { LetterDetailTemplate } from 'components/templates/LetterDetailTemplate';
 import { LetterWriteTemplate } from 'components/templates/LetterWriteTemplate';
 import { QuestRouter } from 'components/templates/QuestRouter';
 import { QuestOpenviduTemplate } from 'components/templates/QuestOpenviduTemplate';
 import { OpenViduApp } from 'components/templates/OpenViduApp';
+
 import bgImage from 'assets/images/bg-earth.webp';
 
 export const EarthPage: React.FC = () => {
@@ -62,9 +66,15 @@ export const EarthPage: React.FC = () => {
             <Route path='letter' element={<LetterWriteTemplate />} />
             <Route path='letter/:id' element={<LetterDetailTemplate />} />
             <Route path='quest/:questid' element={<QuestRouter />} />
-            <Route path='openvidu/:questid' element={<QuestOpenviduTemplate />} />
+            <Route
+              path='openvidu/:questid'
+              element={<QuestOpenviduTemplate />}
+            />
             <Route path='openvidu/sessionid' element={<OpenViduApp />} />
-            <Route path='openvidu/sessionid/:sessionId' element={<OpenViduApp />} />
+            <Route
+              path='openvidu/sessionid/:sessionId'
+              element={<OpenViduApp />}
+            />
           </Routes>
         </div>
         <Footer className='w-full mt-auto' />
