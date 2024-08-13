@@ -81,7 +81,7 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
 
   const handleViewMemorialBookClick = () => {
     if (memorialBookProfile) {
-      navigate(`/everstar/${petId}/memorialbook/${memorialBookProfile.id}`);
+      navigate(`/everstar/${params.pet}/memorialbook/${memorialBookProfile.id}`);
     }
   };
 
@@ -132,14 +132,11 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
 
     console.log(111);
     console.log(petId);
-    const eventSource = new EventSource(
-      `${config.API_BASE_URL}/api/earth/connect/${petId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+    const eventSource = new EventSource(`${config.API_BASE_URL}/api/earth/connect/${petId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
       },
-    );
+    });
 
     eventSource.onmessage = (event) => {
       console.log(event.data);
@@ -157,80 +154,74 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
   }, [quest, petId, accessToken]);
 
   return (
-    <div className='main-container w-full h-full bg-[#ffffff6b] rounded-[20px] overflow-hidden border-[0.5px] border-solid border-white shadow-[0px_4px_4px_#00000040,0px_4px_4px_#00000040] [-webkit-backdrop-filter:blur(4px)_brightness(100%)]'>
-      <div className='progress-container'>
+    <div className="main-container w-full h-full bg-[#ffffff6b] rounded-[20px] overflow-hidden border-[0.5px] border-solid border-white shadow-[0px_4px_4px_#00000040,0px_4px_4px_#00000040] [-webkit-backdrop-filter:blur(4px)_brightness(100%)]">
+      <div className="progress-container">
         <ProgressCard
           fill={fill}
-          buttonTheme='white'
+          buttonTheme="white"
           buttonDisabled={false}
-          buttonText={
-            type === 'earth' ? '영원별로 이동하기' : '지구별로 이동하기'
-          }
+          buttonText={type === 'earth' ? '영원별로 이동하기' : '지구별로 이동하기'}
           buttonIcon={type === 'earth' ? 'SmallStarImg' : 'SmallEarthImg'}
-          onButtonClick={
-            type === 'earth' ? handleStarIconClick : handleEarthIconClick
-          }
-          buttonSize='full'
-          className='h-full'
+          onButtonClick={type === 'earth' ? handleStarIconClick : handleEarthIconClick}
+          buttonSize="full"
+          className="h-full"
         />
       </div>
 
-      <div className='buttons-container mt-4'>
-        <div className='flex flex-col items-center justify-center w-full h-full'>
-          <div className='button-group'>
+      <div className="mt-4 buttons-container">
+        <div className="flex flex-col items-center justify-center w-full h-full">
+          <div className="button-group">
             <button
-              className='flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-lg cursor-pointer hover:bg-bgorange flex-1'
+              className="flex flex-col items-center justify-center flex-1 p-4 bg-white rounded-lg shadow-lg cursor-pointer hover:bg-bgorange"
               onClick={type === 'earth' ? handleLetterClick : handlePostitClick}
             >
               {type === 'earth' ? (
                 <>
                   <LetterIcons
-                    variant='letter'
+                    variant="letter"
                     size={iconSize}
-                    className='mb-2 pointer-events-none'
+                    className="mb-2 pointer-events-none"
                   />
-                  <span className='font-kor-h-h2 text-greyscaleblack-100 font-bold pointer-events-none'>
+                  <span className="font-bold pointer-events-none font-kor-h-h2 text-greyscaleblack-100">
                     편지쓰기
                   </span>
                 </>
               ) : (
                 <>
                   <PostitIcons
-                    variant='postit'
+                    variant="postit"
                     size={iconSize}
-                    className='mb-2 pointer-events-none'
+                    className="mb-2 pointer-events-none"
                   />
-                  <span className='font-kor-h-h2 text-greyscaleblack-100 font-bold pointer-events-none'>
+                  <span className="font-bold pointer-events-none font-kor-h-h2 text-greyscaleblack-100">
                     응원메시지
                   </span>
                 </>
               )}
             </button>
             <button
-              className='flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-lg cursor-pointer hover:bg-bgorange flex-1'
-              onClick={
-                type === 'earth' ? handleLetterboxClick : handleExploreClick
-              }
+              className="flex flex-col items-center justify-center flex-1 p-4 bg-white rounded-lg shadow-lg cursor-pointer hover:bg-bgorange"
+              onClick={type === 'earth' ? handleLetterboxClick : handleExploreClick}
             >
               {type === 'earth' ? (
                 <>
                   <LetterboxIcons
-                    variant='letterbox'
+                    variant="letterbox"
                     size={iconSize}
-                    className='mb-2 pointer-events-none'
+                    className="mb-2 pointer-events-none"
                   />
-                  <span className='font-kor-h-h2 text-greyscaleblack-100 font-bold pointer-events-none'>
+                  <span className="font-bold pointer-events-none font-kor-h-h2 text-greyscaleblack-100">
                     편지함
                   </span>
                 </>
               ) : (
                 <>
                   <RocketIcons
-                    variant='rocket'
+                    variant="rocket"
                     size={iconSize}
-                    className='mb-2 pointer-events-none'
+                    className="mb-2 pointer-events-none"
                   />
-                  <span className='font-kor-h-h2 text-greyscaleblack-100 font-bold pointer-events-none'>
+                  <span className="font-bold pointer-events-none font-kor-h-h2 text-greyscaleblack-100">
                     탐험하기
                   </span>
                 </>
@@ -240,43 +231,33 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
 
           {type === 'everstar' ? (
             <div
-              className='flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-lg cursor-pointer hover:bg-bgorange mt-4 w-full'
+              className="flex flex-col items-center justify-center w-full p-4 mt-4 bg-white rounded-lg shadow-lg cursor-pointer hover:bg-bgorange"
               onClick={onProfileClick} // 프로필 클릭 시 전달된 핸들러 호출
             >
-              <Avatar
-                iconSize={iconSize}
-                src={avatarSrc}
-                className='mr-4 pointer-events-none'
-              />
-              <div className='flex flex-col items-start'>
-                <span className='font-kor-h-h2 text-greyscaleblack-100 font-bold pointer-events-none'>
+              <Avatar iconSize={iconSize} src={avatarSrc} className="mr-4 pointer-events-none" />
+              <div className="flex flex-col items-start">
+                <span className="font-bold pointer-events-none font-kor-h-h2 text-greyscaleblack-100">
                   {name} 영원별입니다.
                 </span>
-                <div className='flex items-center'>
+                <div className="flex items-center">
                   {age && (
-                    <span className='text-sm text-greyscaleblack-100 mr-2 pointer-events-none'>
+                    <span className="mr-2 text-sm pointer-events-none text-greyscaleblack-100">
                       {age}살
                     </span>
                   )}
-                  <span className='text-xs text-greyscaleblack-80 pointer-events-none'>
-                    {description.length > 20
-                      ? `${description.substring(0, 20)}...`
-                      : description}
+                  <span className="text-xs pointer-events-none text-greyscaleblack-80">
+                    {description.length > 20 ? `${description.substring(0, 20)}...` : description}
                   </span>
                 </div>
               </div>
             </div>
           ) : (
             <button
-              className='flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-lg cursor-pointer hover:bg-bgorange mt-4 w-full'
+              className="flex flex-col items-center justify-center w-full p-4 mt-4 bg-white rounded-lg shadow-lg cursor-pointer hover:bg-bgorange"
               onClick={handleMypageClick} // 지구별에서는 마이페이지 클릭 시 전달된 핸들러 호출
             >
-              <Avatar
-                iconSize={iconSize}
-                src={avatarSrc}
-                className='pointer-events-none'
-              />
-              <span className='font-kor-h-h2 text-greyscaleblack-100 font-bold mt-2 pointer-events-none'>
+              <Avatar iconSize={iconSize} src={avatarSrc} className="pointer-events-none" />
+              <span className="mt-2 font-bold pointer-events-none font-kor-h-h2 text-greyscaleblack-100">
                 마이페이지
               </span>
             </button>
@@ -285,8 +266,8 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
       </div>
 
       {type === 'everstar' && memorialBookProfile ? (
-        <div className='buttons-container mt-4'>
-          <div className='flex flex-col items-center justify-center w-full h-full'>
+        <div className="mt-4 buttons-container">
+          <div className="flex flex-col items-center justify-center w-full h-full">
             <ViewMemorialBook
               onClick={handleViewMemorialBookClick}
               toggleStatus={toggleStatus}
@@ -298,16 +279,16 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
           </div>
         </div>
       ) : (
-        <div className='buttons-container mt-4'>
-          <div className='flex flex-col items-center justify-center w-full h-full'>
+        <div className="mt-4 buttons-container">
+          <div className="flex flex-col items-center justify-center w-full h-full">
             {quest && (
-              <div className='relative w-full flex flex-col items-center'>
-                <span className='absolute top-[-20px] bg-mainprimary text-white text-lg font-bold rounded-full w-[24px] h-[24px] flex items-center justify-center pointer-events-none'>
+              <div className="relative flex flex-col items-center w-full">
+                <span className="absolute top-[-20px] bg-mainprimary text-white text-lg font-bold rounded-full w-[24px] h-[24px] flex items-center justify-center pointer-events-none">
                   Q
                 </span>
                 <PrimaryButton
                   theme={getButtonTheme()}
-                  size='full'
+                  size="full"
                   disabled={questStatus === 'completed'}
                   onClick={() => handleQuestClick(quest)}
                   fullWidth
