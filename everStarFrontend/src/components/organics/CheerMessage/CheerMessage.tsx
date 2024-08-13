@@ -209,7 +209,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
           className='w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5'
         />
       </div>
-      <div className='relative w-full max-w-screen-lg p-6 bg-gray-100 rounded-lg shadow-md z-9'>
+      <div className='relative w-full max-w-screen-lg p-6 rounded-lg z-9'>
         <div className='flex'>
           <div className='flex-shrink-0 mr-4'>
             <ProfileCard
