@@ -23,6 +23,13 @@ export interface UserInfo {
 const handleResponse = async (response: Response) => {
   if (!response.ok) {
     const errorResponse = await response.json();
+    console.log(errorResponse);
+    
+    if(errorResponse.errorCode === "DuplicatedPhoneNumberException"){
+      alert(errorResponse.errorMessage);
+      window.location.href = "/login";
+    }
+    //
     throw new Error(errorResponse.message || 'An error occurred');
   }
   return response;
@@ -62,8 +69,21 @@ export const verifyAuthCode = async ({
       body: JSON.stringify({ phone, certificationNumber }),
     }
   );
+  if (!response.ok) {
+    const errorResponse = await response.json();
+    console.log(errorResponse);
+    
+    if(errorResponse.errorCode === "NotMatchAuthCodeException"){
+      alert(errorResponse.errorMessage);
+    }
+    if(errorResponse.statusNum === 403){
+      alert("다시 입력해주세요!!");
+    }
+    //
+    throw new Error(errorResponse.message || 'An error occurred');
+  }
 
-  return handleResponse(response).then((res) => res.json());
+  return response.json();
 };
 
 export const joinUser = async (
@@ -77,9 +97,8 @@ export const joinUser = async (
     body: JSON.stringify(userData),
   });
 
-  const data = await handleResponse(response).then((res) => res.json());
+  const data = await response.json();
   const token = response.headers.get('Authorization')?.split(' ')[1] || null;
-
   return { data, token };
 };
 
