@@ -54,38 +54,40 @@ export const IntroduceWrite: React.FC<IntroduceWriteProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} text='소개글 쓰기'>
-      <div className='flex flex-col justify-between w-full h-full'>
-        <div className='flex flex-col'>
-          <div
-            className="left-0 [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal] "
-            dangerouslySetInnerHTML={{ __html: text }}
-          />
-          <div className='mt-6'>
-            <Textbox
-              type='large'
-              className=''
-              label='내용'
-              showInfoText={true}
-              infoText={message.length ? `${message.length}/255` : ''}
-              infoTextAlign='left'
-              showStar={false}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              maxLength={255}
+      <div className='justify-center'>
+        <div className='flex flex-col justify-between w-full h-full mt-10'>
+          <div className='flex flex-col'>
+            <div
+              className="left-0 [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal] "
+              dangerouslySetInnerHTML={{ __html: text }}
             />
+            <div className='mt-5'>
+              <Textbox
+                type='large'
+                className=''
+                label='내용'
+                showInfoText={true}
+                infoText={message.length ? `${message.length}/255` : ''}
+                infoTextAlign='left'
+                showStar={false}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                maxLength={255}
+              />
+            </div>
           </div>
-        </div>
-        <div className='flex justify-end w-full mt-10'>
-          <PrimaryButton
-            theme='white'
-            size='large'
-            onClick={handleVerify}
-            disabled={false}
-            icon={null}
-            hug={true}
-          >
-            작성완료
-          </PrimaryButton>
+          <div className='flex justify-end mt-2 w-80'>
+            <PrimaryButton
+              theme='white'
+              size='large'
+              onClick={handleVerify}
+              disabled={false}
+              icon={null}
+              hug={true}
+            >
+              작성완료
+            </PrimaryButton>
+          </div>
         </div>
       </div>
     </Modal>
