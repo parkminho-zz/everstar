@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { EarthMain } from 'components/templates/EarthMain';
 import { LetterBoxTemplate } from 'components/templates/LetterBoxTemplate';
-import { Header } from 'components/molecules/Header/Header';
 import { Footer } from 'components/molecules/Footer/Footer';
 import {
   LetterColor,
@@ -113,9 +112,6 @@ export const EarthPage: React.FC = () => {
           backgroundRepeat: 'no-repeat',
         }}
       ></div>
-      {/* 고정된 헤더 */}
-      <Header className='fixed top-0 left-0 z-50 w-full' />
-
       <div className='z-10 flex-grow'>
         <Routes>
           <Route

@@ -80,32 +80,36 @@ export const LetterWriteTemplate: React.FC = () => {
   };
 
   return (
-    <div className='w-full h-full'>
-      <InteractiveForm
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={(newPage) => console.log('Page changed to:', newPage)}
-        headerText='편지 쓰기'
-        textboxLabel='내용'
-        largeButtonText={imageText}
-        smallButtonText='작성 완료'
-        showPrimaryButton={true}
-        customText='사랑하는 반려동물에게<br /> 편지를 보내보세요.'
-        ghostText='편지 내용'
-        onTextChange={handleTextChange}
-        onButtonClick={handleButtonClick}
-        onButtonClick2={handleButtonClick2}
-        value={text}
-        onLeftIconClick={() => navigate(-1)}
-      />
-      {image && <span className='text-sm text-gray-600'>{image.name}</span>}
-      <input
-        type='file'
-        id='photoInput'
-        accept='image/*'
-        onChange={handleImageChange}
-        style={{ display: 'none' }}
-      />
+    <div className='flex items-center justify-center flex-grow'>
+      <div className='w-full h-full max-w-md '>
+        <InteractiveForm
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(newPage) => console.log('Page changed to:', newPage)}
+          headerText='편지 쓰기'
+          textboxLabel='내용'
+          largeButtonText={imageText}
+          smallButtonText='작성 완료'
+          showPrimaryButton={true}
+          customText='사랑하는 반려동물에게<br /> 편지를 보내보세요.'
+          ghostText='편지 내용'
+          onTextChange={handleTextChange}
+          onButtonClick={handleButtonClick}
+          onButtonClick2={handleButtonClick2}
+          glassEffect={false}
+          value={text}
+          onLeftIconClick={() => navigate(-1)}
+          className={'flex justify-center h-full w-full'}
+        />
+        {image && <span className='text-sm text-gray-600'>{image.name}</span>}
+        <input
+          type='file'
+          id='photoInput'
+          accept='image/*'
+          onChange={handleImageChange}
+          style={{ display: 'none' }}
+        />
+      </div>
     </div>
   );
 };

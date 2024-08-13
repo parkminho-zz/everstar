@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { InteractiveForm } from 'components/templates/InteractiveForm';
-import { Glass } from 'components/molecules/Glass/Glass';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -150,14 +149,7 @@ export const QuestWithImageTemplate = () => {
 
   return (
     <div className='relative flex items-center justify-center min-h-screen'>
-      <Glass
-        currentPage={1}
-        totalPages={1}
-        onPageChange={() => console.log('이동')}
-        showPageIndicator={false}
-        className='w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5'
-      />
-      <div className='absolute inset-0 flex items-center justify-center'>
+      <div className='w-full h-full'>
         <InteractiveForm
           currentPage={1}
           totalPages={1}
@@ -177,6 +169,7 @@ export const QuestWithImageTemplate = () => {
           onButtonClick={handleSubmit}
           onButtonClick2={handleButtonClick2}
           onLeftIconClick={() => navigate(-1)}
+          glassEffect={false}
         />
         <input
           type='file'

@@ -42,7 +42,7 @@ export const MyPage: React.FC = () => {
 
       {/* 고정된 푸터 - PetDetailsRoute로 감싸서 펫이 선택된 상황에서만 렌더링 */}
       <PetDetailsRoute>
-        <Footer className="fixed bottom-0 left-0 z-50 w-full" />
+        <Footer className='fixed bottom-0 left-0 z-50 w-full' />
       </PetDetailsRoute>
     </div>
   );
