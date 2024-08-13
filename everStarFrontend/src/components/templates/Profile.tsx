@@ -72,15 +72,15 @@ export const Profile: React.FC = () => {
   if (error) return <div className='text-red-500'>{error.message}</div>;
 
   return (
-    <div className='relative flex flex-col items-center justify-center w-full min-h-screen'>
+    <div className='relative flex flex-col items-center justify-center w-full min-h-screen overflow-hidden'>
       <Glass
         currentPage={1}
         totalPages={1}
         onPageChange={(newPage) => console.log('Page changed to:', newPage)}
         showPageIndicator={false}
-        className='absolute top-0 bottom-0 left-0 right-0 z-0'
+        className='absolute top-0 left-0 w-full h-full z-0'
       />
-      <div className='relative z-10 flex flex-col items-center justify-center w-full h-full'>
+      <div className='relative z-10 flex flex-col items-center justify-center w-full max-w-4xl h-full p-8'>
         {isPetInfoOpen ? (
           <PetInfoForm
             headerText='반려동물 정보 입력'

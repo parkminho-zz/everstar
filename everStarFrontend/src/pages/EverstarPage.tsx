@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import { EverStarMain } from 'components/templates/EverStarMain';
 import { EverStarCheerMessage } from 'components/templates/EverStarCheerMessage';
@@ -8,6 +8,7 @@ import { Footer } from 'components/molecules/Footer/Footer';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
 import bgImage from 'assets/images/bg-everstar.webp';
+
 import {
   useFetchOtherPetDetails,
   useFetchCheeringPet,
@@ -30,7 +31,7 @@ export const EverstarPage: React.FC = () => {
   const params = useParams<{ pet?: string }>();
   const navigate = useNavigate();
   const currentPetId = useSelector(
-    (state: RootState) => state.pet.petDetails?.id
+    (state: RootState) => state.pet.petDetails?.id,
   );
 
   const petId = useMemo(
@@ -39,7 +40,7 @@ export const EverstarPage: React.FC = () => {
         ? parseInt(params.pet, 10)
         : currentPetId ||
           parseInt(sessionStorage.getItem('defaultPetId') || '0', 10),
-    [params.pet, currentPetId]
+    [params.pet, currentPetId],
   );
 
   const { data: petDetails, isLoading: isPetDetailsLoading } =
@@ -54,7 +55,7 @@ export const EverstarPage: React.FC = () => {
 
   const isOwner = currentPetId === petId;
 
-  useMemo(() => {
+  useEffect(() => {
     if (!params.pet && petId && !sessionStorage.getItem('initialNavigation')) {
       sessionStorage.setItem('defaultPetId', petId.toString());
       sessionStorage.setItem('initialNavigation', 'true');
@@ -108,93 +109,76 @@ export const EverstarPage: React.FC = () => {
         color: item.color.toLowerCase() || '',
         cheeringMessageId: item.cheeringMessageId,
         petId: item.petId,
-      })
+      }),
     ) || [];
 
   const totalPages = Math.ceil(postItCards.length / 10);
 
   return (
-    <div
-      className='flex flex-col min-h-screen bg-center bg-cover'
-      style={{ backgroundImage: `url(${bgImage})` }}
-    >
-      <div className='flex flex-col min-h-screen'>
-        <Header type='everstar' className='top-0 z-50' />
-        <div className='flex-grow'>
-          <Routes>
-            <Route
-              path='/'
-              element={
-                <EverStarMain
-                  petProfile={petProfile}
-                  buttonDisabled={
-                    !memorialBooks?.data.isActive || !memorialBooks?.data.isOpen
-                  }
-                  memorialBookProfile={memorialBooks?.data}
-                  petId={petId ?? 0}
-                  isOwner={isOwner}
+    <div className='relative flex flex-col w-full min-h-screen overflow-hidden'>
+      {/* Background Image */}
+      <div
+        className='absolute top-0 left-0 w-full h-full bg-center bg-cover z-[-1]'
+        style={{
+          backgroundImage: `url(${bgImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      ></div>
+
+      {/* 고정된 헤더 */}
+      <Header className='fixed top-0 left-0 w-full z-50' />
+
+      <div>
+        <Routes>
+          <Route
+            path='/'
+            element={
+              <EverStarMain
+                petProfile={petProfile}
+                buttonDisabled={
+                  !memorialBooks?.data.isActive || !memorialBooks?.data.isOpen
+                }
+                memorialBookProfile={memorialBooks?.data}
+                petId={petId ?? 0}
+                isOwner={isOwner}
+              />
+            }
+          />
+          <Route
+            path='message'
+            element={
+              petProfile ? (
+                <EverStarCheerMessage
+                  profile={petProfile}
+                  postItCards={postItCards}
+                  totalPages={totalPages}
                 />
-              }
-            />
-            <Route
-              path='message'
-              element={
-                petProfile ? (
-                  <EverStarCheerMessage
-                    profile={petProfile}
-                    postItCards={postItCards}
-                    totalPages={totalPages}
-                  />
-                ) : (
-                  <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
-                    <img
-                      src={bgImage}
-                      alt='Background'
-                      style={{
-                        position: 'absolute',
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                      }}
-                    />
-                    <SplashTemplate
-                      type='everCheerRocket'
-                      className='z-10 w-full h-full '
-                    />
-                  </div>
-                )
-              }
-            />
-            <Route path='explore' element={<EverStarSearchStar />} />
-            <Route
-              path='memorialbook/:memorialBookId'
-              element={
-                petProfile ? (
-                  <MemorialBook avatarUrl={petProfile.avatarUrl} />
-                ) : (
-                  <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
-                    <img
-                      src={bgImage}
-                      alt='Background'
-                      style={{
-                        position: 'absolute',
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                      }}
-                    />
-                    <SplashTemplate
-                      type='book'
-                      className='z-10 w-full h-full '
-                    />
-                  </div>
-                )
-              }
-            />
-          </Routes>
-        </div>
-        <Footer className='mt-auto' />
+              ) : (
+                <SplashTemplate
+                  type='everCheerRocket'
+                  className='z-10 w-full h-full '
+                />
+              )
+            }
+          />
+          <Route path='explore' element={<EverStarSearchStar />} />
+          <Route
+            path='memorialbook/:memorialBookId'
+            element={
+              petProfile ? (
+                <MemorialBook avatarUrl={petProfile.avatarUrl} />
+              ) : (
+                <SplashTemplate type='book' className='z-10 w-full h-full ' />
+              )
+            }
+          />
+        </Routes>
       </div>
+
+      {/* 고정된 푸터 */}
+      <Footer className='fixed bottom-0 left-0 w-full z-50' />
     </div>
   );
 };

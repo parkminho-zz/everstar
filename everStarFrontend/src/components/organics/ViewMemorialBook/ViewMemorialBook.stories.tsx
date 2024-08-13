@@ -75,7 +75,9 @@ export const ClosedMemorialBook: Story = {
 
 export const WithToggleInteraction: Story = {
   render: (args) => {
-    const [toggleStatus, setToggleStatus] = useState<'on' | 'off'>(args.toggleStatus || 'off');
+    const [toggleStatus, setToggleStatus] = useState<'on' | 'off'>(
+      args.toggleStatus || 'off',
+    );
 
     const handleToggleChange = (status: 'on' | 'off') => {
       setToggleStatus(status);
@@ -83,7 +85,11 @@ export const WithToggleInteraction: Story = {
     };
 
     return (
-      <ViewMemorialBook {...args} toggleStatus={toggleStatus} onToggleChange={handleToggleChange} />
+      <ViewMemorialBook
+        {...args}
+        toggleStatus={toggleStatus}
+        onToggleChange={handleToggleChange}
+      />
     );
   },
   args: {

@@ -17,7 +17,8 @@ export const SplashPageRedirector = () => {
   }, [navigate]);
 
   return loading ? (
-    <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+    <div className='relative flex items-center justify-center min-h-screen'>
+      {/* Background Image */}
       <img
         src={bgImage}
         alt='Background'
@@ -27,8 +28,10 @@ export const SplashPageRedirector = () => {
           height: '100%',
           objectFit: 'cover',
         }}
+        className='absolute top-0 left-0 w-full h-full object-cover'
       />
-      <SplashTemplate type='splash' className='z-10 w-full h-full ' />
+      {/* Splash Template */}
+      <SplashTemplate type='splash' className='z-10' />
     </div>
   ) : null;
 };
