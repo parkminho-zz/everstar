@@ -21,17 +21,9 @@ export const MyInfo: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'one' | 'two'>('one');
   const [selectedPetId, setSelectedPetId] = useState<number | null>(null);
 
-  const {
-    data: petsData,
-    isLoading: isPetsLoading,
-    error: petsError,
-  } = useFetchPets(token);
-  const { isLoading: isUserLoading, error: userError } =
-    useFetchUserInfo(token);
-  const { localPetDetails, refetch } = useLocalPetDetails(
-    selectedPetId ?? 0,
-    token
-  );
+  const { data: petsData, isLoading: isPetsLoading, error: petsError } = useFetchPets(token);
+  const { isLoading: isUserLoading, error: userError } = useFetchUserInfo(token);
+  const { localPetDetails, refetch } = useLocalPetDetails(selectedPetId ?? 0, token);
 
   useEffect(() => {
     if (petsData && petsData.length > 0) {
@@ -84,15 +76,15 @@ export const MyInfo: React.FC = () => {
         setActiveTab('two'); // 반려동물을 선택하면 탭을 전환
       }
     },
-    [pets, selectedPetId]
+    [pets, selectedPetId],
   );
 
   if (isPetsLoading || isUserLoading) {
     return (
-      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+      <div className="relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]">
         <img
           src={bgImage}
-          alt='Background'
+          alt="Background"
           style={{
             position: 'absolute',
             width: '100%',
@@ -100,13 +92,13 @@ export const MyInfo: React.FC = () => {
             objectFit: 'cover',
           }}
         />
-        <SplashTemplate type='myPageRocket' className='z-10 w-full h-full ' />
+        <SplashTemplate type="myPageRocket" className="z-10 w-full h-full " />
       </div>
     );
   }
 
-  if (petsError) return <div className='text-red-500'>{petsError.message}</div>;
-  if (userError) return <div className='text-red-500'>{userError.message}</div>;
+  if (petsError) return <div className="text-red-500">{petsError.message}</div>;
+  if (userError) return <div className="text-red-500">{userError.message}</div>;
 
   const handleButtonClick = () => {
     sessionStorage.removeItem('persist:root');
@@ -116,48 +108,52 @@ export const MyInfo: React.FC = () => {
   };
 
   return (
-    <div className='relative flex flex-col items-center justify-center w-full min-h-screen'>
+    <div className="relative flex flex-col items-center justify-center w-full min-h-screen">
       <Glass
         currentPage={1}
         totalPages={1}
         onPageChange={(newPage) => console.log('Page changed to:', newPage)}
         showPageIndicator={false}
-        className='absolute top-0 bottom-0 left-0 right-0 z-0'
+        className="absolute top-0 bottom-0 left-0 right-0 z-0"
       />
-      <div className='relative z-10 flex flex-col items-center justify-center w-full h-full'>
-        <div className='flex justify-center p-6'>
-          <div className='flex flex-col items-center w-[360px] gap-8 p-5 bg-white rounded-lg shadow-md'>
+      <div className="relative z-10 flex flex-col items-center justify-center w-full h-full">
+        <div className="flex justify-center p-6">
+          <div className="flex flex-col items-center w-[360px] gap-8 p-5 bg-white rounded-lg shadow-md">
             <ModalHeader
-              text='마이 페이지'
+              text="마이 페이지"
               showLeftIcon={true}
               onLeftIconClick={() => navigate(-1)}
             />
             <Tab
-              row='two'
+              row="two"
               activeTab={activeTab}
-              className='mb-4'
+              className="mb-4"
               onTabClick={(tab) => setActiveTab(tab as 'one' | 'two')}
             />
-            {activeTab === 'one' ? (
-              <UserInfoTab
-                userInfo={{
-                  name: userInfo?.userName || '',
-                  birthdate: userInfo?.birthDate || '',
-                  gender: getGenderText(userInfo?.gender || ''),
-                  email: userInfo?.email || '',
-                  phone: userInfo?.phoneNumber || '',
-                }}
-                smallButtonText='핸드폰 번호 수정하기'
-                onButtonClick={handleButtonClick}
-              />
-            ) : (
-              <PetInfoTab
-                petOptions={petOptions}
-                petInfo={petInfo}
-                onPetSelect={onPetSelect}
-                token={token}
-              />
-            )}
+            <div className="flex flex-col w-full gap-4 pb-12">
+              {' '}
+              {/* 이 div에 padding-bottom 추가 */}
+              {activeTab === 'one' ? (
+                <UserInfoTab
+                  userInfo={{
+                    name: userInfo?.userName || '',
+                    birthdate: userInfo?.birthDate || '',
+                    gender: getGenderText(userInfo?.gender || ''),
+                    email: userInfo?.email || '',
+                    phone: userInfo?.phoneNumber || '',
+                  }}
+                  smallButtonText="핸드폰 번호 수정하기"
+                  onButtonClick={handleButtonClick}
+                />
+              ) : (
+                <PetInfoTab
+                  petOptions={petOptions}
+                  petInfo={petInfo}
+                  onPetSelect={onPetSelect}
+                  token={token}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>
