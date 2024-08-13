@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import { Header } from 'components/molecules/Header/Header';
 import { Footer } from 'components/molecules/Footer/Footer';
 import { MyinfoMove } from 'components/templates/MyInfoMove';
 import { Profile } from 'components/templates/Profile';
@@ -32,9 +31,6 @@ export const MyPage: React.FC = () => {
         }}
       ></div>
 
-      {/* 고정된 헤더 */}
-      <Header className='fixed top-0 left-0 w-full z-50' />
-
       {/* 메인 컨텐츠 */}
       <div className='flex flex-col items-center justify-center flex-grow'>
         <Routes>
@@ -46,7 +42,7 @@ export const MyPage: React.FC = () => {
 
       {/* 고정된 푸터 - PetDetailsRoute로 감싸서 펫이 선택된 상황에서만 렌더링 */}
       <PetDetailsRoute>
-        <Footer className='fixed bottom-0 left-0 w-full z-50' />
+        <Footer className='fixed bottom-0 left-0 z-50 w-full' />
       </PetDetailsRoute>
     </div>
   );

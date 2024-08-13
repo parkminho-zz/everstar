@@ -27,7 +27,12 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   avatarSrc,
 }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} text='Profile Information'>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      text='자세히보기'
+      customStyle={{ height: '', maxHeight: '', overflowY: undefined }} // 스타일을 빈 값으로 설정
+    >
       <ProfileCard
         name={profileData.name}
         age={profileData.age}

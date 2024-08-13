@@ -35,7 +35,7 @@ export const SearchStar = (): JSX.Element => {
     <div className='relative flex flex-col items-center justify-center min-h-screen '>
       <div className='relative z-10 flex flex-col items-center justify-center w-full h-full p-12'>
         <MoveContainer
-          title={'영원별 이동'}
+          title={'영원별 탐사'}
           nextPage1={'random'}
           nextPage2={'search'}
           onNextPage1Click={handleNextPage1Click}

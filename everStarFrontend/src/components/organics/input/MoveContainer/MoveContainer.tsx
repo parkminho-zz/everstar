@@ -27,9 +27,9 @@ export const MoveContainer = ({
       case 'profile':
         return '반려동물 변경';
       case 'random':
-        return '랜덤 이동';
+        return '랜덤 탐사';
       case 'search':
-        return '검색 이동';
+        return '검색 탐사';
       default:
         return '내 정보';
     }

@@ -1,5 +1,8 @@
 import React from 'react';
-import { InputContainer, InputContainerProps } from 'components/organics/input/InputContainer';
+import {
+  InputContainer,
+  InputContainerProps,
+} from 'components/organics/input/InputContainer';
 import { Glass } from 'components/molecules/Glass/Glass';
 
 interface InteractiveFormProps extends InputContainerProps {
@@ -18,6 +21,8 @@ interface InteractiveFormProps extends InputContainerProps {
   isRtc?: boolean;
   handleRtcButtonClick?: () => void;
   handleSmallButtonDisabled?: boolean;
+  glassEffect?: boolean;
+  className?: string;
 }
 
 export const InteractiveForm: React.FC<InteractiveFormProps> = ({
@@ -51,6 +56,8 @@ export const InteractiveForm: React.FC<InteractiveFormProps> = ({
   isRtc,
   handleRtcButtonClick,
   handleSmallButtonDisabled,
+  glassEffect,
+  className,
 }) => {
   // const [image, setImage] = useState<string | null>(selectedImage || null);
 
@@ -64,9 +71,10 @@ export const InteractiveForm: React.FC<InteractiveFormProps> = ({
         totalPages={totalPages}
         onPageChange={onPageChange}
         showPageIndicator={false}
+        glassEffect={glassEffect}
         className='w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5'
       />
-      <div className='absolute inset-0 flex items-center justify-center'>
+      <div className='absolute inset-0 flex justify-center'>
         <InputContainer
           headerText={customHeaderText}
           letterCardType={letterCardType}
@@ -95,6 +103,7 @@ export const InteractiveForm: React.FC<InteractiveFormProps> = ({
           isRtc={isRtc}
           handleRtcButtonClick={handleRtcButtonClick}
           handleSmallButtonDisabled={handleSmallButtonDisabled}
+          className={className}
         />
       </div>
     </div>

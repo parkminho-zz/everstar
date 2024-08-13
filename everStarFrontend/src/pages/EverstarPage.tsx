@@ -3,7 +3,6 @@ import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import { EverStarMain } from 'components/templates/EverStarMain';
 import { EverStarCheerMessage } from 'components/templates/EverStarCheerMessage';
 import { EverStarSearchStar } from 'components/templates/EverStarSearchStar';
-import { Header } from 'components/molecules/Header/Header';
 import { Footer } from 'components/molecules/Footer/Footer';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
@@ -31,7 +30,7 @@ export const EverstarPage: React.FC = () => {
   const params = useParams<{ pet?: string }>();
   const navigate = useNavigate();
   const currentPetId = useSelector(
-    (state: RootState) => state.pet.petDetails?.id,
+    (state: RootState) => state.pet.petDetails?.id
   );
 
   const petId = useMemo(
@@ -40,7 +39,7 @@ export const EverstarPage: React.FC = () => {
         ? parseInt(params.pet, 10)
         : currentPetId ||
           parseInt(sessionStorage.getItem('defaultPetId') || '0', 10),
-    [params.pet, currentPetId],
+    [params.pet, currentPetId]
   );
 
   const { data: petDetails, isLoading: isPetDetailsLoading } =
@@ -109,7 +108,7 @@ export const EverstarPage: React.FC = () => {
         color: item.color.toLowerCase() || '',
         cheeringMessageId: item.cheeringMessageId,
         petId: item.petId,
-      }),
+      })
     ) || [];
 
   const totalPages = Math.ceil(postItCards.length / 10);
@@ -128,8 +127,6 @@ export const EverstarPage: React.FC = () => {
       ></div>
 
       {/* 고정된 헤더 */}
-      <Header className='fixed top-0 left-0 w-full z-50' />
-
       <div>
         <Routes>
           <Route
@@ -178,7 +175,7 @@ export const EverstarPage: React.FC = () => {
       </div>
 
       {/* 고정된 푸터 */}
-      <Footer className='fixed bottom-0 left-0 w-full z-50' />
+      <Footer className='fixed bottom-0 left-0 z-50 w-full' />
     </div>
   );
 };

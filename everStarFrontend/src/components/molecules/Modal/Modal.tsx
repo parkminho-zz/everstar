@@ -8,14 +8,16 @@ interface ModalProps extends ModalHeaderProps {
   isOpen: boolean;
   onClose: () => void;
   children?: React.ReactNode;
-  height?: string; // 선택적 height prop 추가
+  height?: string;
+  customStyle?: React.CSSProperties; // customStyle prop 추가
 }
 
 export const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   children,
-  height, // height prop 추가
+  height,
+  customStyle,
   ...headerProps
 }) => {
   if (!isOpen) return null;
@@ -23,15 +25,16 @@ export const Modal: React.FC<ModalProps> = ({
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
       <div
-        className='bg-white rounded-lg shadow-md w-[360px] max-w-full p-4'
+        className='w-full max-w-md p-4 bg-white rounded-lg shadow-md '
         style={{
-          height: height || 'auto',
-          maxHeight: '90vh',
+          height: height || '100vh',
+          maxHeight: '100vh',
           overflowY: 'auto',
-        }} // height가 제공되면 사용, 그렇지 않으면 auto
+          ...customStyle,
+        }}
       >
         <ModalHeader {...headerProps} onLeftIconClick={onClose} />
-        <div className='justify-center'>{children}</div>
+        <div className='flex justify-center'>{children}</div>
       </div>
     </div>
   );

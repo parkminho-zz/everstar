@@ -128,6 +128,8 @@ export const QuestTextTemplate = () => {
         value={text}
         onButtonClick={handleSubmit}
         onLeftIconClick={() => navigate(-1)}
+        glassEffect={false}
+        className={'flex justify-center h-full w-full'}
       />
     </div>
   );
