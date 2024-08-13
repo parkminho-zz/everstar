@@ -77,7 +77,7 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
         dateTime: new Date(item.createAt).toLocaleString(),
       })
     ) || [];
-  const itemPage = 9;
+  const itemPage = 4;
   const letterLength = petLetters.length;
   const letterTotalPage = Math.floor(letterLength / itemPage) + 1;
 
@@ -96,7 +96,7 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
           className='w-full h-full'
         />
       </div>
-      <div className='relative z-10 flex flex-col items-center w-full max-w-5xl p-4 mb-60 sm:p-8'>
+      <div className='relative z-10 flex flex-col items-center w-full max-w-5xl min-h-screen p-10 pt-20 overflow-visible mb-60 sm:p-8'>
         <ModalHeader text={headerText} onLeftIconClick={() => navigate(-1)} />
         <div className='flex flex-col items-center w-full mt-9 sm:mt-20'>
           <LetterBox

@@ -14,6 +14,7 @@ interface ProfileModalProps {
     avatarSrc?: string;
   };
   isOwner: boolean;
+  avatarSrc?: string;
   onPencilClick?: () => void; // Function to handle pencil icon click
 }
 
@@ -23,6 +24,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   profileData,
   isOwner,
   onPencilClick,
+  avatarSrc,
 }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} text='Profile Information'>
@@ -32,7 +34,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
         date={profileData.date}
         description={profileData.description}
         tagList={profileData.tagList}
-        avatarSrc={profileData.avatarSrc}
+        avatarSrc={avatarSrc}
         onPencilClick={isOwner ? onPencilClick || (() => {}) : () => {}} // 빈 함수 전달
       />
     </Modal>
