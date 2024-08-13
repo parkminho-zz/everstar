@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from 'components/molecules/Modal/Modal';
 import { InputField } from 'components/organics/input/InputFields';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
@@ -21,6 +21,20 @@ export const PhoneNumberModal: React.FC<PhoneNumberModalProps> = ({
   text,
 }) => {
   const [verificationCode, setVerificationCode] = useState('');
+  const [timer, setTimer] = useState(180); // 3분(180초) 타이머 설정
+  const [isButtonVisible, setIsButtonVisible] = useState(true);
+
+  useEffect(() => {
+    if (timer > 0) {
+      const interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    } else {
+      setIsButtonVisible(false); // 타이머가 끝나면 인증 버튼 숨김
+    }
+  }, [timer]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVerificationCode(e.target.value);
@@ -28,6 +42,13 @@ export const PhoneNumberModal: React.FC<PhoneNumberModalProps> = ({
 
   const handleVerify = () => {
     onVerify(verificationCode);
+  };
+
+  const handleResend = () => {
+    setTimer(180); // 타이머 초기화
+    setIsButtonVisible(true); // 인증 버튼 다시 보이도록 설정
+    setVerificationCode(''); // 인증 코드 초기화
+    onResend(); // 인증번호 재전송 호출
   };
 
   return (
@@ -50,21 +71,23 @@ export const PhoneNumberModal: React.FC<PhoneNumberModalProps> = ({
             placeholder="인증번호를 입력해 주세요"
             onChange={handleChange}
           />
-          <div className="mt-4 text-right text-blue-500 cursor-pointer" onClick={onResend}>
-            인증번호 재전송
-          </div>
+          {!isButtonVisible && (
+            <div className="mt-4 text-right text-blue-500 cursor-pointer" onClick={handleResend}>
+              인증번호 재전송
+            </div>
+          )}
         </div>
         <div className="flex justify-end w-full mt-8">
-          <PrimaryButton
-            theme="white"
-            size="large"
-            onClick={handleVerify}
-            disabled={!verificationCode}
-            icon={<ArrowIcon color="black" direction="right" size={24} />}
-            hug={true}
-          >
-            {''}
-          </PrimaryButton>
+          {isButtonVisible && (
+            <PrimaryButton
+              theme="white"
+              size="large"
+              onClick={handleVerify}
+              disabled={!verificationCode}
+              icon={<ArrowIcon color="black" direction="right" size={24} />}
+              hug={true}
+            ></PrimaryButton>
+          )}
         </div>
       </div>
     </Modal>
