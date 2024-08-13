@@ -51,10 +51,10 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   isOwner,
 }) => {
   const [toggleStatus, setToggleStatus] = useState<'on' | 'off' | undefined>(
-    memorialBookProfile?.isOpen ? 'on' : 'off',
+    memorialBookProfile?.isOpen ? 'on' : 'off'
   );
   const [isModalOpen, setIsModalOpen] = useState(
-    petProfile?.questIndex === 50 && !memorialBookProfile?.isActive && isOwner,
+    petProfile?.questIndex === 50 && !memorialBookProfile?.isActive && isOwner
   );
 
   const { mutate: updateMemorialBookStatus } = useUpdateMemorialBookOpenStatus({
@@ -73,6 +73,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
     setIsProfileModalOpen(true); // 프로필 클릭 시 모달 열기
   };
 
+  console.log(petProfile);
   //에러
   if (!petProfile) {
     return <div>Loading...</div>;
@@ -108,6 +109,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
       />
 
       <ProfileModal
+        avatarSrc={petProfile.avatarUrl}
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)} // 프로필 모달 닫기
         profileData={petProfile}

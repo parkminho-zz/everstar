@@ -109,7 +109,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
     console.log(
       'Message received (foreground). : ',
       // payload.notification?.title
-      payload,
+      payload
     );
   });
 
@@ -171,7 +171,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      },
+      }
     );
 
     eventSource.onmessage = (event) => {
@@ -204,15 +204,15 @@ export const EarthMain: React.FC<EarthMainProps> = ({
           description={''}
         />
       </div>
-      <div className='fixed right-12 bottom-14'>
+      <div className='fixed z-50 right-20 bottom-20'>
         <LetterCard
           type='receive'
-          color='gray'
+          color='white'
           state='received'
           name='알림'
           message={letterMessage}
           dateTime=''
-          className='h-5'
+          className='h-3'
           centered={true}
           visible={letterCardVisible}
           onClick={handleLetterCardClick}
