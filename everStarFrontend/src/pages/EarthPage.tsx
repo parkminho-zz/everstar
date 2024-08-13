@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { EarthMain } from 'components/templates/EarthMain';
 import { LetterBoxTemplate } from 'components/templates/LetterBoxTemplate';
@@ -34,6 +34,7 @@ interface PetProfile {
 
 export const EarthPage: React.FC = () => {
   const PetId = useSelector((state: RootState) => state.pet.petDetails?.id);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const {
     data: petDetails,
@@ -41,6 +42,9 @@ export const EarthPage: React.FC = () => {
     error: petDetailsError,
   } = useFetchOtherPetDetails(PetId ?? -1);
 
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
   useEffect(() => {
     if (PetId === undefined || isPetDetailsLoading || petDetailsError) {
       console.log('No Pet Details Available');
@@ -95,6 +99,8 @@ export const EarthPage: React.FC = () => {
     }));
   };
 
+  const totalPages = Math.ceil(generateLargeLetterData(50).length / 9);
+
   return (
     <div className='relative flex flex-col w-full min-h-screen overflow-hidden'>
       {/* Background Image */}
@@ -108,9 +114,9 @@ export const EarthPage: React.FC = () => {
         }}
       ></div>
       {/* 고정된 헤더 */}
-      <Header className='fixed top-0 left-0 w-full z-50' />
+      <Header className='fixed top-0 left-0 z-50 w-full' />
 
-      <div className='flex-grow z-10'>
+      <div className='z-10 flex-grow'>
         <Routes>
           <Route
             path='/'
@@ -139,9 +145,9 @@ export const EarthPage: React.FC = () => {
                 <PetDetailsRoute>
                   <LetterBoxTemplate
                     letterData={generateLargeLetterData(50)}
-                    currentPage={1}
-                    totalPages={9}
-                    onPageChange={() => console.log('이동1')}
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
                     headerText='편지함'
                   />
                 </PetDetailsRoute>
@@ -191,7 +197,7 @@ export const EarthPage: React.FC = () => {
           />
         </Routes>
       </div>
-      <Footer className='w-full z-10 fixed bottom-0 left-0' />
+      <Footer className='fixed bottom-0 left-0 z-10 w-full' />
     </div>
   );
 };

@@ -49,7 +49,7 @@ export const CheerColorSelect: React.FC<CheerColorSelectProps> = ({
             className="left-0 [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal] "
             dangerouslySetInnerHTML={{ __html: text }}
           />
-          <div className='mt-6'>
+          <div className='mt-6 '>
             <Select
               options={colorOptions}
               title={'포스트잇 색깔을 선택해주세요'}

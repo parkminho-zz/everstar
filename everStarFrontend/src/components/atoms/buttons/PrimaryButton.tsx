@@ -100,7 +100,9 @@ export function PrimaryButton({
   };
 
   return (
-    <div className={`flex flex-col items-start ${fullWidth ? 'w-full' : ''}`}>
+    <div
+      className={`flex z-0 flex-col items-start ${fullWidth ? 'w-full' : ''}`}
+    >
       {label && (
         <Lable
           prop={label}

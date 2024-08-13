@@ -71,6 +71,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
 
   const [letterCardVisible, setLetterCardVisible] = useState(false);
   const [letterMessage, setLetterMessage] = useState('');
+  const [giftAddress, setGiftAddress] = useState('');
   const [modalState, setModalState] = useState(false);
 
   useEffect(() => {
@@ -91,6 +92,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
       case '카툰화':
         setLetterMessage('선물이 도착했어요');
         localStorage.setItem('isMessage', '선물이 도착했어요');
+        localStorage.setItem('gift', `${payload.notification?.body}`);
         localStorage.setItem('isMessageSeen', 'false');
         break;
 
@@ -107,7 +109,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
     console.log(
       'Message received (foreground). : ',
       // payload.notification?.title
-      payload,
+      payload
     );
   });
 
@@ -121,12 +123,20 @@ export const EarthMain: React.FC<EarthMainProps> = ({
       case '편지가 도착했어요':
         setLetterCardVisible(false);
         localStorage.setItem('isMessageSeen', 'true');
+        localStorage.removeItem('isMessageSeen');
+        localStorage.removeItem('isMessage');
         break;
 
       case '선물이 도착했어요':
         setLetterCardVisible(false);
         localStorage.setItem('isMessageSeen', 'true');
+        // eslint-disable-next-line no-case-declarations
+        const gift = localStorage.getItem('gift') || '';
+        if (gift) {
+          setGiftAddress(gift);
+        }
         setModalState(true);
+
         break;
 
       default:
@@ -135,6 +145,9 @@ export const EarthMain: React.FC<EarthMainProps> = ({
   };
 
   const Modalclose = () => {
+    localStorage.removeItem('gift');
+    localStorage.removeItem('isMessageSeen');
+    localStorage.removeItem('isMessage');
     setModalState(false);
   };
 
@@ -151,7 +164,6 @@ export const EarthMain: React.FC<EarthMainProps> = ({
   useEffect(() => {
     const EventSource = EventSourcePolyfill || NativeEventSource;
 
-    console.log(111);
     console.log(petId);
     const eventSource = new EventSource(
       `https://i11b101.p.ssafy.io/api/earth/connect/${petId}`,
@@ -159,7 +171,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      },
+      }
     );
 
     eventSource.onmessage = (event) => {
@@ -192,15 +204,15 @@ export const EarthMain: React.FC<EarthMainProps> = ({
           description={''}
         />
       </div>
-      <div className='fixed right-12 bottom-14'>
+      <div className='fixed z-50 right-20 bottom-20'>
         <LetterCard
           type='receive'
-          color='gray'
+          color='white'
           state='received'
           name='알림'
           message={letterMessage}
           dateTime=''
-          className='h-5'
+          className='h-3'
           centered={true}
           visible={letterCardVisible}
           onClick={handleLetterCardClick}
@@ -208,7 +220,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
       </div>
       <div>
         <Modal isOpen={modalState} onClose={Modalclose} text=''>
-          <img src='https://picsum.photos/500/500' alt='Description' />
+          <img src={giftAddress} alt='Description' />
           <p>한번밖에 볼 수 없어요! 추후 메모리얼북이 완성 시 확인 가능해요!</p>
         </Modal>
       </div>
