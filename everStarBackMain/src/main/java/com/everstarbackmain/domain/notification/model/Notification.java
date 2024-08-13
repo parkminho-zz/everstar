@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,7 +27,7 @@ public class Notification {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 
@@ -36,5 +37,9 @@ public class Notification {
 	public Notification(User user, NotificationCreateRequestDto requestDto) {
 		this.user = user;
 		this.deviceToken = requestDto.getDeviceToken();
+	}
+
+	public void updateDeviceToken(String deviceToken) {
+		this.deviceToken = deviceToken;
 	}
 }
