@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ProfileCard } from 'components/molecules/cards/ProfileCard/ProfileCard';
 import { PostItCard } from 'components/molecules/cards/PostItCard/PostItCard';
 import { PostItPlusCard } from 'components/molecules/cards/PostItPlusCard/PostItPlusCard';
@@ -45,13 +45,24 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     useState(false);
   const [isCheerMessageWriteModalOpen, setCheerMessageWriteModalOpen] =
     useState(false);
-  const [selectedColor, setSelectedColor] = useState<string>(''); // 색상 상태 추가
+  const [selectedColor, setSelectedColor] = useState<string>('');
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 970);
+
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
   const petName = useSelector((state: RootState) => state.pet.petDetails?.name);
-  const params = useParams(); //params.pet 사용
+  const params = useParams();
 
-  const cardsPerPage = 12;
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 970);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const cardsPerPage = isMobile ? 2 : 12;
   const { mutate: createCheeringPet } = useFetchPetPost(
     token,
     Number(petId),
@@ -70,7 +81,6 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     console.log(formData);
     createCheeringPet(formData, {
       onSuccess: (data) => {
-        console.log(data.relationShip);
         const newPostItCard = {
           contents: formData.content,
           name: petName + ' ' + data.relationShip || '',
@@ -106,10 +116,6 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     );
   };
 
-  const handlePencilClick = () => {
-    setIntroduceWriteModalOpen(true);
-  };
-
   const handleCloseIntroduceWriteModal = () => {
     setIntroduceWriteModalOpen(false);
     const petIntroduce = JSON.parse(
@@ -120,10 +126,6 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
 
   const handleVerifyIntroduceWrite = () => {
     setIntroduceWriteModalOpen(false);
-  };
-
-  const handlePostItPlusClick = () => {
-    setCheerColorSelectModalOpen(true);
   };
 
   const handleCloseCheerColorSelectModal = () => {
@@ -180,7 +182,6 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     const startIdx = (currentPage - 1) * cardsPerPage;
     const endIdx = startIdx + cardsPerPage;
     const cardsToShow = postItCards.slice(startIdx, endIdx);
-    console.log(cardsToShow);
     return cardsToShow.map((card, index) => (
       <PostItCard
         key={startIdx + index}
@@ -190,6 +191,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
         onDelete={() =>
           handleDelete(startIdx + index, Number(petId), card.cheeringMessageId)
         }
+        onClick={() => console.log(card.contents)}
       />
     ));
   };
@@ -199,7 +201,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
   ); // +1 for PostItPlusCard
 
   return (
-    <div className='relative flex flex-col items-center p-12'>
+    <div className='relative flex flex-col items-center p-3'>
       <div className='absolute inset-0 z-9999'>
         <Glass
           currentPage={currentPage}
@@ -209,9 +211,9 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
           className='w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5'
         />
       </div>
-      <div className='relative w-full max-w-screen-lg p-6 rounded-lg z-9'>
-        <div className='flex'>
-          <div className='flex-shrink-0 mr-4'>
+      <div className='relative w-full max-w-screen-lg p-3 rounded-lg z-9'>
+        <div className={`flex ${isMobile ? 'flex-col' : ''}`}>
+          <div className='flex-shrink-0 mb-4 md:mb-0 md:mr-4'>
             <ProfileCard
               avatarSrc={profile.avatarUrl}
               name={profile.name}
@@ -219,14 +221,19 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
               date={profile.date}
               description={profile.description}
               tagList={profile.tagList}
-              onPencilClick={handlePencilClick}
+              onPencilClick={() => setIntroduceWriteModalOpen(true)}
             />
           </div>
           <div className='flex-grow'>
-            <div className='grid grid-cols-4 gap-4'>
+            <div
+              className={`flex ${isMobile ? 'justify-start pb-20 ml-3 gap-8' : 'grid grid-cols-4 gap-4'}`}
+            >
               {renderPostItCards()}
               {currentPage === totalPagesCalculated && (
-                <PostItPlusCard key='plus' onClick={handlePostItPlusClick} />
+                <PostItPlusCard
+                  key='plus'
+                  onClick={() => setCheerColorSelectModalOpen(true)}
+                />
               )}
             </div>
           </div>
@@ -246,9 +253,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
         onClose={handleCloseCheerColorSelectModal}
         onVerify={handleVerifyCheerColorSelect}
         text='색상 정보를 선택하세요'
-        onResend={function (): void {
-          throw new Error('Function not implemented.');
-        }}
+        onResend={() => {}}
         onOptionSelect={handleCheerColorSelect} // 색상 선택 처리 함수 전달
       />
 

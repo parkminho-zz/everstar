@@ -7,6 +7,9 @@ interface IPostItCard {
   name: string;
   color: ColorKey;
   onDelete: () => void; // Add onDelete prop
+  onClick?: () => void;
+  width?: string; // Add width prop
+  height?: string; // Add height prop
 }
 
 const colors: Record<ColorKey, string> = {
@@ -23,27 +26,32 @@ export const PostItCard = ({
   name,
   color,
   onDelete,
+  onClick,
+  width = '142px',
+  height = '152px',
 }: IPostItCard) => {
   const colorValue = colors[color];
 
   return (
     <div
-      className={`flex flex-col w-[142px] h-[152px] shadow-md p-2`}
-      style={{ backgroundColor: colorValue }}
+      className={`flex flex-col shadow-md p-2`}
+      style={{ backgroundColor: colorValue, width, height }}
     >
       <div className='flex items-end justify-end '>
         <button onClick={onDelete}>
           <CloseIcon size={24} color='black' />
         </button>
       </div>
-      <div className='flex flex-col justify-between flex-1 w-full'>
-        <label className='max-w-full max-h-[82px] text-greyscaleblack-100 kor-p-p2 line-clamp-4 break-words '>
-          {contents}
-        </label>
-        <label className='mt-1 max-w-full max-h-[22px] mb-3 text-greyscaleblack-60 kor-p-p4 break-words overflow-y-hidden'>
-          {name}
-        </label>
-      </div>
+      <button onClick={onClick}>
+        <div className='flex flex-col justify-between flex-1 w-full'>
+          <label className='max-w-full max-h-[82px] text-greyscaleblack-100 kor-p-p2 line-clamp-4 break-words '>
+            {contents}
+          </label>
+          <label className='mt-1 max-w-full max-h-[22px] mb-3 text-greyscaleblack-60 kor-p-p4 break-words overflow-y-hidden'>
+            {name}
+          </label>
+        </div>
+      </button>
     </div>
   );
 };

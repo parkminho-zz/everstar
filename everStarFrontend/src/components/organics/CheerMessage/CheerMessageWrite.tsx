@@ -28,7 +28,7 @@ export const CheerMessageWrite: React.FC<CheerMessageWriteProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} text='응원메시지 작성하기'>
-      <div className='flex flex-col justify-between w-full h-full'>
+      <div className='flex flex-col justify-between h-full mt-5 w-80'>
         <div className='flex flex-col'>
           <div
             className="left-0 [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal]"
