@@ -85,19 +85,23 @@ export const ProfileSelection: React.FC<ProfileSelectionProps> = ({
         breakpoint: 600, // 모바일 이하
         settings: {
           slidesToShow: 1, // 1개 표시
+          centerMode: true, // 모바일에서 슬라이드를 중앙에 정렬
         },
       },
     ],
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-8 w-full max-w-[832px] mx-auto rounded-sm">
-      <h1 className="mb-12 text-2xl font-semibold text-greyscaleblack-100">
+    <div className='flex flex-col items-center justify-center p-8 w-full max-w-[832px] mx-auto rounded-sm'>
+      <h1 className='mb-12 text-2xl font-semibold text-greyscaleblack-100'>
         여행을 함께 할 친구를 선택해주세요
       </h1>
-      <Slider {...sliderSettings} className="w-full gap-x-8">
+      <Slider {...sliderSettings} className='w-full'>
         {avatars.map((avatar, index) => (
-          <div key={index} className="flex flex-col items-center gap-y-8">
+          <div
+            key={index}
+            className='flex flex-col items-center justify-center gap-y-8'
+          >
             <Avatar
               src={avatar.src}
               size={avatar.size}
@@ -106,8 +110,13 @@ export const ProfileSelection: React.FC<ProfileSelectionProps> = ({
             />
           </div>
         ))}
-        <div className="flex flex-col items-center justify-center gap-y-8">
-          <CircleButton theme="white" icon="plus" disabled={false} onClick={onAddAvatar} />
+        <div className='flex flex-col items-center justify-center gap-y-8'>
+          <CircleButton
+            theme='white'
+            icon='plus'
+            disabled={false}
+            onClick={onAddAvatar}
+          />
         </div>
       </Slider>
     </div>

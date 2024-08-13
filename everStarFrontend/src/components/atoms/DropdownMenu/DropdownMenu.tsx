@@ -3,14 +3,21 @@ import React from 'react';
 interface DropdownMenuProps {
   options: (string | number)[];
   onOptionSelect: (option: string | number) => void;
+  maxHeight?: number; // 선택 사항인 최대 높이 prop
 }
 
 export const DropdownMenu: React.FC<DropdownMenuProps> = ({
   options,
   onOptionSelect,
+  maxHeight, // maxHeight를 선택적으로 받음
 }) => {
   return (
-    <div className='absolute z-10 w-full mt-1 overflow-y-auto bg-white rounded-md shadow-lg max-h-100'>
+    <div
+      className={`absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg ${
+        maxHeight ? 'overflow-y-auto' : ''
+      }`}
+      style={{ maxHeight: maxHeight ? `${maxHeight}px` : 'auto' }} // maxHeight가 있으면 적용, 없으면 auto
+    >
       <ul className='py-1'>
         {options.map((option, index) => (
           <li

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -15,11 +15,15 @@ export const Footer: React.FC<FooterProps> = ({ className }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const navigate = useNavigate();
 
+  const [activeTab, setActiveTab] = useState<'earth' | 'everstar'>('earth');
+
   const handleNavigateToEarth = () => {
+    setActiveTab('earth');
     navigate(`/earth`);
   };
 
   const handleNavigateToEverstar = () => {
+    setActiveTab('everstar');
     navigate(`/everstar/${petId}`);
   };
 
@@ -31,21 +35,29 @@ export const Footer: React.FC<FooterProps> = ({ className }) => {
         <div className='flex justify-around py-2'>
           <button
             onClick={handleNavigateToEarth}
-            className='flex flex-col items-center hover:text-blue-500'
+            className={`flex flex-col items-center ${
+              activeTab === 'earth' ? 'text-blue-500' : 'hover:text-blue-500'
+            }`}
           >
             <LogoIcons
               variant='small-earth-img'
-              className='hover:scale-110 transition-transform duration-200'
+              className={`transition-transform duration-200 ${
+                activeTab === 'earth' ? 'scale-110' : 'hover:scale-110'
+              }`}
             />
             <span className='text-xs'>지구별</span>
           </button>
           <button
             onClick={handleNavigateToEverstar}
-            className='flex flex-col items-center hover:text-blue-500'
+            className={`flex flex-col items-center ${
+              activeTab === 'everstar' ? 'text-blue-500' : 'hover:text-blue-500'
+            }`}
           >
             <LogoIcons
               variant='small-star-img'
-              className='hover:scale-110 transition-transform duration-200'
+              className={`transition-transform duration-200 ${
+                activeTab === 'everstar' ? 'scale-110' : 'hover:scale-110'
+              }`}
             />
             <span className='text-xs'>영원별</span>
           </button>
@@ -61,7 +73,9 @@ export const Footer: React.FC<FooterProps> = ({ className }) => {
       <div className='flex items-center justify-center w-1/2'>
         <button
           onClick={handleNavigateToEarth}
-          className='flex items-center hover:text-blue-500 cursor-pointer'
+          className={`flex items-center ${
+            activeTab === 'earth' ? 'text-blue-500' : 'hover:text-blue-500'
+          } cursor-pointer`}
         >
           <LogoIcons variant='small-earth-img' />
           <span>지구별로 이동</span>
@@ -70,7 +84,9 @@ export const Footer: React.FC<FooterProps> = ({ className }) => {
       <div className='flex items-center justify-center w-1/2'>
         <button
           onClick={handleNavigateToEverstar}
-          className='flex items-center hover:text-blue-500 cursor-pointer'
+          className={`flex items-center ${
+            activeTab === 'everstar' ? 'text-blue-500' : 'hover:text-blue-500'
+          } cursor-pointer`}
         >
           <LogoIcons variant='small-star-img' />
           <span>영원별로 이동</span>

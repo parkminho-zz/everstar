@@ -52,10 +52,10 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   isOwner,
 }) => {
   const [toggleStatus, setToggleStatus] = useState<'on' | 'off' | undefined>(
-    memorialBookProfile?.isOpen ? 'on' : 'off'
+    memorialBookProfile?.isOpen ? 'on' : 'off',
   );
   const [isModalOpen, setIsModalOpen] = useState(
-    petProfile?.questIndex === 50 && !memorialBookProfile?.isActive && isOwner
+    petProfile?.questIndex === 50 && !memorialBookProfile?.isActive && isOwner,
   );
 
   const { mutate: updateMemorialBookStatus } = useUpdateMemorialBookOpenStatus({
@@ -84,7 +84,9 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
     <div className='flex flex-col items-center justify-center min-h-screen'>
       <Header className='fixed top-0 left-0 z-50 w-full' />
       {isModalOpen && (
-        <DepressionSurvey onSubmitSuccess={handleSurveySubmitSuccess} />
+        <div className='fixed top-0 left-0 z-100 w-full h-full flex items-center justify-center bg-black bg-opacity-50'>
+          <DepressionSurvey onSubmitSuccess={handleSurveySubmitSuccess} />
+        </div>
       )}
 
       <MainActionComponent

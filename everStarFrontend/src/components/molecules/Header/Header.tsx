@@ -14,9 +14,9 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
   };
 
   return (
-    <div className={`flex h-14 items-center justify-start ms-14 ${className}`}>
+    <div className={`flex h-14 items-center justify-start ms-10 ${className}`}>
       <LogoIcons
-        variant='small-star'
+        variant='middle-star'
         className='cursor-pointer'
         onClick={handleLogoClick}
       />
