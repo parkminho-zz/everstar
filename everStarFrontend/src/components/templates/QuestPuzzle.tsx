@@ -105,7 +105,10 @@ export const QuestPuzzle: React.FC = () => {
         showPageIndicator={false}
         className='w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5'
       />
+      <div className='absolute inset-0 flex justify-center'>
       <Puzzle id='puzzle' pieceSize={pieceSize} width={width} height={height} />
+      </div>
+      
     </div>
   );
 };
