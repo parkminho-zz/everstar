@@ -1,8 +1,5 @@
-import React from 'react';
-import {
-  ModalHeader,
-  ModalHeaderProps,
-} from 'components/molecules/ModalHeader/ModalHeader';
+import React, { useEffect, useCallback } from 'react';
+import { ModalHeader, ModalHeaderProps } from 'components/molecules/ModalHeader/ModalHeader';
 
 interface ModalProps extends ModalHeaderProps {
   isOpen: boolean;
@@ -20,12 +17,31 @@ export const Modal: React.FC<ModalProps> = ({
   customStyle,
   ...headerProps
 }) => {
+  const handleBackButton = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    },
+    [onClose],
+  );
+
+  useEffect(() => {
+    if (isOpen) {
+      // 모달이 열렸을 때만 이벤트 리스너 등록
+      window.addEventListener('keydown', handleBackButton);
+      return () => {
+        window.removeEventListener('keydown', handleBackButton);
+      };
+    }
+  }, [isOpen, handleBackButton]);
+
   if (!isOpen) return null;
 
   return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div
-        className='w-full max-w-md p-4 bg-white rounded-lg shadow-md '
+        className="w-full max-w-md p-4 bg-white rounded-lg shadow-md"
         style={{
           height: height || '100vh',
           maxHeight: '100vh',
@@ -34,7 +50,7 @@ export const Modal: React.FC<ModalProps> = ({
         }}
       >
         <ModalHeader {...headerProps} onLeftIconClick={onClose} />
-        <div className='flex justify-center'>{children}</div>
+        <div className="flex justify-center">{children}</div>
       </div>
     </div>
   );

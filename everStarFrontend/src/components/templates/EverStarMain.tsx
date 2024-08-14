@@ -81,16 +81,12 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   }
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen'>
-      <Header className='fixed top-0 left-0 z-50 w-full' />
-      {isModalOpen && (
-        <div className='fixed top-0 left-0 z-100 w-full h-full flex items-center justify-center bg-black bg-opacity-50'>
-          <DepressionSurvey onSubmitSuccess={handleSurveySubmitSuccess} />
-        </div>
-      )}
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <Header className="fixed top-0 left-0 z-50 w-full" />
+      {isModalOpen && <DepressionSurvey onSubmitSuccess={handleSurveySubmitSuccess} />}
 
       <MainActionComponent
-        type='everstar'
+        type="everstar"
         profileImageUrl={petProfile.avatarUrl}
         fill={petProfile.questIndex}
         name={petProfile.name}
