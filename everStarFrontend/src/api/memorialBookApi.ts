@@ -219,7 +219,8 @@ export const updatePsychologicalTestResult = async (
   memorialBookId: number,
   testResult: string,
   token: string,
-): Promise<void> => {
+): Promise<{ psychologicalTestResult: string }> => {
+  // 반환 타입 명시
   const response = await fetch(
     `${config.API_BASE_URL}/api/pets/${petId}/memorialbooks/${memorialBookId}/psychological-test`,
     {
@@ -238,4 +239,6 @@ export const updatePsychologicalTestResult = async (
       errorResponse.message || 'An error occurred while updating the psychological test result',
     );
   }
+
+  return response.json(); // JSON 응답 반환
 };

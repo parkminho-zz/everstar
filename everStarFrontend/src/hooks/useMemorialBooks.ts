@@ -163,7 +163,7 @@ export const useCreateDiary = (
 
 export const useUpdatePsychologicalTestResult = (
   options?: UseMutationOptions<
-    void,
+    { psychologicalTestResult: string }, // 반환 타입 명시
     Error,
     { petId: number; memorialBookId: number; testResult: string }
   >,
@@ -171,7 +171,11 @@ export const useUpdatePsychologicalTestResult = (
   const queryClient = useQueryClient();
   const token = useSelector((state: RootState) => state.auth.accessToken);
 
-  return useMutation<void, Error, { petId: number; memorialBookId: number; testResult: string }>({
+  return useMutation<
+    { psychologicalTestResult: string },
+    Error,
+    { petId: number; memorialBookId: number; testResult: string }
+  >({
     mutationFn: ({ petId, memorialBookId, testResult }) => {
       if (!token) {
         throw new Error('토큰이 없습니다');
