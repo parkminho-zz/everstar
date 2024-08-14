@@ -13,6 +13,7 @@ interface SearchModalProps {
   onClose: () => void;
   onSubmit: (personalities: string[]) => void;
   tagsContainerClassName?: string;
+  dropdownMaxHeight?: number; // 선택적으로 드롭다운 최대 높이 설정
 }
 
 export const SearchModal: React.FC<SearchModalProps> = ({
@@ -22,6 +23,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   onClose,
   onSubmit,
   tagsContainerClassName = '',
+  dropdownMaxHeight, // 선택적 prop
 }) => {
   const [tags, setTags] = useState<(string | number)[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -58,6 +60,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           className=""
           onOptionSelect={handleTagAdd}
           moveToTopOnClick={false}
+          dropdownMaxHeight={dropdownMaxHeight} // 선택적으로 maxHeight 전달
         />
         <Lable prop={`성격 ${tags.length}/3`} show={true} font="default" className="mb-2" />
         <div

@@ -12,15 +12,7 @@ import { Modal } from 'components/molecules/Modal/Modal';
 import { MainActionComponent } from 'components/organics/MainActionComponent/MainActionComponent';
 
 type ViewMemorialBookSize = 'large' | 'medium' | 'small';
-type RainbowColor =
-  | 'none'
-  | 'red'
-  | 'orange'
-  | 'yellow'
-  | 'green'
-  | 'blue'
-  | 'indigo'
-  | 'violet';
+type RainbowColor = 'none' | 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'indigo' | 'violet';
 
 interface EarthMainProps {
   title: string;
@@ -58,10 +50,7 @@ const getColor = (fill: number): RainbowColor => {
   return 'none';
 };
 
-export const EarthMain: React.FC<EarthMainProps> = ({
-  fill,
-  profileImageUrl,
-}) => {
+export const EarthMain: React.FC<EarthMainProps> = ({ fill, profileImageUrl }) => {
   const [quest, setQuest] = useState('');
 
   const app = initializeApp(firebaseConfig);
@@ -109,7 +98,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
     console.log(
       'Message received (foreground). : ',
       // payload.notification?.title
-      payload
+      payload,
     );
   });
 
@@ -164,14 +153,11 @@ export const EarthMain: React.FC<EarthMainProps> = ({
     const EventSource = EventSourcePolyfill || NativeEventSource;
 
     console.log(petId);
-    const eventSource = new EventSource(
-      `https://i11b101.p.ssafy.io/api/earth/connect/${petId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const eventSource = new EventSource(`https://i11b101.p.ssafy.io/api/earth/connect/${petId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     eventSource.onmessage = (event) => {
       console.log(event.data);
@@ -190,10 +176,10 @@ export const EarthMain: React.FC<EarthMainProps> = ({
 
   return (
     <div>
-      <div className='relative flex flex-col items-center justify-center min-h-screen'>
+      <div className="relative flex flex-col items-start min-h-screen-56">
         <Rainbow className={getRainbowStyle()} color={getColor(fill)} />
         <MainActionComponent
-          type='earth'
+          type="earth"
           fill={fill}
           profileImageUrl={profileImageUrl}
           onToggleChange={undefined}
@@ -203,15 +189,15 @@ export const EarthMain: React.FC<EarthMainProps> = ({
           description={''}
         />
       </div>
-      <div className='fixed z-50 left-10 bottom-20'>
+      <div className="fixed z-50 left-10 bottom-20">
         <LetterCard
-          type='receive'
-          color='white'
-          state='received'
-          name='알림'
+          type="receive"
+          color="white"
+          state="received"
+          name="알림"
           message={letterMessage}
-          dateTime=''
-          className='h-3'
+          dateTime=""
+          className="h-3"
           centered={true}
           visible={letterCardVisible}
           onClick={handleLetterCardClick}
@@ -221,11 +207,11 @@ export const EarthMain: React.FC<EarthMainProps> = ({
         <Modal
           isOpen={modalState}
           onClose={Modalclose}
-          text='깜짝 선물'
-          className='flex flex-col items-center justify-center'
+          text="깜짝 선물"
+          className="flex flex-col items-center justify-center"
         >
-          <img src={giftAddress} alt='Description' />
-          <div className='mt-10 text-2xl'>
+          <img src={giftAddress} alt="Description" />
+          <div className="mt-10 text-2xl">
             한번밖에 볼 수 없어요! <br />
             추후 메모리얼북이 완성 시 <br />
             확인 가능해요!
