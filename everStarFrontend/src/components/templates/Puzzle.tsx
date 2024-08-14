@@ -17,6 +17,7 @@ export const Puzzle: React.FC<QuestPuzzleProps> = (props) => {
     (state: RootState) => state.pet.petDetails?.profileImageUrl
   );
 
+
   useEffect(() => {
     const puzzle = puzzleRef.current;
 
@@ -32,6 +33,7 @@ export const Puzzle: React.FC<QuestPuzzleProps> = (props) => {
           height: 500,
           pieceSize: 100,
           proximity: 10,
+          border : '1px solid black',
           borderFill: 10,
           strokeWidth: 2,
           lineSoftness: 0.12,
@@ -59,14 +61,14 @@ export const Puzzle: React.FC<QuestPuzzleProps> = (props) => {
         ref={puzzleRef}
         id={props.id}
         style={{
-          width: '100%',
-          height: '50%',
+          width: 'auto',
+          height: 'auto',
           border: 'solid black 1px',
           display: 'flex',
           justifyContent: 'center',
         }}
       ></div>
-      <button>누르면 캡처</button>
+      <button onClick={() => console.log("!1")} style={{'backgroundColor' : 'black', width : '100px', zIndex: "1000", position: 'relative'}}> 저장하기</button>
     </div>
   );
 };

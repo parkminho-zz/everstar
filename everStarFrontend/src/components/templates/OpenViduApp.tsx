@@ -17,6 +17,7 @@ import { Glass } from 'components/molecules/Glass/Glass';
 import { InputField } from 'components/organics/input/InputFields';
 import Chatting from 'components/organics/Openvidu/Chatting';
 import UserVideoComponent from '../organics/Openvidu/UserVideoComponent';
+import html2canvas from 'html2canvas';
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i11b101.p.ssafy.io/';
@@ -206,7 +207,8 @@ export const OpenViduApp = () => {
     setMainStreamManager(undefined);
     setPublisher(undefined);
 
-    navigate(-1);
+    // navigate(-1);
+    window.close();
   };
 
   const toggleAudio = () => {
@@ -266,16 +268,23 @@ export const OpenViduApp = () => {
     return response.data; // The token
   };
 
+  const handleCapture = () => {
+    html2canvas(document.body).then((canvas) => {
+      // 캡처한 이미지를 데이터 URL로 변환합니다.
+      const dataURL = canvas.toDataURL('image/png');
+      // 이미지 URL을 콘솔에 출력하거나, 원하는 대로 처리합니다.
+      console.log(dataURL);
+      // 데이터 URL을 사용하여 이미지를 새 창으로 열거나 파일로 다운로드할 수 있습니다.
+      const link = document.createElement('a');
+      link.href = dataURL;
+      link.download = 'capture.png';
+      link.click();
+    });
+  };
+
   return (
     <div className='relative flex flex-col items-center w-full h-full p-12'>
-      <div className='absolute inset-0 z-0'>
-        <Glass
-          currentPage={1}
-          totalPages={1}
-          onPageChange={() => console.log('이동')}
-          showPageIndicator={false}
-        />
-      </div>
+ 
       {session === undefined ? (
         <div id='join' className='z-10 flex flex-col items-center justify-center w-full h-full'>
           <div
@@ -343,9 +352,9 @@ export const OpenViduApp = () => {
             <h1 id='session-title' className='z-10 kor-h-h2 sm:text-2xl md:text-3xl'>
               화상 채널
             </h1>
-            <h3 className='z-10 ml-5 sm:text-base md:text-lg'>
-              💡 퀘스트 완료를 위해 화면 캡처를 해주세요!
-            </h3>
+            <button onClick={handleCapture} className='z-10 ml-5 sm:text-base md:text-lg'>
+              💡 퀘스트 완료를 위해 화면 캡처!!!
+            </button>
           </div>
           <div className='flex flex-row items-center justify-center w-full h-4/5'>
             <div className='z-10 flex flex-col items-center justify-center h-full gap-8 md:w-1/3 lg:w-1/4'>
