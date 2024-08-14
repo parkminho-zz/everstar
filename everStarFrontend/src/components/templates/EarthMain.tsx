@@ -10,7 +10,6 @@ import { getMessaging, onMessage } from 'firebase/messaging';
 import { firebaseConfig } from 'firebase-messaging-sw';
 import { Modal } from 'components/molecules/Modal/Modal';
 import { MainActionComponent } from 'components/organics/MainActionComponent/MainActionComponent';
-import { Header } from 'components/molecules/Header/Header';
 
 type ViewMemorialBookSize = 'large' | 'medium' | 'small';
 type RainbowColor =
@@ -191,7 +190,6 @@ export const EarthMain: React.FC<EarthMainProps> = ({
 
   return (
     <div>
-      <Header className='fixed top-0 left-0 z-50 w-full' />
       <div className='relative flex flex-col items-center justify-center min-h-screen'>
         <Rainbow className={getRainbowStyle()} color={getColor(fill)} />
         <MainActionComponent

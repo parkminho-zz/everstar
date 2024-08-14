@@ -3,7 +3,6 @@ import { useUpdateMemorialBookOpenStatus } from 'hooks/useMemorialBooks';
 import { DepressionSurvey } from 'components/organics/DepressionSurvey/DepressionSurvey';
 import { MainActionComponent } from 'components/organics/MainActionComponent/MainActionComponent'; // MainActionComponent 임포트
 import { ProfileModal } from 'components/organics/ProfileModal/ProfileModal';
-import { Header } from 'components/molecules/Header/Header';
 interface EverStarMainProps {
   petProfile: {
     name: string;
@@ -52,10 +51,10 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   isOwner,
 }) => {
   const [toggleStatus, setToggleStatus] = useState<'on' | 'off' | undefined>(
-    memorialBookProfile?.isOpen ? 'on' : 'off',
+    memorialBookProfile?.isOpen ? 'on' : 'off'
   );
   const [isModalOpen, setIsModalOpen] = useState(
-    petProfile?.questIndex === 50 && !memorialBookProfile?.isActive && isOwner,
+    petProfile?.questIndex === 50 && !memorialBookProfile?.isActive && isOwner
   );
 
   const { mutate: updateMemorialBookStatus } = useUpdateMemorialBookOpenStatus({
@@ -81,12 +80,13 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <Header className="fixed top-0 left-0 z-50 w-full" />
-      {isModalOpen && <DepressionSurvey onSubmitSuccess={handleSurveySubmitSuccess} />}
+    <div className='flex flex-col items-center justify-center min-h-screen'>
+      {isModalOpen && (
+        <DepressionSurvey onSubmitSuccess={handleSurveySubmitSuccess} />
+      )}
 
       <MainActionComponent
-        type="everstar"
+        type='everstar'
         profileImageUrl={petProfile.avatarUrl}
         fill={petProfile.questIndex}
         name={petProfile.name}
