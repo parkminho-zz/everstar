@@ -16,7 +16,7 @@ const sizeMap = {
   small: '24px',
   medium: '120px',
   large: '180px',
-  square: '340px', // square에 대한 너비를 설정
+  square: '364px', // square에 대한 너비를 설정
 };
 
 export const Avatar: React.FC<AvatarProps> = ({
