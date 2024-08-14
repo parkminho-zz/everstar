@@ -5,6 +5,7 @@ import { QuestTextTemplate } from './QuestTextTemplate';
 import { QuestWithImageTemplate } from './QuestWithImageTemplate';
 import { useNavigate } from 'react-router-dom';
 import { QuestPuzzle } from './QuestPuzzle';
+import { QuestOpenviduTemplate } from './QuestOpenviduTemplate';
 
 const TextQuestArray = [
   '1',
@@ -63,11 +64,13 @@ export const QuestRouter: React.FC = () => {
   }
 
   if (TextQuestArray.includes(questid)) {
-    return <QuestPuzzle />;
+    return <QuestTextTemplate />;
   } else if (ImageQuestArray.includes(questid)) {
     return <QuestWithImageTemplate />;
   } else if (OpenViduQuestArray.includes(questid)) {
-    return null;
+    return <QuestOpenviduTemplate />;
+  } else if (PuzzleQuestArray.includes(questid)) {
+    return <QuestPuzzle />;
   } else {
     return <div>존재하지 않는 퀘스트입니다.</div>;
   }
