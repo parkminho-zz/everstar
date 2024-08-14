@@ -113,9 +113,11 @@ export const QuestOpenviduTemplate: React.FC = () => {
 
           return response.status;
         } catch (error) {
+          alert("다시 입력해 주세요");
           console.error('Error:', error);
         }
       } else {
+        alert("다시 입력해 주세요");
         console.error('Required data is missing');
       }
     }
