@@ -2,6 +2,7 @@ package com.everstarbackmain.global.util;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.UUID;
 
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,7 @@ public class S3UploadUtil {
 	private final S3Config s3Config;
 
 	public String saveFile(MultipartFile multipartFile) {
-		String originalFilename = multipartFile.getOriginalFilename();
+		String originalFilename = UUID.randomUUID() + multipartFile.getOriginalFilename();
 
 		ObjectMetadata metadata = new ObjectMetadata();
 		metadata.setContentLength(multipartFile.getSize());
@@ -41,7 +42,7 @@ public class S3UploadUtil {
 		byte[] decodedBytes = Base64.getDecoder().decode(encodedFile);
 		MultipartFile decodedImageFile = new MockMultipartFile(
 			"image",
-			"image.png",
+			UUID.randomUUID() + ".png",
 			"image/png",
 			decodedBytes
 		);
