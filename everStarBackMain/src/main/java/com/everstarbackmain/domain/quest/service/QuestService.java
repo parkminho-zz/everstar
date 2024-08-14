@@ -44,6 +44,7 @@ public class QuestService {
 	@Transactional
 	@Async
 	public void changePetQuestCompleted(Long petId) {
+		log.info("main server - 스케줄 실행");
 		Pet pet = petRepository.findByIdAndIsDeleted(petId, false)
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 		pet.setFalseIsQuestCompleted();

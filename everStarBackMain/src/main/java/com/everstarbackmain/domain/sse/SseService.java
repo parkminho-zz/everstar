@@ -32,7 +32,9 @@ public class SseService {
 			.orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PET_EXCEPTION));
 		SseEmitter sseEmitter = emitterRepository.findById(petId);
 
+		log.info("main-server : emitter find");
 		if(sseEmitter != null){
+			log.info("main-server : emitter 찾기 성공");
 			sendToClient(pet, sseEmitter);
 		}
 	}
