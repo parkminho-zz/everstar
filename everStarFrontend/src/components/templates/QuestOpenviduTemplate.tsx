@@ -145,8 +145,8 @@ export const QuestOpenviduTemplate: React.FC = () => {
     return response.data;
   };
 
-  const handleRtcButtonClick = async () => {
-    if (questid === '24' || '34' || '38') {
+  const handleRtcPuzzleClick = async () => {
+    if (questid === '24' || questid === '34' || questid === '38') {
       const sessionId = await getOpenVidu();
       sessionStorage.setItem(`didOpenvidu${questid}`, 'true');
       navigate(`/openvidu/sessionid/${sessionId}`);
@@ -158,6 +158,15 @@ export const QuestOpenviduTemplate: React.FC = () => {
     }
   };
 
+  const rtcPuzzleText = () => {
+    if (questid === '24' || questid === '34' || questid === '38') {
+      return '화상통화 해보기';
+    } else if (questid === '31') {
+      return '퍼즐 맞추기';
+    } else {
+      return '예시';
+    }
+  };
   // 로딩 중이거나 퀘스트 데이터가 없으면 로딩 스피너 또는 빈 화면을 보여줌
   if (loading) {
     return (
@@ -201,7 +210,8 @@ export const QuestOpenviduTemplate: React.FC = () => {
           smallButtonText='작성완료'
           showPrimaryButton={true}
           isRtc={true}
-          handleRtcButtonClick={handleRtcButtonClick}
+          handleRtcPuzzleClick={handleRtcPuzzleClick}
+          rtcPuzzleText={rtcPuzzleText()}
           onTextChange={handleTextChange}
           value={text}
           onButtonClick={handleSubmit}
