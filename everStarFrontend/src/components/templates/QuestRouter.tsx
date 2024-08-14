@@ -64,7 +64,7 @@ export const QuestRouter: React.FC = () => {
   }
 
   if (TextQuestArray.includes(questid)) {
-    return <QuestPuzzle />;
+    return <QuestTextTemplate />;
   } else if (ImageQuestArray.includes(questid)) {
     return <QuestWithImageTemplate />;
   } else if (OpenViduQuestArray.includes(questid)) {
