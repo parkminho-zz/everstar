@@ -10,7 +10,7 @@ import { InteractiveForm } from './InteractiveForm';
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i11b101.p.ssafy.io/';
 
-export const QuestOpenviduTemplate: React.FC = () => {
+export const QuestPuzzleTemplate: React.FC = () => {
   const { questid } = useParams<{ questid: string }>();
 
   const navigate = useNavigate();
@@ -139,16 +139,9 @@ export const QuestOpenviduTemplate: React.FC = () => {
   };
 
   const handleRtcButtonClick = async () => {
-    if (questid === '24' || '34' || '38') {
-      const sessionId = await getOpenVidu();
-      sessionStorage.setItem(`didOpenvidu${questid}`, 'true');
-      navigate(`/earth/openvidu/sessionid/${sessionId}`);
-    } else if (questid === '31') {
-      //퍼즐생성
-      navigate(`/earth/puzzle`);
-    } else {
-      navigate('/earth');
-    }
+    const sessionId = await getOpenVidu();
+    sessionStorage.setItem(`didOpenvidu${questid}`, 'true');
+    navigate(`/earth/openvidu/sessionid/${sessionId}`);
   };
 
   // 로딩 중이거나 퀘스트 데이터가 없으면 로딩 스피너 또는 빈 화면을 보여줌
