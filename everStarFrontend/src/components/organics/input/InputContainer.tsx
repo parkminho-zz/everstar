@@ -88,7 +88,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
   return (
     <div className={className}>
       <div
-        className='flex flex-col items-center w-full gap-8 bg-white rounded-lg shadow-md p-9'
+        className='flex flex-col items-center w-full max-w-md gap-5 bg-white rounded-lg shadow-md p-9'
         style={{ maxHeight: '1156px', overflowY: 'auto' }}
       >
         {/* Modal Header */}
@@ -125,17 +125,19 @@ export const InputContainer: React.FC<InputContainerProps> = ({
             )}
           </div>
 
-          {isRtc && (
-            <PrimaryButton
-              theme='white'
-              size='large'
-              disabled={false}
-              icon={null}
-              onClick={handleRtcButtonClick}
-            >
-              화상통화 해보기
-            </PrimaryButton>
-          )}
+          <div className='flex flex-col items-start w-full'>
+            {isRtc && (
+              <PrimaryButton
+                theme='white'
+                size='large'
+                disabled={false}
+                icon={null}
+                onClick={handleRtcButtonClick}
+              >
+                화상통화 해보기
+              </PrimaryButton>
+            )}
+          </div>
           <div className='flex w-full'>
             {letterCardType === 'receive' ? (
               <div className='flex flex-col justify-center'>

@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { LetterBoxTemplate } from './LetterBoxTemplate';
 import { action } from '@storybook/addon-actions';
-import { LetterColor, LetterState } from 'components/molecules/cards/LetterCard/LetterCard';
+import {
+  LetterColor,
+  LetterState,
+} from 'components/molecules/cards/LetterCard/LetterCard';
 
 const generateLargeLetterData = (count: number) => {
   return Array.from({ length: count }, (_, index) => ({

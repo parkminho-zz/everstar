@@ -35,7 +35,7 @@ const LetterBox: React.FC<LetterBoxProps> = ({
     if (isMobile) {
       return 'grid-cols-1 grid-rows-2';
     } else if (isTablet) {
-      return 'grid-cols-2 grid-rows-3';
+      return 'grid-cols-2 grid-rows-2';
     } else {
       return 'grid-cols-3 grid-rows-2';
     }
@@ -49,7 +49,7 @@ const LetterBox: React.FC<LetterBoxProps> = ({
   const displayedLetters = letters?.slice(startIndex, endIndex);
 
   return (
-    <div className='flex flex-wrap items-center justify-center p-8 align-content-center'>
+    <div className='flex flex-wrap items-center justify-center p-0 align-content-center'>
       <div className={`grid ${getGridClassName()} gap-8`}>
         {displayedLetters === undefined || displayedLetters?.length === 0 ? (
           <div className='text-center text-gray-500 col-span-full'>
