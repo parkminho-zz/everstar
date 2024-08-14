@@ -40,8 +40,7 @@ export const OpenViduApp = () => {
   const [isVideoMuted, setIsVideoMuted] = useState<boolean>(false);
   const [isSpeakerMuted, setIsSpeakerMuted] = useState<boolean>(false);
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
-  const [isChatVisible, setIsChatVisible] = useState<boolean>(true);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isTabletAndMobile, setIsTabletAndMobile] = useState<boolean>(false);
 
   const [exitClick, setExitClick] = useState<boolean>(false);
   const [, setCurrentVideoDevice] = useState<MediaDeviceInfo | Device | undefined>(undefined);
@@ -73,7 +72,7 @@ export const OpenViduApp = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 640);
+      setIsTabletAndMobile(window.innerWidth <= 1024);
     };
 
     handleResize();
@@ -84,7 +83,7 @@ export const OpenViduApp = () => {
 
   const handleSwipeDown = (event: React.TouchEvent) => {
     event.preventDefault();
-    setIsChatVisible(false); // 스와이프 다운 시 채팅 숨김
+    setIsChatOpen(false); // 스와이프 다운 시 채팅 숨김
   };
   const clip = () => {
     const textarea = document.createElement('textarea');
@@ -319,12 +318,12 @@ export const OpenViduApp = () => {
                 ></InputField>
               </p>
               <div className='flex flex-row items-center justify-center gap-3 mt-6 text-center'>
-                <button
+                {/* <button
                   className={`cursor-pointer flex items-center justify-center rounded-lg px-4 text-center shadow-[0px_4px_8px_#dbe5ec99,0px_0px_1px_1px_#dbe5ec99] ${userNameOk ? 'bg-white text-black hover:bg-bgorange' : 'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60'} w-[106px] h-[40px]`}
                   onClick={() => navigate(-1)}
                 >
                   뒤로가기
-                </button>
+                </button> */}
                 <input
                   className={`cursor-pointer flex items-center justify-center rounded-lg px-4 text-center shadow-[0px_4px_8px_#dbe5ec99,0px_0px_1px_1px_#dbe5ec99] ${userNameOk ? 'bg-white text-black hover:bg-bgorange' : 'disabled:bg-greyscaleblack-20 disabled:text-greyscaleblack-60'} w-[106px] h-[40px]`}
                   name='commit'
@@ -349,7 +348,7 @@ export const OpenViduApp = () => {
             </h3>
           </div>
           <div className='flex flex-row items-center justify-center w-full h-4/5'>
-            <div className='z-10 flex flex-col items-center justify-center gap-8 h-4/5 md:w-1/3 lg:w-1/4'>
+            <div className='z-10 flex flex-col items-center justify-center h-full gap-8 md:w-1/3 lg:w-1/4'>
               <CircleButton
                 theme={isAudioMuted ? 'white' : 'hover'}
                 onClick={toggleAudio}
@@ -372,7 +371,7 @@ export const OpenViduApp = () => {
                 label={isSpeakerMuted ? '스피커켜기' : '스피커끄기'}
               />
             </div>
-            <div className='z-10 flex w-full gap-4 tablet:flex-row h-4/5 mobile:flex-col'>
+            <div className='z-10 flex w-full h-full gap-4 tablet:flex-col mobile:flex-col'>
               {mainStreamManager !== undefined ? (
                 <UserVideoComponent streamManager={mainStreamManager} />
               ) : null}
@@ -384,7 +383,7 @@ export const OpenViduApp = () => {
                 ))}
               </div>
             </div>
-            <div className='z-10 flex flex-col items-center justify-center w-1/6 gap-8 h-4/5'>
+            <div className='z-10 flex flex-col items-center justify-center w-1/6 h-full gap-8'>
               <CircleButton
                 theme={isChatOpen ? 'hover' : 'white'}
                 onClick={toggleChat}
@@ -408,26 +407,18 @@ export const OpenViduApp = () => {
               />
             </div>
             {isChatOpen &&
-              (isMobile ? (
+              (isTabletAndMobile ? (
                 <div
                   className={`${
-                    isChatVisible ? 'translate-y-0' : 'translate-y-full'
-                  } transition-transform z-10 w-full h-4/5 bg-white shadow-lg flex flex-row justify-center rounded-lg items-center absolute bottom-0 left-0`}
+                    isChatOpen ? 'translate-y-0' : 'translate-y-full'
+                  } transition-transform z-10 w-full h-[300px] bg-white shadow-lg flex flex-row justify-center rounded-lg items-center absolute bottom-0 left-0`}
                   onTouchEnd={handleSwipeDown} // 스와이프 처리
                 >
-                  <Chatting
-                    userName={myUserName}
-                    onClick={() => setIsChatVisible(false)}
-                    arrowOn={true}
-                  />
+                  <Chatting userName={myUserName} onClick={toggleChat} arrowOn={true} />
                 </div>
               ) : (
                 <div className='z-10 w-[40%] h-[500px] bg-white shadow-lg flex flex-row justify-center rounded-lg items-center'>
-                  <Chatting
-                    userName={myUserName}
-                    onClick={() => setIsChatVisible(false)}
-                    arrowOn={false}
-                  />
+                  <Chatting userName={myUserName} arrowOn={false} />
                 </div>
               ))}
           </div>

@@ -18,7 +18,7 @@ type Props = {
 interface ChattingProps {
   userName: string;
   arrowOn: boolean;
-  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const Chatting: React.FC<ChattingProps> = ({ userName, onClick, arrowOn }) => {
