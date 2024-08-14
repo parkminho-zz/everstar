@@ -6,13 +6,11 @@ import { RootState } from 'store/Store';
 import { useNavigate } from 'react-router-dom';
 import { Glass } from 'components/molecules/Glass/Glass';
 import { InteractiveForm } from './InteractiveForm';
-import bgImage from 'assets/images/bg-login.webp';
-import { SplashTemplate } from './SplashTemplate';
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i11b101.p.ssafy.io/';
 
-export const QuestOpenviduTemplate: React.FC = () => {
+export const QuestPuzzleTemplate: React.FC = () => {
   const { questid } = useParams<{ questid: string }>();
 
   const navigate = useNavigate();
@@ -76,10 +74,7 @@ export const QuestOpenviduTemplate: React.FC = () => {
         const formData = new FormData();
 
         // JSON 데이터 준비
-        const requestDto = JSON.stringify({
-          content: text,
-          type: 'TEXT_IMAGE',
-        });
+        const requestDto = JSON.stringify({ content: text, type: 'TEXT_IMAGE' });
 
         const requestDtoBlob = new Blob([requestDto], {
           type: 'application/json',
@@ -113,11 +108,9 @@ export const QuestOpenviduTemplate: React.FC = () => {
 
           return response.status;
         } catch (error) {
-          alert('다시 입력해 주세요');
           console.error('Error:', error);
         }
       } else {
-        alert('다시 입력해 주세요');
         console.error('Required data is missing');
       }
     }
@@ -146,35 +139,14 @@ export const QuestOpenviduTemplate: React.FC = () => {
   };
 
   const handleRtcButtonClick = async () => {
-    if (questid === '24' || '34' || '38') {
-      const sessionId = await getOpenVidu();
-      sessionStorage.setItem(`didOpenvidu${questid}`, 'true');
-      navigate(`/openvidu/sessionid/${sessionId}`);
-    } else if (questid === '31') {
-      //퍼즐생성
-      navigate(`/earth/puzzle`);
-    } else {
-      navigate('/earth');
-    }
+    const sessionId = await getOpenVidu();
+    sessionStorage.setItem(`didOpenvidu${questid}`, 'true');
+    navigate(`/earth/openvidu/sessionid/${sessionId}`);
   };
 
   // 로딩 중이거나 퀘스트 데이터가 없으면 로딩 스피너 또는 빈 화면을 보여줌
   if (loading) {
-    return (
-      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
-        <img
-          src={bgImage}
-          alt='Background'
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-          }}
-        />
-        <SplashTemplate type='openvidu' className='z-10 w-full h-full ' />
-      </div>
-    );
+    return <div>Loading...</div>;
   }
 
   return (

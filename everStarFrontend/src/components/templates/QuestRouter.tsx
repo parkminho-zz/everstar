@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { QuestTextTemplate } from './QuestTextTemplate';
 import { QuestWithImageTemplate } from './QuestWithImageTemplate';
 import { useNavigate } from 'react-router-dom';
+import { QuestPuzzle } from './QuestPuzzle';
 
 const TextQuestArray = [
   '1',
@@ -30,7 +32,6 @@ const TextQuestArray = [
   '27',
   '28',
   '29',
-  '31',
   '32',
   '33',
   '35',
@@ -46,7 +47,7 @@ const TextQuestArray = [
 ];
 const ImageQuestArray = ['3', '10', '17', '30', '36', '37', '40', '45'];
 const OpenViduQuestArray = ['24', '34', '38'];
-
+const PuzzleQuestArray = ['31'];
 export const QuestRouter: React.FC = () => {
   const navigate = useNavigate();
   const { questid } = useParams<{ questid: string }>();
@@ -62,7 +63,7 @@ export const QuestRouter: React.FC = () => {
   }
 
   if (TextQuestArray.includes(questid)) {
-    return <QuestTextTemplate />;
+    return <QuestPuzzle />;
   } else if (ImageQuestArray.includes(questid)) {
     return <QuestWithImageTemplate />;
   } else if (OpenViduQuestArray.includes(questid)) {
