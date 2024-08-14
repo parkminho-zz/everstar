@@ -22,7 +22,8 @@ export interface InputContainerProps {
   smallButtonText: string;
   showPrimaryButton?: boolean;
   isRtc?: boolean;
-  handleRtcButtonClick?: () => void;
+  handleRtcPuzzleClick?: () => void;
+  rtcPuzzleText?: string;
   onLeftIconClick?: () => void; // 추가된 속성
   primaryButtonDisabled?: boolean;
   ghostText?: string;
@@ -55,7 +56,8 @@ export const InputContainer: React.FC<InputContainerProps> = ({
   dateTime,
   showPrimaryButton = true,
   isRtc = false,
-  handleRtcButtonClick,
+  handleRtcPuzzleClick,
+  rtcPuzzleText,
   onLeftIconClick, // 추가된 속성
   primaryButtonDisabled = false,
   ghostText,
@@ -124,7 +126,6 @@ export const InputContainer: React.FC<InputContainerProps> = ({
               </div>
             )}
           </div>
-
           <div className='flex flex-col items-start w-full'>
             {isRtc && (
               <PrimaryButton
@@ -132,9 +133,9 @@ export const InputContainer: React.FC<InputContainerProps> = ({
                 size='large'
                 disabled={false}
                 icon={null}
-                onClick={handleRtcButtonClick}
+                onClick={handleRtcPuzzleClick}
               >
-                화상통화 해보기
+                {rtcPuzzleText}
               </PrimaryButton>
             )}
           </div>
