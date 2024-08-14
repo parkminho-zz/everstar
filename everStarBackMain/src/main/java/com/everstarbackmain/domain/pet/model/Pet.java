@@ -126,6 +126,21 @@ public class Pet extends BaseTimeEntity {
 		setTrueIsQuestCompleted();
 	}
 
+	public void plusQuestIndexByPresentation() {
+		if (questIndex == 3) {
+			questIndex = 15;
+		} else if (questIndex == 15) {
+			questIndex = 24;
+		} else if (questIndex == 24) {
+			questIndex = 33;
+		} else if (questIndex == 33) {
+			questIndex = 49;
+		} else {
+			questIndex++;
+		}
+		setTrueIsQuestCompleted();
+	}
+
 	public void setTrueIsQuestCompleted() {
 		isQuestCompleted = true;
 	}
