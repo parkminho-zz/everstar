@@ -85,8 +85,6 @@ public class QuestAnswerService {
 
 		BadWordFiltering badWordFiltering = new BadWordFiltering();
 		boolean test = badWordFiltering.blankCheck(requestDto.getContent());
-		System.out.println(filteredContent);
-		System.out.println(test);
 		if (test) {
            log.info(" 이건 욕이잖아 !! Filtered content: {}", filteredContent);
 
@@ -118,10 +116,14 @@ public class QuestAnswerService {
 	}
 
 	private void plusPetQuestIndexByTextType(User user, Pet pet, Quest quest, QuestAnswer questAnswer) {
-		pet.plusQuestIndex();
+		if (pet.getName().equals("푸바오")) {
+			pet.plusQuestIndexByPresentation();
+		} else {
+			pet.plusQuestIndex();
+		}
+
 		int petQuestIndex = pet.getQuestIndex();
 		sseService.updateQuestStatusNotification(user, pet.getId());
-
 
 		if ((petQuestIndex - 1) % 7 == 0) {
 			analyseWeeklyQuestAnswer(pet.getId(), petQuestIndex - 1);
@@ -137,7 +139,12 @@ public class QuestAnswerService {
 
 	private void plusPetQuestIndexByImageType(User user, Pet pet, Quest quest, QuestAnswer questAnswer, String imageUrl,
 		MultipartFile imageFile) {
-		pet.plusQuestIndex();
+		if (pet.getName().equals("푸바오")) {
+			pet.plusQuestIndexByPresentation();
+		} else {
+			pet.plusQuestIndex();
+		}
+
 		int petQuestIndex = pet.getQuestIndex();
 		sseService.updateQuestStatusNotification(user, pet.getId());
 
