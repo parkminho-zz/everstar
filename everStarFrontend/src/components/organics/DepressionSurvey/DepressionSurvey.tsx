@@ -73,23 +73,21 @@ export const DepressionSurvey: React.FC<DepressionSurveyProps> = ({ onSubmitSucc
       <div className="w-full max-w-md p-4 bg-white border border-gray-300 rounded-lg shadow-lg">
         <h2 className="mb-4 text-lg font-semibold text-center text-gray-800">우울증 증상 설문지</h2>
         <div className="h-64 overflow-auto">
-          <table className="w-full text-sm border-collapse table-fixed">
+          <table className="w-full text-sm border-collapse">
             <thead>
               <tr className="bg-gray-200">
-                <th className="w-8 px-1 py-1">#</th>
-                <th className="px-1 py-1">질문</th>
-                <th className="w-24 px-1 py-1 text-center">전혀 아님</th>
-                <th className="w-24 px-1 py-1 text-center">며칠 동안</th>
-                <th className="w-24 px-1 py-1 text-center">7일 이상</th>
-                <th className="w-24 px-1 py-1 text-center">거의 매일</th>
+                <th className="px-1 py-2 text-left">질문</th>
+                <th className="px-1 py-2 text-center">전혀 아님</th>
+                <th className="px-1 py-2 text-center">며칠 동안</th>
+                <th className="px-1 py-2 text-center">7일 이상</th>
+                <th className="px-1 py-2 text-center">거의 매일</th>
               </tr>
             </thead>
             <tbody>
               {questions.map((question) => (
                 <tr key={question.id} className="border-b">
-                  <td className="px-1 py-1">{question.id}</td>
-                  <td className="px-1 py-1">{question.text}</td>
-                  <td className="px-1 py-1 text-center">
+                  <td className="px-2 py-2">{question.text}</td>
+                  <td className="px-2 py-2 text-center">
                     <input
                       type="radio"
                       name={`question-${question.id}`}
@@ -98,7 +96,7 @@ export const DepressionSurvey: React.FC<DepressionSurveyProps> = ({ onSubmitSucc
                       className="form-radio"
                     />
                   </td>
-                  <td className="px-1 py-1 text-center">
+                  <td className="px-2 py-2 text-center">
                     <input
                       type="radio"
                       name={`question-${question.id}`}
@@ -107,7 +105,7 @@ export const DepressionSurvey: React.FC<DepressionSurveyProps> = ({ onSubmitSucc
                       className="form-radio"
                     />
                   </td>
-                  <td className="px-1 py-1 text-center">
+                  <td className="px-2 py-2 text-center">
                     <input
                       type="radio"
                       name={`question-${question.id}`}
@@ -116,7 +114,7 @@ export const DepressionSurvey: React.FC<DepressionSurveyProps> = ({ onSubmitSucc
                       className="form-radio"
                     />
                   </td>
-                  <td className="px-1 py-1 text-center">
+                  <td className="px-2 py-2 text-center">
                     <input
                       type="radio"
                       name={`question-${question.id}`}
