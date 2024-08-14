@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Modal } from 'components/molecules/Modal/Modal';
 import { Textbox } from 'components/molecules/input/Textbox';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
-import { Toggle } from 'components/atoms/buttons/Toggle';
-import { InputField } from 'components/organics/input/InputFields';
 
 interface CheerMessageWriteProps {
   isOpen: boolean;
@@ -22,20 +20,15 @@ export const CheerMessageWrite: React.FC<CheerMessageWriteProps> = ({
   text,
 }) => {
   const [message, setMessage] = useState('');
-  const [isToggleOn, setIsToggleOn] = useState<'on' | 'off'>('off');
 
   const handleVerify = () => {
     onVerify(message);
     setMessage('');
   };
 
-  const handleToggleChange = (status: 'on' | 'off') => {
-    setIsToggleOn(status);
-  };
-
   return (
     <Modal isOpen={isOpen} onClose={onClose} text='응원메시지 작성하기'>
-      <div className='flex flex-col justify-between w-full h-full'>
+      <div className='flex flex-col justify-between h-full mt-5 w-80'>
         <div className='flex flex-col'>
           <div
             className="left-0 [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal]"
@@ -56,18 +49,6 @@ export const CheerMessageWrite: React.FC<CheerMessageWriteProps> = ({
             />
           </div>
         </div>
-        <Toggle status={isToggleOn} onChange={handleToggleChange} />
-        {isToggleOn === 'on' && (
-          <InputField
-            label={''}
-            showLabel={true}
-            showValidationText={false}
-            starshow={false}
-            state={'focus'}
-            text={''}
-            showCheckIcon={false}
-          />
-        )}
         <div className='flex justify-end w-full mt-10'>
           <PrimaryButton
             theme='white'

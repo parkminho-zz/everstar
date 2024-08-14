@@ -3,6 +3,7 @@ import { ReactComponent as LetterIcon } from 'assets/symbols/letter.svg';
 
 interface LetterIconsProps {
   variant: 'letter' | 'letter-text';
+  size?: number; // 아이콘의 크기를 설정할 수 있는 prop
   text?: string;
   onClick?: () => void;
   onMouseEnter?: () => void;
@@ -12,6 +13,7 @@ interface LetterIconsProps {
 
 export const LetterIcons: React.FC<LetterIconsProps> = ({
   variant,
+  size = 24, // 기본 크기를 24px로 설정
   text,
   onClick,
   className,
@@ -24,6 +26,8 @@ export const LetterIcons: React.FC<LetterIconsProps> = ({
         position: 'relative',
         display: 'inline-block',
         textAlign: 'center',
+        width: `${size}px`, // Div의 크기를 아이콘 크기에 맞게 조정
+        height: `${size}px`,
       }}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
@@ -34,16 +38,16 @@ export const LetterIcons: React.FC<LetterIconsProps> = ({
         <div
           style={{
             position: 'relative',
-            width: '24px',
-            height: '24px',
+            width: `${size}px`,
+            height: `${size}px`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             fontFamily: "'Noto_Sans-Bold',Helvetica",
             fontWeight: 'bold',
-            fontSize: '8px',
+            fontSize: `${size / 3}px`, // 텍스트 크기도 아이콘 크기에 맞게 조정
             color: 'black',
-            lineHeight: '8px',
+            lineHeight: `${size / 3}px`,
             textAlign: 'center',
             whiteSpace: 'nowrap',
           }}
@@ -51,7 +55,12 @@ export const LetterIcons: React.FC<LetterIconsProps> = ({
           {text || '편지쓰기'}
         </div>
       ) : (
-        <LetterIcon className="w-6 h-6" />
+        <LetterIcon
+          style={{
+            width: `${size}px`, // SVG 아이콘의 크기 조정
+            height: `${size}px`,
+          }}
+        />
       )}
     </div>
   );

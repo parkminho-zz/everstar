@@ -34,6 +34,7 @@ export interface InputContainerProps {
   value?: string;
   handleReplyClick?: () => void;
   handleSmallButtonDisabled?: boolean;
+  className?: string;
 }
 
 export const InputContainer: React.FC<InputContainerProps> = ({
@@ -63,6 +64,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
   onButtonClick2,
   handleReplyClick,
   handleSmallButtonDisabled = false,
+  className = 'flex justify-center p-6',
 }) => {
   const [text, setText] = useState('');
 
@@ -84,13 +86,17 @@ export const InputContainer: React.FC<InputContainerProps> = ({
   };
 
   return (
-    <div className='flex justify-center p-6 bg-gray-100'>
+    <div className={className}>
       <div
-        className='flex flex-col items-center w-[360px] gap-8 p-5 bg-white rounded-lg shadow-md'
-        style={{ maxHeight: '742px', overflowY: 'auto' }}
+        className='flex flex-col items-center w-full gap-8 bg-white rounded-lg shadow-md p-9'
+        style={{ maxHeight: '1156px', overflowY: 'auto' }}
       >
         {/* Modal Header */}
-        <ModalHeader text={headerText} showLeftIcon={true} onLeftIconClick={onLeftIconClick} />
+        <ModalHeader
+          text={headerText}
+          showLeftIcon={true}
+          onLeftIconClick={onLeftIconClick}
+        />
 
         {/* Content */}
         <div className='flex flex-col items-center w-full gap-8'>
@@ -100,7 +106,9 @@ export const InputContainer: React.FC<InputContainerProps> = ({
               <LetterCard
                 name={myName ? `${myName}에게` : undefined}
                 type='send'
-                color={letterCardType === 'receive' ? 'bgorange' : letterCardColor}
+                color={
+                  letterCardType === 'receive' ? 'bgorange' : letterCardColor
+                }
                 state={letterCardState}
                 message={letterCardMessage}
                 className={letterCardClassName}
@@ -167,7 +175,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
 
                 {/* Large Primary Button */}
                 {showPrimaryButton && (
-                  <div className='flex justify-center w-full'>
+                  <div className='flex justify-start w-full'>
                     <PrimaryButton
                       theme='white'
                       size='large'
@@ -181,7 +189,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
                 )}
 
                 {/* Small Primary Button */}
-                <div className='flex justify-end w-full mt-2'>
+                <div className='flex justify-end mt-8 w-80'>
                   <PrimaryButton
                     theme='white'
                     size='small'

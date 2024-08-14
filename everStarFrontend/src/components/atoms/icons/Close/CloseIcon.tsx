@@ -1,5 +1,8 @@
 import React from 'react';
 import { ReactComponent as CloseIconSVG } from 'assets/icons/close.svg';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { RootState } from 'store/Store';
 
 interface CloseIconProps {
   size: 16 | 24;
@@ -18,6 +21,14 @@ export const CloseIcon: React.FC<CloseIconProps> = ({
     orange: 'text-mainprimary',
   };
 
+  const params = useParams<{ pet: string }>();
+  const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
+
+  const isVisible = params.pet && petId && Number(params.pet) === petId;
+
+  if (!isVisible) {
+    return <div className='mt-5'></div>;
+  }
   return <CloseIconSVG className={`${sizeClasses} ${colorClasses[color]}`} />;
 };
 

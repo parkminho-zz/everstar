@@ -11,19 +11,27 @@ export const SplashPageRedirector = () => {
     const timer = setTimeout(() => {
       setLoading(false);
       navigate('/login'); // 3초 후에 로그인 페이지로 이동
-    }, 3000); // 3초 동안 스플래시 페이지 표시
+    }, 1500); // 3초 동안 스플래시 페이지 표시
 
     return () => clearTimeout(timer);
   }, [navigate]);
 
   return loading ? (
-    <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+    <div className='relative flex items-center justify-center min-h-screen'>
+      {/* Background Image */}
       <img
         src={bgImage}
         alt='Background'
-        style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }}
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+        }}
+        className='absolute top-0 left-0 w-full h-full object-cover'
       />
-      <SplashTemplate type='splash' className='z-10 w-full h-full ' />
+      {/* Splash Template */}
+      <SplashTemplate type='splash' className='z-10' />
     </div>
   ) : null;
 };

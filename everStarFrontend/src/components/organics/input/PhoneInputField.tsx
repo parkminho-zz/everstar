@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 import { InformationText } from 'components/atoms/texts/InformationText';
 import { Lable } from 'components/atoms/texts/Lable';
 import { CheckIcon } from 'components/atoms/icons/Check/CheckIcon';
 
-interface InputFieldProps {
+interface PhoneInputFieldProps {
   label: string;
   showLabel: boolean;
   showValidationText: boolean;
@@ -15,11 +17,10 @@ interface InputFieldProps {
   showCheckIcon: boolean;
   placeholder?: string;
   readOnlyState?: boolean;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void; // onKeyDown 핸들러 추가
+  onChange?: (value: string) => void;
 }
 
-export const InputField: React.FC<InputFieldProps> = ({
+export const PhoneInputField: React.FC<PhoneInputFieldProps> = ({
   label,
   showLabel = true,
   showValidationText = true,
@@ -31,14 +32,9 @@ export const InputField: React.FC<InputFieldProps> = ({
   placeholder,
   readOnlyState,
   onChange,
-  onKeyDown,
 }) => {
   const [inputState, setInputState] = useState(state);
   const [inputText, setInputText] = useState(text);
-
-  useEffect(() => {
-    setInputText(text);
-  }, [text]);
 
   const handleFocus = () => {
     setInputState('focus');
@@ -48,36 +44,30 @@ export const InputField: React.FC<InputFieldProps> = ({
     setInputState(inputText.length > 0 ? 'done' : 'default');
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputText(event.target.value);
+  const handleChange = (value: string) => {
+    setInputText(value);
     if (onChange) {
-      onChange(event);
+      onChange(value);
     }
-    if (inputState === 'error' && event.target.value.length > 0) {
+
+    if (inputState === 'error' && value.length > 0) {
       setInputState('focus');
-    } else if (event.target.value.length > 0) {
+    } else if (value.length > 0) {
       setInputState('done');
     }
   };
 
   let validationText = '';
   if (inputState === 'error') {
-    validationText = '비밀번호가 잘못되었습니다';
+    validationText = '전화번호가 잘못되었습니다';
   } else if (['default', 'disable', 'done', 'focus'].includes(inputState)) {
-    validationText = '비밀번호를 입력해 주세요';
+    validationText = '전화번호를 입력해 주세요';
   }
 
   return (
-    <div
-      className={`w-80 flex flex-col items-start gap-2 relative ${className}`}
-    >
+    <div className={`w-80 flex flex-col items-start gap-2 relative ${className}`}>
       {showLabel && (
-        <Lable
-          className='!flex-[0_0_auto]'
-          prop={label}
-          show={starshow}
-          font='default'
-        />
+        <Lable className="!flex-[0_0_auto]" prop={label} show={starshow} font="default" />
       )}
       <div
         className={`flex items-center px-4 py-2 relative w-full flex-col rounded-xl gap-2 self-stretch h-14 overflow-hidden justify-center
@@ -86,24 +76,25 @@ export const InputField: React.FC<InputFieldProps> = ({
         ${inputState === 'disable' ? 'bg-[#f0f2f6]' : 'bg-white'}
         ${['error', 'focus'].includes(inputState) ? 'border-2 border-solid' : ''}`}
       >
-        <div className='w-full flex self-stretch items-center gap-1 flex-[0_0_auto] relative'>
-          <input
-            type='text'
+        <div className="w-full flex self-stretch items-center gap-1 flex-[0_0_auto] relative">
+          <PhoneInput
+            country={'kr'}
+            onlyCountries={['kr']}
             value={inputText}
             onFocus={handleFocus}
             onBlur={handleBlur}
             onChange={handleChange}
-            onKeyDown={onKeyDown}
-            className={`flex-1 ${inputState === 'disable' ? 'bg-[#f0f2f6] text-[#c3c9d3]' : 'bg-white text-black'} border-none outline-none`}
-            disabled={inputState === 'disable'}
-            placeholder={placeholder}
-            readOnly={readOnlyState}
+            inputProps={{
+              readOnly: readOnlyState,
+              disabled: inputState === 'disable',
+              placeholder: placeholder,
+            }}
+            containerClass={`flex-1 ${inputState === 'disable' ? 'bg-[#f0f2f6] text-[#c3c9d3]' : 'bg-white text-black'} border-none outline-none`}
+            buttonClass="!hidden" // 국가 선택 버튼 숨기기
+            inputClass="!w-full !border-none !outline-none !shadow-none !pl-0" // 국가번호 숨기기 위해 padding 조정
           />
           {showCheckIcon && (
-            <CheckIcon
-              size={24}
-              color={inputState === 'done' ? 'orange' : 'gray'}
-            />
+            <CheckIcon size={24} color={inputState === 'done' ? 'orange' : 'gray'} />
           )}
         </div>
       </div>
@@ -119,21 +110,18 @@ export const InputField: React.FC<InputFieldProps> = ({
   );
 };
 
-InputField.propTypes = {
+PhoneInputField.propTypes = {
   label: PropTypes.string.isRequired,
   showLabel: PropTypes.bool.isRequired,
   showValidationText: PropTypes.bool.isRequired,
   starshow: PropTypes.bool.isRequired,
   state: PropTypes.oneOf(['default', 'focus', 'disable', 'done', 'error'])
-    .isRequired as PropTypes.Validator<
-    'default' | 'focus' | 'disable' | 'done' | 'error'
-  >,
+    .isRequired as PropTypes.Validator<'default' | 'focus' | 'disable' | 'done' | 'error'>,
   text: PropTypes.string.isRequired,
   className: PropTypes.string,
   showCheckIcon: PropTypes.bool.isRequired,
   placeholder: PropTypes.string,
   onChange: PropTypes.func,
-  onKeyDown: PropTypes.func,
 };
 
-export type { InputFieldProps };
+export type { PhoneInputFieldProps };

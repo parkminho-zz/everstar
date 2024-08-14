@@ -20,7 +20,10 @@ interface SearchVisitStarProps {
   height?: string;
 }
 
-export const SearchVisitStar: React.FC<SearchVisitStarProps> = ({ isOpen, onClose }) => {
+export const SearchVisitStar: React.FC<SearchVisitStarProps> = ({
+  isOpen,
+  onClose,
+}) => {
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState<{ label: string; id: number }[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -61,20 +64,20 @@ export const SearchVisitStar: React.FC<SearchVisitStarProps> = ({ isOpen, onClos
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} text="방문할 영원별 찾기">
-      <div className="flex flex-col justify-between w-full h-full">
+    <Modal isOpen={isOpen} onClose={onClose} text='방문할 영원별 찾기'>
+      <div className='flex flex-col justify-between w-full h-full'>
         <Search
-          initialState="focus"
+          initialState='focus'
           options={options.map((option) => option.label)}
           onOptionSelect={handleOptionSelect}
           onInputChange={handleSearch}
           enableFiltering={false}
         />
         {isError && <div>Error fetching pets by name.</div>}
-        <div className="flex justify-end w-full mt-10">
+        <div className='flex justify-center w-full mt-10'>
           <PrimaryButton
-            theme="white"
-            size="large"
+            theme='white'
+            size='large'
             onClick={handleVerify}
             disabled={!selectedId}
             icon={null}

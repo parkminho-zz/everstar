@@ -17,9 +17,9 @@ export const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
   onClick,
   toggleStatus,
   onToggleChange,
-  isActive = true,
-  isOpen = true,
-  isOwner = true,
+  isActive = false,
+  isOpen = false,
+  isOwner = false,
 }) => {
   const [buttonText, setButtonText] = useState<string>('');
   const [buttonTheme, setButtonTheme] = useState<'focus' | 'hover' | 'white'>('focus');
@@ -71,11 +71,17 @@ export const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
   }, [toggleStatus, isActive, isOwner, isOpen]);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center w-full">
       <div className="mb-6">
         <BookIcons variant={bookVariant} />
       </div>
-      <PrimaryButton theme={buttonTheme} size="large" disabled={isDisabled} onClick={onClick}>
+      <PrimaryButton
+        theme={buttonTheme}
+        size="full" // 'full'로 설정하여 버튼을 길게 늘입니다
+        disabled={isDisabled}
+        onClick={onClick}
+        fullWidth // 이 옵션을 추가하여 버튼 컨테이너를 전체 너비로 설정
+      >
         {buttonText}
       </PrimaryButton>
 

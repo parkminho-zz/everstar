@@ -32,5 +32,5 @@ export const OAuthCallback: React.FC = () => {
     }
   }, [location, dispatch, navigate]);
 
-  return <div>Loading...</div>;
+  return <div>토큰의 정보가 없어요. Loading</div>;
 };

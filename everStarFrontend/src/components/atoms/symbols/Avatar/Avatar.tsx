@@ -2,7 +2,8 @@ import React from 'react';
 import defaultAvatarSrc from 'assets/symbols/avatar.png'; // 기본 이미지 import
 
 interface AvatarProps {
-  size: 'small' | 'medium' | 'large' | 'text' | 'square';
+  size?: 'small' | 'medium' | 'large' | 'text' | 'square';
+  iconSize?: number; // 아이콘 크기를 위한 새로운 prop
   src?: string; // 선택적 prop 추가
   name?: string;
   className?: string; // 추가된 부분
@@ -15,10 +16,12 @@ const sizeMap = {
   small: '24px',
   medium: '120px',
   large: '180px',
+  square: '364px', // square에 대한 너비를 설정
 };
 
 export const Avatar: React.FC<AvatarProps> = ({
   size,
+  iconSize,
   src,
   name,
   className,
@@ -26,6 +29,11 @@ export const Avatar: React.FC<AvatarProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
+  const computedSize =
+    iconSize ||
+    sizeMap[size as 'small' | 'medium' | 'large' | 'square'] ||
+    sizeMap.small;
+
   return (
     <div
       style={{
@@ -42,9 +50,8 @@ export const Avatar: React.FC<AvatarProps> = ({
       {size === 'text' ? (
         <div
           style={{
-            position: 'relative',
-            width: '24px',
-            height: '24px',
+            width: computedSize,
+            height: computedSize,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -59,25 +66,17 @@ export const Avatar: React.FC<AvatarProps> = ({
         >
           마이페이지
         </div>
-      ) : size === 'square' ? (
-        <div className="w-[340px] h-[250px] self-stretch">
-          <img src={src || defaultAvatarSrc} alt="avatar" />
-        </div>
       ) : (
-        <div
+        <img
+          src={src || defaultAvatarSrc}
+          alt='avatar'
           style={{
-            width: sizeMap[size],
-            height: sizeMap[size],
-            borderRadius: '50%',
-            overflow: 'hidden',
+            width: computedSize,
+            height: size === 'square' ? '250px' : computedSize, // square일 때 높이를 250px로 설정
+            borderRadius: size === 'square' ? '0%' : '50%',
+            objectFit: 'cover', // 이미지의 비율을 유지하면서 크기에 맞게 조정
           }}
-        >
-          <img
-            src={src || defaultAvatarSrc}
-            alt="avatar"
-            style={{ width: '100%', height: '100%' }}
-          />
-        </div>
+        />
       )}
       {size === 'medium' && name && (
         <div

@@ -4,6 +4,8 @@ import { Glass } from 'components/molecules/Glass/Glass';
 import { LetterBox } from 'components/organics/LetterBox/LetterBox';
 import { useNavigate } from 'react-router-dom';
 import { useFetchLetterPet } from 'hooks/useEarth';
+import bgImage from 'assets/images/bg-login.webp';
+import { SplashTemplate } from './SplashTemplate';
 
 interface Letter {
   id: number;
@@ -18,14 +20,13 @@ interface Letter {
 interface LetterBoxTemplateProps {
   letterData: Letter[];
   currentPage: number;
-  totalPages: number;
+  totalPages?: number;
   onPageChange: (newPage: number) => void;
   headerText: string;
 }
 
 const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
   currentPage,
-  totalPages,
   onPageChange,
   headerText,
 }) => {
@@ -33,7 +34,26 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
   const { data, isLoading, isError } = useFetchLetterPet();
 
   // 로딩 및 오류 상태 처리
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return (
+      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+        <img
+          src={bgImage}
+          alt='Background'
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+        <SplashTemplate
+          type='LetterBoxRocket'
+          className='z-10 w-full h-full '
+        />
+      </div>
+    );
+  }
   if (isError) return <div>Error loading data</div>;
 
   const petLetters =
@@ -57,6 +77,9 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
         dateTime: new Date(item.createAt).toLocaleString(),
       })
     ) || [];
+  const itemPage = 4;
+  const letterLength = petLetters.length;
+  const letterTotalPage = Math.floor(letterLength / itemPage) + 1;
 
   const handleLetterClick = (id: number) => {
     navigate(`/earth/letter/${id}`);
@@ -64,21 +87,23 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
 
   return (
     <div className='relative flex items-center justify-center min-h-screen'>
-      <Glass
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={onPageChange}
-        showPageIndicator={true}
-        className='w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5'
-      />
-      <div className='absolute inset-0 flex flex-col items-center p-4 sm:p-8'>
+      <div className='absolute inset-0'>
+        <Glass
+          currentPage={currentPage}
+          totalPages={letterTotalPage}
+          onPageChange={onPageChange}
+          showPageIndicator={true}
+          className='w-full h-full'
+        />
+      </div>
+      <div className='relative z-10 flex flex-col items-center w-full max-w-5xl min-h-screen p-10 pt-20 overflow-visible mb-60 sm:p-8'>
         <ModalHeader text={headerText} onLeftIconClick={() => navigate(-1)} />
-        <div className='flex flex-col items-center w-full max-w-5xl mt-9 sm:mt-20'>
+        <div className='flex flex-col items-center w-full mt-9 sm:mt-20'>
           <LetterBox
             letters={petLetters}
             onLetterClick={handleLetterClick}
             currentPage={currentPage}
-            itemsPerPage={100}
+            itemsPerPage={itemPage}
           />
         </div>
       </div>

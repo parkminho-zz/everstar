@@ -10,6 +10,8 @@ import { MemorialBookDetailsResponse } from 'api/memorialBookApi';
 import { useFetchMemorialBookById } from 'hooks/useMemorialBooks';
 import { useParams } from 'react-router-dom';
 import { MemorialBookDiaryModal } from 'components/organics/MemorialBook/MemorialBookDiaryModal';
+import bgImage from 'assets/images/bg-login.webp';
+import { SplashTemplate } from './SplashTemplate';
 
 const parseMemorialBookData = (
   data: MemorialBookDetailsResponse,
@@ -96,16 +98,25 @@ const loadImages = (element: HTMLElement) => {
   return Promise.all(promises);
 };
 
-export const MemorialBook: React.FC<{ avatarUrl?: string }> = ({ avatarUrl }) => {
+export const MemorialBook: React.FC<{ avatarUrl?: string; isOwner?: boolean }> = ({
+  avatarUrl,
+  isOwner,
+}) => {
   const params = useParams<{ pet?: string; memorialBookId?: string }>();
   const petId = params.pet ? parseInt(params.pet, 10) : 0;
   const memorialBookId = params.memorialBookId ? parseInt(params.memorialBookId, 10) : 0;
 
   const memorialBookRef = useRef<HTMLDivElement>(null);
-  const { data: memorialBookDetails, isLoading } = useFetchMemorialBookById(petId, memorialBookId);
+
+  const {
+    data: memorialBookDetails,
+    isLoading,
+    refetch,
+  } = useFetchMemorialBookById(petId, memorialBookId); // refetch 추가
 
   const [pages, setPages] = useState<PageType[]>([]);
   const [isDiaryModalOpen, setIsDiaryModalOpen] = useState(false);
+  const [isDiaryUpdated, setIsDiaryUpdated] = useState(false); // 새로운 상태 추가
 
   // 새로운 useEffect 추가: avatarUrl이 변경될 때 강제로 리렌더링
   useEffect(() => {
@@ -113,19 +124,16 @@ export const MemorialBook: React.FC<{ avatarUrl?: string }> = ({ avatarUrl }) =>
       const parsedPages = parseMemorialBookData(memorialBookDetails.data, avatarUrl);
       setPages(parsedPages);
     }
-  }, [memorialBookDetails, avatarUrl]); // avatarUrl이 변경될 때마다 다시 데이터를 파싱
+  }, [memorialBookDetails, avatarUrl]);
 
-  // avatarUrl이 변경될 때 강제로 리렌더링 트리거
+  // diary 업데이트 감지
   useEffect(() => {
-    if (memorialBookRef.current) {
-      memorialBookRef.current.style.opacity = '0';
-      setTimeout(() => {
-        if (memorialBookRef.current) {
-          memorialBookRef.current.style.opacity = '1';
-        }
-      }, 0);
+    if (isDiaryUpdated) {
+      refetch(); // 데이터 다시 불러오기
+      alert('저장이 완료되었어요.');
+      setIsDiaryUpdated(false); // 상태 초기화
     }
-  }, [avatarUrl]);
+  }, [isDiaryUpdated, refetch]);
 
   const handleDownloadPdf = async () => {
     if (memorialBookRef.current) {
@@ -172,36 +180,57 @@ export const MemorialBook: React.FC<{ avatarUrl?: string }> = ({ avatarUrl }) =>
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]">
+        <img
+          src={bgImage}
+          alt="Background"
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+        <SplashTemplate type="book" className="z-10 w-full h-full " />
+      </div>
+    );
   }
-
   return (
     <div>
       <div className="relative z-10 my-4" ref={memorialBookRef}>
         <OrganicsMemorialBook pages={pages} />
       </div>
       <div className="relative z-10 flex justify-center m-4 space-x-4">
-        <PrimaryButton
-          theme="white"
-          size="medium"
-          onClick={handleDownloadPdf}
-          disabled={false}
-          icon={null}
-        >
-          PDF로 만들기
-        </PrimaryButton>
-        <PrimaryButton
-          theme="white"
-          size="medium"
-          onClick={handleWriteDiary}
-          disabled={false}
-          icon={null}
-        >
-          일기쓰기
-        </PrimaryButton>
+        {isOwner && ( // isOwner가 true일 때만 버튼들 표시
+          <>
+            <PrimaryButton
+              theme="white"
+              size="medium"
+              onClick={handleDownloadPdf}
+              disabled={false}
+              icon={null}
+            >
+              PDF로 만들기
+            </PrimaryButton>
+            <PrimaryButton
+              theme="white"
+              size="medium"
+              onClick={handleWriteDiary}
+              disabled={false}
+              icon={null}
+            >
+              일기쓰기
+            </PrimaryButton>
+          </>
+        )}
       </div>
 
-      <MemorialBookDiaryModal isOpen={isDiaryModalOpen} onClose={handleCloseDiaryModal} />
+      <MemorialBookDiaryModal
+        isOpen={isDiaryModalOpen}
+        onClose={handleCloseDiaryModal}
+        onSuccess={() => setIsDiaryUpdated(true)} // 일기 작성 후 상태 업데이트
+      />
     </div>
   );
 };

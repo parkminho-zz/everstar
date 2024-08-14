@@ -10,6 +10,8 @@ import { UserInfoTab } from 'components/organics/Profile/UserInfoTab';
 import { PetInfoTab } from 'components/organics/Profile/PetInfoTab';
 import { Glass } from 'components/molecules/Glass/Glass';
 import { useLocalPetDetails } from 'hooks/usePets';
+import bgImage from 'assets/images/bg-login.webp';
+import { SplashTemplate } from './SplashTemplate';
 
 export const MyInfo: React.FC = () => {
   const navigate = useNavigate();
@@ -28,7 +30,7 @@ export const MyInfo: React.FC = () => {
     useFetchUserInfo(token);
   const { localPetDetails, refetch } = useLocalPetDetails(
     selectedPetId ?? 0,
-    token
+    token,
   );
 
   useEffect(() => {
@@ -82,19 +84,39 @@ export const MyInfo: React.FC = () => {
         setActiveTab('two'); // 반려동물을 선택하면 탭을 전환
       }
     },
-    [pets, selectedPetId]
+    [pets, selectedPetId],
   );
 
-  if (isPetsLoading || isUserLoading) return <div>로딩 중...</div>;
+  if (isPetsLoading || isUserLoading) {
+    return (
+      <div className='relative flex flex-col items-center justify-start min-h-screen bg-center bg-cover z-[-1]'>
+        <img
+          src={bgImage}
+          alt='Background'
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+        <SplashTemplate type='myPageRocket' className='z-10 w-full h-full ' />
+      </div>
+    );
+  }
+
   if (petsError) return <div className='text-red-500'>{petsError.message}</div>;
   if (userError) return <div className='text-red-500'>{userError.message}</div>;
 
   const handleButtonClick = () => {
-    console.log('Primary Button Clicked');
+    sessionStorage.removeItem('persist:root');
+    sessionStorage.removeItem('petDetails');
+    sessionStorage.removeItem('diffPetDetails');
+    window.location.reload();
   };
 
   return (
-    <div className='relative flex flex-col items-center justify-center w-full min-h-screen'>
+    <div className='relative flex flex-col items-center justify-start w-full min-h-screen'>
       <Glass
         currentPage={1}
         totalPages={1}
@@ -102,9 +124,9 @@ export const MyInfo: React.FC = () => {
         showPageIndicator={false}
         className='absolute top-0 bottom-0 left-0 right-0 z-0'
       />
-      <div className='relative z-10 flex flex-col items-center justify-center w-full h-full'>
-        <div className='flex justify-center p-6'>
-          <div className='flex flex-col items-center w-[360px] gap-8 p-5 bg-white rounded-lg shadow-md'>
+      <div className='relative z-10 flex flex-col items-center justify-start w-full h-full'>
+        <div className='flex justify-start w-full'>
+          <div className='flex flex-col items-center min-w-[360px] max-w-md top-0 w-full gap-8 p-5 bg-white rounded-lg shadow-md'>
             <ModalHeader
               text='마이 페이지'
               showLeftIcon={true}
@@ -116,26 +138,30 @@ export const MyInfo: React.FC = () => {
               className='mb-4'
               onTabClick={(tab) => setActiveTab(tab as 'one' | 'two')}
             />
-            {activeTab === 'one' ? (
-              <UserInfoTab
-                userInfo={{
-                  name: userInfo?.userName || '',
-                  birthdate: userInfo?.birthDate || '',
-                  gender: getGenderText(userInfo?.gender || ''),
-                  email: userInfo?.email || '',
-                  phone: userInfo?.phoneNumber || '',
-                }}
-                smallButtonText='핸드폰 번호 수정하기'
-                onButtonClick={handleButtonClick}
-              />
-            ) : (
-              <PetInfoTab
-                petOptions={petOptions}
-                petInfo={petInfo}
-                onPetSelect={onPetSelect}
-                token={token}
-              />
-            )}
+            <div className='flex flex-col items-center justify-start w-full gap-4 pb-12'>
+              {' '}
+              {/* 이 div에 padding-bottom 추가 */}
+              {activeTab === 'one' ? (
+                <UserInfoTab
+                  userInfo={{
+                    name: userInfo?.userName || '',
+                    birthdate: userInfo?.birthDate || '',
+                    gender: getGenderText(userInfo?.gender || ''),
+                    email: userInfo?.email || '',
+                    phone: userInfo?.phoneNumber || '',
+                  }}
+                  smallButtonText='핸드폰 번호 수정하기'
+                  onButtonClick={handleButtonClick}
+                />
+              ) : (
+                <PetInfoTab
+                  petOptions={petOptions}
+                  petInfo={petInfo}
+                  onPetSelect={onPetSelect}
+                  token={token}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>

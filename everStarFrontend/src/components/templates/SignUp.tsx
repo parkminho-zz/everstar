@@ -47,7 +47,6 @@ export const SignUp: React.FC = () => {
       gender,
       questReceptionTime,
     });
-
     setModalOpen(true);
     mutateSendCode(phoneNumber, {
       onError: (error: unknown) => {

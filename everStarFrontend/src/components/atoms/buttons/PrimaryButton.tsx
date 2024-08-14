@@ -6,7 +6,7 @@ import {
 import { Lable } from 'components/atoms/texts/Lable';
 
 type PrimaryButtonTheme = 'focus' | 'hover' | 'white';
-type PrimaryButtonSize = 'large' | 'medium' | 'small';
+type PrimaryButtonSize = 'large' | 'medium' | 'small' | 'full';
 
 interface IPrimaryButtonProps {
   id?: string;
@@ -19,6 +19,7 @@ interface IPrimaryButtonProps {
   hug?: boolean;
   label?: string; // Optional label prop
   showLabelStar?: boolean; // Optional prop to show or hide star in label
+  fullWidth?: boolean; // Optional prop to apply w-full to the container div
 }
 
 const focus = 'bg-mainprimary text-greyscalewhite hover:bg-bgorange';
@@ -37,11 +38,12 @@ const color: Record<PrimaryButtonTheme, string> = {
 const large = 'w-[320px] h-[64px]';
 const medium = 'w-[134px] h-[48px]';
 const small = 'w-[106px] h-[40px]';
-
+const full = 'w-full h-[64px]';
 const sizeStyle: Record<PrimaryButtonSize, string> = {
   large,
   medium,
   small,
+  full,
 };
 
 export function PrimaryButton({
@@ -53,8 +55,9 @@ export function PrimaryButton({
   disabled,
   icon = <ArrowIcon color='black' direction='right' size={24} />,
   hug = false,
-  label, // 추가된 라벨 prop
-  showLabelStar = false, // Optional prop to show or hide star in label
+  label,
+  showLabelStar = false,
+  fullWidth = false, // Destructure the new fullWidth prop
 }: IPrimaryButtonProps) {
   const getTextStyle = () => {
     switch (size) {
@@ -97,7 +100,9 @@ export function PrimaryButton({
   };
 
   return (
-    <div className='flex flex-col items-start'>
+    <div
+      className={`flex z-0 flex-col items-start ${fullWidth ? 'w-full' : ''}`}
+    >
       {label && (
         <Lable
           prop={label}

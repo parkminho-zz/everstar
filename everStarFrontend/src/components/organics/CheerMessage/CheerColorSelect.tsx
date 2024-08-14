@@ -43,13 +43,13 @@ export const CheerColorSelect: React.FC<CheerColorSelectProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} text='색상 정보 선택'>
-      <div className='flex flex-col justify-between w-full h-full'>
+      <div className='flex flex-col justify-between h-full mt-5 w-80'>
         <div className='flex flex-col'>
           <div
             className="left-0 [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal] "
             dangerouslySetInnerHTML={{ __html: text }}
           />
-          <div className='mt-6'>
+          <div className='mt-6 '>
             <Select
               options={colorOptions}
               title={'포스트잇 색깔을 선택해주세요'}

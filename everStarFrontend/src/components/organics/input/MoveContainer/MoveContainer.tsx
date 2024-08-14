@@ -27,35 +27,31 @@ export const MoveContainer = ({
       case 'profile':
         return '반려동물 변경';
       case 'random':
-        return '랜덤 이동';
+        return '랜덤 탐사';
       case 'search':
-        return '검색 이동';
+        return '검색 탐사';
       default:
         return '내 정보';
     }
   };
   return (
-    <div className='flex w-[360px] h-[278px] py-6 px-0 flex-col items-center gap-4 flex-shrink-0 bg-white'>
-      <ModalHeader
-        text={title}
-        showLeftIcon={true}
-        onLeftIconClick={onLeftIconClick}
-      />
+    <div className="flex w-[360px] h-[278px] py-6 px-0 flex-col items-center gap-4 flex-shrink-0 bg-white rounded-lg">
+      <ModalHeader text={title} showLeftIcon={true} onLeftIconClick={onLeftIconClick} />
       <PrimaryButton
-        theme='white'
-        size='large'
+        theme="white"
+        size="large"
         onClick={onNextPage1Click}
         disabled={false}
-        icon={<ArrowIcon color='black' direction='right' size={24} />}
+        icon={<ArrowIcon color="black" direction="right" size={24} />}
       >
         {goNext(nextPage1)}
       </PrimaryButton>
       <PrimaryButton
-        theme='white'
-        size='large'
+        theme="white"
+        size="large"
         onClick={onNextPage2Click}
         disabled={false}
-        icon={<ArrowIcon color='black' direction='right' size={24} />}
+        icon={<ArrowIcon color="black" direction="right" size={24} />}
       >
         {goNext(nextPage2)}
       </PrimaryButton>

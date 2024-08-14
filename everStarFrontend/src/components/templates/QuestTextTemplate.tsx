@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { InteractiveForm } from 'components/templates/InteractiveForm';
-import { Glass } from 'components/molecules/Glass/Glass';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
 import { useNavigate } from 'react-router-dom';
+import bgImage from 'assets/images/bg-login.webp';
+import { SplashTemplate } from './SplashTemplate';
 
 export const QuestTextTemplate = () => {
   const navigate = useNavigate();
@@ -90,38 +91,46 @@ export const QuestTextTemplate = () => {
 
   // 로딩 중이거나 퀘스트 데이터가 없으면 로딩 스피너 또는 빈 화면을 보여줌
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+        <img
+          src={bgImage}
+          alt='Background'
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+        <SplashTemplate type='quest' className='z-10 w-full h-full ' />
+      </div>
+    );
   }
 
   return (
-    <div className='relative items-center justify-center min-h-screen fle'>
-      <Glass
+    <div className='w-full h-full'>
+      <InteractiveForm
         currentPage={1}
         totalPages={1}
-        onPageChange={() => console.log('이동')}
-        showPageIndicator={false}
-        className='w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5'
+        onPageChange={(newPage) => console.log('Page changed to:', newPage)}
+        headerText='오늘의 질문'
+        letterCardType='default'
+        letterCardColor='white'
+        letterCardState='notReceived'
+        letterCardMessage={questContent} // 로드된 퀘스트 내용 표시
+        centered={true}
+        textboxLabel='답변'
+        largeButtonText='이미지 추가'
+        smallButtonText='작성완료'
+        showPrimaryButton={false}
+        onTextChange={handleTextChange}
+        value={text}
+        onButtonClick={handleSubmit}
+        onLeftIconClick={() => navigate(-1)}
+        glassEffect={false}
+        className={'flex justify-center h-full w-full'}
       />
-      <div className='absolute inset-0 flex items-center justify-center'>
-        <InteractiveForm
-          currentPage={1}
-          totalPages={1}
-          onPageChange={(newPage) => console.log('Page changed to:', newPage)}
-          headerText='오늘의 질문'
-          letterCardType='default'
-          letterCardColor='white'
-          letterCardState='notReceived'
-          letterCardMessage={questContent} // 로드된 퀘스트 내용 표시
-          centered={true}
-          textboxLabel='답변'
-          largeButtonText='이미지 추가'
-          smallButtonText='작성완료'
-          showPrimaryButton={false}
-          onTextChange={handleTextChange}
-          value={text}
-          onButtonClick={handleSubmit}
-        />
-      </div>
     </div>
   );
 };
