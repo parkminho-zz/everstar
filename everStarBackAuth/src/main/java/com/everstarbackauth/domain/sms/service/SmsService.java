@@ -36,6 +36,7 @@ public class SmsService {
 		log.info("SMS sent successfully certificationNumber {}", certificationNumber);
 	}
 
+	// 인증처리 로직
 	@Transactional
 	public void verifySms(CheckCodeRequestDto checkCodeRequestDto) {
 		String phone = validatePhoneNumber(checkCodeRequestDto.getPhone());
@@ -50,6 +51,7 @@ public class SmsService {
 		log.info("SMS verification successful for {}", phone);
 	}
 
+	// 인증 유효성 검증
 	public boolean isVerify(CheckCodeRequestDto checkCodeRequestDto) {
 		String storedCertificationNumber = smsCertificationRepository.getSmsCertification(checkCodeRequestDto.getPhone());
 

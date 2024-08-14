@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 public class CheckCodeRequestDto {
 
-	@NotBlank(message = "전화번호는 필수 입력 값입니다.")
-	@Pattern(regexp = "^01(?:0|1|[6-9])[.-]?(\\d{3}|\\d{4})[.-]?(\\d{4})$", message = "전화번호는 공백, '-', '.' 없이 숫자만 입력해야 합니다.")
+	@NotBlank(message = "휴대폰 번호는 필수 입력 값입니다.")
+	@Pattern(regexp = "^010\\d{8}$", message = "휴대폰 번호는는 공백 없이 010으로 시작하는 11자리 숫자만 입력 가능합니다.")
 	private String phone;
 
 	@NotBlank(message = "인증번호는 필수 입력 값입니다.")
