@@ -116,7 +116,7 @@ public class QuestAnswerService {
 	}
 
 	private void plusPetQuestIndexByTextType(User user, Pet pet, Quest quest, QuestAnswer questAnswer) {
-		if (pet.getName().equals("푸바오")) {
+		if (pet.getId().equals(2054L)) {
 			pet.plusQuestIndexByPresentation();
 		} else {
 			pet.plusQuestIndex();
@@ -139,7 +139,7 @@ public class QuestAnswerService {
 
 	private void plusPetQuestIndexByImageType(User user, Pet pet, Quest quest, QuestAnswer questAnswer, String imageUrl,
 		MultipartFile imageFile) {
-		if (pet.getName().equals("푸바오")) {
+		if (pet.getId().equals(2054L)) {
 			pet.plusQuestIndexByPresentation();
 		} else {
 			pet.plusQuestIndex();
