@@ -8,10 +8,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
 import bgImage from 'assets/images/bg-everstar.webp';
 
-import {
-  useFetchOtherPetDetails,
-  useFetchCheeringPet,
-} from 'hooks/useEverStar';
+import { useFetchOtherPetDetails, useFetchCheeringPet } from 'hooks/useEverStar';
 import { useFetchMemorialBooksWithQuest } from 'hooks/useMemorialBooks';
 import { MemorialBook } from 'components/templates/MemorialBook';
 import { SplashTemplate } from 'components/templates/SplashTemplate';
@@ -29,26 +26,24 @@ interface PetProfile {
 export const EverstarPage: React.FC = () => {
   const params = useParams<{ pet?: string }>();
   const navigate = useNavigate();
-  const currentPetId = useSelector(
-    (state: RootState) => state.pet.petDetails?.id
-  );
+  const currentPetId = useSelector((state: RootState) => state.pet.petDetails?.id);
 
   const petId = useMemo(
     () =>
       params.pet
         ? parseInt(params.pet, 10)
-        : currentPetId ||
-          parseInt(sessionStorage.getItem('defaultPetId') || '0', 10),
-    [params.pet, currentPetId]
+        : currentPetId || parseInt(sessionStorage.getItem('defaultPetId') || '0', 10),
+    [params.pet, currentPetId],
   );
 
-  const { data: petDetails, isLoading: isPetDetailsLoading } =
-    useFetchOtherPetDetails(petId);
+  const { data: petDetails, isLoading: isPetDetailsLoading } = useFetchOtherPetDetails(petId);
 
   const questIndex = petDetails?.questIndex || 0;
 
-  const { data: memorialBooks, isLoading: isMemorialBooksLoading } =
-    useFetchMemorialBooksWithQuest(petId, questIndex);
+  const { data: memorialBooks, isLoading: isMemorialBooksLoading } = useFetchMemorialBooksWithQuest(
+    petId,
+    questIndex,
+  );
 
   const { data: cheerData, isLoading: isCheerLoading } = useFetchCheeringPet();
 
@@ -64,10 +59,10 @@ export const EverstarPage: React.FC = () => {
 
   if (isPetDetailsLoading || isMemorialBooksLoading || isCheerLoading) {
     return (
-      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+      <div className="relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]">
         <img
           src={bgImage}
-          alt='Background'
+          alt="Background"
           style={{
             position: 'absolute',
             width: '100%',
@@ -75,7 +70,7 @@ export const EverstarPage: React.FC = () => {
             objectFit: 'cover',
           }}
         />
-        <SplashTemplate type='everPage' className='z-10 w-full h-full ' />
+        <SplashTemplate type="everPage" className="z-10 w-full h-full " />
       </div>
     );
   }
@@ -108,16 +103,16 @@ export const EverstarPage: React.FC = () => {
         color: item.color.toLowerCase() || '',
         cheeringMessageId: item.cheeringMessageId,
         petId: item.petId,
-      })
+      }),
     ) || [];
 
   const totalPages = Math.ceil(postItCards.length / 10);
 
   return (
-    <div className='relative flex flex-col w-full min-h-screen overflow-hidden'>
+    <div className="relative flex flex-col w-full min-h-screen overflow-hidden">
       {/* Background Image */}
       <div
-        className='absolute top-0 left-0 w-full h-full bg-center bg-cover z-[-1]'
+        className="absolute top-0 left-0 w-full h-full bg-center bg-cover z-[-1]"
         style={{
           backgroundImage: `url(${bgImage})`,
           backgroundSize: 'cover',
@@ -130,13 +125,11 @@ export const EverstarPage: React.FC = () => {
       <div>
         <Routes>
           <Route
-            path='/'
+            path="/"
             element={
               <EverStarMain
                 petProfile={petProfile}
-                buttonDisabled={
-                  !memorialBooks?.data.isActive || !memorialBooks?.data.isOpen
-                }
+                buttonDisabled={!memorialBooks?.data.isActive || !memorialBooks?.data.isOpen}
                 memorialBookProfile={memorialBooks?.data}
                 petId={petId ?? 0}
                 isOwner={isOwner}
@@ -144,7 +137,7 @@ export const EverstarPage: React.FC = () => {
             }
           />
           <Route
-            path='message'
+            path="message"
             element={
               petProfile ? (
                 <EverStarCheerMessage
@@ -153,21 +146,21 @@ export const EverstarPage: React.FC = () => {
                   totalPages={totalPages}
                 />
               ) : (
-                <SplashTemplate
-                  type='everCheerRocket'
-                  className='z-10 w-full h-full '
-                />
+                <SplashTemplate type="everCheerRocket" className="z-10 w-full h-full " />
               )
             }
           />
-          <Route path='explore' element={<EverStarSearchStar />} />
+          <Route path="explore" element={<EverStarSearchStar />} />
           <Route
-            path='memorialbook/:memorialBookId'
+            path="memorialbook/:memorialBookId"
             element={
               petProfile ? (
-                <MemorialBook avatarUrl={petProfile.avatarUrl} />
+                <MemorialBook
+                  avatarUrl={petProfile.avatarUrl}
+                  isOwner={isOwner} // 여기에 isOwner를 전달
+                />
               ) : (
-                <SplashTemplate type='book' className='z-10 w-full h-full ' />
+                <SplashTemplate type="book" className="z-10 w-full h-full " />
               )
             }
           />
@@ -175,7 +168,7 @@ export const EverstarPage: React.FC = () => {
       </div>
 
       {/* 고정된 푸터 */}
-      <Footer className='fixed bottom-0 left-0 z-50 w-full' />
+      <Footer className="fixed bottom-0 left-0 z-50 w-full" />
     </div>
   );
 };

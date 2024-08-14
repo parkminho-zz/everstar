@@ -72,7 +72,7 @@ export const UserInfoTab: React.FC<UserInfoTabProps> = ({
         className=''
         placeholder='전화번호를 입력해 주세요'
       />
-      <div className='flex justify-between w-full'>
+      <div className='p-auto'>
         <PrimaryButton
           theme='white'
           size='large'
