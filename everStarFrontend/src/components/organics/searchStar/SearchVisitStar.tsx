@@ -72,6 +72,7 @@ export const SearchVisitStar: React.FC<SearchVisitStarProps> = ({
           onOptionSelect={handleOptionSelect}
           onInputChange={handleSearch}
           enableFiltering={false}
+          dropdownMaxHeight={300}
         />
         {isError && <div>Error fetching pets by name.</div>}
         <div className='flex justify-center w-full mt-10'>

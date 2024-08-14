@@ -12,7 +12,6 @@ import { useFetchOtherPetDetails, useFetchCheeringPet } from 'hooks/useEverStar'
 import { useFetchMemorialBooksWithQuest } from 'hooks/useMemorialBooks';
 import { MemorialBook } from 'components/templates/MemorialBook';
 import { SplashTemplate } from 'components/templates/SplashTemplate';
-
 interface PetProfile {
   name: string;
   age: number;
@@ -59,18 +58,13 @@ export const EverstarPage: React.FC = () => {
 
   if (isPetDetailsLoading || isMemorialBooksLoading || isCheerLoading) {
     return (
-      <div className="relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]">
+      <div className="relative flex flex-col items-start justify-center min-h-screen-56 bg-center bg-cover z-[-1]">
         <img
           src={bgImage}
           alt="Background"
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-          }}
+          className="absolute inset-0 object-cover w-full h-full"
         />
-        <SplashTemplate type="everPage" className="z-10 w-full h-full " />
+        <SplashTemplate type="everPage" className="z-10 w-full h-full" />
       </div>
     );
   }
@@ -109,10 +103,10 @@ export const EverstarPage: React.FC = () => {
   const totalPages = Math.ceil(postItCards.length / 10);
 
   return (
-    <div className="relative flex flex-col w-full min-h-screen overflow-hidden">
+    <div className="relative flex flex-col w-full overflow-hidden min-h-screen-56">
       {/* Background Image */}
       <div
-        className="absolute top-0 left-0 w-full h-full bg-center bg-cover z-[-1]"
+        className="absolute top-0 left-0 w-full min-h-screen h-full bg-center bg-cover z-[-1]"
         style={{
           backgroundImage: `url(${bgImage})`,
           backgroundSize: 'cover',
@@ -120,9 +114,7 @@ export const EverstarPage: React.FC = () => {
           backgroundRepeat: 'no-repeat',
         }}
       ></div>
-
-      {/* 고정된 헤더 */}
-      <div>
+      <div className="z-10 flex-grow">
         <Routes>
           <Route
             path="/"
@@ -146,7 +138,7 @@ export const EverstarPage: React.FC = () => {
                   totalPages={totalPages}
                 />
               ) : (
-                <SplashTemplate type="everCheerRocket" className="z-10 w-full h-full " />
+                <SplashTemplate type="everCheerRocket" className="z-10 w-full h-full" />
               )
             }
           />

@@ -92,16 +92,13 @@ export const ProfileSelection: React.FC<ProfileSelectionProps> = ({
   };
 
   return (
-    <div className='flex flex-col items-center justify-center p-8 w-full max-w-[832px] mx-auto rounded-sm'>
-      <h1 className='mb-12 text-2xl font-semibold text-greyscaleblack-100'>
+    <div className="flex flex-col items-center justify-center p-8 w-full max-w-[832px] mx-auto rounded-sm">
+      <h1 className="z-10 mb-12 text-2xl font-semibold text-greyscaleblack-100">
         여행을 함께 할 친구를 선택해주세요
       </h1>
-      <Slider {...sliderSettings} className='w-full'>
+      <Slider {...sliderSettings} className="w-full">
         {avatars.map((avatar, index) => (
-          <div
-            key={index}
-            className='flex flex-col items-center justify-center gap-y-8'
-          >
+          <div key={index} className="flex flex-col items-center justify-center gap-y-8">
             <Avatar
               src={avatar.src}
               size={avatar.size}
@@ -110,13 +107,8 @@ export const ProfileSelection: React.FC<ProfileSelectionProps> = ({
             />
           </div>
         ))}
-        <div className='flex flex-col items-center justify-center gap-y-8'>
-          <CircleButton
-            theme='white'
-            icon='plus'
-            disabled={false}
-            onClick={onAddAvatar}
-          />
+        <div className="flex flex-col items-center justify-center gap-y-8">
+          <CircleButton theme="white" icon="plus" disabled={false} onClick={onAddAvatar} />
         </div>
       </Slider>
     </div>

@@ -11,52 +11,43 @@ interface Question {
 }
 
 const questions: Question[] = [
-  {
-    id: 1,
-    text: '일 또는 여가 활동을 하는데 흥미나 즐거움을 느끼지 못함',
-    value: 0,
-  },
-  { id: 2, text: '기분이 가라앉거나.우울하거나.희망이 없음', value: 0 },
-  {
-    id: 3,
-    text: '잠이 들거나 계속 잠을 자는 것이 어려움. 또는 잠을 너무 많이 잠',
-    value: 0,
-  },
+  { id: 1, text: '일 또는 여가 활동을 하는데 흥미나 즐거움을 느끼지 못함', value: 0 },
+  { id: 2, text: '기분이 가라앉거나 우울하거나 희망이 없음', value: 0 },
+  { id: 3, text: '잠이 들거나 계속 잠을 자는 것이 어려움 또는 잠을 너무 많이 잠', value: 0 },
   { id: 4, text: '피곤하다고 느끼거나 기운이 거의 없음', value: 0 },
   { id: 5, text: '입맛이 없거나 과식을 함', value: 0 },
   {
     id: 6,
-    text: '자신을 부정적으로 봄 – 혹은 자신이 실패자라고 느끼거나 자신 또는 가족을 실망시킴',
+    text: '자신을 부정적으로 봄 – 자신이 실패자라고 느끼거나 자신 또는 가족을 실망시킴',
     value: 0,
   },
-  {
-    id: 7,
-    text: '신문을 읽거나 텔레비전 보는 것과 같은 일에 집중하는 것이 어려움',
-    value: 0,
-  },
+  { id: 7, text: '신문을 읽거나 텔레비전 보는 것과 같은 일에 집중하는 것이 어려움', value: 0 },
   {
     id: 8,
-    text: '다른 사람들이 주목할 정도로 너무 느리게 움직이거나 말을 함 또는 반대로 평상시보다 많이 움직여서, 너무 안절부절 못하거나 들떠 있음',
+    text: '다른 사람들이 주목할 정도로 너무 느리게 움직이거나 말을 함 또는 너무 안절부절 못하거나 들떠 있음',
     value: 0,
   },
   {
     id: 9,
-    text: '자신이 죽는 것이 더 낫다고 생각하거나 어떤 식으로든 자신을 해칠것이라고 생각함',
+    text: '자신이 죽는 것이 더 낫다고 생각하거나 어떤 식으로든 자신을 해칠 것이라고 생각함',
     value: 0,
   },
 ];
 
 interface DepressionSurveyProps {
-  onSubmitSuccess: () => void; // 제출 성공 시 호출되는 콜백
+  onSubmitSuccess: () => void;
 }
 
-export const DepressionSurvey: React.FC<DepressionSurveyProps> = ({
-  onSubmitSuccess,
-}) => {
+export const DepressionSurvey: React.FC<DepressionSurveyProps> = ({ onSubmitSuccess }) => {
   const [answers, setAnswers] = useState<{ [key: number]: number }>({});
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
   const memorialBookId = 1; // 실제 memorialBookId로 바꿔야 함
-  const { mutate: updateTestResult } = useUpdatePsychologicalTestResult();
+  const { mutate: updateTestResult } = useUpdatePsychologicalTestResult({
+    onSuccess: (data) => {
+      alert(`${data.psychologicalTestResult}`);
+      onSubmitSuccess(); // 성공 시 콜백 호출
+    },
+  });
 
   const handleChange = (id: number, value: number) => {
     setAnswers((prev) => ({
@@ -66,87 +57,70 @@ export const DepressionSurvey: React.FC<DepressionSurveyProps> = ({
   };
 
   const handleSubmit = () => {
-    const totalScore = Object.values(answers).reduce(
-      (acc, curr) => acc + curr,
-      0,
-    );
+    const totalScore = Object.values(answers).reduce((acc, curr) => acc + curr, 0);
+
     if (petId) {
-      updateTestResult(
-        { petId, memorialBookId, testResult: totalScore.toString() },
-        {
-          onSuccess: () => {
-            onSubmitSuccess(); // 성공 시 콜백 호출
-          },
-        },
-      );
+      updateTestResult({
+        petId,
+        memorialBookId,
+        testResult: totalScore.toString(),
+      });
     }
   };
 
   return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
-      <div className='w-11/12 h-[80%] p-6 bg-white border border-gray-300 rounded-lg shadow-lg'>
-        <h2 className='mb-4 text-xl font-semibold text-center text-gray-800'>
-          우울증 증상 설문지
-        </h2>
-        <div className='overflow-auto h-[70%]'>
-          <table className='w-full border-collapse table-fixed'>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="w-full max-w-md p-4 bg-white border border-gray-300 rounded-lg shadow-lg">
+        <h2 className="mb-4 text-lg font-semibold text-center text-gray-800">우울증 증상 설문지</h2>
+        <div className="h-64 overflow-auto">
+          <table className="w-full text-sm border-collapse">
             <thead>
-              <tr className='text-left bg-gray-200'>
-                <th className='w-8 px-2 py-1'>#</th>
-                <th className='px-2 py-1'>질문</th>
-                <th className='w-32 px-2 py-1 text-center'>
-                  전혀 방해받지 않았다
-                </th>
-                <th className='w-32 px-2 py-1 text-center'>
-                  며칠동안 방해받았다
-                </th>
-                <th className='w-32 px-2 py-1 text-center'>
-                  7일 이상 방해받았다
-                </th>
-                <th className='w-32 px-2 py-1 text-center'>
-                  거의 매일 방해받았다
-                </th>
+              <tr className="bg-gray-200">
+                <th className="px-1 py-2 text-left">질문</th>
+                <th className="px-1 py-2 text-center">전혀 아님</th>
+                <th className="px-1 py-2 text-center">며칠 동안</th>
+                <th className="px-1 py-2 text-center">7일 이상</th>
+                <th className="px-1 py-2 text-center">거의 매일</th>
               </tr>
             </thead>
             <tbody>
               {questions.map((question) => (
-                <tr key={question.id} className='border-b'>
-                  <td className='px-2 py-1'>{question.id}</td>
-                  <td className='px-2 py-1'>{question.text}</td>
-                  <td className='px-2 py-1 text-center'>
+                <tr key={question.id} className="border-b">
+                  <td className="px-2 py-2">{question.text}</td>
+                  <td className="px-2 py-2 text-center">
                     <input
-                      type='radio'
+                      type="radio"
                       name={`question-${question.id}`}
                       value={0}
                       onChange={() => handleChange(question.id, 0)}
-                      className='text-indigo-600 form-radio'
+                      className="form-radio"
                     />
                   </td>
-                  <td className='px-2 py-1 text-center'>
+                  <td className="px-2 py-2 text-center">
                     <input
-                      type='radio'
+                      type="radio"
                       name={`question-${question.id}`}
                       value={1}
                       onChange={() => handleChange(question.id, 1)}
-                      className='text-indigo-600 form-radio'
+                      className="form-radio"
                     />
                   </td>
-                  <td className='px-2 py-1 text-center'>
+                  <td className="px-2 py-2 text-center">
                     <input
-                      type='radio'
+                      type="radio"
                       name={`question-${question.id}`}
                       value={2}
                       onChange={() => handleChange(question.id, 2)}
-                      className='text-indigo-600 form-radio'
+                      className="form-radio"
                     />
                   </td>
-                  <td className='px-2 py-1 text-center'>
+                  <td className="px-2 py-2 text-center">
                     <input
-                      type='radio'
+                      type="radio"
                       name={`question-${question.id}`}
                       value={3}
                       onChange={() => handleChange(question.id, 3)}
-                      className='text-indigo-600 form-radio'
+                      className="form-radio"
                     />
                   </td>
                 </tr>
@@ -154,13 +128,11 @@ export const DepressionSurvey: React.FC<DepressionSurveyProps> = ({
             </tbody>
           </table>
         </div>
-        <div className='flex justify-center mt-4'>
+        <div className="flex justify-center mt-4">
           <PrimaryButton
-            theme='white'
-            size='large'
+            theme="white"
+            size="medium"
             onClick={handleSubmit}
-            label=''
-            showLabelStar={false}
             disabled={false}
             icon={null}
           >

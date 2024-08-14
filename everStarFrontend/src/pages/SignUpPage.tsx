@@ -4,7 +4,7 @@ import bgImage from 'assets/images/bg-login.webp';
 
 export const SignUpPage: React.FC = () => {
   return (
-    <div className="relative flex flex-col w-full min-h-screen overflow-hidden">
+    <div className="relative flex flex-col w-full overflow-hidden min-h-screen-56">
       {/* Background Image */}
       <div
         className="absolute top-0 left-0 w-full h-full bg-center bg-cover z-[-1]"

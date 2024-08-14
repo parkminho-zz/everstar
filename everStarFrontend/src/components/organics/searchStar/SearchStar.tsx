@@ -32,8 +32,8 @@ export const SearchStar = (): JSX.Element => {
   };
 
   return (
-    <div className='relative flex flex-col items-center justify-center min-h-screen '>
-      <div className='relative z-10 flex flex-col items-center justify-center w-full h-full p-12'>
+    <div className="relative flex flex-col items-start min-h-screen-56 ">
+      <div className="relative z-10 flex flex-col items-center justify-center w-full h-full p-12">
         <MoveContainer
           title={'다른 영원별 탐사'}
           nextPage1={'random'}
@@ -46,7 +46,7 @@ export const SearchStar = (): JSX.Element => {
           isOpen={isModalOpen}
           onClose={handleModalClose}
           onVerify={(code) => console.log('Verified code:', code)}
-          text=''
+          text=""
         />
       </div>
     </div>
