@@ -254,20 +254,8 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
 
               <div className='flex flex-col items-start'>
                 <span className='font-bold pointer-events-none font-kor-h-h2 text-greyscaleblack-100'>
-                  {name}님의 영원별입니다.
+                  {name}님의 영원별
                 </span>
-                <div className='flex items-center'>
-                  {age && (
-                    <span className='mr-2 text-sm pointer-events-none text-greyscaleblack-100'>
-                      {age}살
-                    </span>
-                  )}
-                  <span className='text-xs pointer-events-none text-greyscaleblack-80'>
-                    {description.length > 20
-                      ? `${description.substring(0, 20)}...`
-                      : description}
-                  </span>
-                </div>
               </div>
             </div>
           ) : (
