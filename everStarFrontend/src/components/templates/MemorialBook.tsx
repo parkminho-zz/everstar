@@ -26,13 +26,13 @@ const parseMemorialBookData = (
   });
 
   const sentimentResults = [
-    sentimentAnalysis.week1Result * 100,
-    sentimentAnalysis.week2Result * 100,
-    sentimentAnalysis.week3Result * 100,
-    sentimentAnalysis.week4Result * 100,
-    sentimentAnalysis.week5Result * 100,
-    sentimentAnalysis.week6Result * 100,
-    sentimentAnalysis.week7Result * 100,
+    sentimentAnalysis.week1Result,
+    sentimentAnalysis.week2Result,
+    sentimentAnalysis.week3Result,
+    sentimentAnalysis.week4Result,
+    sentimentAnalysis.week5Result,
+    sentimentAnalysis.week6Result,
+    sentimentAnalysis.week7Result,
   ];
 
   pages.push({
