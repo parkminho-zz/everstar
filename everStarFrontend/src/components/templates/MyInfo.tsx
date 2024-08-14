@@ -89,7 +89,7 @@ export const MyInfo: React.FC = () => {
 
   if (isPetsLoading || isUserLoading) {
     return (
-      <div className='relative flex flex-col items-center justify-start min-h-screen bg-center bg-cover z-[-1]'>
+      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
         <img
           src={bgImage}
           alt='Background'
@@ -124,7 +124,7 @@ export const MyInfo: React.FC = () => {
         showPageIndicator={false}
         className='absolute top-0 bottom-0 left-0 right-0 z-0'
       />
-      <div className='relative z-10 flex flex-col items-center justify-start w-full h-full'>
+      <div className='relative z-10 flex flex-col items-center justify-center w-full h-full'>
         <div className='flex justify-start w-full'>
           <div className='flex flex-col items-center min-w-[360px] max-w-md top-0 w-full gap-8 p-5 bg-white rounded-lg shadow-md'>
             <ModalHeader
