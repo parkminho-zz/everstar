@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
 import { useNavigate } from 'react-router-dom';
-import { Glass } from 'components/molecules/Glass/Glass';
 import { InteractiveForm } from './InteractiveForm';
 import bgImage from 'assets/images/bg-login.webp';
 import { SplashTemplate } from './SplashTemplate';
@@ -20,16 +19,17 @@ export const QuestOpenviduTemplate: React.FC = () => {
   const [image, setImage] = useState<File | null>();
   const [questContent, setQuestContent] = useState('');
   const [loading, setLoading] = useState(true);
+  const [imageText, setImageText] = useState('이미지 추가');
   const [didOpenvidu] = useState<boolean>(() => {
     return sessionStorage.getItem(`didOpenvidu${questid}`) === 'true';
   });
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
 
-  useEffect(() => {
-    console.log('이미지!!!!: ', image);
-    console.log('오픈비두 클릭했는지 여부: ', didOpenvidu);
-  }, [image]);
+  // useEffect(() => {
+  //   console.log('이미지!!!!: ', image);
+  //   console.log('오픈비두 클릭했는지 여부: ', didOpenvidu);
+  // }, [image]);
 
   useEffect(() => {
     getQuest();
@@ -128,6 +128,12 @@ export const QuestOpenviduTemplate: React.FC = () => {
     console.log('입력된 텍스트: ', text);
   };
 
+  useEffect(() => {
+    if (image) {
+      setImageText(image.name);
+    }
+  }, [image]);
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setImage(file);
@@ -187,15 +193,10 @@ export const QuestOpenviduTemplate: React.FC = () => {
   }
 
   return (
-    <div className='relative flex items-center justify-center min-h-screen'>
-      <Glass
-        currentPage={1}
-        totalPages={1}
-        onPageChange={() => console.log('이동')}
-        showPageIndicator={false}
-      />
-      <div className='absolute inset-0 flex items-center justify-center'>
+    <div className='flex items-center justify-center flex-grow '>
+      <div className='w-full h-full max-w-md '>
         <InteractiveForm
+          onLeftIconClick={() => navigate(-1)}
           currentPage={1}
           totalPages={1}
           onPageChange={() => console.log('이동')}
@@ -206,7 +207,7 @@ export const QuestOpenviduTemplate: React.FC = () => {
           letterCardState='notReceived'
           centered={true}
           textboxLabel='답변'
-          largeButtonText='이미지 추가'
+          largeButtonText={imageText}
           smallButtonText='작성완료'
           showPrimaryButton={true}
           isRtc={true}
@@ -217,6 +218,8 @@ export const QuestOpenviduTemplate: React.FC = () => {
           onButtonClick={handleSubmit}
           onButtonClick2={handleButtonClick2}
           handleSmallButtonDisabled={!didOpenvidu}
+          glassEffect={false}
+          className={'flex justify-center h-full w-full'}
         />
         <input
           type='file'

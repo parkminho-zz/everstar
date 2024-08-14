@@ -1,5 +1,8 @@
 import React, { useEffect, useCallback } from 'react';
-import { ModalHeader, ModalHeaderProps } from 'components/molecules/ModalHeader/ModalHeader';
+import {
+  ModalHeader,
+  ModalHeaderProps,
+} from 'components/molecules/ModalHeader/ModalHeader';
 
 interface ModalProps extends ModalHeaderProps {
   isOpen: boolean;
@@ -7,6 +10,7 @@ interface ModalProps extends ModalHeaderProps {
   children?: React.ReactNode;
   height?: string;
   customStyle?: React.CSSProperties; // customStyle prop 추가
+  className?: string;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -15,6 +19,7 @@ export const Modal: React.FC<ModalProps> = ({
   children,
   height,
   customStyle,
+  className = 'flex justify-center',
   ...headerProps
 }) => {
   const handleBackButton = useCallback(
@@ -23,7 +28,7 @@ export const Modal: React.FC<ModalProps> = ({
         onClose();
       }
     },
-    [onClose],
+    [onClose]
   );
 
   useEffect(() => {
@@ -39,9 +44,9 @@ export const Modal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
       <div
-        className="w-full max-w-md p-4 bg-white rounded-lg shadow-md"
+        className='w-full max-w-md p-4 bg-white rounded-lg shadow-md'
         style={{
           height: height || '100vh',
           maxHeight: '100vh',
@@ -50,7 +55,7 @@ export const Modal: React.FC<ModalProps> = ({
         }}
       >
         <ModalHeader {...headerProps} onLeftIconClick={onClose} />
-        <div className="flex justify-center">{children}</div>
+        <div className={className}>{children}</div>
       </div>
     </div>
   );

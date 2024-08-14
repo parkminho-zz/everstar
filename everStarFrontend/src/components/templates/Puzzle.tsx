@@ -13,7 +13,9 @@ interface QuestPuzzleProps {
 export const Puzzle: React.FC<QuestPuzzleProps> = (props) => {
   const puzzleRef = useRef<HTMLDivElement>(null);
   const headbreaker: any = require('headbreaker');
-  const petImg = useSelector((state: RootState) => state.pet.petDetails?.profileImageUrl);
+  const petImg = useSelector(
+    (state: RootState) => state.pet.petDetails?.profileImageUrl
+  );
 
   useEffect(() => {
     const puzzle = puzzleRef.current;

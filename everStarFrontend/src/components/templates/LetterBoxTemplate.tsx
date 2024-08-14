@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
 import { Glass } from 'components/molecules/Glass/Glass';
 import { LetterBox } from 'components/organics/LetterBox/LetterBox';
@@ -32,6 +32,20 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
 }) => {
   const navigate = useNavigate();
   const { data, isLoading, isError } = useFetchLetterPet();
+
+  const [itemPage, setItemPage] = useState(3);
+
+  // 화면 크기에 따라 itemPage 값 설정
+  useEffect(() => {
+    const handleResize = () => {
+      setItemPage(window.innerWidth >= 768 ? 4 : 3);
+    };
+
+    handleResize(); // 초기 설정
+    window.addEventListener('resize', handleResize); // 창 크기 변화에 따른 반응형 처리
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // 로딩 및 오류 상태 처리
   if (isLoading) {
@@ -77,7 +91,6 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
         dateTime: new Date(item.createAt).toLocaleString(),
       })
     ) || [];
-  const itemPage = 4;
   const letterLength = petLetters.length;
   const letterTotalPage = Math.floor(letterLength / itemPage) + 1;
 
@@ -86,17 +99,17 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
   };
 
   return (
-    <div className='relative flex items-center justify-center min-h-screen'>
-      <div className='absolute inset-0'>
+    <div className='relative flex flex-col items-center '>
+      <div className='absolute inset-0 flex items-center justify-center'>
         <Glass
           currentPage={currentPage}
           totalPages={letterTotalPage}
           onPageChange={onPageChange}
           showPageIndicator={true}
-          className='w-full h-full'
+          className='flex flex-col w-full h-[111%] sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5'
         />
       </div>
-      <div className='relative z-10 flex flex-col items-center w-full max-w-5xl min-h-screen p-10 pt-20 overflow-visible mb-60 sm:p-8'>
+      <div className='relative z-10 flex flex-col items-center w-full h-full max-w-5xl p-10 pt-20 overflow-visible sm:p-8'>
         <ModalHeader text={headerText} onLeftIconClick={() => navigate(-1)} />
         <div className='flex flex-col items-center w-full mt-9 sm:mt-20'>
           <LetterBox

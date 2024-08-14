@@ -10,6 +10,9 @@ import { useFetchCheeringPetDelete, useFetchPetPost } from 'hooks/useEverStar';
 import { RootState } from 'store/Store';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { PostItDetailModal } from './PostItDetailModal';
+import { ModalHeader } from 'components/molecules/ModalHeader/ModalHeader';
+import { useNavigate } from 'react-router-dom';
 
 export interface CheerMessageProps {
   profile: {
@@ -39,6 +42,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
   onPageChange,
 }) => {
   const [postItCards, setPostItCards] = useState(initialPostItCards);
+  const [postItOpen, setPostItOpen] = useState(false);
   const [isIntroduceWriteModalOpen, setIntroduceWriteModalOpen] =
     useState(false);
   const [isCheerColorSelectModalOpen, setCheerColorSelectModalOpen] =
@@ -47,11 +51,17 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     useState(false);
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [isMobile, setIsMobile] = useState(window.innerWidth < 970);
+  const [selectedCard, setSelectedCard] = useState<{
+    contents: string;
+    name: string;
+    color: string;
+  } | null>(null); // 선택된 카드를 저장할 상태 추가
 
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
   const petName = useSelector((state: RootState) => state.pet.petDetails?.name);
   const params = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => {
@@ -166,6 +176,21 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     setCheerMessageWriteModalOpen(false);
   };
 
+  const handlePostItOpen = (card: {
+    contents: string;
+    name: string;
+    color: string;
+    petId: number;
+    cheeringMessageId: number;
+  }) => {
+    setSelectedCard(card);
+    setPostItOpen(true);
+  };
+
+  const handleClosePostItModal = () => {
+    setPostItOpen(false);
+  };
+
   const handleVerifyCheerMessageWrite = (message: string) => {
     handleCreate({
       content: message,
@@ -191,7 +216,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
         onDelete={() =>
           handleDelete(startIdx + index, Number(petId), card.cheeringMessageId)
         }
-        onClick={() => console.log(card.contents)}
+        onClick={() => handlePostItOpen(card)}
       />
     ));
   };
@@ -212,8 +237,9 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
         />
       </div>
       <div className='relative w-full max-w-screen-lg p-3 rounded-lg z-9'>
+        <ModalHeader text={'응원게시판'} onLeftIconClick={() => navigate(-1)} />
         <div className={`flex ${isMobile ? 'flex-col' : ''}`}>
-          <div className='flex-shrink-0 mb-4 md:mb-0 md:mr-4'>
+          <div className='flex-shrink-0 mb-4 mr-4 md:mb-0 md:mr-4 '>
             <ProfileCard
               avatarSrc={profile.avatarUrl}
               name={profile.name}
@@ -226,7 +252,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
           </div>
           <div className='flex-grow'>
             <div
-              className={`flex ${isMobile ? 'justify-start pb-20 ml-3 gap-8' : 'grid grid-cols-4 gap-4'}`}
+              className={`flex ${isMobile ? 'justify-start pb-10 ml-3 gap-8' : 'grid grid-cols-4 gap-4'}`}
             >
               {renderPostItCards()}
               {currentPage === totalPagesCalculated && (
@@ -239,6 +265,16 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
           </div>
         </div>
       </div>
+
+      {selectedCard && (
+        <PostItDetailModal
+          isOpen={postItOpen}
+          onClose={handleClosePostItModal}
+          contents={selectedCard.contents}
+          name={selectedCard.name}
+          color={selectedCard.color}
+        />
+      )}
 
       <IntroduceWrite
         isOpen={isIntroduceWriteModalOpen}
