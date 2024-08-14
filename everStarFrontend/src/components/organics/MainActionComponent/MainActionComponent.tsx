@@ -41,8 +41,6 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
   memorialBookProfile,
   isOwner,
   name = '',
-  age,
-  description = '',
   onProfileClick,
 }) => {
   const navigate = useNavigate();
@@ -233,7 +231,7 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
                     className='mb-2 pointer-events-none'
                   />
                   <span className='font-bold pointer-events-none font-kor-h-h2 text-greyscaleblack-100'>
-                    탐험하기
+                    탐사하기
                   </span>
                 </>
               )}

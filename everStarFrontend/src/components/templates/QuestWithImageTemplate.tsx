@@ -95,11 +95,11 @@ export const QuestWithImageTemplate = () => {
         return response.status;
       } catch (error) {
         console.error('Error:', error);
-        alert("다시 입력해 주세요");
+        alert('다시 입력해 주세요');
       }
     } else {
       console.error('Required data is missing');
-      alert("다시 입력해 주세요");
+      alert('다시 입력해 주세요');
     }
   };
 
@@ -150,8 +150,8 @@ export const QuestWithImageTemplate = () => {
   }
 
   return (
-    <div className='relative flex items-center justify-center min-h-screen'>
-      <div className='w-full h-full'>
+    <div className='flex items-center justify-center flex-grow'>
+      <div className='w-full h-full max-w-md '>
         <InteractiveForm
           currentPage={1}
           totalPages={1}
@@ -172,6 +172,7 @@ export const QuestWithImageTemplate = () => {
           onButtonClick2={handleButtonClick2}
           onLeftIconClick={() => navigate(-1)}
           glassEffect={false}
+          className={'flex justify-center h-full w-full'}
         />
         <input
           type='file'

@@ -90,11 +90,15 @@ export const InputContainer: React.FC<InputContainerProps> = ({
   return (
     <div className={className}>
       <div
-        className='flex flex-col items-center w-full gap-8 bg-white rounded-lg shadow-md p-9'
+        className='flex flex-col items-center w-full max-w-md gap-5 bg-white rounded-lg shadow-md p-9'
         style={{ maxHeight: '1156px', overflowY: 'auto' }}
       >
         {/* Modal Header */}
-        <ModalHeader text={headerText} showLeftIcon={true} onLeftIconClick={onLeftIconClick} />
+        <ModalHeader
+          text={headerText}
+          showLeftIcon={true}
+          onLeftIconClick={onLeftIconClick}
+        />
 
         {/* Content */}
         <div className='flex flex-col items-center w-full gap-8'>
@@ -104,7 +108,9 @@ export const InputContainer: React.FC<InputContainerProps> = ({
               <LetterCard
                 name={myName ? `${myName}에게` : undefined}
                 type='send'
-                color={letterCardType === 'receive' ? 'bgorange' : letterCardColor}
+                color={
+                  letterCardType === 'receive' ? 'bgorange' : letterCardColor
+                }
                 state={letterCardState}
                 message={letterCardMessage}
                 className={letterCardClassName}
@@ -120,18 +126,19 @@ export const InputContainer: React.FC<InputContainerProps> = ({
               </div>
             )}
           </div>
-
-          {isRtc && (
-            <PrimaryButton
-              theme='white'
-              size='large'
-              disabled={false}
-              icon={null}
-              onClick={handleRtcPuzzleClick}
-            >
-              {rtcPuzzleText}
-            </PrimaryButton>
-          )}
+          <div className='flex flex-col items-start w-full'>
+            {isRtc && (
+              <PrimaryButton
+                theme='white'
+                size='large'
+                disabled={false}
+                icon={null}
+                onClick={handleRtcPuzzleClick}
+              >
+                {rtcPuzzleText}
+              </PrimaryButton>
+            )}
+          </div>
           <div className='flex w-full'>
             {letterCardType === 'receive' ? (
               <div className='flex flex-col justify-center'>

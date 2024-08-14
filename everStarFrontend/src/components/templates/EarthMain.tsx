@@ -203,7 +203,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
           description={''}
         />
       </div>
-      <div className='fixed z-50 right-20 bottom-20'>
+      <div className='fixed z-50 left-10 bottom-20'>
         <LetterCard
           type='receive'
           color='white'
@@ -218,9 +218,18 @@ export const EarthMain: React.FC<EarthMainProps> = ({
         />
       </div>
       <div>
-        <Modal isOpen={modalState} onClose={Modalclose} text=''>
+        <Modal
+          isOpen={modalState}
+          onClose={Modalclose}
+          text='깜짝 선물'
+          className='flex flex-col items-center justify-center'
+        >
           <img src={giftAddress} alt='Description' />
-          <p>한번밖에 볼 수 없어요! 추후 메모리얼북이 완성 시 확인 가능해요!</p>
+          <div className='mt-10 text-2xl'>
+            한번밖에 볼 수 없어요! <br />
+            추후 메모리얼북이 완성 시 <br />
+            확인 가능해요!
+          </div>
         </Modal>
       </div>
     </div>
