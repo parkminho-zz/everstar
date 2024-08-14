@@ -31,7 +31,7 @@ public class QuestScheduler {
 		LocalDateTime nextQuestTime = LocalDateTime.now().plusSeconds(15);
 		Date nextQuestDate = Date.from(nextQuestTime.atZone(ZoneId.systemDefault()).toInstant());
 
-		log.info("Main server - schedule");
+		log.info("Main server - schedule connect");
 		taskScheduler.schedule(() -> questService.changePetQuestCompleted(petId), nextQuestDate);
 	}
 }
