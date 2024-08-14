@@ -14,7 +14,8 @@ interface SelectProps {
   onOptionSelect: (option: string | number) => void;
   infoText: string;
   showIcon?: boolean;
-  label?: string; // 추가된 부분
+  label?: string;
+  dropdownMaxHeight?: number; // 추가된 부분
 }
 
 export const Select: React.FC<SelectProps> = ({
@@ -26,11 +27,12 @@ export const Select: React.FC<SelectProps> = ({
   onOptionSelect,
   infoText,
   showIcon = true,
-  label = '레이블', // 추가된 부분
+  label = '레이블',
+  dropdownMaxHeight, // 추가된 부분
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | number | null>(
-    null
+    null,
   );
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
@@ -104,6 +106,7 @@ export const Select: React.FC<SelectProps> = ({
             <DropdownMenu
               options={options}
               onOptionSelect={handleOptionSelect}
+              maxHeight={dropdownMaxHeight} // 추가된 부분
             />
           </div>
         )}
@@ -118,7 +121,7 @@ export const Select: React.FC<SelectProps> = ({
 Select.propTypes = {
   className: PropTypes.string,
   options: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+    PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   ).isRequired,
   title: PropTypes.string.isRequired,
   showLabel: PropTypes.bool,
@@ -126,7 +129,8 @@ Select.propTypes = {
   onOptionSelect: PropTypes.func.isRequired,
   infoText: PropTypes.string.isRequired,
   showIcon: PropTypes.bool,
-  label: PropTypes.string, // 추가된 부분
+  label: PropTypes.string,
+  dropdownMaxHeight: PropTypes.number, // 추가된 부분
 };
 
 export type { SelectProps };

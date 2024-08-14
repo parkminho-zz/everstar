@@ -95,9 +95,11 @@ export const QuestWithImageTemplate = () => {
         return response.status;
       } catch (error) {
         console.error('Error:', error);
+        alert("다시 입력해 주세요");
       }
     } else {
       console.error('Required data is missing');
+      alert("다시 입력해 주세요");
     }
   };
 
