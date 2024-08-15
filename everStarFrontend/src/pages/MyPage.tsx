@@ -20,10 +20,10 @@ export const MyPage: React.FC = () => {
   }, [accessToken, petDetails, navigate]);
 
   return (
-    <div className='relative flex flex-col w-full min-h-screen-56 overflow-hidden'>
+    <div className="relative flex flex-col w-full min-h-screen overflow-hidden">
       {/* Background Image */}
       <div
-        className='absolute top-0 left-0 w-full h-full min-h-screen-56 bg-center bg-cover z-[-1]'
+        className="absolute top-0 left-0 w-full h-full min-h-screen bg-center bg-cover z-[-1]"
         style={{
           backgroundImage: `url(${require('assets/images/bg-login.webp')})`,
           backgroundSize: 'cover',
@@ -32,17 +32,17 @@ export const MyPage: React.FC = () => {
       ></div>
 
       {/* 메인 컨텐츠 */}
-      <div className='flex flex-col items-center justify-center flex-grow min-h-screen-56'>
+      <div className="flex flex-col items-center justify-start flex-grow min-h-screen">
         <Routes>
-          <Route path='/' element={<MyinfoMove />} />
-          <Route path='profile' element={<Profile />} />
-          <Route path='myinfo' element={<MyInfo />} />
+          <Route path="/" element={<MyinfoMove />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="myinfo" element={<MyInfo />} />
         </Routes>
       </div>
 
       {/* 고정된 푸터 - PetDetailsRoute로 감싸서 펫이 선택된 상황에서만 렌더링 */}
       <PetDetailsRoute>
-        <Footer className='fixed bottom-0 left-0 z-50 w-full' />
+        <Footer className="fixed bottom-0 left-0 z-50 w-full" />
       </PetDetailsRoute>
     </div>
   );

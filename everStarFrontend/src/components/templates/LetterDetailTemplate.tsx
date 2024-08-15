@@ -43,7 +43,7 @@ export const LetterDetailTemplate: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="relative flex flex-col items-start min-h-screen-56 bg-center bg-cover z-[-1]">
+      <div className="relative flex flex-col items-start min-h-screen bg-center bg-cover z-[-1]">
         <img
           src={bgImage}
           alt="Background"
@@ -119,7 +119,7 @@ export const LetterDetailTemplate: React.FC = () => {
     setImage(file);
   };
   return (
-    <div className="flex flex-col min-h-screen-56">
+    <div className="flex flex-col min-h-screen">
       <div className="w-full h-full">
         <InteractiveForm
           currentPage={1}

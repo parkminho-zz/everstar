@@ -8,12 +8,7 @@ export interface TabProps {
   onTabClick: (tab: 'one' | 'two' | 'three') => void;
 }
 
-export const Tab: React.FC<TabProps> = ({
-  row,
-  activeTab,
-  className = '',
-  onTabClick,
-}) => {
+export const Tab: React.FC<TabProps> = ({ row, activeTab, className = '', onTabClick }) => {
   return (
     <div
       className={`[border-bottom-style:solid] border-[#c3c9d3] w-[360px] flex items-start h-10 border-b bg-white relative ${className}`}
@@ -55,11 +50,10 @@ export const Tab: React.FC<TabProps> = ({
 };
 
 Tab.propTypes = {
-  row: PropTypes.oneOf(['two', 'three']).isRequired as PropTypes.Validator<
-    'two' | 'three'
+  row: PropTypes.oneOf(['two', 'three']).isRequired as PropTypes.Validator<'two' | 'three'>,
+  activeTab: PropTypes.oneOf(['one', 'two', 'three']).isRequired as PropTypes.Validator<
+    'one' | 'two' | 'three'
   >,
-  activeTab: PropTypes.oneOf(['one', 'two', 'three'])
-    .isRequired as PropTypes.Validator<'one' | 'two' | 'three'>,
   className: PropTypes.string,
   onTabClick: PropTypes.func.isRequired,
 };
