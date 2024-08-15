@@ -34,7 +34,12 @@ export const DiaryPage: React.FC<DiaryPageProps> = ({ title, content, imageUrl, 
       </div>
       <div className="flex flex-col items-center w-full mt-4 space-y-4">
         {imageUrl && (
-          <img src={imageUrl} alt="Diary entry" className="w-[180px] h-[135px] object-cover" />
+          <img
+            src={`${imageUrl}?timestamp=${Date.now()}`}
+            alt="Diary entry"
+            className="w-[180px] h-[135px] object-cover"
+            crossOrigin="anonymous"
+          />
         )}
         <p
           className={`leading-tight tracking-wide font-kor-p-p1 text-greyscaleblack-100 ${getFontSize(content)}`}

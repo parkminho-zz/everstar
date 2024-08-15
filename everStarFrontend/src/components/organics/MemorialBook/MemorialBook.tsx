@@ -3,7 +3,8 @@ import HTMLFlipBook from 'react-pageflip';
 import { MemorialBookCover } from 'components/molecules/MemorialBook/MemorialBookCover/MemorialBookCover';
 import { QuestionPage } from 'components/molecules/MemorialBook/QuestionPage/QuestionPage';
 import { ImagePage } from 'components/molecules/MemorialBook/ImagePage/ImagePage';
-import { ChartPage } from 'components/molecules/MemorialBook/ChartPage/ChartPage';
+import { ChartScores } from 'components/molecules/MemorialBook/ChartScores/ChartScores';
+import { ChartContent } from 'components/molecules/MemorialBook/ChartContent/ChartContent';
 import { DiaryPage } from 'components/molecules/MemorialBook/DiaryPage/DiaryPage';
 
 // Define the Page component
@@ -28,8 +29,8 @@ export type PageType =
       myAnswer: string;
       petName: string;
       petAnswer: string;
-      myImage?: string; // myImage field added
-      petImage?: string; // petImage field added
+      myImage?: string;
+      petImage?: string;
     }
   | {
       type: 'imageQuestion';
@@ -40,7 +41,8 @@ export type PageType =
       petImage: string;
       petAnswer: string;
     }
-  | { type: 'chart'; title: string; content: string; scores: number[] }
+  | { type: 'chartContent'; title: string; content: string }
+  | { type: 'chartScores'; title: string; scores: number[] }
   | { type: 'diary'; title: string; content: string; imageUrl?: string; createdTime?: string };
 
 // Define the MemorialBook component
@@ -53,7 +55,6 @@ export interface MemorialBookProps {
   minHeight?: number;
   maxHeight?: number;
 }
-
 export const MemorialBook: React.FC<MemorialBookProps> = ({
   pages,
   width = 360,
@@ -115,8 +116,8 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
                     myAnswer={page.myAnswer}
                     petName={page.petName}
                     petAnswer={page.petAnswer}
-                    myImage={page.myImage} // User image
-                    petImage={page.petImage} // AI image
+                    myImage={page.myImage}
+                    petImage={page.petImage}
                   />
                 </Page>
               );
@@ -133,10 +134,16 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
                   />
                 </Page>
               );
-            case 'chart':
+            case 'chartContent':
               return (
                 <Page key={index} pageIndex={index}>
-                  <ChartPage title={page.title} content={page.content} scores={page.scores} />
+                  <ChartContent title={page.title} content={page.content} />
+                </Page>
+              );
+            case 'chartScores':
+              return (
+                <Page key={index} pageIndex={index}>
+                  <ChartScores title={page.title} scores={page.scores} />
                 </Page>
               );
             case 'diary':

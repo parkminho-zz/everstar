@@ -10,8 +10,7 @@ import { MemorialBookDetailsResponse } from 'api/memorialBookApi';
 import { useFetchMemorialBookById } from 'hooks/useMemorialBooks';
 import { useParams } from 'react-router-dom';
 import { MemorialBookDiaryModal } from 'components/organics/MemorialBook/MemorialBookDiaryModal';
-import bgImage from 'assets/images/bg-login.webp';
-import { SplashTemplate } from './SplashTemplate';
+import BookSpinner from 'assets/symbols/book-splash.gif';
 
 const parseMemorialBookData = (
   data: MemorialBookDetailsResponse,
@@ -19,15 +18,14 @@ const parseMemorialBookData = (
 ): PageType[] => {
   const { quests, questAnswers, aiAnswers, diaries, sentimentAnalysis, pet } = data;
   const pages: PageType[] = [];
-  console.log(data);
 
-  // Add cover page
   pages.push({
     type: 'cover',
-    src: avatarUrl || pet.profileImageUrl,
+    src: avatarUrl
+      ? `${avatarUrl}?timestamp=${Date.now()}`
+      : `${pet.profileImageUrl}?timestamp=${Date.now()}`,
   });
 
-  // Add sentiment analysis chart page
   const sentimentResults = [
     sentimentAnalysis.week1Result,
     sentimentAnalysis.week2Result,
@@ -39,25 +37,29 @@ const parseMemorialBookData = (
   ];
 
   pages.push({
-    type: 'chart',
-    title: '감정 분석',
-    content: sentimentAnalysis.totalResult,
+    type: 'chartScores',
+    title: '감정 분석 결과',
     scores: sentimentResults,
   });
 
-  // Add quest pages with AI answers
+  pages.push({
+    type: 'chartContent',
+    title: '감정 분석 총평',
+    content: sentimentAnalysis.totalResult,
+  });
+
   quests.forEach((quest) => {
     const questAnswer = questAnswers.find((answer) => answer.questId === quest.id);
     const aiAnswer = aiAnswers.find((answer) => answer.questId === quest.id);
 
-    const myImage = questAnswer?.imageUrl || '';
-    const petImage = aiAnswer?.imageUrl || '';
+    const myImage = questAnswer?.imageUrl ? `${questAnswer.imageUrl}?timestamp=${Date.now()}` : '';
+    const petImage = aiAnswer?.imageUrl ? `${aiAnswer.imageUrl}?timestamp=${Date.now()}` : '';
     const myAnswer = questAnswer?.content || '';
     const petAnswer = aiAnswer?.content || '';
 
     pages.push({
       type: 'question',
-      question: `${quest.id}. ${quest.content}`, // Display quest ID with question
+      question: `${quest.id}. ${quest.content}`,
       myAnswer,
       petName: pet.name,
       petAnswer,
@@ -66,36 +68,44 @@ const parseMemorialBookData = (
     });
   });
 
-  // Add diary pages with the diary number and creation date
   diaries.forEach((diary, index) => {
     pages.push({
       type: 'diary',
       title: `${index + 1}번째 일기`,
       content: diary.content,
-      imageUrl: diary.imageUrl || '',
-      createdTime: diary.createdTime, // Add createdTime
+      imageUrl: diary.imageUrl ? `${diary.imageUrl}?timestamp=${Date.now()}` : '',
+      createdTime: diary.createdTime,
     });
-    console.log(diaries);
   });
 
   return pages;
 };
 
-const loadImages = (element: HTMLElement) => {
-  const images = element.querySelectorAll('img');
-  const promises = Array.from(images).map((img) => {
-    return new Promise<void>((resolve) => {
+const loadImageWithRetry = (img: HTMLImageElement, retries = 3): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    const attemptLoad = (retryCount: number) => {
       if (img.complete) {
         resolve();
       } else {
         img.onload = () => resolve();
         img.onerror = () => {
-          console.warn(`Failed to load image: ${img.src}`);
-          resolve();
+          if (retryCount > 0) {
+            console.warn(`Retrying to load image: ${img.src}. Retries left: ${retryCount}`);
+            setTimeout(() => attemptLoad(retryCount - 1), 1000);
+          } else {
+            console.error(`Failed to load image: ${img.src} after multiple attempts.`);
+            resolve(); // Resolve even on error to avoid blocking the process
+          }
         };
       }
-    });
+    };
+    attemptLoad(retries);
   });
+};
+
+const loadImages = (element: HTMLElement) => {
+  const images = element.querySelectorAll('img');
+  const promises = Array.from(images).map((img) => loadImageWithRetry(img));
   return Promise.all(promises);
 };
 
@@ -108,16 +118,12 @@ export const MemorialBook: React.FC<{ avatarUrl?: string; isOwner?: boolean }> =
   const memorialBookId = params.memorialBookId ? parseInt(params.memorialBookId, 10) : 0;
 
   const memorialBookRef = useRef<HTMLDivElement>(null);
-
-  const {
-    data: memorialBookDetails,
-    isLoading,
-    refetch,
-  } = useFetchMemorialBookById(petId, memorialBookId);
+  const { data: memorialBookDetails, refetch } = useFetchMemorialBookById(petId, memorialBookId);
 
   const [pages, setPages] = useState<PageType[]>([]);
   const [isDiaryModalOpen, setIsDiaryModalOpen] = useState(false);
   const [isDiaryUpdated, setIsDiaryUpdated] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     if (memorialBookDetails) {
@@ -135,6 +141,8 @@ export const MemorialBook: React.FC<{ avatarUrl?: string; isOwner?: boolean }> =
   }, [isDiaryUpdated, refetch]);
 
   const handleDownloadPdf = async () => {
+    setIsDownloading(true);
+
     if (memorialBookRef.current) {
       const book = memorialBookRef.current.querySelectorAll('.demoPage');
       const pdf = new jsPDF({
@@ -151,6 +159,7 @@ export const MemorialBook: React.FC<{ avatarUrl?: string; isOwner?: boolean }> =
         const canvas = await html2canvas(page, {
           scale: 2,
           useCORS: true,
+          allowTaint: true,
           logging: true,
         });
 
@@ -168,6 +177,8 @@ export const MemorialBook: React.FC<{ avatarUrl?: string; isOwner?: boolean }> =
 
       pdf.save('memorial-book.pdf');
     }
+
+    setIsDownloading(false);
   };
 
   const handleWriteDiary = () => {
@@ -178,26 +189,13 @@ export const MemorialBook: React.FC<{ avatarUrl?: string; isOwner?: boolean }> =
     setIsDiaryModalOpen(false);
   };
 
-  if (isLoading) {
-    return (
-      <div className="relative flex flex-col items-start min-h-screen bg-center bg-cover z-[-1]">
-        <img
-          src={bgImage}
-          alt="Background"
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-          }}
-        />
-        <SplashTemplate type="book" className="z-10 w-full h-full " />
-      </div>
-    );
-  }
-
   return (
     <div>
+      {isDownloading && (
+        <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
+          <img src={BookSpinner} alt="Loading" className="w-24 h-24" />
+        </div>
+      )}
       <div className="relative z-10 my-4" ref={memorialBookRef}>
         <OrganicsMemorialBook pages={pages} />
       </div>
