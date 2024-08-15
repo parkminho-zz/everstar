@@ -14,9 +14,10 @@ import BookSpinner from 'assets/symbols/book-splash.gif';
 
 const parseMemorialBookData = (
   data: MemorialBookDetailsResponse,
-  avatarUrl: string | undefined,
+  avatarUrl: string | undefined
 ): PageType[] => {
-  const { quests, questAnswers, aiAnswers, diaries, sentimentAnalysis, pet } = data;
+  const { quests, questAnswers, aiAnswers, diaries, sentimentAnalysis, pet } =
+    data;
   const pages: PageType[] = [];
 
   pages.push({
@@ -49,11 +50,17 @@ const parseMemorialBookData = (
   });
 
   quests.forEach((quest) => {
-    const questAnswer = questAnswers.find((answer) => answer.questId === quest.id);
+    const questAnswer = questAnswers.find(
+      (answer) => answer.questId === quest.id
+    );
     const aiAnswer = aiAnswers.find((answer) => answer.questId === quest.id);
 
-    const myImage = questAnswer?.imageUrl ? `${questAnswer.imageUrl}?timestamp=${Date.now()}` : '';
-    const petImage = aiAnswer?.imageUrl ? `${aiAnswer.imageUrl}?timestamp=${Date.now()}` : '';
+    const myImage = questAnswer?.imageUrl
+      ? `${questAnswer.imageUrl}?timestamp=${Date.now()}`
+      : '';
+    const petImage = aiAnswer?.imageUrl
+      ? `${aiAnswer.imageUrl}?timestamp=${Date.now()}`
+      : '';
     const myAnswer = questAnswer?.content || '';
     const petAnswer = aiAnswer?.content || '';
 
@@ -73,7 +80,9 @@ const parseMemorialBookData = (
       type: 'diary',
       title: `${index + 1}번째 일기`,
       content: diary.content,
-      imageUrl: diary.imageUrl ? `${diary.imageUrl}?timestamp=${Date.now()}` : '',
+      imageUrl: diary.imageUrl
+        ? `${diary.imageUrl}?timestamp=${Date.now()}`
+        : '',
       createdTime: diary.createdTime,
     });
   });
@@ -81,7 +90,10 @@ const parseMemorialBookData = (
   return pages;
 };
 
-const loadImageWithRetry = (img: HTMLImageElement, retries = 3): Promise<void> => {
+const loadImageWithRetry = (
+  img: HTMLImageElement,
+  retries = 3
+): Promise<void> => {
   return new Promise<void>((resolve, reject) => {
     const attemptLoad = (retryCount: number) => {
       if (img.complete) {
@@ -90,10 +102,8 @@ const loadImageWithRetry = (img: HTMLImageElement, retries = 3): Promise<void> =
         img.onload = () => resolve();
         img.onerror = () => {
           if (retryCount > 0) {
-            console.warn(`Retrying to load image: ${img.src}. Retries left: ${retryCount}`);
             setTimeout(() => attemptLoad(retryCount - 1), 1000);
           } else {
-            console.error(`Failed to load image: ${img.src} after multiple attempts.`);
             resolve(); // Resolve even on error to avoid blocking the process
           }
         };
@@ -109,16 +119,21 @@ const loadImages = (element: HTMLElement) => {
   return Promise.all(promises);
 };
 
-export const MemorialBook: React.FC<{ avatarUrl?: string; isOwner?: boolean }> = ({
-  avatarUrl,
-  isOwner,
-}) => {
+export const MemorialBook: React.FC<{
+  avatarUrl?: string;
+  isOwner?: boolean;
+}> = ({ avatarUrl, isOwner }) => {
   const params = useParams<{ pet?: string; memorialBookId?: string }>();
   const petId = params.pet ? parseInt(params.pet, 10) : 0;
-  const memorialBookId = params.memorialBookId ? parseInt(params.memorialBookId, 10) : 0;
+  const memorialBookId = params.memorialBookId
+    ? parseInt(params.memorialBookId, 10)
+    : 0;
 
   const memorialBookRef = useRef<HTMLDivElement>(null);
-  const { data: memorialBookDetails, refetch } = useFetchMemorialBookById(petId, memorialBookId);
+  const { data: memorialBookDetails, refetch } = useFetchMemorialBookById(
+    petId,
+    memorialBookId
+  );
 
   const [pages, setPages] = useState<PageType[]>([]);
   const [isDiaryModalOpen, setIsDiaryModalOpen] = useState(false);
@@ -127,7 +142,10 @@ export const MemorialBook: React.FC<{ avatarUrl?: string; isOwner?: boolean }> =
 
   useEffect(() => {
     if (memorialBookDetails) {
-      const parsedPages = parseMemorialBookData(memorialBookDetails.data, avatarUrl);
+      const parsedPages = parseMemorialBookData(
+        memorialBookDetails.data,
+        avatarUrl
+      );
       setPages(parsedPages);
     }
   }, [memorialBookDetails, avatarUrl]);
@@ -192,19 +210,19 @@ export const MemorialBook: React.FC<{ avatarUrl?: string; isOwner?: boolean }> =
   return (
     <div>
       {isDownloading && (
-        <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
-          <img src={BookSpinner} alt="Loading" className="w-24 h-24" />
+        <div className='fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-black bg-opacity-50'>
+          <img src={BookSpinner} alt='Loading' className='w-24 h-24' />
         </div>
       )}
-      <div className="relative z-10 my-4" ref={memorialBookRef}>
+      <div className='relative z-10 my-4' ref={memorialBookRef}>
         <OrganicsMemorialBook pages={pages} />
       </div>
-      <div className="relative z-10 flex justify-center m-4 space-x-4">
+      <div className='relative z-10 flex justify-center m-4 space-x-4'>
         {isOwner && (
           <>
             <PrimaryButton
-              theme="white"
-              size="medium"
+              theme='white'
+              size='medium'
               onClick={handleDownloadPdf}
               disabled={false}
               icon={null}
@@ -212,8 +230,8 @@ export const MemorialBook: React.FC<{ avatarUrl?: string; isOwner?: boolean }> =
               PDF로 만들기
             </PrimaryButton>
             <PrimaryButton
-              theme="white"
-              size="medium"
+              theme='white'
+              size='medium'
               onClick={handleWriteDiary}
               disabled={false}
               icon={null}

@@ -33,7 +33,7 @@ export const Profile: React.FC = () => {
       requestDto.personalities = personalities;
       currentFormData.set(
         'requestDto',
-        new Blob([JSON.stringify(requestDto)], { type: 'application/json' }),
+        new Blob([JSON.stringify(requestDto)], { type: 'application/json' })
       );
 
       addPet(currentFormData, {
@@ -54,10 +54,10 @@ export const Profile: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="relative flex flex-col items-start min-h-screen bg-center bg-cover z-[-1]">
+      <div className='relative flex flex-col items-start min-h-screen bg-center bg-cover z-[-1]'>
         <img
           src={bgImage}
-          alt="Background"
+          alt='Background'
           style={{
             position: 'absolute',
             width: '100%',
@@ -65,29 +65,37 @@ export const Profile: React.FC = () => {
             objectFit: 'cover',
           }}
         />
-        <SplashTemplate type="myPageRocket" className="z-10 w-full h-full " />
+        <SplashTemplate type='myPageRocket' className='z-10 w-full h-full ' />
       </div>
     );
   }
-  if (error) return <div className="text-red-500">{error.message}</div>;
+  if (error) return <div className='text-red-500'>{error.message}</div>;
 
   return (
-    <div className="flex items-center justify-center flex-grow w-full">
+    <div className='flex items-center justify-center flex-grow w-full'>
       <Glass
         currentPage={1}
         totalPages={1}
         onPageChange={(newPage) => console.log('Page changed to:', newPage)}
         showPageIndicator={false}
-        className="absolute top-0 left-0 z-0 w-full h-full"
+        className='absolute top-0 left-0 z-0 w-full h-full'
       />
       {isPetInfoOpen ? (
         <PetInfoForm
-          headerText="반려동물 정보 입력"
+          headerText='반려동물 정보 입력'
           showPrimaryButton={true}
-          text="반려동물 정보를 입력해주세요."
+          text='반려동물 정보를 입력해주세요.'
           onClose={() => setPetInfoOpen(false)}
           onSubmit={handlePetFormSubmit}
-          relationshipOptions={['엄마', '아빠', '언니', '누나', '형', '오빠', '친구']}
+          relationshipOptions={[
+            '엄마',
+            '아빠',
+            '언니',
+            '누나',
+            '형',
+            '오빠',
+            '친구',
+          ]}
         />
       ) : (
         <ProfileSelection
@@ -203,8 +211,8 @@ export const Profile: React.FC = () => {
             '격렬한',
             '상상력 풍부한',
           ]}
-          modalTitle="반려동물 성격 선택"
-          buttonLabel="작성 완료"
+          modalTitle='반려동물 성격 선택'
+          buttonLabel='작성 완료'
           onClose={() => {
             setSearchModalOpen(false);
             setPetInfoOpen(true);

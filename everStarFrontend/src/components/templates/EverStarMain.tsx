@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useFetchMemorialBooks, useUpdateMemorialBookOpenStatus } from 'hooks/useMemorialBooks';
 import { DepressionSurvey } from 'components/organics/DepressionSurvey/DepressionSurvey';
 import { MainActionComponent } from 'components/organics/MainActionComponent/MainActionComponent';
 import { ProfileModal } from 'components/organics/ProfileModal/ProfileModal';
 import { IntroduceWrite } from 'components/organics/CheerMessage/IntroduceWrite';
 import { useSound } from 'use-sound';
+import { RootState } from 'store/Store';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import introduce from 'assets/musics/Introduce.mp3';
+import myEverStar from 'assets/musics/MyEverStar.mp3';
+import diffEverStar from 'assets/musics/DiffEverStar.mp3';
 
 interface EverStarMainProps {
   petProfile: {
@@ -34,6 +39,38 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   petId,
   isOwner,
 }) => {
+  const params = useParams();
+  const myPetId = useSelector((state: RootState) => state.pet.petDetails?.id);
+  const [MyEverStar] = useSound(myEverStar);
+  const [DiffEverStar] = useSound(diffEverStar);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return; // 처음 렌더링 시 아무 동작도 하지 않음
+    }
+
+    if (!isProfileModalOpen) {
+      if (Number(myPetId) === Number(params.pet)) {
+        MyEverStar();
+      } else {
+        DiffEverStar();
+      }
+    }
+    isFirstRender.current = true;
+  });
+  // useEffect(() => {
+  //   if (!isProfileModalOpen) {
+  //     if (Number(myPetId) === Number(params.pet)) {
+  //       MyEverStar();
+  //     } else {
+  //       DiffEverStar();
+  //     }
+  //   }
+  // }, []);
   const [Introduce] = useSound(introduce);
   const { data, refetch } = useFetchMemorialBooks(petId); // Fetch memorial book profile
   const [toggleStatus, setToggleStatus] = useState<'on' | 'off' | undefined>(
@@ -42,7 +79,6 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(
     petProfile?.questIndex === 50 && !memorialBookProfile?.isActive && isOwner,
   );
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const petIntroduce = JSON.parse(sessionStorage.getItem('petDetails') || '{}');
 
@@ -53,6 +89,11 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
       refetch(); // Refetch the memorial book profile after updating the open status
     },
   });
+  // const [description, setDescription] = useState(petProfile?.description || '');
+
+  // const handleVerifyIntroduceWrite = () => {
+  //   setIntroduceWriteModalOpen(false);
+  // };
 
   const handleSurveySubmitSuccess = async () => {
     // 설문 제출 후 모달 닫기
@@ -103,7 +144,6 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
       petProfile.description = petIntroduce.introduction;
     }
   };
-
   if (!petProfile) {
     return <div>Loading...</div>;
   }

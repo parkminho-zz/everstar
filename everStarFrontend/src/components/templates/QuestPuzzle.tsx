@@ -35,12 +35,11 @@ export const QuestPuzzle: React.FC = () => {
       );
 
       if (response.data) {
-        console.log('성공:', response.data.data.content);
         setQuestContent(response.data.data.content);
       }
     } catch (error) {
       console.error('퀘스트 데이터를 가져오는 중 오류 발생:', error);
-      navigate("/earth");
+      navigate('/earth');
     } finally {
       setLoading(false); // 데이터 로딩 후 로딩 상태 업데이트
     }
@@ -67,8 +66,6 @@ export const QuestPuzzle: React.FC = () => {
         }
       );
 
-      console.log('Response:', response.data);
-
       return response.status;
     } catch (error) {
       console.error('답변 전송 중 오류 발생:', error);
@@ -77,14 +74,12 @@ export const QuestPuzzle: React.FC = () => {
 
   const handleTextChange = (newText: string) => {
     setText(newText);
-    console.log('입력된 텍스트:', text);
   };
 
   const handleSubmit = async () => {
     const status = await answerQuestion();
 
     if (status === 200) {
-      console.log('성공');
       navigate('/earth');
     } else {
       console.log('실패');
@@ -107,8 +102,12 @@ export const QuestPuzzle: React.FC = () => {
         className='w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5'
       />
       <div className='absolute inset-0 flex justify-center'>
-      <Puzzle id='puzzle' pieceSize={pieceSize} width={width} height={height} />
-      
+        <Puzzle
+          id='puzzle'
+          pieceSize={pieceSize}
+          width={width}
+          height={height}
+        />
       </div>
     </div>
   );

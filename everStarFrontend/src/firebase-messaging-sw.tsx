@@ -18,17 +18,17 @@ const messaging = getMessaging(app);
 
 const handleAlramPost = async (formData: { deviceToken: string }) => {
   const token = Store.getState().auth.accessToken;
-  console.log(token);
+  // console.log(token);
   try {
     const data = await fetchAlramPost(formData, token);
-    console.log('알람 api 생성 성공:', data);
+    // console.log('알람 api 생성 성공:', data);
   } catch (error) {
     console.error('알람 api 생성 실패:', error);
   }
 };
 
 async function requestPermission() {
-  console.log('권한 요청 중...');
+  // console.log('권한 요청 중...');
 
   const permission = await Notification.requestPermission();
   if (permission === 'denied') {
@@ -36,14 +36,14 @@ async function requestPermission() {
     return;
   }
 
-  console.log('알림 권한이 허용됨');
+  // console.log('알림 권한이 허용됨');
 
   const token = await getToken(messaging, {
     vapidKey: process.env.REACT_APP_VAPIDKEY,
   });
 
   if (token) {
-    console.log('token :', token);
+    // console.log('token :', token);
     handleAlramPost({ deviceToken: token });
   } else {
     console.log('Can not get Token');
@@ -60,7 +60,7 @@ function registerServiceWorker() {
     navigator.serviceWorker
       .register('/firebase-messaging-sw.js')
       .then((registration) => {
-        console.log('Service Worker 등록 성공:', registration);
+        // console.log('Service Worker 등록 성공:', registration);
         // 권한 요청 및 토큰 받아오기
         requestPermission();
       })

@@ -23,11 +23,10 @@ export interface UserInfo {
 const handleResponse = async (response: Response) => {
   if (!response.ok) {
     const errorResponse = await response.json();
-    console.log(errorResponse);
-    
-    if(errorResponse.errorCode === "DuplicatedPhoneNumberException"){
+
+    if (errorResponse.errorCode === 'DuplicatedPhoneNumberException') {
       alert(errorResponse.errorMessage);
-      window.location.href = "/login";
+      window.location.href = '/login';
     }
     //
     throw new Error(errorResponse.message || 'An error occurred');
@@ -71,13 +70,12 @@ export const verifyAuthCode = async ({
   );
   if (!response.ok) {
     const errorResponse = await response.json();
-    console.log(errorResponse);
-    
-    if(errorResponse.errorCode === "NotMatchAuthCodeException"){
+
+    if (errorResponse.errorCode === 'NotMatchAuthCodeException') {
       alert(errorResponse.errorMessage);
     }
-    if(errorResponse.statusNum === 403){
-      alert("다시 입력해주세요!!");
+    if (errorResponse.statusNum === 403) {
+      alert('다시 입력해주세요!!');
     }
     //
     throw new Error(errorResponse.message || 'An error occurred');
@@ -103,7 +101,6 @@ export const joinUser = async (
 };
 
 export const fetchUserInfo = async (token: string): Promise<UserInfo> => {
-  console.log(`Fetching user info with token: ${token}`);
   const response = await fetch(`${config.API_BASE_URL}/api/accounts/users`, {
     method: 'GET',
     headers: {
@@ -112,12 +109,10 @@ export const fetchUserInfo = async (token: string): Promise<UserInfo> => {
     },
   });
 
-  console.log('Response status:', response.status);
   if (!response.ok) {
     throw new Error('사용자 정보를 가져오는 데 실패했습니다');
   }
 
   const result = await response.json();
-  console.log('Fetched user info:', result);
   return result.data;
 };

@@ -59,14 +59,14 @@ const milestoneColors = [
   {
     min: 49,
     max: 49,
-    message: ' 모든 무지개를 달성했어요!',
+    message: ' 무지개를 완성했어요!',
     color: 'bg-purple-600',
   },
 ];
 
 const getMessage = (fill: number) => {
   if (fill >= 49) {
-    return ' 모든 무지개를 달성했어요!';
+    return ' 무지개를 완성했어요!';
   }
 
   for (const milestone of milestoneColors) {
