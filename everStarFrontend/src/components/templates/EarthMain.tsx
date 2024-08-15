@@ -9,6 +9,9 @@ import { getMessaging, onMessage } from 'firebase/messaging';
 import { firebaseConfig } from 'firebase-messaging-sw';
 import { Modal } from 'components/molecules/Modal/Modal';
 import { MainActionComponent } from 'components/organics/MainActionComponent/MainActionComponent';
+import { useSound } from 'use-sound';
+import alarm from 'assets/musics/Alarm.mp3';
+import fcmGift from 'assets/musics/FcmGift.mp3';
 
 type ViewMemorialBookSize = 'large' | 'medium' | 'small';
 type RainbowColor =
@@ -68,6 +71,9 @@ export const EarthMain: React.FC<EarthMainProps> = ({
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
 
+  const [Alarm] = useSound(alarm);
+  const [FcmGift] = useSound(fcmGift);
+
   const [letterCardVisible, setLetterCardVisible] = useState(false);
   const [letterMessage, setLetterMessage] = useState('');
   const [giftAddress, setGiftAddress] = useState('');
@@ -89,6 +95,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
 
     switch (payload.notification?.title) {
       case '카툰화':
+        FcmGift();
         setLetterMessage('선물이 도착했어요');
         localStorage.setItem('isMessage', '선물이 도착했어요');
         localStorage.setItem('gift', `${payload.notification?.body}`);
@@ -96,6 +103,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
         break;
 
       case '편지':
+        Alarm();
         setLetterMessage('편지가 도착했어요');
         localStorage.setItem('isMessage', '편지가 도착했어요');
         localStorage.setItem('isMessageSeen', 'false');
@@ -165,7 +173,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
 
   return (
     <div>
-      <div className='relative flex flex-col items-start min-h-screen-56 pb-14'>
+      <div className='relative flex flex-col items-start min-h-screen pb-14'>
         <Rainbow className={getRainbowStyle()} color={getColor(fill)} />
         <MainActionComponent
           type='earth'
@@ -177,20 +185,20 @@ export const EarthMain: React.FC<EarthMainProps> = ({
           age={undefined}
           description={''}
         />
-      </div>
-      <div className='fixed z-50 left-10 bottom-20'>
-        <LetterCard
-          type='receive'
-          color='white'
-          state='received'
-          name='알림'
-          message={letterMessage}
-          dateTime=''
-          className='h-3'
-          centered={true}
-          visible={letterCardVisible}
-          onClick={handleLetterCardClick}
-        />
+        <div className='fixed z-50 flex flex-col items-center justify-center w-full bottom-20'>
+          <LetterCard
+            type='receive'
+            color='white'
+            state='received'
+            name='알림'
+            message={letterMessage}
+            dateTime=''
+            className='h-3'
+            centered={true}
+            visible={letterCardVisible}
+            onClick={handleLetterCardClick}
+          />
+        </div>
       </div>
       <div>
         <Modal

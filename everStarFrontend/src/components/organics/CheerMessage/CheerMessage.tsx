@@ -227,7 +227,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
   ); // +1 for PostItPlusCard
 
   return (
-    <div className='relative flex flex-col items-center p-3'>
+    <div className='relative flex flex-col items-center '>
       <div className='absolute inset-0 z-9999'>
         <Glass
           currentPage={currentPage}
@@ -240,7 +240,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
       <div className='relative w-full max-w-screen-lg p-3 rounded-lg z-9'>
         <ModalHeader text={'응원게시판'} onLeftIconClick={() => navigate(-1)} />
         <div className={`flex ${isMobile ? 'flex-col' : ''}`}>
-          <div className='flex-shrink-0 mb-4 mr-4 md:mb-0 md:mr-4 '>
+          <div className='flex-shrink-0 mb-4 md:mb-0 md:mr-4 '>
             <ProfileCard
               avatarSrc={profile.avatarUrl}
               name={profile.name}

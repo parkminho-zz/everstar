@@ -64,7 +64,7 @@ export const EverstarPage: React.FC = () => {
 
   if (isPetDetailsLoading || isMemorialBooksLoading || isCheerLoading) {
     return (
-      <div className='relative flex flex-col items-start justify-center bg-center bg-cover min-h-screen-56'>
+      <div className='relative flex flex-col items-start justify-center min-h-screen bg-center bg-cover'>
         <img
           src={bgImage}
           alt='Background'
@@ -122,7 +122,8 @@ export const EverstarPage: React.FC = () => {
       ></div>
 
       {/* Scrollable Content */}
-      <div className='flex items-center justify-center flex-grow pb-14 min-h-screen-56'>
+      {/* 바로밑에 items-center */}
+      <div className='flex justify-center flex-grow min-h-screen'>
         <Routes>
           <Route
             path='/'

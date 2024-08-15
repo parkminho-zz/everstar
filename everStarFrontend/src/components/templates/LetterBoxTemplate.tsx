@@ -50,7 +50,7 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
   // 로딩 및 오류 상태 처리
   if (isLoading) {
     return (
-      <div className="relative flex flex-col items-start min-h-screen-56 bg-center bg-cover z-[-1]">
+      <div className="relative flex flex-col items-start min-h-screen bg-center bg-cover z-[-1]">
         <img
           src={bgImage}
           alt="Background"

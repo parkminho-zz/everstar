@@ -32,7 +32,7 @@ export const SearchStar = (): JSX.Element => {
   };
 
   return (
-    <div className='relative flex flex-col justify-center items-start min-h-screen-56 pb-14'>
+    <div className='relative flex flex-col items-start justify-center min-h-screen pb-14'>
       <MoveContainer
         title={'다른 영원별 탐사'}
         nextPage1={'random'}
