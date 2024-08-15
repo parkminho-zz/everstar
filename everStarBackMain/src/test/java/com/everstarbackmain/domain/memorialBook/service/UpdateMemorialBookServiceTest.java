@@ -88,7 +88,8 @@ class UpdateMemorialBookServiceTest {
 	@DisplayName("메모리얼북_공개_여부_수정_비활성화_에러_테스트")
 	public void 메모리얼북_공개_여부_수정_비활성화_에러_테스트() {
 		// given
-		memorialBook.changeActiveStatus();
+		ReflectionTestUtils.setField(memorialBook, "isActive", false);
+
 		BDDMockito.given(memorialBookRepository.findByIdAndIsDeleted(anyLong(), anyBoolean())).willReturn(Optional.of(memorialBook));
 
 		// then
