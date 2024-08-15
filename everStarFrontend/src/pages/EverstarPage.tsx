@@ -122,7 +122,8 @@ export const EverstarPage: React.FC = () => {
 
       {/* Scrollable Content */}
       {/* 바로밑에 items-center */}
-      <div className='flex justify-center flex-grow min-h-screen'>
+      {/*  바로밑에 flex-grow */}
+      <div className='flex justify-center min-h-screen'>
         <Routes>
           <Route
             path='/'
