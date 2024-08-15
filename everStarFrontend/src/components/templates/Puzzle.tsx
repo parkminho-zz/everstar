@@ -4,7 +4,8 @@ import { RootState } from 'store/Store';
 import html2canvas from 'html2canvas';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import PrimaryButton from 'components/atoms/buttons/TextButton';
+import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
+import { White } from 'components/atoms/buttons/CircleButton.stories';
 export interface QuestPuzzleProps {
   id: string;
   width: number;
@@ -113,7 +114,9 @@ export const Puzzle: React.FC<QuestPuzzleProps> = (props) => {
         return response.status;
       } catch (error) {
         console.error('Error:', error);
-        throw error;
+        alert('입력이 잘못되었어요.');
+        navigate('/earth');
+        // throw error;
       }
     }
   };
@@ -166,7 +169,7 @@ export const Puzzle: React.FC<QuestPuzzleProps> = (props) => {
             alignItems: 'center',
           }}
         >
-          <PrimaryButton size={'large'} disabled={false} onClick={handleCapture}>
+          <PrimaryButton theme={'white'} size={'large'} disabled={false} onClick={handleCapture}>
             퍼즐을 완료 했으면 캡처해주세요
           </PrimaryButton>
         </div>
