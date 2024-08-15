@@ -17,17 +17,17 @@ const parseMemorialBookData = (
   data: MemorialBookDetailsResponse,
   avatarUrl: string | undefined,
 ): PageType[] => {
-  console.log(data);
   const { quests, questAnswers, aiAnswers, diaries, sentimentAnalysis, pet } = data;
   const pages: PageType[] = [];
+  console.log(data);
 
-  // 커버 페이지 추가
+  // Add cover page
   pages.push({
     type: 'cover',
     src: avatarUrl || pet.profileImageUrl,
   });
 
-  // 감정 분석 차트 페이지 추가
+  // Add sentiment analysis chart page
   const sentimentResults = [
     sentimentAnalysis.week1Result,
     sentimentAnalysis.week2Result,
@@ -45,40 +45,37 @@ const parseMemorialBookData = (
     scores: sentimentResults,
   });
 
-  // 퀘스트와 AI 답변을 포함한 페이지 추가
+  // Add quest pages with AI answers
   quests.forEach((quest) => {
     const questAnswer = questAnswers.find((answer) => answer.questId === quest.id);
     const aiAnswer = aiAnswers.find((answer) => answer.questId === quest.id);
 
-    if (quest.type === 'TEXT') {
-      pages.push({
-        type: 'question',
-        question: quest.content,
-        myAnswer: questAnswer?.content || '',
-        petName: pet.name,
-        petAnswer: aiAnswer?.content || '',
-      });
-    } else if (quest.type === 'TEXT_IMAGE' || quest.type === 'WEBRTC') {
-      pages.push({
-        type: 'imageQuestion',
-        question: quest.content,
-        petName: pet.name,
-        myImage: questAnswer?.imageUrl || '',
-        myAnswer: questAnswer?.content || '',
-        petImage: aiAnswer?.imageUrl || '',
-        petAnswer: aiAnswer?.content || '',
-      });
-    }
+    const myImage = questAnswer?.imageUrl || '';
+    const petImage = aiAnswer?.imageUrl || '';
+    const myAnswer = questAnswer?.content || '';
+    const petAnswer = aiAnswer?.content || '';
+
+    pages.push({
+      type: 'question',
+      question: `${quest.id}. ${quest.content}`, // Display quest ID with question
+      myAnswer,
+      petName: pet.name,
+      petAnswer,
+      myImage,
+      petImage,
+    });
   });
 
-  // 다이어리 페이지 추가
-  diaries.forEach((diary) => {
+  // Add diary pages with the diary number and creation date
+  diaries.forEach((diary, index) => {
     pages.push({
       type: 'diary',
-      title: diary.title,
+      title: `${index + 1}번째 일기`,
       content: diary.content,
       imageUrl: diary.imageUrl || '',
+      createdTime: diary.createdTime, // Add createdTime
     });
+    console.log(diaries);
   });
 
   return pages;
@@ -87,12 +84,15 @@ const parseMemorialBookData = (
 const loadImages = (element: HTMLElement) => {
   const images = element.querySelectorAll('img');
   const promises = Array.from(images).map((img) => {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve) => {
       if (img.complete) {
         resolve();
       } else {
         img.onload = () => resolve();
-        img.onerror = () => reject();
+        img.onerror = () => {
+          console.warn(`Failed to load image: ${img.src}`);
+          resolve();
+        };
       }
     });
   });
