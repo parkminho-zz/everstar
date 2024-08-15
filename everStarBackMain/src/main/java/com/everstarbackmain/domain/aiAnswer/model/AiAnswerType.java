@@ -10,7 +10,7 @@ public enum AiAnswerType {
 
 	TEXT("TEXT"),
 	IMAGE("IMAGE"),
-	WEBRTC("MUSIC");
+	WEBRTC("WEBRTC");
 
 	private String type;
 
