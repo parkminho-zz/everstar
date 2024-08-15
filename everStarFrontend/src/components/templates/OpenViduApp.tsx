@@ -44,6 +44,7 @@ export const OpenViduApp = () => {
   const [isTabletAndMobile, setIsTabletAndMobile] = useState<boolean>(false);
 
   const [exitClick, setExitClick] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [, setCurrentVideoDevice] = useState<MediaDeviceInfo | Device | undefined>(undefined);
 
   const navigate = useNavigate();
@@ -101,8 +102,8 @@ export const OpenViduApp = () => {
     textarea.value = url;
     textarea.select();
     document.execCommand('copy');
-    alert(`URL이 복사되었습니다. ${textarea.value}`);
     document.body.removeChild(textarea);
+    setIsModalOpen(true); // 모달을 열도록 상태 변경
   };
 
   const handleChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -207,7 +208,7 @@ export const OpenViduApp = () => {
     setMainStreamManager(undefined);
     setPublisher(undefined);
 
-     navigate(-1);
+    navigate(-1);
     //window.close();
   };
 
@@ -283,8 +284,7 @@ export const OpenViduApp = () => {
   };
 
   return (
-    <div className='relative flex flex-col items-center w-full h-full p-12'>
- 
+    <div className='relative flex flex-col items-center w-full h-screen '>
       {session === undefined ? (
         <div id='join' className='z-10 flex flex-col items-center justify-center w-full h-full'>
           <div
@@ -347,7 +347,21 @@ export const OpenViduApp = () => {
       ) : null}
 
       {session !== undefined ? (
-        <div id='session flex flex-col justify-center items-center w-full h-full sm:p-8 md:p-12'>
+        <div id='session flex flex-col justify-center items-center w-full h-full '>
+          {isModalOpen && (
+            <div className='modal-overlay fixed inset-0 flex justify-center items-center z-30'>
+              <div className='modal w-[300px] z-40 rounded-md bg-white h-[150px] text-center items-center justify-center flex flex-col shadow-md'>
+                <p>URL이 복사되었습니다!</p>
+                <br />
+                <button
+                  className='w-1/6 h-auto p-2 bg-white border shadow-md rounded-md'
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  닫기
+                </button>
+              </div>
+            </div>
+          )}
           <div id='session-header' className='z-10 flex flex-row justify-around w-full mt-6 mb-6'>
             <h1 id='session-title' className='z-10 kor-h-h2 sm:text-2xl md:text-3xl'>
               화상 채널
@@ -356,8 +370,9 @@ export const OpenViduApp = () => {
               💡 퀘스트 완료를 위해 화면 캡처!!!
             </button>
           </div>
+
           <div className='flex flex-row items-center justify-center w-full h-4/5'>
-            <div className='z-10 flex flex-col items-center justify-center h-full gap-8 md:w-1/3 lg:w-1/4'>
+            <div className='z-10 flex flex-col w-1/6 tablet:w-1/4 mobile:w-1/4 items-center h-full gap-8 ml-2'>
               <CircleButton
                 theme={isAudioMuted ? 'white' : 'hover'}
                 onClick={toggleAudio}
@@ -380,11 +395,11 @@ export const OpenViduApp = () => {
                 label={isSpeakerMuted ? '스피커켜기' : '스피커끄기'}
               />
             </div>
-            <div className='z-10 flex w-full h-full gap-4 tablet:flex-col mobile:flex-col'>
+            <div className='z-10 flex desktop:flex-row w-auto h-full gap-4 mobile:flex-col tablet:flex-col '>
               {mainStreamManager !== undefined ? (
                 <UserVideoComponent streamManager={mainStreamManager} />
               ) : null}
-              <div className='grid w-full grid-cols-2 gap-4'>
+              <div className='grid w-full gap-4 desktop:grid-cols-2 tablet:grid-cols-1 mobile:grid-cols-1'>
                 {subscribers.map((sub, i) => (
                   <div key={i} className='box-border col-span-1 stream-container'>
                     <UserVideoComponent streamManager={sub} />
@@ -392,7 +407,8 @@ export const OpenViduApp = () => {
                 ))}
               </div>
             </div>
-            <div className='z-10 flex flex-col items-center justify-center w-1/6 h-full gap-8'>
+
+            <div className='mr-2 ml-2 z-10 flex flex-col w-1/6 tablet:w-1/4 mobile:w-1/4 items-center h-full gap-8'>
               <CircleButton
                 theme={isChatOpen ? 'hover' : 'white'}
                 onClick={toggleChat}
@@ -420,13 +436,13 @@ export const OpenViduApp = () => {
                 <div
                   className={`${
                     isChatOpen ? 'translate-y-0' : 'translate-y-full'
-                  } transition-transform z-10 w-full h-[300px] bg-white shadow-lg flex flex-row justify-center rounded-lg items-center absolute bottom-0 left-0`}
+                  } transition-transform z-10 w-full h-[490px] flex flex-row justify-center items-start absolute bottom-0 left-0`}
                   onTouchEnd={handleSwipeDown} // 스와이프 처리
                 >
                   <Chatting userName={myUserName} onClick={toggleChat} arrowOn={true} />
                 </div>
               ) : (
-                <div className='z-10 w-[40%] h-[500px] bg-white shadow-lg flex flex-row justify-center rounded-lg items-center'>
+                <div className='z-10 w-[40%] h-full flex flex-row items-center'>
                   <Chatting userName={myUserName} arrowOn={false} />
                 </div>
               ))}
