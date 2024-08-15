@@ -122,7 +122,7 @@ export const EverstarPage: React.FC = () => {
       ></div>
 
       {/* Scrollable Content */}
-      <div className='flex items-center justify-center flex-grow pb-14 min-h-screen'>
+      <div className='flex items-center justify-center flex-grow pb-14 min-h-screen-56'>
         <Routes>
           <Route
             path='/'
