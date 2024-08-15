@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 import introduce from 'assets/musics/Introduce.mp3';
 import myEverStar from 'assets/musics/MyEverStar.mp3';
 import diffEverStar from 'assets/musics/DiffEverStar.mp3';
+import Swal from 'sweetalert2';
 
 interface EverStarMainProps {
   petProfile: {
@@ -116,7 +117,11 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
 
     // 심리 테스트 결과를 알림으로 표시
     if (updatedMemorialBookProfile?.psychologicalTestResult) {
-      alert(updatedMemorialBookProfile.psychologicalTestResult);
+      Swal.fire({
+        icon: 'success',
+        title: '트라우마 자가진단',
+        text: updatedMemorialBookProfile.psychologicalTestResult,
+      });
     }
   };
 
