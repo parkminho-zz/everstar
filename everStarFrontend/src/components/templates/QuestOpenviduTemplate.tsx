@@ -155,8 +155,8 @@ export const QuestOpenviduTemplate: React.FC = () => {
     if (questid === '24' || questid === '34' || questid === '38') {
       const sessionId = await getOpenVidu();
       sessionStorage.setItem(`didOpenvidu${questid}`, 'true');
-      window.open(`https://i11b101.p.ssafy.io/openvidu/sessionid/${sessionId}`)
-      //navigate(`/openvidu/sessionid/${sessionId}`);
+      //window.open(`https://i11b101.p.ssafy.io/openvidu/sessionid/${sessionId}`)
+      navigate(`/openvidu/sessionid/${sessionId}`);
     } else if (questid === '31') {
       //퍼즐생성
       navigate(`/earth/puzzle`);
