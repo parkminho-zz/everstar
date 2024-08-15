@@ -114,3 +114,21 @@ export const updateProfileImage = async (
     throw new Error('프로필 이미지를 업데이트하는 데 실패했습니다');
   }
 };
+
+export const putProfileImage = async (
+  petId: number,
+  formData: FormData,
+  token: string,
+): Promise<void> => {
+  const response = await fetch(`${config.API_BASE_URL}/api/pets/${petId}/profile-image`, {
+    method: 'Put',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error('프로필 이미지를 업데이트하는 데 실패했습니다');
+  }
+};

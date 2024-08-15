@@ -5,6 +5,7 @@ import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { InputField } from 'components/organics/input/InputFields';
 import { Tag } from 'components/atoms/buttons/Tag';
 import { fetchPetDetails, PetInfo } from 'api/petApi';
+import { usePutProfileImage } from 'hooks/usePets';
 
 export interface PetInfoTabProps {
   petOptions: string[];
@@ -47,6 +48,22 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({
     }
   }, [selectedPet, petInfo]);
 
+  const { mutate: updateProfileImage } = usePutProfileImage(localPetDetails?.id || 0, token);
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      const formData = new FormData();
+      formData.append('profileImage', file); // profileImage 키로 파일 추가
+
+      try {
+        await updateProfileImage(formData); // 파일 업로드
+      } catch (error) {
+        console.error('Failed to update profile image:', error);
+      }
+    }
+  };
+
   return (
     <>
       <Select
@@ -61,10 +78,19 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({
       {localPetDetails && (
         <>
           <Avatar size="medium" src={localPetDetails.profileImageUrl} name={localPetDetails.name} />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            style={{ display: 'none' }}
+            id="fileInput"
+          />
           <PrimaryButton
             theme="white"
             size="medium"
-            onClick={() => console.log('Change profile picture')}
+            onClick={() => {
+              document.getElementById('fileInput')?.click(); // 파일 입력 클릭
+            }}
             disabled={false}
             icon={null}
           >
