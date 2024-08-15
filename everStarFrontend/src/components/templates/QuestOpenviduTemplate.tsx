@@ -196,7 +196,6 @@ export const QuestOpenviduTemplate: React.FC = () => {
     <div className='flex items-center justify-center flex-grow '>
       <div className='w-full h-full max-w-md '>
         <InteractiveForm
-          onLeftIconClick={() => navigate(-1)}
           currentPage={1}
           totalPages={1}
           onPageChange={() => console.log('이동')}
@@ -215,10 +214,10 @@ export const QuestOpenviduTemplate: React.FC = () => {
           rtcPuzzleText={rtcPuzzleText()}
           onTextChange={handleTextChange}
           value={text}
+          onLeftIconClick={() => navigate('/earth')}
           onButtonClick={handleSubmit}
           onButtonClick2={handleButtonClick2}
           handleSmallButtonDisabled={!didOpenvidu}
-          glassEffect={false}
           className={'flex justify-center h-full w-full'}
         />
         <input

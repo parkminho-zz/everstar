@@ -30,7 +30,7 @@ export const MyInfo: React.FC = () => {
     useFetchUserInfo(token);
   const { localPetDetails, refetch } = useLocalPetDetails(
     selectedPetId ?? 0,
-    token,
+    token
   );
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export const MyInfo: React.FC = () => {
         setActiveTab('two'); // 반려동물을 선택하면 탭을 전환
       }
     },
-    [pets, selectedPetId],
+    [pets, selectedPetId]
   );
 
   if (isPetsLoading || isUserLoading) {
@@ -125,7 +125,7 @@ export const MyInfo: React.FC = () => {
         className='absolute top-0 bottom-0 left-0 right-0 z-0'
       />
       <div className='relative z-10 flex flex-col items-center justify-start w-full h-full'>
-        <div className='flex justify-start w-full'>
+        <div className='flex justify-center w-full'>
           <div className='flex flex-col items-center min-w-[360px] max-w-md top-0 w-full gap-8 p-5 bg-white rounded-lg shadow-md'>
             <ModalHeader
               text='마이 페이지'

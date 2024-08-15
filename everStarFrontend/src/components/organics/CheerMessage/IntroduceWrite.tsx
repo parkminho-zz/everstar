@@ -10,7 +10,7 @@ interface IntroduceWriteProps {
   isOpen: boolean;
   onClose: () => void;
   onResend: () => void;
-  onVerify: (code: string) => void;
+  onVerify?: (code: string) => void;
   text: string;
   height?: string;
 }

@@ -170,7 +170,7 @@ export const QuestWithImageTemplate = () => {
           value={text}
           onButtonClick={handleSubmit}
           onButtonClick2={handleButtonClick2}
-          onLeftIconClick={() => navigate(-1)}
+          onLeftIconClick={() => console.log(1)}
           glassEffect={false}
           className={'flex justify-center h-full w-full'}
         />
@@ -185,4 +185,3 @@ export const QuestWithImageTemplate = () => {
     </div>
   );
 };
-0;
