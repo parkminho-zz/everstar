@@ -98,6 +98,7 @@ public class MemorialBookService {
 		String resultMessage = PsychologicalTestResultMapper.getTestResultMessage(resultScore);
 		memorialBook.addPsychologicalTestResult(resultMessage);
 		memorialBook.changeTestStatus();
+		memorialBook.changeActiveStatus();
 	}
 
 	public MemorialBookInfoResponseDto getMemorialBookInfoByPetId(Long petId) {

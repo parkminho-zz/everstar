@@ -23,8 +23,7 @@ public class MemorialBookScheduler {
 
 	public void scheduleMemorialBookActivation(User user, Long petId) {
 		LocalTime questReceptionTime = user.getQuestReceptionTime();
-		// LocalDateTime nextDayQuestReceptionTime = LocalDateTime.of(LocalDate.now().plusDays(1), questReceptionTime);
-		LocalDateTime nextDayQuestReceptionTime = LocalDateTime.now().plusSeconds(1);
+		LocalDateTime nextDayQuestReceptionTime = LocalDateTime.of(LocalDate.now().plusDays(1), questReceptionTime);
 		Date nextDayQuestReceptionDate = Date.from(
 			nextDayQuestReceptionTime.atZone(ZoneId.systemDefault()).toInstant());
 
