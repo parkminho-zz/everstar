@@ -72,7 +72,7 @@ const Chatting: React.FC<ChattingProps> = ({ userName, onClick, arrowOn }) => {
   };
 
   return (
-    <div style={{ padding: '20px' }} className='w-full h-full'>
+    <div style={{ padding: '20px' }} className='w-full h-[500px] bg-white shadow-lg rounded-lg '>
       <div className='flex flex-row justify-center w-full'>
         <h1 className='mb-3 text-center kor-h-h3'>채팅</h1>
         {arrowOn && (
