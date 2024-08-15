@@ -27,7 +27,10 @@ function App() {
           <Route path='/oauth/*' element={<OAuthCallback />} />
           <Route path='/earth/*' element={<EarthPage />} />
           <Route path='/openvidu/sessionid' element={<OpenViduApp />} />
-          <Route path='/openvidu/sessionid/:sessionId' element={<OpenViduApp />} />
+          <Route
+            path='/openvidu/sessionid/:sessionId'
+            element={<OpenViduApp />}
+          />
           {/* 보호된 경로들 */}
           {/* Profile 경로는 로그인만 필요 */}
           <Route

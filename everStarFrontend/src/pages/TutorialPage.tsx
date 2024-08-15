@@ -42,9 +42,9 @@ export const TutorialPage = () => {
   };
 
   return (
-    <div className="relative flex flex-col w-full h-screen bg-gray-100">
+    <div className='relative flex flex-col w-full h-screen bg-gray-100'>
       {/* 슬라이더 */}
-      <div className="flex-grow">
+      <div className='flex-grow'>
         <Slider
           ref={sliderRef}
           infinite={false}
@@ -56,11 +56,11 @@ export const TutorialPage = () => {
           beforeChange={(current, next) => setCurrentSlide(next)} // 슬라이드 변경 시 상태 업데이트
         >
           {images.map((image, index) => (
-            <div key={index} className="relative h-[calc(100vh-8rem)]">
+            <div key={index} className='relative h-[calc(100vh-8rem)]'>
               <img
                 src={image}
                 alt={`Slide ${index + 1}`}
-                className="object-contain w-full h-full"
+                className='object-contain w-full h-full'
               />
             </div>
           ))}
@@ -68,16 +68,25 @@ export const TutorialPage = () => {
       </div>
 
       {/* 하단 버튼 */}
-      <div className="flex items-center justify-between px-6 py-4 bg-white sm:px-10 md:px-20 lg:px-40 xl:px-60">
-        <button onClick={handleSkip} className="text-lg font-medium text-blue-500">
-          SKIP
+      <div className='flex items-center justify-between px-6 py-4 bg-white sm:px-10 md:px-20 lg:px-40 xl:px-60'>
+        <button
+          onClick={handleSkip}
+          className='text-lg font-medium text-orange-500'
+        >
+          스킵
         </button>
-        <div className="flex space-x-3">
-          <button onClick={handlePrev} className="px-4 py-2 text-white bg-blue-500 rounded">
-            Prev
+        <div className='flex space-x-3'>
+          <button
+            onClick={handlePrev}
+            className='px-4 py-2 text-white bg-orange-300 rounded'
+          >
+            이전
           </button>
-          <button onClick={handleNext} className="px-4 py-2 text-white bg-blue-500 rounded">
-            {currentSlide === images.length - 1 ? 'Start' : 'Next'}{' '}
+          <button
+            onClick={handleNext}
+            className='px-4 py-2 text-white bg-orange-300 rounded'
+          >
+            {currentSlide === images.length - 1 ? '시작하기' : '다음'}{' '}
             {/* 마지막 슬라이드면 "Start"로 변경 */}
           </button>
         </div>
