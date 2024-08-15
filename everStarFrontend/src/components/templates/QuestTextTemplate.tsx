@@ -39,6 +39,7 @@ export const QuestTextTemplate = () => {
       }
     } catch (error) {
       console.error('퀘스트 데이터를 가져오는 중 오류 발생:', error);
+      navigate("/earth");
     } finally {
       setLoading(false); // 데이터 로딩 후 로딩 상태 업데이트
     }
