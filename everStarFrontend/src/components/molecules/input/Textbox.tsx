@@ -24,7 +24,7 @@ export const Textbox = ({
   showInfoText = true,
   infoTextAlign = 'left',
   showStar = true,
-  ghostText = '응원과 위로의 메시지를 남겨주세요.',
+  ghostText = '',
   maxLength = 255, // 기본 최대 글자 수
   value = '',
   onChange = () => {}, // 추가된 부분: 기본 onChange 핸들러
