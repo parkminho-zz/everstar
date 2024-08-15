@@ -24,10 +24,19 @@ const parseMemorialBookData = (
   // Add cover page
   pages.push({
     type: 'cover',
-    src: avatarUrl || pet.profileImageUrl,
+    src: avatarUrl
+      ? `${avatarUrl}?timestamp=${Date.now()}`
+      : `${pet.profileImageUrl}?timestamp=${Date.now()}`,
   });
 
-  // Add sentiment analysis chart page
+  // Add sentiment analysis chart content page
+  pages.push({
+    type: 'chartContent',
+    title: '감정 분석 총평',
+    content: sentimentAnalysis.totalResult,
+  });
+
+  // Add sentiment analysis scores page
   const sentimentResults = [
     sentimentAnalysis.week1Result,
     sentimentAnalysis.week2Result,
@@ -39,9 +48,8 @@ const parseMemorialBookData = (
   ];
 
   pages.push({
-    type: 'chart',
-    title: '감정 분석',
-    content: sentimentAnalysis.totalResult,
+    type: 'chartScores',
+    title: '감정 분석 결과',
     scores: sentimentResults,
   });
 
@@ -50,8 +58,8 @@ const parseMemorialBookData = (
     const questAnswer = questAnswers.find((answer) => answer.questId === quest.id);
     const aiAnswer = aiAnswers.find((answer) => answer.questId === quest.id);
 
-    const myImage = questAnswer?.imageUrl || '';
-    const petImage = aiAnswer?.imageUrl || '';
+    const myImage = questAnswer?.imageUrl ? `${questAnswer.imageUrl}?timestamp=${Date.now()}` : '';
+    const petImage = aiAnswer?.imageUrl ? `${aiAnswer.imageUrl}?timestamp=${Date.now()}` : '';
     const myAnswer = questAnswer?.content || '';
     const petAnswer = aiAnswer?.content || '';
 
@@ -72,7 +80,7 @@ const parseMemorialBookData = (
       type: 'diary',
       title: `${index + 1}번째 일기`,
       content: diary.content,
-      imageUrl: diary.imageUrl || '',
+      imageUrl: diary.imageUrl ? `${diary.imageUrl}?timestamp=${Date.now()}` : '',
       createdTime: diary.createdTime, // Add createdTime
     });
     console.log(diaries);
@@ -151,7 +159,7 @@ export const MemorialBook: React.FC<{ avatarUrl?: string; isOwner?: boolean }> =
         const canvas = await html2canvas(page, {
           scale: 2,
           useCORS: true,
-          logging: true,
+          allowTaint: true,
         });
 
         const imgData = canvas.toDataURL('image/png', 1.0);
