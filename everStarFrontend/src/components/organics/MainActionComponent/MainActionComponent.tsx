@@ -11,6 +11,16 @@ import { ViewMemorialBook } from 'components/organics/ViewMemorialBook/ViewMemor
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { RootState } from 'store/Store';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
+import { useSound } from 'use-sound';
+import clickEvent from 'assets/musics/ClickEffect.mp3';
+import cheerMessage from 'assets/musics/CheerMessage.mp3';
+import explore from 'assets/musics/Explore.mp3';
+import letterBox from 'assets/musics/LetterBox.mp3';
+import letterWrite from 'assets/musics/LetterWrite.mp3';
+import mypage from 'assets/musics/Mypage.mp3';
+import todayQuest from 'assets/musics/Quest.mp3';
+import memorialBookSpace from 'assets/musics/MemorialBookSpace.mp3';
+
 // import config from 'config';
 import './MainActionComponent.css';
 
@@ -43,6 +53,14 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
   name = '',
   onProfileClick,
 }) => {
+  const [ClickEvent] = useSound(clickEvent);
+  const [CheerMessage] = useSound(cheerMessage);
+  const [Explore] = useSound(explore);
+  const [LetterBox] = useSound(letterBox);
+  const [LetterWrite] = useSound(letterWrite);
+  const [Mypage] = useSound(mypage);
+  const [TodayQuest] = useSound(todayQuest);
+  const [MemorialBookSpace] = useSound(memorialBookSpace);
   const navigate = useNavigate();
   const params = useParams();
   const avatarSrc = profileImageUrl || '';
@@ -54,33 +72,40 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
   const [quest, setQuest] = useState<string>('');
 
   const handleQuestClick = (questId: string) => {
+    TodayQuest();
     navigate(`/earth/quest/${questId}`);
   };
 
   const handleLetterClick = () => {
+    LetterWrite();
     navigate('/earth/letter');
   };
 
   const handleExploreClick = () => {
+    Explore();
     navigate(`/everstar/${petId}/explore`);
   };
 
   const handleLetterboxClick = () => {
+    LetterBox();
     navigate('/earth/letterbox');
   };
 
   const handlePostitClick = () => {
+    CheerMessage();
     navigate(`/everstar/${params.pet}/message`);
   };
 
   const handleMypageClick = () => {
+    Mypage();
     navigate('/mypage');
   };
 
   const handleViewMemorialBookClick = () => {
+    MemorialBookSpace();
     if (memorialBookProfile) {
       navigate(
-        `/everstar/${params.pet}/memorialbook/${memorialBookProfile.id}`,
+        `/everstar/${params.pet}/memorialbook/${memorialBookProfile.id}`
       );
     }
   };
@@ -127,6 +152,15 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
     }
   };
 
+  const handleButtonClick = () => {
+    ClickEvent();
+    if (type === 'earth') {
+      handleStarIconClick();
+    } else {
+      handleEarthIconClick();
+    }
+  };
+
   useEffect(() => {
     const EventSource = EventSourcePolyfill || NativeEventSource;
 
@@ -137,7 +171,7 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      },
+      }
     );
 
     eventSource.onmessage = (event) => {
@@ -166,9 +200,7 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
             type === 'earth' ? '영원별로 이동하기' : '지구별로 이동하기'
           }
           buttonIcon={type === 'earth' ? 'SmallStarImg' : 'SmallEarthImg'}
-          onButtonClick={
-            type === 'earth' ? handleStarIconClick : handleEarthIconClick
-          }
+          onButtonClick={handleButtonClick}
           buttonSize='full'
           className='h-full'
         />
