@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  useFetchMemorialBooks,
-  useUpdateMemorialBookOpenStatus,
-} from 'hooks/useMemorialBooks';
+import { useFetchMemorialBooks, useUpdateMemorialBookOpenStatus } from 'hooks/useMemorialBooks';
 import { DepressionSurvey } from 'components/organics/DepressionSurvey/DepressionSurvey';
 import { MainActionComponent } from 'components/organics/MainActionComponent/MainActionComponent';
 import { ProfileModal } from 'components/organics/ProfileModal/ProfileModal';
@@ -40,67 +37,73 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   const [Introduce] = useSound(introduce);
   const { data, refetch } = useFetchMemorialBooks(petId); // Fetch memorial book profile
   const [toggleStatus, setToggleStatus] = useState<'on' | 'off' | undefined>(
-    memorialBookProfile?.isOpen ? 'on' : 'off'
+    memorialBookProfile?.isOpen ? 'on' : 'off',
   );
   const [isModalOpen, setIsModalOpen] = useState(
-    petProfile?.questIndex === 50 && !memorialBookProfile?.isActive && isOwner
+    petProfile?.questIndex === 50 && !memorialBookProfile?.isActive && isOwner,
   );
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const petIntroduce = JSON.parse(sessionStorage.getItem('petDetails') || '{}');
 
-  const [isIntroduceWriteModalOpen, setIntroduceWriteModalOpen] =
-    useState(false);
+  const [isIntroduceWriteModalOpen, setIntroduceWriteModalOpen] = useState(false);
 
   const { mutate: updateMemorialBookStatus } = useUpdateMemorialBookOpenStatus({
     onSuccess: () => {
       refetch(); // Refetch the memorial book profile after updating the open status
     },
   });
-  // const [description, setDescription] = useState(petProfile?.description || '');
-
-  // const handleVerifyIntroduceWrite = () => {
-  //   console.log(1);
-  //   setIntroduceWriteModalOpen(false);
-  // };
 
   const handleSurveySubmitSuccess = async () => {
+    // 설문 제출 후 모달 닫기
     setIsModalOpen(false);
 
-    await refetch(); // Refetch the memorial book profile after submitting the survey
+    // memorialBookProfile 다시 가져오기
+    await refetch();
 
-    // Get the updated data
+    // 최신 데이터 가져오기
     const updatedMemorialBookProfile = data?.data || memorialBookProfile;
 
-    // Display psychologicalTestResult as an alert
+    // isActive를 true로 설정
+    if (updatedMemorialBookProfile && !updatedMemorialBookProfile.isActive) {
+      updateMemorialBookStatus({
+        petId,
+        memorialBookId: updatedMemorialBookProfile.id,
+        isOpen: updatedMemorialBookProfile.isOpen,
+      });
+    }
+
+    // 심리 테스트 결과를 알림으로 표시
     if (updatedMemorialBookProfile?.psychologicalTestResult) {
       alert(updatedMemorialBookProfile.psychologicalTestResult);
     }
   };
 
   const handleProfileClick = () => {
-    // console.log(description);
     Introduce();
     setIsProfileModalOpen(true); // 프로필 클릭 시 모달 열기
   };
 
-  // useEffect hook to refetch memorialBookProfile on component mount
   useEffect(() => {
-    refetch(); // Fetch the memorial book profile when component mounts
+    // 컴포넌트 마운트 시 memorialBookProfile 가져오기
+    refetch();
   }, [refetch]);
+
+  useEffect(() => {
+    // isActive가 true일 때 설문 모달이 다시 뜨지 않도록 설정
+    if (memorialBookProfile?.isActive) {
+      setIsModalOpen(false);
+    }
+  }, [memorialBookProfile]);
 
   const handleCloseIntroduceWriteModal = () => {
     setIntroduceWriteModalOpen(false);
-    const petIntroduce = JSON.parse(
-      sessionStorage.getItem('petDetails') || '{}'
-    );
+    const petIntroduce = JSON.parse(sessionStorage.getItem('petDetails') || '{}');
     if (petProfile) {
       petProfile.description = petIntroduce.introduction;
     }
   };
 
-  console.log(petProfile);
-  //에러
   if (!petProfile) {
     return <div>Loading...</div>;
   }
@@ -108,11 +111,12 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   const updatedMemorialBookProfile = data?.data || memorialBookProfile;
 
   return (
-    <div className='flex justify-center flex-grow'>
+    <div className="flex justify-center flex-grow">
       {isModalOpen &&
         updatedMemorialBookProfile &&
         petProfile?.questIndex === 50 &&
-        isOwner && (
+        isOwner &&
+        !updatedMemorialBookProfile.isActive && (
           <div style={{ position: 'relative', zIndex: 1000 }}>
             <DepressionSurvey
               onSubmitSuccess={handleSurveySubmitSuccess}
@@ -122,7 +126,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
         )}
 
       <MainActionComponent
-        type='everstar'
+        type="everstar"
         profileImageUrl={petProfile.avatarUrl}
         fill={petProfile.questIndex}
         name={petProfile.name}
@@ -147,8 +151,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
       <IntroduceWrite
         isOpen={isIntroduceWriteModalOpen}
         onClose={handleCloseIntroduceWriteModal}
-        // onVerify={handleVerifyIntroduceWrite}
-        text='소개글을 입력하세요'
+        text="소개글을 입력하세요"
         onResend={() => {}}
       />
 
