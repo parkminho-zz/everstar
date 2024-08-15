@@ -139,7 +139,7 @@ public class QuestAnswerService {
 
 	private void plusPetQuestIndexByImageType(User user, Pet pet, Quest quest, QuestAnswer questAnswer, String imageUrl,
 		MultipartFile imageFile) {
-		if (pet.getId().equals(2054L)) {
+		if (pet.getId().equals(2082L)) {
 			pet.plusQuestIndexByPresentation();
 		} else {
 			pet.plusQuestIndex();
