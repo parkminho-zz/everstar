@@ -116,7 +116,7 @@ public class QuestAnswerService {
 	}
 
 	private void plusPetQuestIndexByTextType(User user, Pet pet, Quest quest, QuestAnswer questAnswer) {
-		if (pet.getId().equals(2054L)) {
+		if (pet.getId().equals(2082L)) {
 			pet.plusQuestIndexByPresentation();
 		} else {
 			pet.plusQuestIndex();
