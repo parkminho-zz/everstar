@@ -207,8 +207,8 @@ export const OpenViduApp = () => {
     setMainStreamManager(undefined);
     setPublisher(undefined);
 
-    // navigate(-1);
-    window.close();
+     navigate(-1);
+    //window.close();
   };
 
   const toggleAudio = () => {
