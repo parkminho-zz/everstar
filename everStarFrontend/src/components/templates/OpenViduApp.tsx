@@ -18,6 +18,14 @@ import { InputField } from 'components/organics/input/InputFields';
 import Chatting from 'components/organics/Openvidu/Chatting';
 import UserVideoComponent from '../organics/Openvidu/UserVideoComponent';
 import html2canvas from 'html2canvas';
+import connectToStomp from 'components/organics/Openvidu/Stomp';
+import { Client, IMessage } from '@stomp/stompjs';
+interface Message {
+  type: string;
+  roomId: string;
+  sender: string;
+  message: string;
+}
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i11b101.p.ssafy.io/';
@@ -42,16 +50,63 @@ export const OpenViduApp = () => {
   const [isSpeakerMuted, setIsSpeakerMuted] = useState<boolean>(false);
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
   const [isTabletAndMobile, setIsTabletAndMobile] = useState<boolean>(false);
-
+  const [input, setInput] = useState<string>('');
   const [exitClick, setExitClick] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [, setCurrentVideoDevice] = useState<MediaDeviceInfo | Device | undefined>(undefined);
-
+  const [roomId] = useState<string>(sessionId || 'default_room_id'); // Example roomId
+  const [stompClient, setStompClient] = useState<Client | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     console.log('구독자 수 변경: ', subscribers);
   }, [subscribers.length]);
+
+  useEffect(() => {
+    console.log('현재 룸아이디: ', roomId);
+    // Create and connect client
+    const client: Client = connectToStomp(onConnected);
+    setStompClient(client);
+
+    // Set up subscription when connected
+    function onConnected() {
+      if (client) {
+        client.subscribe(`/api/chat/sub/chat/room/${roomId}`, onMessageReceived);
+      }
+    }
+
+    // Handle received messages
+    function onMessageReceived(message: IMessage) {
+      console.log('Received message:', message.body); // Debugging log
+      const parsedMessage: Message = JSON.parse(message.body);
+      setMessages((prevMessages) => [...prevMessages, parsedMessage]);
+    }
+
+    // Cleanup function
+    return () => {
+      if (client) client.deactivate();
+    };
+  }, [roomId]);
+
+  const sendMessage = () => {
+    console.log(111);
+    if (stompClient && input.trim() !== '') {
+      const messagePayload: Message = {
+        type: 'ENTER',
+        roomId,
+        sender: myUserName, // Set dynamically as needed
+        message: input,
+      };
+
+      stompClient.publish({
+        destination: '/api/chat/pub/chat/message',
+        body: JSON.stringify(messagePayload),
+      });
+      setInput('');
+    }
+  };
+  
 
   // useEffect(() => {
   //   console.log('세션아이디 params:', sessionId);
@@ -283,6 +338,11 @@ export const OpenViduApp = () => {
     });
   };
 
+  const handleSetInput = (input: string) => {
+    setInput(input); // 입력값 업데이트
+    console.log('Current input:', input); // 예시로 콘솔에 출력
+  };
+
   return (
     <div className='relative flex flex-col items-center w-full h-screen '>
       {session === undefined ? (
@@ -437,18 +497,17 @@ export const OpenViduApp = () => {
                   className={`${
                     isChatOpen ? 'translate-y-0' : 'translate-y-full'
                   } transition-transform z-10 w-full h-[490px] flex flex-row justify-center items-start absolute bottom-0 left-0`}
-                  onTouchEnd={handleSwipeDown} // 스와이프 처리
                 >
-                  <Chatting userName={myUserName} onClick={toggleChat} arrowOn={true} />
+                  <Chatting userName={myUserName} onClick={toggleChat} arrowOn={true}setInput={handleSetInput} input ={input}  sendMessage = {sendMessage} messages = {messages} />
                 </div>
               ) : (
                 <div className='z-10 w-[40%] h-full flex flex-row items-center'>
-                  <Chatting userName={myUserName} arrowOn={false} />
+                  <Chatting userName={myUserName} arrowOn={false} setInput={handleSetInput} input ={input}  sendMessage = {sendMessage} messages = {messages}/>
                 </div>
               ))}
           </div>
         </div>
-      ) : null}
+      ) : null}z
     </div>
   );
 };
