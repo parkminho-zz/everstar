@@ -28,7 +28,7 @@ interface UpdatePetIntroductionVariables {
 export const useFetchPetsByName = (
   petname: string,
   page: number = 0,
-  size: number = 10,
+  size: number = 10
 ) => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
 
@@ -58,7 +58,7 @@ export const useFetchCheeringPetDelete = () => {
       return fetchCheeringPetDelete(
         params.petId,
         token,
-        params.cheeringMessageId,
+        params.cheeringMessageId
       );
     },
     onSuccess: () => {
@@ -133,7 +133,7 @@ export const useFetchPetPost = (
     Cheering,
     Error,
     { content: string; color: string; isAnonymous: boolean }
-  >,
+  >
 ) => {
   const queryClient = useQueryClient();
   return useMutation<
@@ -156,7 +156,7 @@ export const useFetchPetPost = (
 };
 
 export const useUpdatePetIntroduction = (
-  options?: UseMutationOptions<unknown, Error, UpdatePetIntroductionVariables>,
+  options?: UseMutationOptions<unknown, Error, UpdatePetIntroductionVariables>
 ) => {
   const queryClient = useQueryClient();
   const token = useSelector((state: RootState) => state.auth.accessToken);

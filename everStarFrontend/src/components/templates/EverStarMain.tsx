@@ -3,6 +3,7 @@ import { useFetchMemorialBooks, useUpdateMemorialBookOpenStatus } from 'hooks/us
 import { DepressionSurvey } from 'components/organics/DepressionSurvey/DepressionSurvey';
 import { MainActionComponent } from 'components/organics/MainActionComponent/MainActionComponent';
 import { ProfileModal } from 'components/organics/ProfileModal/ProfileModal';
+import { IntroduceWrite } from 'components/organics/CheerMessage/IntroduceWrite';
 
 interface EverStarMainProps {
   petProfile: {
@@ -40,11 +41,19 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   );
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
+  const [isIntroduceWriteModalOpen, setIntroduceWriteModalOpen] = useState(false);
+
   const { mutate: updateMemorialBookStatus } = useUpdateMemorialBookOpenStatus({
     onSuccess: () => {
       refetch(); // Refetch the memorial book profile after updating the open status
     },
   });
+  // const [description, setDescription] = useState(petProfile?.description || '');
+
+  // const handleVerifyIntroduceWrite = () => {
+  //   console.log(1);
+  //   setIntroduceWriteModalOpen(false);
+  // };
 
   const handleSurveySubmitSuccess = async () => {
     setIsModalOpen(false);
@@ -61,6 +70,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   };
 
   const handleProfileClick = () => {
+    // console.log(description);
     setIsProfileModalOpen(true); // 프로필 클릭 시 모달 열기
   };
 
@@ -69,6 +79,12 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
     refetch(); // Fetch the memorial book profile when component mounts
   }, [refetch]);
 
+  const handleCloseIntroduceWriteModal = () => {
+    setIntroduceWriteModalOpen(false);
+  };
+
+  console.log(petProfile);
+  //에러
   if (!petProfile) {
     return <div>Loading...</div>;
   }
@@ -109,13 +125,24 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
         onProfileClick={handleProfileClick} // 프로필 클릭 핸들러 추가
       />
 
+      <IntroduceWrite
+        isOpen={isIntroduceWriteModalOpen}
+        onClose={handleCloseIntroduceWriteModal}
+        // onVerify={handleVerifyIntroduceWrite}
+        text="소개글을 입력하세요"
+        onResend={() => {}}
+      />
+
       <ProfileModal
         avatarSrc={petProfile.avatarUrl}
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)} // 프로필 모달 닫기
         profileData={petProfile}
         isOwner={isOwner}
-        onPencilClick={() => console.log('Edit profile clicked')} // PencilIcon 클릭 시 처리할 핸들러
+        onPencilClick={() => {
+          setIntroduceWriteModalOpen(true);
+          setIsProfileModalOpen(false);
+        }}
       />
     </div>
   );

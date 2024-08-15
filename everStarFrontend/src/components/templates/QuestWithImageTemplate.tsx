@@ -41,7 +41,7 @@ export const QuestWithImageTemplate = () => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
-        },
+        }
       );
 
       if (response.data) {
@@ -50,6 +50,7 @@ export const QuestWithImageTemplate = () => {
       }
     } catch (error) {
       console.error('퀘스트 데이터를 가져오는 중 오류 발생:', error);
+      navigate("/earth");
     } finally {
       setLoading(false); // 데이터 로딩 후 로딩 상태 업데이트
     }
@@ -87,7 +88,7 @@ export const QuestWithImageTemplate = () => {
               'Content-Type': 'multipart/form-data',
               Authorization: `Bearer ${accessToken}`,
             },
-          },
+          }
         );
 
         console.log('Response:', response.data);
@@ -130,10 +131,10 @@ export const QuestWithImageTemplate = () => {
 
   if (loading) {
     return (
-      <div className="relative flex flex-col items-start min-h-screen bg-center bg-cover z-[-1]">
+      <div className='relative flex flex-col items-start min-h-screen bg-center bg-cover z-[-1]'>
         <img
           src={bgImage}
-          alt="Background"
+          alt='Background'
           style={{
             position: 'absolute',
             width: '100%',
@@ -141,40 +142,43 @@ export const QuestWithImageTemplate = () => {
             objectFit: 'cover',
           }}
         />
-        <SplashTemplate type="LetterBoxRocket" className="z-10 w-full h-full " />
+        <SplashTemplate
+          type='LetterBoxRocket'
+          className='z-10 w-full h-full '
+        />
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center flex-grow">
-      <div className="w-full h-full max-w-md ">
+    <div className='flex items-center justify-center flex-grow'>
+      <div className='w-full h-full max-w-md '>
         <InteractiveForm
           currentPage={1}
           totalPages={1}
           onPageChange={(newPage) => console.log('Page changed to:', newPage)}
-          headerText="오늘의 질문"
-          letterCardType="send"
-          letterCardColor="white"
-          letterCardState="notReceived"
+          headerText='오늘의 질문'
+          letterCardType='send'
+          letterCardColor='white'
+          letterCardState='notReceived'
           letterCardMessage={questContent}
           centered={true}
-          textboxLabel="답변"
+          textboxLabel='답변'
           largeButtonText={imageText}
-          smallButtonText="작성완료"
+          smallButtonText='작성완료'
           showPrimaryButton={true}
           onTextChange={handleTextChange}
           value={text}
           onButtonClick={handleSubmit}
           onButtonClick2={handleButtonClick2}
-          onLeftIconClick={() => navigate(-1)}
+          onLeftIconClick={() => console.log(1)}
           glassEffect={false}
           className={'flex justify-center h-full w-full'}
         />
         <input
-          type="file"
-          id="photoInput"
-          accept="image/*"
+          type='file'
+          id='photoInput'
+          accept='image/*'
           onChange={handleImageChange}
           style={{ display: 'none' }}
         />
@@ -182,4 +186,3 @@ export const QuestWithImageTemplate = () => {
     </div>
   );
 };
-0;

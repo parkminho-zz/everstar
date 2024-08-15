@@ -46,6 +46,7 @@ export const CheerMessageWrite: React.FC<CheerMessageWriteProps> = ({
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               maxLength={255}
+              ghostText='응원과 위로의 메시지를 남겨주세요'
             />
           </div>
         </div>

@@ -134,9 +134,9 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     profile.description = petIntroduce.introduction;
   };
 
-  const handleVerifyIntroduceWrite = () => {
-    setIntroduceWriteModalOpen(false);
-  };
+  // const handleVerifyIntroduceWrite = () => {
+  //   setIntroduceWriteModalOpen(false);
+  // };
 
   const handleCloseCheerColorSelectModal = () => {
     setCheerColorSelectModalOpen(false);
@@ -279,7 +279,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
       <IntroduceWrite
         isOpen={isIntroduceWriteModalOpen}
         onClose={handleCloseIntroduceWriteModal}
-        onVerify={handleVerifyIntroduceWrite}
+        // onVerify={handleVerifyIntroduceWrite}
         text='소개글을 입력하세요'
         onResend={() => {}}
       />

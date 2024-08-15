@@ -30,7 +30,7 @@ export const QuestTextTemplate = () => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
-        },
+        }
       );
 
       if (response.data) {
@@ -39,6 +39,7 @@ export const QuestTextTemplate = () => {
       }
     } catch (error) {
       console.error('퀘스트 데이터를 가져오는 중 오류 발생:', error);
+      navigate("/earth");
     } finally {
       setLoading(false); // 데이터 로딩 후 로딩 상태 업데이트
     }
@@ -62,7 +63,7 @@ export const QuestTextTemplate = () => {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${accessToken}`,
           },
-        },
+        }
       );
 
       console.log('Response:', response.data);
@@ -92,10 +93,10 @@ export const QuestTextTemplate = () => {
   // 로딩 중이거나 퀘스트 데이터가 없으면 로딩 스피너 또는 빈 화면을 보여줌
   if (loading) {
     return (
-      <div className="relative flex flex-col items-start min-h-screen bg-center bg-cover z-[-1]">
+      <div className='relative flex flex-col items-start min-h-screen bg-center bg-cover z-[-1]'>
         <img
           src={bgImage}
-          alt="Background"
+          alt='Background'
           style={{
             position: 'absolute',
             width: '100%',
@@ -103,26 +104,26 @@ export const QuestTextTemplate = () => {
             objectFit: 'cover',
           }}
         />
-        <SplashTemplate type="quest" className="z-10 w-full h-full " />
+        <SplashTemplate type='quest' className='z-10 w-full h-full ' />
       </div>
     );
   }
 
   return (
-    <div className="w-full h-full">
+    <div className='w-full h-full'>
       <InteractiveForm
         currentPage={1}
         totalPages={1}
         onPageChange={(newPage) => console.log('Page changed to:', newPage)}
-        headerText="오늘의 질문"
-        letterCardType="default"
-        letterCardColor="white"
-        letterCardState="notReceived"
+        headerText='오늘의 질문'
+        letterCardType='default'
+        letterCardColor='white'
+        letterCardState='notReceived'
         letterCardMessage={questContent} // 로드된 퀘스트 내용 표시
         centered={true}
-        textboxLabel="답변"
-        largeButtonText="이미지 추가"
-        smallButtonText="작성완료"
+        textboxLabel='답변'
+        largeButtonText='이미지 추가'
+        smallButtonText='작성완료'
         showPrimaryButton={false}
         onTextChange={handleTextChange}
         value={text}

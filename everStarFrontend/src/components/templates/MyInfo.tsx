@@ -30,7 +30,7 @@ export const MyInfo: React.FC = () => {
     useFetchUserInfo(token);
   const { localPetDetails, refetch } = useLocalPetDetails(
     selectedPetId ?? 0,
-    token,
+    token
   );
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export const MyInfo: React.FC = () => {
         setActiveTab('two'); // 반려동물을 선택하면 탭을 전환
       }
     },
-    [pets, selectedPetId],
+    [pets, selectedPetId]
   );
 
   if (isPetsLoading || isUserLoading) {

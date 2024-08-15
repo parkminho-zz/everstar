@@ -59,7 +59,7 @@ export const LetterCard = ({
   return (
     <button
       onClick={onClick}
-      className={`${getBgColor()} ${getAlignmentClass()} flex flex-col self-stretch gap-[16px] p-4 rounded-[20px] shadow-md ${type === 'default' ? 'w-[270px]' : 'w-[320px]'}`}
+      className={`${getBgColor()} ${getAlignmentClass()} flex flex-col gap-[16px] p-4 rounded-[20px] shadow-md ${type === 'default' ? 'w-[270px]' : 'w-[320px]'}`}
     >
       {name && (
         <LetterText

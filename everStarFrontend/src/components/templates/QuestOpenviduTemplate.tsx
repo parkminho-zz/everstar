@@ -44,7 +44,7 @@ export const QuestOpenviduTemplate: React.FC = () => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
-        },
+        }
       );
 
       if (response.data) {
@@ -53,6 +53,7 @@ export const QuestOpenviduTemplate: React.FC = () => {
       }
     } catch (error) {
       console.error('퀘스트 데이터를 가져오는 중 오류 발생:', error);
+      navigate("/earth");
     } finally {
       setLoading(false); // 데이터 로딩 후 로딩 상태 업데이트
     }
@@ -106,7 +107,7 @@ export const QuestOpenviduTemplate: React.FC = () => {
                 'Content-Type': 'multipart/form-data',
                 Authorization: `Bearer ${accessToken}`,
               },
-            },
+            }
           );
 
           console.log('Response:', response.data);
@@ -177,10 +178,10 @@ export const QuestOpenviduTemplate: React.FC = () => {
   // 로딩 중이거나 퀘스트 데이터가 없으면 로딩 스피너 또는 빈 화면을 보여줌
   if (loading) {
     return (
-      <div className="relative flex flex-col items-start min-h-screen bg-center bg-cover z-[-1]">
+      <div className='relative flex flex-col items-start min-h-screen bg-center bg-cover z-[-1]'>
         <img
           src={bgImage}
-          alt="Background"
+          alt='Background'
           style={{
             position: 'absolute',
             width: '100%',
@@ -188,44 +189,43 @@ export const QuestOpenviduTemplate: React.FC = () => {
             objectFit: 'cover',
           }}
         />
-        <SplashTemplate type="openvidu" className="z-10 w-full h-full " />
+        <SplashTemplate type='openvidu' className='z-10 w-full h-full ' />
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center flex-grow ">
-      <div className="w-full h-full max-w-md ">
+    <div className='flex items-center justify-center flex-grow '>
+      <div className='w-full h-full max-w-md '>
         <InteractiveForm
-          onLeftIconClick={() => navigate(-1)}
           currentPage={1}
           totalPages={1}
           onPageChange={() => console.log('이동')}
           letterCardMessage={questContent}
-          headerText="오늘의 질문"
-          letterCardType="default"
-          letterCardColor="white"
-          letterCardState="notReceived"
+          headerText='오늘의 질문'
+          letterCardType='default'
+          letterCardColor='white'
+          letterCardState='notReceived'
           centered={true}
-          textboxLabel="답변"
+          textboxLabel='답변'
           largeButtonText={imageText}
-          smallButtonText="작성완료"
+          smallButtonText='작성완료'
           showPrimaryButton={true}
           isRtc={true}
           handleRtcPuzzleClick={handleRtcPuzzleClick}
           rtcPuzzleText={rtcPuzzleText()}
           onTextChange={handleTextChange}
           value={text}
+          onLeftIconClick={() => navigate('/earth')}
           onButtonClick={handleSubmit}
           onButtonClick2={handleButtonClick2}
           handleSmallButtonDisabled={!didOpenvidu}
-          glassEffect={false}
           className={'flex justify-center h-full w-full'}
         />
         <input
-          type="file"
-          id="photoInput"
-          accept="image/*"
+          type='file'
+          id='photoInput'
+          accept='image/*'
           onChange={handleImageChange}
           style={{ display: 'none' }}
         />

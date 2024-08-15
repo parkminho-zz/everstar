@@ -19,7 +19,7 @@ export interface SignUpFormProps {
     userName: string,
     birthDate: string,
     gender: string,
-    questReceptionTime: string,
+    questReceptionTime: string
   ) => void;
 }
 
@@ -52,7 +52,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 
   const handleInputChange = (
     field: keyof typeof formData,
-    value: string | null,
+    value: string | null
   ) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -68,7 +68,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 
   useEffect(() => {
     const allFieldsFilled = Object.values(formData).every(
-      (value) => value !== '' && value !== null,
+      (value) => value !== '' && value !== null
     );
     setIsButtonDisabled(!allFieldsFilled);
   }, [formData]);
@@ -88,7 +88,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
         formattedData.name,
         formattedData.birthdate,
         formattedData.gender,
-        formattedData.questReceptionTime,
+        formattedData.questReceptionTime
       );
     }
   };
@@ -140,7 +140,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
         onChange={(date) =>
           handleInputChange(
             'birthdate',
-            date ? date.toISOString().split('T')[0] : '',
+            date ? date.toISOString().split('T')[0] : ''
           )
         }
       />
@@ -164,7 +164,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
         className=''
         options={Array.from(
           { length: 17 },
-          (_, i) => `${String(i + 6).padStart(2, '0')}:00`,
+          (_, i) => `${String(i + 6).padStart(2, '0')}:00`
         )}
         title='질문 받을 시간을 선택하세요'
         showLabel={true}

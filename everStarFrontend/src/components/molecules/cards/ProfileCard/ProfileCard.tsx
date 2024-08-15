@@ -24,7 +24,7 @@ export const ProfileCard = ({
   const visibleTags = tagList.slice(0, 3);
 
   return (
-    <div className='w-[364px] h-[496px] bg-greyscalewhite shadow-md '>
+    <div className='h-[496px] bg-greyscalewhite shadow-md '>
       <Avatar size='square' src={avatarSrc} />
       <div className='flex justify-between w-full p-4 h-fit'>
         <label className='block kor-h-h3 text-greyscaleblack-100'>{name}</label>
