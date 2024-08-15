@@ -59,7 +59,7 @@ export const EverstarPage: React.FC = () => {
 
   if (isPetDetailsLoading || isMemorialBooksLoading || isCheerLoading) {
     return (
-      <div className="relative flex flex-col items-start justify-center bg-center bg-cover min-h-screen-56">
+      <div className="relative flex flex-col items-start justify-center min-h-screen bg-center bg-cover">
         <img
           src={bgImage}
           alt="Background"
