@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.everstarbackmain.domain.notification.util.NotificationUtil;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.model.PetGender;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
@@ -53,6 +54,9 @@ public class WritePetLetterEventListenerTest {
 
 	@Mock
 	private SmsCertificationUtil smsCertificationUtil;
+
+	@Mock
+	private NotificationUtil notificationUtil;
 
 	@Mock
 	private PetLetterScheduler petLetterScheduler;
