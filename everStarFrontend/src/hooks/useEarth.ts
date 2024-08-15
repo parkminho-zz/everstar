@@ -99,7 +99,6 @@ export const useFetchLetterPetDetail = (letterId: number) => {
         letter.data.userLetter.imageUrl = '';
         letter.data.userLetter.petName = '';
       }
-      console.log(letter);
       return letter;
     },
     enabled: !!letterId && !!petId && !!token,

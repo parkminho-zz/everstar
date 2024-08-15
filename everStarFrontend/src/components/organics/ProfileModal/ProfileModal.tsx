@@ -27,7 +27,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   avatarSrc,
 }) => {
   const petIntroduce = JSON.parse(sessionStorage.getItem('petDetails') || '{}');
-  console.log(petIntroduce);
+  // console.log(petIntroduce);
   return (
     <Modal
       isOpen={isOpen}

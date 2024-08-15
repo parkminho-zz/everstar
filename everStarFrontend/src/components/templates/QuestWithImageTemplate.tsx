@@ -26,7 +26,6 @@ export const QuestWithImageTemplate = () => {
   useEffect(() => {
     getQuest();
 
-    console.log('이미지!!!!: ', image);
     if (image) {
       setImageText(image.name);
     }
@@ -45,12 +44,11 @@ export const QuestWithImageTemplate = () => {
       );
 
       if (response.data) {
-        console.log('성공:', response.data.data.content);
         setQuestContent(response.data.data.content);
       }
     } catch (error) {
       console.error('퀘스트 데이터를 가져오는 중 오류 발생:', error);
-      navigate("/earth");
+      navigate('/earth');
     } finally {
       setLoading(false); // 데이터 로딩 후 로딩 상태 업데이트
     }
@@ -72,7 +70,6 @@ export const QuestWithImageTemplate = () => {
 
       if (image) {
         formData.append('imageFile', image);
-        console.log('이미지 잘 들어갔니?');
       } else {
         const emptyFile = new File([new Blob()], '', { type: 'image/jpeg' });
         formData.append('imageFile', emptyFile);
@@ -91,8 +88,6 @@ export const QuestWithImageTemplate = () => {
           }
         );
 
-        console.log('Response:', response.data);
-
         return response.status;
       } catch (error) {
         console.error('Error:', error);
@@ -106,7 +101,6 @@ export const QuestWithImageTemplate = () => {
 
   const handleTextChange = (newText: string) => {
     setText(newText);
-    console.log('입력된 텍스트: ', text);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,7 +112,6 @@ export const QuestWithImageTemplate = () => {
     const status = await answerImageQuestion();
 
     if (status === 200) {
-      console.log('성공');
       navigate('/earth');
     } else {
       console.log('실패');

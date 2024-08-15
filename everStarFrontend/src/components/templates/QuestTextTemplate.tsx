@@ -34,12 +34,11 @@ export const QuestTextTemplate = () => {
       );
 
       if (response.data) {
-        console.log('성공:', response.data.data.content);
         setQuestContent(response.data.data.content);
       }
     } catch (error) {
       console.error('퀘스트 데이터를 가져오는 중 오류 발생:', error);
-      navigate("/earth");
+      navigate('/earth');
     } finally {
       setLoading(false); // 데이터 로딩 후 로딩 상태 업데이트
     }
@@ -66,8 +65,6 @@ export const QuestTextTemplate = () => {
         }
       );
 
-      console.log('Response:', response.data);
-
       return response.status;
     } catch (error) {
       console.error('답변 전송 중 오류 발생:', error);
@@ -76,7 +73,6 @@ export const QuestTextTemplate = () => {
 
   const handleTextChange = (newText: string) => {
     setText(newText);
-    console.log('입력된 텍스트:', text);
   };
 
   const handleSubmit = async () => {

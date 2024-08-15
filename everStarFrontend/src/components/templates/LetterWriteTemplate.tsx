@@ -50,16 +50,12 @@ export const LetterWriteTemplate: React.FC = () => {
         type: 'application/json',
       });
       formData.append('requestDto', requestDtoBlob);
-      console.log(image);
       if (image) {
         formData.append('image', image);
       } else {
         const emptyFile = new File([new Blob()], '', { type: 'image/jpeg' });
         formData.append('image', emptyFile);
       }
-      console.log(image);
-      console.log('requestDto: ', formData.get('requestDto'));
-      console.log('image: : ', formData.get('image'));
       // formData를 사용하여 letterPost 호출
       letterPost(formData, {
         onSuccess: (data) => {
@@ -71,7 +67,7 @@ export const LetterWriteTemplate: React.FC = () => {
         },
       });
     } else {
-      alert("내용을 입력해주세요");
+      alert('내용을 입력해주세요');
       console.error('Required data is missing');
     }
   };
