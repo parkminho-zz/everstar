@@ -1,8 +1,5 @@
-import React, { useState } from 'react';
-import {
-  useFetchMemorialBooks,
-  useUpdateMemorialBookOpenStatus,
-} from 'hooks/useMemorialBooks';
+import React, { useState, useEffect } from 'react';
+import { useFetchMemorialBooks, useUpdateMemorialBookOpenStatus } from 'hooks/useMemorialBooks';
 import { DepressionSurvey } from 'components/organics/DepressionSurvey/DepressionSurvey';
 import { MainActionComponent } from 'components/organics/MainActionComponent/MainActionComponent';
 import { ProfileModal } from 'components/organics/ProfileModal/ProfileModal';
@@ -49,14 +46,28 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
     },
   });
 
-  const handleSurveySubmitSuccess = () => {
+  const handleSurveySubmitSuccess = async () => {
     setIsModalOpen(false);
-    refetch(); // Refetch the memorial book profile after submitting the survey
+
+    await refetch(); // Refetch the memorial book profile after submitting the survey
+
+    // Get the updated data
+    const updatedMemorialBookProfile = data?.data || memorialBookProfile;
+
+    // Display psychologicalTestResult as an alert
+    if (updatedMemorialBookProfile?.psychologicalTestResult) {
+      alert(updatedMemorialBookProfile.psychologicalTestResult);
+    }
   };
 
   const handleProfileClick = () => {
     setIsProfileModalOpen(true); // 프로필 클릭 시 모달 열기
   };
+
+  // useEffect hook to refetch memorialBookProfile on component mount
+  useEffect(() => {
+    refetch(); // Fetch the memorial book profile when component mounts
+  }, [refetch]);
 
   if (!petProfile) {
     return <div>Loading...</div>;
@@ -65,22 +76,18 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   const updatedMemorialBookProfile = data?.data || memorialBookProfile;
 
   return (
-    <div className='flex items-center justify-center flex-grow'>
-      {isModalOpen &&
-        updatedMemorialBookProfile &&
-        !updatedMemorialBookProfile.isActive &&
-        petProfile?.questIndex === 50 &&
-        isOwner && (
-          <div style={{ position: 'relative', zIndex: 1000 }}>
-            <DepressionSurvey
-              onSubmitSuccess={handleSurveySubmitSuccess}
-              memorialBookId={updatedMemorialBookProfile.id} // memorialBookId를 직접 전달
-            />
-          </div>
-        )}
+    <div className="flex items-center justify-center flex-grow">
+      {isModalOpen && updatedMemorialBookProfile && petProfile?.questIndex === 50 && isOwner && (
+        <div style={{ position: 'relative', zIndex: 1000 }}>
+          <DepressionSurvey
+            onSubmitSuccess={handleSurveySubmitSuccess}
+            memorialBookId={updatedMemorialBookProfile.id} // memorialBookId를 직접 전달
+          />
+        </div>
+      )}
 
       <MainActionComponent
-        type='everstar'
+        type="everstar"
         profileImageUrl={petProfile.avatarUrl}
         fill={petProfile.questIndex}
         name={petProfile.name}

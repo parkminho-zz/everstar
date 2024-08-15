@@ -6,7 +6,7 @@ import { ImagePage } from 'components/molecules/MemorialBook/ImagePage/ImagePage
 import { ChartPage } from 'components/molecules/MemorialBook/ChartPage/ChartPage';
 import { DiaryPage } from 'components/molecules/MemorialBook/DiaryPage/DiaryPage';
 
-// 페이지 컴포넌트 정의
+// Define the Page component
 const Page = React.forwardRef<HTMLDivElement, { children: React.ReactNode; pageIndex: number }>(
   (props, ref) => {
     return (
@@ -19,15 +19,17 @@ const Page = React.forwardRef<HTMLDivElement, { children: React.ReactNode; pageI
 );
 Page.displayName = 'Page';
 
-// 각 페이지 타입 정의
+// Define the PageType types
 export type PageType =
-  | { type: 'cover'; src?: string } // Add src here
+  | { type: 'cover'; src?: string }
   | {
       type: 'question';
       question: string;
       myAnswer: string;
       petName: string;
       petAnswer: string;
+      myImage?: string; // myImage field added
+      petImage?: string; // petImage field added
     }
   | {
       type: 'imageQuestion';
@@ -39,9 +41,9 @@ export type PageType =
       petAnswer: string;
     }
   | { type: 'chart'; title: string; content: string; scores: number[] }
-  | { type: 'diary'; title: string; content: string; imageUrl?: string };
+  | { type: 'diary'; title: string; content: string; imageUrl?: string; createdTime?: string };
 
-// MemorialBook 컴포넌트 정의
+// Define the MemorialBook component
 export interface MemorialBookProps {
   pages: PageType[];
   width?: number;
@@ -113,6 +115,8 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
                     myAnswer={page.myAnswer}
                     petName={page.petName}
                     petAnswer={page.petAnswer}
+                    myImage={page.myImage} // User image
+                    petImage={page.petImage} // AI image
                   />
                 </Page>
               );
@@ -138,7 +142,12 @@ export const MemorialBook: React.FC<MemorialBookProps> = ({
             case 'diary':
               return (
                 <Page key={index} pageIndex={index}>
-                  <DiaryPage title={page.title} content={page.content} imageUrl={page.imageUrl} />
+                  <DiaryPage
+                    title={page.title}
+                    content={page.content}
+                    imageUrl={page.imageUrl}
+                    createdTime={page.createdTime}
+                  />
                 </Page>
               );
             default:
