@@ -206,8 +206,8 @@ public class OpenAiClient {
 		return prompt;
 	}
 
-	public String writePetTextImageToImageAnswer(QuestAnswer questAnswer, String imageUrl) {
-		String prompt = createPetTextImageToImageAnswerPrompt(questAnswer, imageUrl);
+	public String writePetTextImageToImageAnswer(Quest quest, QuestAnswer questAnswer, String imageUrl) {
+		String prompt = createPetTextImageToImageAnswerPrompt(quest, questAnswer, imageUrl);
 
 		ImageGPTRequest request = new ImageGPTRequest(prompt);
 		ImageGPTResponse response = restTemplate.postForObject(openAiConfig.getCreateImageUrl(), request, ImageGPTResponse.class);
@@ -219,7 +219,7 @@ public class OpenAiClient {
 		return response.getData().get(0).getB64_json();
 	}
 
-	private String createPetTextImageToImageAnswerPrompt(QuestAnswer questAnswer, String imageUrl) {
+	private String createPetTextImageToImageAnswerPrompt(Quest quest, QuestAnswer questAnswer, String imageUrl) {
 		String prompt = createDalleImagePrompt(questAnswer);
 
 		List<Content> contents = new ArrayList<>();
@@ -243,9 +243,13 @@ public class OpenAiClient {
 
 			if (matcher.find()) {
 				extractedString = matcher.group(1);
+				if (quest.getId().equals(40L)) {
+					extractedString += " When drawing a caricature, draw the person as the same Korean as in the photo.";
+				}
 				log.info("main server - 추출된 Dalle 이미지 생성용 프롬프트: {}", extractedString);
 				break;
 			}
+
 		}
 
 		return extractedString;
