@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Client, IMessage } from '@stomp/stompjs';
-import connectToStomp from './Stomp';
+import React, { useState, useEffect, useRef } from 'react';
+import { Client } from '@stomp/stompjs';
 import { useParams } from 'react-router-dom';
 import { MessageWithTime } from 'components/molecules/cards/MessageCard/MessageWithTime';
 import { ArrowIcon } from 'components/atoms/icons/Arrow/ArrowIcon';
@@ -11,6 +10,7 @@ interface Message {
   sender: string;
   message: string;
 }
+
 type Props = {
   sessionId: string;
 };
@@ -19,60 +19,58 @@ interface ChattingProps {
   userName: string;
   arrowOn: boolean;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  setInput?: (input: string) => void;
+  input?: string;
+  sendMessage?: () => void;
+  messages: Message[];
 }
 
-const Chatting: React.FC<ChattingProps> = ({ userName, onClick, arrowOn }) => {
+const Chatting: React.FC<ChattingProps> = ({
+  userName,
+  onClick,
+  arrowOn,
+  setInput,
+  input,
+  sendMessage,
+  messages
+}) => {
   const { sessionId } = useParams<Props>();
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState<string>('');
   const [stompClient, setStompClient] = useState<Client | null>(null);
-  const [roomId] = useState<string>(sessionId || 'default_room_id'); // Example roomId
+  const [roomId] = useState<string>(sessionId || 'default_room_id');
   const [sender] = useState<string>(userName);
-  useEffect(() => {
-    console.log('현재 룸아이디: ', roomId);
-    // Create and connect client
-    const client: Client = connectToStomp(onConnected);
-    setStompClient(client);
 
-    // Set up subscription when connected
-    function onConnected() {
-      if (client) {
-        client.subscribe(`/api/chat/sub/chat/room/${roomId}`, onMessageReceived);
-      }
-    }
-
-    // Handle received messages
-    function onMessageReceived(message: IMessage) {
-      console.log('Received message:', message.body); // Debugging log
-      const parsedMessage: Message = JSON.parse(message.body);
-      setMessages((prevMessages) => [...prevMessages, parsedMessage]);
-    }
-
-    // Cleanup function
-    return () => {
-      if (client) client.deactivate();
-    };
-  }, [roomId]);
-
-  const sendMessage = () => {
-    if (stompClient && input.trim() !== '') {
-      const messagePayload: Message = {
-        type: 'ENTER',
-        roomId,
-        sender: sender, // Set dynamically as needed
-        message: input,
-      };
-
-      stompClient.publish({
-        destination: '/api/chat/pub/chat/message',
-        body: JSON.stringify(messagePayload),
-      });
-      setInput('');
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (setInput) {
+      setInput(event.target.value);
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && sendMessage) {
+      sendMessage();
+    }
+  };
+
+  const formatTime = (date: Date): string => {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    scrollToBottom();
+}, [messages]);
+
+const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+    }
+};
+
   return (
-    <div style={{ padding: '20px' }} className='w-full h-[500px] bg-white shadow-lg rounded-lg '>
+    <div style={{ padding: '20px' }} className='w-full h-[500px] bg-white shadow-lg rounded-lg'>
       <div className='flex flex-row justify-center w-full'>
         <h1 className='mb-3 text-center kor-h-h3'>채팅</h1>
         {arrowOn && (
@@ -82,7 +80,7 @@ const Chatting: React.FC<ChattingProps> = ({ userName, onClick, arrowOn }) => {
         )}
       </div>
 
-      <div className=' h-[70%] p-2.5 w-full mt-2 border rounded-lg shadow-md solid 3px overflow-y-scroll text-xs'>
+      <div ref={messagesEndRef} className='h-[70%] p-2.5 w-full mt-2 border rounded-lg shadow-md overflow-y-auto text-xs'>
         {messages.map((msg, idx) => (
           <div
             key={idx}
@@ -96,20 +94,21 @@ const Chatting: React.FC<ChattingProps> = ({ userName, onClick, arrowOn }) => {
             <MessageWithTime
               flag={msg.sender === sender ? false : true}
               contents={msg.message}
-              time={'23:00'}
+              time={formatTime(new Date())}
               sender={msg.sender}
             />
           </div>
         ))}
+      
       </div>
-      <div className='mt-4'>
+      <div className='mt-4 flex'>
         <input
           type='text'
           value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
           style={{ width: '80%' }}
-          className='h-20 mt-2 border rounded-lg shadow-md solid 3px'
+          className='h-20 mt-2 border rounded-lg shadow-md'
         />
         <button onClick={sendMessage} style={{ width: '20%' }}>
           Send
