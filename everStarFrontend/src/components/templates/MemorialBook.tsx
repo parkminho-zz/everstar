@@ -11,6 +11,7 @@ import { useFetchMemorialBookById } from 'hooks/useMemorialBooks';
 import { useParams } from 'react-router-dom';
 import { MemorialBookDiaryModal } from 'components/organics/MemorialBook/MemorialBookDiaryModal';
 import BookSpinner from 'assets/symbols/book-splash.gif';
+import Swal from 'sweetalert2';
 
 const parseMemorialBookData = (
   data: MemorialBookDetailsResponse,
@@ -153,7 +154,13 @@ export const MemorialBook: React.FC<{
   useEffect(() => {
     if (isDiaryUpdated) {
       refetch();
-      alert('저장이 완료되었어요.');
+
+      Swal.fire({
+        icon: 'success',
+        title: '저장',
+        text: '저장이 완료되었어요.',
+      });
+
       setIsDiaryUpdated(false);
     }
   }, [isDiaryUpdated, refetch]);
