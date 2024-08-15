@@ -9,9 +9,20 @@ import { getMessaging, onMessage } from 'firebase/messaging';
 import { firebaseConfig } from 'firebase-messaging-sw';
 import { Modal } from 'components/molecules/Modal/Modal';
 import { MainActionComponent } from 'components/organics/MainActionComponent/MainActionComponent';
+import { useSound } from 'use-sound';
+import alarm from 'assets/musics/Alarm.mp3';
+import fcmGift from 'assets/musics/FcmGift.mp3';
 
 type ViewMemorialBookSize = 'large' | 'medium' | 'small';
-type RainbowColor = 'none' | 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'indigo' | 'violet';
+type RainbowColor =
+  | 'none'
+  | 'red'
+  | 'orange'
+  | 'yellow'
+  | 'green'
+  | 'blue'
+  | 'indigo'
+  | 'violet';
 
 interface EarthMainProps {
   title: string;
@@ -49,13 +60,19 @@ const getColor = (fill: number): RainbowColor => {
   return 'none';
 };
 
-export const EarthMain: React.FC<EarthMainProps> = ({ fill, profileImageUrl }) => {
+export const EarthMain: React.FC<EarthMainProps> = ({
+  fill,
+  profileImageUrl,
+}) => {
   // const [quest, setQuest] = useState('');
 
   const app = initializeApp(firebaseConfig);
   const messaging = getMessaging(app);
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 480px)' });
+
+  const [Alarm] = useSound(alarm);
+  const [FcmGift] = useSound(fcmGift);
 
   const [letterCardVisible, setLetterCardVisible] = useState(false);
   const [letterMessage, setLetterMessage] = useState('');
@@ -78,6 +95,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({ fill, profileImageUrl }) =
 
     switch (payload.notification?.title) {
       case '카툰화':
+        FcmGift();
         setLetterMessage('선물이 도착했어요');
         localStorage.setItem('isMessage', '선물이 도착했어요');
         localStorage.setItem('gift', `${payload.notification?.body}`);
@@ -85,6 +103,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({ fill, profileImageUrl }) =
         break;
 
       case '편지':
+        Alarm();
         setLetterMessage('편지가 도착했어요');
         localStorage.setItem('isMessage', '편지가 도착했어요');
         localStorage.setItem('isMessageSeen', 'false');
@@ -97,7 +116,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({ fill, profileImageUrl }) =
     console.log(
       'Message received (foreground). : ',
       // payload.notification?.title
-      payload,
+      payload
     );
   });
 
@@ -154,10 +173,10 @@ export const EarthMain: React.FC<EarthMainProps> = ({ fill, profileImageUrl }) =
 
   return (
     <div>
-      <div className="relative flex flex-col items-start min-h-screen pb-14">
+      <div className='relative flex flex-col items-start min-h-screen pb-14'>
         <Rainbow className={getRainbowStyle()} color={getColor(fill)} />
         <MainActionComponent
-          type="earth"
+          type='earth'
           fill={fill}
           profileImageUrl={profileImageUrl}
           onToggleChange={undefined}
@@ -166,30 +185,30 @@ export const EarthMain: React.FC<EarthMainProps> = ({ fill, profileImageUrl }) =
           age={undefined}
           description={''}
         />
-      </div>
-      <div className="fixed z-50 left-10 bottom-20">
-        <LetterCard
-          type="receive"
-          color="white"
-          state="received"
-          name="알림"
-          message={letterMessage}
-          dateTime=""
-          className="h-3"
-          centered={true}
-          visible={letterCardVisible}
-          onClick={handleLetterCardClick}
-        />
+        <div className='fixed z-50 flex flex-col items-center justify-center w-full bottom-20'>
+          <LetterCard
+            type='receive'
+            color='white'
+            state='received'
+            name='알림'
+            message={letterMessage}
+            dateTime=''
+            className='h-3'
+            centered={true}
+            visible={letterCardVisible}
+            onClick={handleLetterCardClick}
+          />
+        </div>
       </div>
       <div>
         <Modal
           isOpen={modalState}
           onClose={Modalclose}
-          text="깜짝 선물"
-          className="flex flex-col items-center justify-center"
+          text='깜짝 선물'
+          className='flex flex-col items-center justify-center'
         >
-          <img src={giftAddress} alt="Description" />
-          <div className="mt-10 text-2xl">
+          <img src={giftAddress} alt='Description' />
+          <div className='mt-10 text-2xl'>
             한번밖에 볼 수 없어요! <br />
             추후 메모리얼북이 완성 시 <br />
             확인 가능해요!
