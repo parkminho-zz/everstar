@@ -4,8 +4,8 @@ import { RootState } from 'store/Store';
 import html2canvas from 'html2canvas';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-
-interface QuestPuzzleProps {
+import PrimaryButton from 'components/atoms/buttons/TextButton';
+export interface QuestPuzzleProps {
   id: string;
   width: number;
   height: number;
@@ -20,9 +20,7 @@ export const Puzzle: React.FC<QuestPuzzleProps> = (props) => {
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
   const { questid } = useParams<{ questid: string }>();
-  const petImg = useSelector(
-    (state: RootState) => state.pet.petDetails?.profileImageUrl
-  );
+  const petImg = useSelector((state: RootState) => state.pet.petDetails?.profileImageUrl);
 
   useEffect(() => {
     const puzzle = puzzleRef.current;
@@ -31,7 +29,7 @@ export const Puzzle: React.FC<QuestPuzzleProps> = (props) => {
       const vangogh = new Image();
       if (petImg) {
         vangogh.src = `${petImg}?timestamp=${Date.now()}`;
-        vangogh.crossOrigin = "anonymous"; // 크로스 오리진 문제 해결
+        vangogh.crossOrigin = 'anonymous'; // 크로스 오리진 문제 해결
       }
 
       vangogh.onload = () => {
@@ -71,7 +69,7 @@ export const Puzzle: React.FC<QuestPuzzleProps> = (props) => {
 
       // 캡처된 이미지를 Blob 형태로 변환
       const imageBlob = await new Promise<Blob | null>((resolve) =>
-        canvas.toBlob(resolve, 'image/png')
+        canvas.toBlob(resolve, 'image/png'),
       );
 
       // FormData 객체 생성
@@ -105,12 +103,12 @@ export const Puzzle: React.FC<QuestPuzzleProps> = (props) => {
               'Content-Type': 'multipart/form-data',
               Authorization: `Bearer ${accessToken}`,
             },
-          }
+          },
         );
 
         console.log('Response:', response.data);
-        if(response.status == 200){
-          navigate("/earth");
+        if (response.status == 200) {
+          navigate('/earth');
         }
         return response.status;
       } catch (error) {
@@ -121,35 +119,58 @@ export const Puzzle: React.FC<QuestPuzzleProps> = (props) => {
   };
 
   return (
-    <div style={{width : "100%", height : "80%", display : "flex" , alignItems : "center" , justifyContent : "center"}}>
-       <div style={{height : "70%", width : "100%", display : "flex", flexDirection : "column", justifyContent: "center", alignItems : "center"}}>
-        
+    <div
+      style={{
+        width: '100%',
+        height: '80%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       <div
-        ref={captureRef}
         style={{
-          width: 'auto',
-          height: 'auto',
-          border: 'solid black 1px',
+          height: '70%',
+          width: '100%',
           display: 'flex',
+          flexDirection: 'column',
           justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <div
-          ref={puzzleRef}
-          id={props.id}
+          ref={captureRef}
+          style={{
+            width: 'auto',
+            height: 'auto',
+            border: 'solid black 1px',
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <div
+            ref={puzzleRef}
+            id={props.id}
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+          ></div>
+        </div>
+        <div
           style={{
             width: '100%',
-            height: '100%',
+            height: '20%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
-        ></div>
+        >
+          <PrimaryButton size={'large'} disabled={false} onClick={handleCapture}>
+            퍼즐을 완료 했으면 캡처해주세요
+          </PrimaryButton>
+        </div>
       </div>
-      <div style={{width : "100%", height : "20%", display: "flex", justifyContent : "center", alignItems : "center"}}>
-        <button onClick={handleCapture}>퍼즐을 완료 했으면 캡처해주세요</button>
-      </div>
-     
     </div>
-
-    </div>
-   
   );
 };
