@@ -10,6 +10,7 @@ interface AvatarProps {
   onClick?: () => void; // 추가된 클릭 이벤트 핸들러
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  crossOrigin?: 'anonymous' | 'use-credentials' | ''; // CORS 설정을 위한 prop 추가
 }
 
 const sizeMap = {
@@ -28,11 +29,10 @@ export const Avatar: React.FC<AvatarProps> = ({
   onClick,
   onMouseEnter,
   onMouseLeave,
+  crossOrigin, // CORS 설정 prop
 }) => {
   const computedSize =
-    iconSize ||
-    sizeMap[size as 'small' | 'medium' | 'large' | 'square'] ||
-    sizeMap.small;
+    iconSize || sizeMap[size as 'small' | 'medium' | 'large' | 'square'] || sizeMap.small;
 
   return (
     <div
@@ -69,7 +69,8 @@ export const Avatar: React.FC<AvatarProps> = ({
       ) : (
         <img
           src={src || defaultAvatarSrc}
-          alt='avatar'
+          alt="avatar"
+          crossOrigin={crossOrigin} // CORS 설정을 위한 prop
           style={{
             width: computedSize,
             height: size === 'square' ? '250px' : computedSize, // square일 때 높이를 250px로 설정

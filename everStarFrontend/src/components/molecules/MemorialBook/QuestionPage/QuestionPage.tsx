@@ -38,9 +38,10 @@ const QuestionPage: React.FC<QuestionPageProps> = ({
       <div className="flex items-start w-full mb-4">
         {myImage && (
           <img
-            src={myImage}
+            src={`${myImage}?timestamp=${Date.now()}`}
             alt="My Answer"
             className="w-[150px] h-[150px] object-cover mr-4 shadow-sm rounded-md"
+            crossOrigin="anonymous"
           />
         )}
         <div className="flex flex-col">
@@ -62,9 +63,10 @@ const QuestionPage: React.FC<QuestionPageProps> = ({
           {petImage && (
             <div className="relative flex items-center justify-center w-[150px] h-[150px] mt-2 mb-2">
               <img
-                src={petImage}
+                src={`${petImage}?timestamp=${Date.now()}`}
                 alt={`${petName}의 답변`}
                 className="w-[150px] h-[150px] object-cover shadow-sm rounded-md"
+                crossOrigin="anonymous"
               />
             </div>
           )}
