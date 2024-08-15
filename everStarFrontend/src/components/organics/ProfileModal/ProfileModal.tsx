@@ -26,6 +26,8 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   onPencilClick,
   avatarSrc,
 }) => {
+  const petIntroduce = JSON.parse(sessionStorage.getItem('petDetails') || '{}');
+  console.log(petIntroduce);
   return (
     <Modal
       isOpen={isOpen}
@@ -37,7 +39,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
         name={profileData.name}
         age={profileData.age}
         date={profileData.date}
-        description={profileData.description}
+        description={petIntroduce.introduction}
         tagList={profileData.tagList}
         avatarSrc={avatarSrc}
         onPencilClick={isOwner ? onPencilClick || (() => {}) : () => {}} // 빈 함수 전달

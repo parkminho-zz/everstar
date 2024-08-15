@@ -44,6 +44,8 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   );
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
+  const petIntroduce = JSON.parse(sessionStorage.getItem('petDetails') || '{}');
+
   const [isIntroduceWriteModalOpen, setIntroduceWriteModalOpen] =
     useState(false);
 
@@ -71,6 +73,12 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
 
   const handleCloseIntroduceWriteModal = () => {
     setIntroduceWriteModalOpen(false);
+    const petIntroduce = JSON.parse(
+      sessionStorage.getItem('petDetails') || '{}'
+    );
+    if (petProfile) {
+      petProfile.description = petIntroduce.introduction;
+    }
   };
 
   console.log(petProfile);
@@ -102,7 +110,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
         fill={petProfile.questIndex}
         name={petProfile.name}
         age={petProfile.age}
-        description={petProfile.description}
+        description={petIntroduce.introduction}
         memorialBookProfile={updatedMemorialBookProfile}
         toggleStatus={toggleStatus}
         onToggleChange={(status) => {

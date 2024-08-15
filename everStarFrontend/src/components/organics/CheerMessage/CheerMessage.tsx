@@ -67,10 +67,11 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     const handleResize = () => {
       setIsMobile(window.innerWidth < 970);
     };
-
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const petIntroduce = JSON.parse(sessionStorage.getItem('petDetails') || '{}');
 
   const cardsPerPage = isMobile ? 2 : 12;
   const { mutate: createCheeringPet } = useFetchPetPost(
@@ -245,7 +246,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
               name={profile.name}
               age={profile.age}
               date={profile.date}
-              description={profile.description}
+              description={petIntroduce.introduction}
               tagList={profile.tagList}
               onPencilClick={() => setIntroduceWriteModalOpen(true)}
             />
