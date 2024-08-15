@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.everstarbackmain.domain.notification.util.NotificationUtil;
 import com.everstarbackmain.domain.pet.model.Pet;
 import com.everstarbackmain.domain.pet.repository.PetRepository;
 import com.everstarbackmain.domain.petterLetter.model.PetLetter;
@@ -33,6 +34,7 @@ public class SendPetLetterEventListener {
 	private final PetRepository petRepository;
 	private final SmsCertificationUtil smsCertificationUtil;
 	private final PetLetterScheduler petLetterScheduler;
+	private final NotificationUtil notificationUtil;
 
 	@EventListener
 	@Transactional
@@ -45,6 +47,7 @@ public class SendPetLetterEventListener {
 		PetLetter petLetter = PetLetter.writePetLetter(pet, content);
 		petLetterRepository.save(petLetter);
 		sendSms(pet);
+		sendNotification(pet);
 
 		pet.updatePetSendTime();
 		petRepository.save(pet);
@@ -54,5 +57,10 @@ public class SendPetLetterEventListener {
 	private void sendSms(Pet pet) {
 		User user = pet.getUser();
 		smsCertificationUtil.sendSms(user.getPhoneNumber(), pet.getName());
+	}
+
+	private void sendNotification(Pet pet) {
+		User user = pet.getUser();
+		notificationUtil.sendPetLetterNotification(user);
 	}
 }

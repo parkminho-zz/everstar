@@ -30,6 +30,8 @@ public class QMemorialBook extends EntityPathBase<MemorialBook> {
 
     public final BooleanPath isOpen = createBoolean("isOpen");
 
+    public final BooleanPath isTested = createBoolean("isTested");
+
     public final com.everstarbackmain.domain.pet.model.QPet pet;
 
     public final StringPath psychologicalTestResult = createString("psychologicalTestResult");
