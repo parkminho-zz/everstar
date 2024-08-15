@@ -11,7 +11,7 @@ import { ViewMemorialBook } from 'components/organics/ViewMemorialBook/ViewMemor
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { RootState } from 'store/Store';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
-import config from 'config';
+// import config from 'config';
 import './MainActionComponent.css';
 
 export interface MainActionComponentProps {
@@ -80,7 +80,7 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
   const handleViewMemorialBookClick = () => {
     if (memorialBookProfile) {
       navigate(
-        `/everstar/${params.pet}/memorialbook/${memorialBookProfile.id}`
+        `/everstar/${params.pet}/memorialbook/${memorialBookProfile.id}`,
       );
     }
   };
@@ -121,7 +121,7 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
       case 'completed':
         return '퀘스트를 완료했습니다';
       case 'inProgress':
-        return `${quest}번째 퀘스트가 진행 중입니다`;
+        return `${quest}번째 퀘스트가 도착했습니다`;
       default:
         return `${quest}번째 퀘스트가 도착했습니다`;
     }
@@ -137,7 +137,7 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     eventSource.onmessage = (event) => {

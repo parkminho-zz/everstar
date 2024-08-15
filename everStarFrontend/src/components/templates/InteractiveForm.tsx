@@ -1,5 +1,8 @@
 import React from 'react';
-import { InputContainer, InputContainerProps } from 'components/organics/input/InputContainer';
+import {
+  InputContainer,
+  InputContainerProps,
+} from 'components/organics/input/InputContainer';
 import { Glass } from 'components/molecules/Glass/Glass';
 
 interface InteractiveFormProps extends InputContainerProps {
@@ -64,16 +67,16 @@ export const InteractiveForm: React.FC<InteractiveFormProps> = ({
   const customHeaderText = headerText;
   const customLetterCardMessage = letterCardMessage;
   return (
-    <div className="relative flex items-center justify-center min-h-screen-56">
+    <div className='relative flex items-center justify-center min-h-screen-56'>
       <Glass
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={onPageChange}
         showPageIndicator={false}
         glassEffect={glassEffect}
-        className="w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5"
+        className='w-full h-auto sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5'
       />
-      <div className="absolute inset-0 flex justify-center">
+      <div className='absolute inset-0 flex justify-center'>
         <InputContainer
           headerText={customHeaderText}
           letterCardType={letterCardType}

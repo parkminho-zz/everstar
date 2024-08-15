@@ -89,7 +89,7 @@ export const MyInfo: React.FC = () => {
 
   if (isPetsLoading || isUserLoading) {
     return (
-      <div className='relative flex flex-col items-center justify-start min-h-screen bg-center bg-cover z-[-1]'>
+      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
         <img
           src={bgImage}
           alt='Background'
@@ -116,7 +116,7 @@ export const MyInfo: React.FC = () => {
   };
 
   return (
-    <div className='relative flex flex-col items-center justify-start w-full min-h-screen'>
+    <div className='relative flex flex-col items-center justify-start w-full min-h-screen-56'>
       <Glass
         currentPage={1}
         totalPages={1}
@@ -124,9 +124,10 @@ export const MyInfo: React.FC = () => {
         showPageIndicator={false}
         className='absolute top-0 bottom-0 left-0 right-0 z-0'
       />
-      <div className='relative z-10 flex flex-col items-center justify-start w-full h-full'>
-        <div className='flex justify-start w-full'>
-          <div className='flex flex-col items-center min-w-[360px] max-w-md top-0 w-full gap-8 p-5 bg-white rounded-lg shadow-md'>
+      <div className='relative z-10 flex flex-col items-center justify-center w-full h-full'>
+        <div className='flex justify-center w-full'>
+          {/* 수평 중앙 정렬을 위해 justify-center 적용 */}
+          <div className='flex flex-col items-center min-w-[360px] max-w-md w-full gap-8 p-5 bg-white rounded-lg shadow-md'>
             <ModalHeader
               text='마이 페이지'
               showLeftIcon={true}
@@ -139,8 +140,6 @@ export const MyInfo: React.FC = () => {
               onTabClick={(tab) => setActiveTab(tab as 'one' | 'two')}
             />
             <div className='flex flex-col items-center justify-start w-full gap-4 pb-12'>
-              {' '}
-              {/* 이 div에 padding-bottom 추가 */}
               {activeTab === 'one' ? (
                 <UserInfoTab
                   userInfo={{
