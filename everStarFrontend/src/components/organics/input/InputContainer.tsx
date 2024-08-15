@@ -120,7 +120,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
             ) : (
               <div className='w-full'>
                 <div
-                  className="left-0 [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal]"
+                  className="p-5 [font-family:'Noto_Sans_KR-Medium',Helvetica] font-medium text-[#1f2329] text-2xl tracking-[-2.40px] leading-[normal]"
                   dangerouslySetInnerHTML={{ __html: customText }}
                 />
               </div>
@@ -164,7 +164,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
                 </div>
               </div>
             ) : (
-              <div className='flex flex-col justify-center w-full'>
+              <div className='flex flex-col items-center justify-center w-full'>
                 {/* Textbox */}
                 <Textbox
                   type='large'
@@ -178,7 +178,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
 
                 {/* Large Primary Button */}
                 {showPrimaryButton && (
-                  <div className='flex justify-start w-full'>
+                  <div className='flex justify-center w-full'>
                     <PrimaryButton
                       theme='white'
                       size='large'

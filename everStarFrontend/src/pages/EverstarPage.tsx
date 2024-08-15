@@ -30,7 +30,7 @@ export const EverstarPage: React.FC = () => {
   const params = useParams<{ pet?: string }>();
   const navigate = useNavigate();
   const currentPetId = useSelector(
-    (state: RootState) => state.pet.petDetails?.id,
+    (state: RootState) => state.pet.petDetails?.id
   );
 
   const petId = useMemo(
@@ -39,7 +39,7 @@ export const EverstarPage: React.FC = () => {
         ? parseInt(params.pet, 10)
         : currentPetId ||
           parseInt(sessionStorage.getItem('defaultPetId') || '0', 10),
-    [params.pet, currentPetId],
+    [params.pet, currentPetId]
   );
 
   const { data: petDetails, isLoading: isPetDetailsLoading } =
@@ -64,7 +64,7 @@ export const EverstarPage: React.FC = () => {
 
   if (isPetDetailsLoading || isMemorialBooksLoading || isCheerLoading) {
     return (
-      <div className='relative flex flex-col items-start justify-center min-h-screen-56 bg-center bg-cover'>
+      <div className='relative flex flex-col items-start justify-center bg-center bg-cover min-h-screen-56'>
         <img
           src={bgImage}
           alt='Background'
@@ -103,7 +103,7 @@ export const EverstarPage: React.FC = () => {
         color: item.color.toLowerCase() || '',
         cheeringMessageId: item.cheeringMessageId,
         petId: item.petId,
-      }),
+      })
     ) || [];
 
   const totalPages = Math.ceil(postItCards.length / 10);

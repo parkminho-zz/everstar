@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Rainbow } from 'components/atoms/symbols/Rainbow/Rainbow';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store/Store';
+// import { useSelector } from 'react-redux';
+// import { RootState } from 'store/Store';
 import { LetterCard } from 'components/molecules/cards/LetterCard/LetterCard';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, onMessage } from 'firebase/messaging';
@@ -61,7 +61,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
   fill,
   profileImageUrl,
 }) => {
-  const [quest, setQuest] = useState('');
+  // const [quest, setQuest] = useState('');
 
   const app = initializeApp(firebaseConfig);
   const messaging = getMessaging(app);
@@ -108,12 +108,12 @@ export const EarthMain: React.FC<EarthMainProps> = ({
     console.log(
       'Message received (foreground). : ',
       // payload.notification?.title
-      payload,
+      payload
     );
   });
 
-  const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
-  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
+  // const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
+  // const accessToken = useSelector((state: RootState) => state.auth.accessToken);
 
   const handleLetterCardClick = () => {
     const type = localStorage.getItem('isMessage');
