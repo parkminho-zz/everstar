@@ -1,5 +1,8 @@
 import React from 'react';
-import { InputContainer, InputContainerProps } from 'components/organics/input/InputContainer';
+import {
+  InputContainer,
+  InputContainerProps,
+} from 'components/organics/input/InputContainer';
 import { Glass } from 'components/molecules/Glass/Glass';
 
 interface InteractiveFormProps extends InputContainerProps {
@@ -64,7 +67,7 @@ export const InteractiveForm: React.FC<InteractiveFormProps> = ({
   const customHeaderText = headerText;
   const customLetterCardMessage = letterCardMessage;
   return (
-    <div className='relative flex items-center justify-center min-h-screen'>
+    <div className='relative flex items-center justify-center min-h-screen-56'>
       <Glass
         currentPage={currentPage}
         totalPages={totalPages}

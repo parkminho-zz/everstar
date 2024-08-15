@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 import { useMediaQuery } from 'react-responsive';
 import { Rainbow } from 'components/atoms/symbols/Rainbow/Rainbow';
 import { useSelector } from 'react-redux';
@@ -109,7 +108,7 @@ export const EarthMain: React.FC<EarthMainProps> = ({
     console.log(
       'Message received (foreground). : ',
       // payload.notification?.title
-      payload
+      payload,
     );
   });
 
@@ -151,46 +150,22 @@ export const EarthMain: React.FC<EarthMainProps> = ({
   };
 
   const getRainbowStyle = () => {
+    let style = 'absolute w-full h-full top-0 left-0 ';
+    style += 'pointer-events-none z-[-1]'; // Ensures it's in the background and doesn't affect interactions
+
     if (isMobile) {
-      return 'absolute right-0 bottom-0 w-[375px] h-[667px] mb-48 mr-[-20px] ';
+      style += ' right-0 bottom-0 mb-48 mr-[-20px]';
     } else if (isTabletOrMobile) {
-      return 'absolute left-0 bottom-0 w-[768px] h-[800px] mb-64';
+      style += ' bottom-0 mb-64';
     } else {
-      return 'absolute left-0 bottom-0 w-[1280px] h-[1024px] mb-[-70px]';
+      style += ' bottom-0 mb-[-70px]';
     }
+    return style;
   };
-
-  useEffect(() => {
-    const EventSource = EventSourcePolyfill || NativeEventSource;
-
-    console.log(petId);
-    const eventSource = new EventSource(
-      `https://i11b101.p.ssafy.io/api/earth/connect/${petId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-
-    eventSource.onmessage = (event) => {
-      console.log(event.data);
-      if (event.data.length !== 0 && event.data !== 'dummy') {
-        console.log(event.data);
-        if (quest !== event.data) {
-          setQuest(event.data);
-        }
-      }
-    };
-
-    return () => {
-      eventSource.close();
-    };
-  }, [quest, petId, accessToken]);
 
   return (
     <div>
-      <div className='relative flex flex-col items-center justify-center min-h-screen'>
+      <div className='relative flex flex-col items-start min-h-screen-56 pb-14'>
         <Rainbow className={getRainbowStyle()} color={getColor(fill)} />
         <MainActionComponent
           type='earth'

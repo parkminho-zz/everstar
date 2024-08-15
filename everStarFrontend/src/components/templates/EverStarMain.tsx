@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { useUpdateMemorialBookOpenStatus } from 'hooks/useMemorialBooks';
+import {
+  useFetchMemorialBooks,
+  useUpdateMemorialBookOpenStatus,
+} from 'hooks/useMemorialBooks';
 import { DepressionSurvey } from 'components/organics/DepressionSurvey/DepressionSurvey';
-import { MainActionComponent } from 'components/organics/MainActionComponent/MainActionComponent'; // MainActionComponent 임포트
+import { MainActionComponent } from 'components/organics/MainActionComponent/MainActionComponent';
 import { ProfileModal } from 'components/organics/ProfileModal/ProfileModal';
 import { IntroduceWrite } from 'components/organics/CheerMessage/IntroduceWrite';
+
 interface EverStarMainProps {
   petProfile: {
     name: string;
@@ -22,26 +26,6 @@ interface EverStarMainProps {
     isActive: boolean;
   } | null;
   petId: number;
-  isOwner: boolean; // 새로운 prop 추가
-}
-
-interface EverStarMainProps {
-  petProfile: {
-    name: string;
-    age: number;
-    date: string;
-    description: string;
-    tagList: string[];
-    avatarUrl: string;
-    questIndex: number;
-  } | null;
-  memorialBookProfile: {
-    id: number;
-    psychologicalTestResult: string | null;
-    isOpen: boolean;
-    isActive: boolean;
-  } | null;
-  petId: number;
   isOwner: boolean;
 }
 
@@ -51,19 +35,21 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   petId,
   isOwner,
 }) => {
+  const { data, refetch } = useFetchMemorialBooks(petId); // Fetch memorial book profile
   const [toggleStatus, setToggleStatus] = useState<'on' | 'off' | undefined>(
     memorialBookProfile?.isOpen ? 'on' : 'off'
   );
   const [isModalOpen, setIsModalOpen] = useState(
     petProfile?.questIndex === 50 && !memorialBookProfile?.isActive && isOwner
   );
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const [isIntroduceWriteModalOpen, setIntroduceWriteModalOpen] =
     useState(false);
 
   const { mutate: updateMemorialBookStatus } = useUpdateMemorialBookOpenStatus({
-    onSuccess: (_, variables) => {
-      setToggleStatus(variables.isOpen ? 'on' : 'off');
+    onSuccess: () => {
+      refetch(); // Refetch the memorial book profile after updating the open status
     },
   });
   // const [description, setDescription] = useState(petProfile?.description || '');
@@ -75,9 +61,8 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
 
   const handleSurveySubmitSuccess = () => {
     setIsModalOpen(false);
+    refetch(); // Refetch the memorial book profile after submitting the survey
   };
-
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const handleProfileClick = () => {
     // console.log(description);
@@ -94,11 +79,22 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
     return <div>Loading...</div>;
   }
 
+  const updatedMemorialBookProfile = data?.data || memorialBookProfile;
+
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen'>
-      {isModalOpen && (
-        <DepressionSurvey onSubmitSuccess={handleSurveySubmitSuccess} />
-      )}
+    <div className='flex items-center justify-center flex-grow'>
+      {isModalOpen &&
+        updatedMemorialBookProfile &&
+        !updatedMemorialBookProfile.isActive &&
+        petProfile?.questIndex === 50 &&
+        isOwner && (
+          <div style={{ position: 'relative', zIndex: 1000 }}>
+            <DepressionSurvey
+              onSubmitSuccess={handleSurveySubmitSuccess}
+              memorialBookId={updatedMemorialBookProfile.id} // memorialBookId를 직접 전달
+            />
+          </div>
+        )}
 
       <MainActionComponent
         type='everstar'
@@ -107,14 +103,14 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
         name={petProfile.name}
         age={petProfile.age}
         description={petProfile.description}
-        memorialBookProfile={memorialBookProfile}
+        memorialBookProfile={updatedMemorialBookProfile}
         toggleStatus={toggleStatus}
         onToggleChange={(status) => {
           setToggleStatus(status);
-          if (memorialBookProfile) {
+          if (updatedMemorialBookProfile) {
             updateMemorialBookStatus({
               petId,
-              memorialBookId: memorialBookProfile.id,
+              memorialBookId: updatedMemorialBookProfile.id,
               isOpen: status === 'on',
             });
           }

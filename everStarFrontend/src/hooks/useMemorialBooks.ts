@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useQuery, useMutation, useQueryClient, UseMutationOptions } from '@tanstack/react-query';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  UseMutationOptions,
+} from '@tanstack/react-query';
 import {
   getMemorialBooks,
   getMemorialBookById,
@@ -11,10 +16,17 @@ import {
   updatePsychologicalTestResult,
 } from '../api/memorialBookApi';
 import { RootState } from 'store/Store';
-import { setMemorialBookDetails, setLoading, setError } from 'store/slices/memorialBookSlice';
+import {
+  setMemorialBookDetails,
+  setLoading,
+  setError,
+} from 'store/slices/memorialBookSlice';
 
 // Fetch the memorial book for a given pet and refetch when questIndex changes
-export const useFetchMemorialBooksWithQuest = (petId: number, questIndex: number) => {
+export const useFetchMemorialBooksWithQuest = (
+  petId: number,
+  questIndex: number,
+) => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
 
   return useQuery<{ data: MemorialBookResponse }, Error>({
@@ -46,7 +58,10 @@ export const useFetchMemorialBooks = (petId: number) => {
 };
 
 // Fetch a specific memorial book by its ID
-export const useFetchMemorialBookById = (petId: number, memorialBookId: number) => {
+export const useFetchMemorialBookById = (
+  petId: number,
+  memorialBookId: number,
+) => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const dispatch = useDispatch();
 
@@ -84,7 +99,11 @@ export const useUpdateMemorialBookOpenStatus = (
   const queryClient = useQueryClient();
   const token = useSelector((state: RootState) => state.auth.accessToken);
 
-  return useMutation<void, Error, { petId: number; memorialBookId: number; isOpen: boolean }>({
+  return useMutation<
+    void,
+    Error,
+    { petId: number; memorialBookId: number; isOpen: boolean }
+  >({
     mutationFn: ({ petId, memorialBookId, isOpen }) => {
       if (!token) {
         throw new Error('토큰이 없습니다');
@@ -141,7 +160,14 @@ export const useCreateDiary = (
       if (!token) {
         throw new Error('토큰이 없습니다');
       }
-      return createDiary(petId, memorialBookId, title, content, imageFile, token);
+      return createDiary(
+        petId,
+        memorialBookId,
+        title,
+        content,
+        imageFile,
+        token,
+      );
     },
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
@@ -163,20 +189,29 @@ export const useCreateDiary = (
 
 export const useUpdatePsychologicalTestResult = (
   options?: UseMutationOptions<
-    void,
+    { psychologicalTestResult: string },
     Error,
-    { petId: number; memorialBookId: number; testResult: string }
+    { petId: number; memorialBookId: number; psychologicalTestResult: string }
   >,
 ) => {
   const queryClient = useQueryClient();
   const token = useSelector((state: RootState) => state.auth.accessToken);
 
-  return useMutation<void, Error, { petId: number; memorialBookId: number; testResult: string }>({
-    mutationFn: ({ petId, memorialBookId, testResult }) => {
+  return useMutation<
+    { psychologicalTestResult: string },
+    Error,
+    { petId: number; memorialBookId: number; psychologicalTestResult: string }
+  >({
+    mutationFn: ({ petId, memorialBookId, psychologicalTestResult }) => {
       if (!token) {
         throw new Error('토큰이 없습니다');
       }
-      return updatePsychologicalTestResult(petId, memorialBookId, testResult, token);
+      return updatePsychologicalTestResult(
+        petId,
+        memorialBookId,
+        psychologicalTestResult,
+        token,
+      );
     },
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({

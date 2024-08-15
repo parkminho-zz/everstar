@@ -30,10 +30,7 @@ module.exports = {
         'eng-h-h3': ['var(--eng-h-h3-font-family)', 'Helvetica'],
         'eng-p-p1': ['var(--eng-p-p1-font-family)', 'Helvetica'],
         'eng-p-p2': ['var(--eng-p-p2-font-family)', 'Helvetica'],
-        'eng-subtitle-subtitle3': [
-          'var(--eng-subtitle-subtitle3-font-family)',
-          'Helvetica',
-        ],
+        'eng-subtitle-subtitle3': ['var(--eng-subtitle-subtitle3-font-family)', 'Helvetica'],
         'kor-body-body1': ['var(--kor-body-body1-font-family)', 'Helvetica'],
         'kor-body-body2': ['var(--kor-body-body2-font-family)', 'Helvetica'],
         'kor-h-h1': ['var(--kor-h-h1-font-family)', 'Helvetica'],
@@ -43,18 +40,9 @@ module.exports = {
         'kor-p-p2': ['var(--kor-p-p2-font-family)', 'Helvetica'],
         'kor-p-p3': ['var(--kor-p-p3-font-family)', 'Helvetica'],
         'kor-p-p4': ['var(--kor-p-p4-font-family)', 'Helvetica'],
-        'kor-subtitle-subtitle1': [
-          'var(--kor-subtitle-subtitle1-font-family)',
-          'Helvetica',
-        ],
-        'kor-subtitle-subtitle2': [
-          'var(--kor-subtitle-subtitle2-font-family)',
-          'Helvetica',
-        ],
-        'kor-subtitle-subtitle3': [
-          'var(--kor-subtitle-subtitle3-font-family)',
-          'Helvetica',
-        ],
+        'kor-subtitle-subtitle1': ['var(--kor-subtitle-subtitle1-font-family)', 'Helvetica'],
+        'kor-subtitle-subtitle2': ['var(--kor-subtitle-subtitle2-font-family)', 'Helvetica'],
+        'kor-subtitle-subtitle3': ['var(--kor-subtitle-subtitle3-font-family)', 'Helvetica'],
       },
       fontSize: {
         'kor-h-h1': [
@@ -198,6 +186,9 @@ module.exports = {
         focus: 'var(--focus)',
         large: 'var(--large)',
         small: 'var(--small)',
+      },
+      minHeight: {
+        'screen-56': 'calc(100vh - 56px)', // 여기에 추가
       },
     },
     fontFamily: {

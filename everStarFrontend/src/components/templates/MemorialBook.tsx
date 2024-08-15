@@ -17,14 +17,17 @@ const parseMemorialBookData = (
   data: MemorialBookDetailsResponse,
   avatarUrl: string | undefined,
 ): PageType[] => {
+  console.log(data);
   const { quests, questAnswers, aiAnswers, diaries, sentimentAnalysis, pet } = data;
   const pages: PageType[] = [];
 
+  // 커버 페이지 추가
   pages.push({
     type: 'cover',
-    src: avatarUrl,
+    src: avatarUrl || pet.profileImageUrl,
   });
 
+  // 감정 분석 차트 페이지 추가
   const sentimentResults = [
     sentimentAnalysis.week1Result,
     sentimentAnalysis.week2Result,
@@ -42,41 +45,39 @@ const parseMemorialBookData = (
     scores: sentimentResults,
   });
 
+  // 퀘스트와 AI 답변을 포함한 페이지 추가
   quests.forEach((quest) => {
     const questAnswer = questAnswers.find((answer) => answer.questId === quest.id);
     const aiAnswer = aiAnswers.find((answer) => answer.questId === quest.id);
 
-    if (quest.type === 'TEXT' && questAnswer && aiAnswer) {
+    if (quest.type === 'TEXT') {
       pages.push({
         type: 'question',
         question: quest.content,
-        myAnswer: questAnswer.content,
+        myAnswer: questAnswer?.content || '',
         petName: pet.name,
-        petAnswer: aiAnswer.content,
+        petAnswer: aiAnswer?.content || '',
       });
-    } else if (
-      (quest.type === 'TEXT_IMAGE' || quest.type === 'WEBRTC') &&
-      questAnswer &&
-      aiAnswer
-    ) {
+    } else if (quest.type === 'TEXT_IMAGE' || quest.type === 'WEBRTC') {
       pages.push({
         type: 'imageQuestion',
         question: quest.content,
         petName: pet.name,
-        myImage: questAnswer.imageUrl,
-        myAnswer: questAnswer.content,
-        petImage: aiAnswer.imageUrl,
-        petAnswer: aiAnswer.content,
+        myImage: questAnswer?.imageUrl || '',
+        myAnswer: questAnswer?.content || '',
+        petImage: aiAnswer?.imageUrl || '',
+        petAnswer: aiAnswer?.content || '',
       });
     }
   });
 
+  // 다이어리 페이지 추가
   diaries.forEach((diary) => {
     pages.push({
       type: 'diary',
       title: diary.title,
       content: diary.content,
-      imageUrl: diary.imageUrl,
+      imageUrl: diary.imageUrl || '',
     });
   });
 
@@ -112,13 +113,12 @@ export const MemorialBook: React.FC<{ avatarUrl?: string; isOwner?: boolean }> =
     data: memorialBookDetails,
     isLoading,
     refetch,
-  } = useFetchMemorialBookById(petId, memorialBookId); // refetch 추가
+  } = useFetchMemorialBookById(petId, memorialBookId);
 
   const [pages, setPages] = useState<PageType[]>([]);
   const [isDiaryModalOpen, setIsDiaryModalOpen] = useState(false);
-  const [isDiaryUpdated, setIsDiaryUpdated] = useState(false); // 새로운 상태 추가
+  const [isDiaryUpdated, setIsDiaryUpdated] = useState(false);
 
-  // 새로운 useEffect 추가: avatarUrl이 변경될 때 강제로 리렌더링
   useEffect(() => {
     if (memorialBookDetails) {
       const parsedPages = parseMemorialBookData(memorialBookDetails.data, avatarUrl);
@@ -126,12 +126,11 @@ export const MemorialBook: React.FC<{ avatarUrl?: string; isOwner?: boolean }> =
     }
   }, [memorialBookDetails, avatarUrl]);
 
-  // diary 업데이트 감지
   useEffect(() => {
     if (isDiaryUpdated) {
-      refetch(); // 데이터 다시 불러오기
+      refetch();
       alert('저장이 완료되었어요.');
-      setIsDiaryUpdated(false); // 상태 초기화
+      setIsDiaryUpdated(false);
     }
   }, [isDiaryUpdated, refetch]);
 
@@ -181,7 +180,7 @@ export const MemorialBook: React.FC<{ avatarUrl?: string; isOwner?: boolean }> =
 
   if (isLoading) {
     return (
-      <div className="relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]">
+      <div className="relative flex flex-col items-start min-h-screen bg-center bg-cover z-[-1]">
         <img
           src={bgImage}
           alt="Background"
@@ -196,13 +195,14 @@ export const MemorialBook: React.FC<{ avatarUrl?: string; isOwner?: boolean }> =
       </div>
     );
   }
+
   return (
     <div>
       <div className="relative z-10 my-4" ref={memorialBookRef}>
         <OrganicsMemorialBook pages={pages} />
       </div>
       <div className="relative z-10 flex justify-center m-4 space-x-4">
-        {isOwner && ( // isOwner가 true일 때만 버튼들 표시
+        {isOwner && (
           <>
             <PrimaryButton
               theme="white"
@@ -229,7 +229,7 @@ export const MemorialBook: React.FC<{ avatarUrl?: string; isOwner?: boolean }> =
       <MemorialBookDiaryModal
         isOpen={isDiaryModalOpen}
         onClose={handleCloseDiaryModal}
-        onSuccess={() => setIsDiaryUpdated(true)} // 일기 작성 후 상태 업데이트
+        onSuccess={() => setIsDiaryUpdated(true)}
       />
     </div>
   );

@@ -155,6 +155,7 @@ export const QuestOpenviduTemplate: React.FC = () => {
     if (questid === '24' || questid === '34' || questid === '38') {
       const sessionId = await getOpenVidu();
       sessionStorage.setItem(`didOpenvidu${questid}`, 'true');
+      //window.open(`https://i11b101.p.ssafy.io/openvidu/sessionid/${sessionId}`)
       navigate(`/openvidu/sessionid/${sessionId}`);
     } else if (questid === '31') {
       //퍼즐생성
@@ -176,7 +177,7 @@ export const QuestOpenviduTemplate: React.FC = () => {
   // 로딩 중이거나 퀘스트 데이터가 없으면 로딩 스피너 또는 빈 화면을 보여줌
   if (loading) {
     return (
-      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+      <div className='relative flex flex-col items-start min-h-screen bg-center bg-cover z-[-1]'>
         <img
           src={bgImage}
           alt='Background'

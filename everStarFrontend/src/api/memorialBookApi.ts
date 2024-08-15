@@ -108,13 +108,16 @@ export const getMemorialBooks = async (
   token: string,
 ): Promise<{ data: MemorialBookResponse }> => {
   // 수정된 부분
-  const response = await fetch(`${config.API_BASE_URL}/api/pets/${petId}/memorialbooks`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8',
-      Authorization: `Bearer ${token}`,
+  const response = await fetch(
+    `${config.API_BASE_URL}/api/pets/${petId}/memorialbooks`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `Bearer ${token}`,
+      },
     },
-  });
+  );
 
   if (!response.ok) {
     const errorResponse = await response.json();
@@ -210,16 +213,19 @@ export const createDiary = async (
 
   if (!response.ok) {
     const errorResponse = await response.json();
-    throw new Error(errorResponse.message || 'An error occurred while creating the diary entry');
+    throw new Error(
+      errorResponse.message ||
+        'An error occurred while creating the diary entry',
+    );
   }
 };
 
 export const updatePsychologicalTestResult = async (
   petId: number,
   memorialBookId: number,
-  testResult: string,
+  psychologicalTestResult: string, // 수정된 필드명
   token: string,
-): Promise<void> => {
+): Promise<{ psychologicalTestResult: string }> => {
   const response = await fetch(
     `${config.API_BASE_URL}/api/pets/${petId}/memorialbooks/${memorialBookId}/psychological-test`,
     {
@@ -228,14 +234,17 @@ export const updatePsychologicalTestResult = async (
         'Content-Type': 'application/json;charset=UTF-8',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ testResult }),
+      body: JSON.stringify({ psychologicalTestResult }), // 수정된 필드명
     },
   );
 
   if (!response.ok) {
     const errorResponse = await response.json();
     throw new Error(
-      errorResponse.message || 'An error occurred while updating the psychological test result',
+      errorResponse.message ||
+        'An error occurred while updating the psychological test result',
     );
   }
+
+  return response.json(); // JSON 응답 반환
 };

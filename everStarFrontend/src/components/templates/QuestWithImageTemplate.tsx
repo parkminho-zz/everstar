@@ -130,7 +130,7 @@ export const QuestWithImageTemplate = () => {
 
   if (loading) {
     return (
-      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+      <div className='relative flex flex-col items-start min-h-screen bg-center bg-cover z-[-1]'>
         <img
           src={bgImage}
           alt='Background'

@@ -50,10 +50,10 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
   // 로딩 및 오류 상태 처리
   if (isLoading) {
     return (
-      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
+      <div className="relative flex flex-col items-start min-h-screen-56 bg-center bg-cover z-[-1]">
         <img
           src={bgImage}
-          alt='Background'
+          alt="Background"
           style={{
             position: 'absolute',
             width: '100%',
@@ -61,10 +61,7 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
             objectFit: 'cover',
           }}
         />
-        <SplashTemplate
-          type='LetterBoxRocket'
-          className='z-10 w-full h-full '
-        />
+        <SplashTemplate type="LetterBoxRocket" className="z-10 w-full h-full " />
       </div>
     );
   }
@@ -84,12 +81,9 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
         color: 'white',
         state: item.isRead ? 'received' : 'notReceived',
         name: item.petName,
-        sendMessage:
-          item.content.length > 10
-            ? item.content.slice(0, 10) + '...'
-            : item.content, // 10글자 초과 시 '...' 추가
+        sendMessage: item.content.length > 10 ? item.content.slice(0, 10) + '...' : item.content, // 10글자 초과 시 '...' 추가
         dateTime: new Date(item.createAt).toLocaleString(),
-      })
+      }),
     ) || [];
   const letterLength = petLetters.length;
   const letterTotalPage = Math.floor(letterLength / itemPage) + 1;
@@ -99,19 +93,19 @@ const LetterBoxTemplate: React.FC<LetterBoxTemplateProps> = ({
   };
 
   return (
-    <div className='relative flex flex-col items-center '>
-      <div className='absolute inset-0 flex items-center justify-center'>
+    <div className="relative flex flex-col items-center ">
+      <div className="absolute inset-0 flex items-center justify-center">
         <Glass
           currentPage={currentPage}
           totalPages={letterTotalPage}
           onPageChange={onPageChange}
           showPageIndicator={true}
-          className='flex flex-col w-full h-[111%] sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5'
+          className="flex flex-col w-full h-[111%] sm:w-4/5 md:w-3/5 lg:w-2/5 sm:h-4/5"
         />
       </div>
-      <div className='relative z-10 flex flex-col items-center w-full h-full max-w-5xl p-10 pt-20 overflow-visible sm:p-8'>
+      <div className="relative z-10 flex flex-col items-center w-full h-full max-w-5xl p-10 pt-20 overflow-visible sm:p-8">
         <ModalHeader text={headerText} onLeftIconClick={() => navigate(-1)} />
-        <div className='flex flex-col items-center w-full mt-9 sm:mt-20'>
+        <div className="flex flex-col items-center w-full mt-9 sm:mt-20">
           <LetterBox
             letters={petLetters}
             onLetterClick={handleLetterClick}

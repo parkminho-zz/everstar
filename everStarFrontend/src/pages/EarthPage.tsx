@@ -3,7 +3,10 @@ import { Routes, Route } from 'react-router-dom';
 import { EarthMain } from 'components/templates/EarthMain';
 import { LetterBoxTemplate } from 'components/templates/LetterBoxTemplate';
 import { Footer } from 'components/molecules/Footer/Footer';
-import { LetterColor, LetterState } from 'components/molecules/cards/LetterCard/LetterCard';
+import {
+  LetterColor,
+  LetterState,
+} from 'components/molecules/cards/LetterCard/LetterCard';
 import { LetterDetailTemplate } from 'components/templates/LetterDetailTemplate';
 import { LetterWriteTemplate } from 'components/templates/LetterWriteTemplate';
 import { QuestRouter } from 'components/templates/QuestRouter';
@@ -97,7 +100,7 @@ export const EarthPage: React.FC = () => {
   const totalPages = Math.ceil(generateLargeLetterData(50).length / 9);
 
   return (
-    <div className='relative flex flex-col w-full min-h-screen overflow-hidden'>
+    <div className='relative flex flex-col w-full overflow-hidden min-h-screen'>
       {/* Background Image */}
       <div
         className='absolute top-0 left-0 w-full h-full bg-center bg-cover z-[-1]'

@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // useNavigate 추가
 import { SignUpForm } from 'components/organics/SignUpForm/SignUpForm';
 import { PhoneNumberModal } from 'components/organics/PhoneNumberModal/PhoneNumberModal';
-import { useSendVerificationCode, useVerifyAuthCode, useJoinUser } from 'hooks/useAuth';
+import {
+  useSendVerificationCode,
+  useVerifyAuthCode,
+  useJoinUser,
+} from 'hooks/useAuth';
 
 interface UserInfo {
   email: string;
@@ -36,7 +40,7 @@ export const SignUp: React.FC = () => {
     userName: string,
     birthDate: string,
     gender: string,
-    questReceptionTime: string,
+    questReceptionTime: string
   ) => {
     setPhone(phoneNumber);
     setFormData({
@@ -97,17 +101,17 @@ export const SignUp: React.FC = () => {
             alert('잘못된 인증번호입니다. 다시 확인해주세요.');
           }
         },
-      },
+      }
     );
   };
 
   return (
-    <div className="flex items-center justify-center flex-grow">
+    <div className='flex items-center justify-center flex-grow'>
       <SignUpForm
-        headerText="회원가입"
-        smallButtonText=""
+        headerText='회원가입'
+        smallButtonText=''
         showPrimaryButton={true}
-        text="회원가입을 위해 정보를 입력해주세요."
+        text='회원가입을 위해 정보를 입력해주세요.'
         onButtonClick={handleSignUpButtonClick}
       />
       <PhoneNumberModal
@@ -115,7 +119,7 @@ export const SignUp: React.FC = () => {
         onClose={handleCloseModal}
         onResend={handleResend}
         onVerify={handleVerifyAndJoin}
-        text="인증번호를 <br /> 입력해 주세요"
+        text='인증번호를 <br /> 입력해 주세요'
       />
     </div>
   );
