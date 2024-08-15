@@ -11,7 +11,15 @@ import { Modal } from 'components/molecules/Modal/Modal';
 import { MainActionComponent } from 'components/organics/MainActionComponent/MainActionComponent';
 
 type ViewMemorialBookSize = 'large' | 'medium' | 'small';
-type RainbowColor = 'none' | 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'indigo' | 'violet';
+type RainbowColor =
+  | 'none'
+  | 'red'
+  | 'orange'
+  | 'yellow'
+  | 'green'
+  | 'blue'
+  | 'indigo'
+  | 'violet';
 
 interface EarthMainProps {
   title: string;
@@ -49,7 +57,10 @@ const getColor = (fill: number): RainbowColor => {
   return 'none';
 };
 
-export const EarthMain: React.FC<EarthMainProps> = ({ fill, profileImageUrl }) => {
+export const EarthMain: React.FC<EarthMainProps> = ({
+  fill,
+  profileImageUrl,
+}) => {
   const [quest, setQuest] = useState('');
 
   const app = initializeApp(firebaseConfig);
@@ -139,21 +150,25 @@ export const EarthMain: React.FC<EarthMainProps> = ({ fill, profileImageUrl }) =
   };
 
   const getRainbowStyle = () => {
+    let style = 'absolute w-full h-full top-0 left-0 ';
+    style += 'pointer-events-none z-[-1]'; // Ensures it's in the background and doesn't affect interactions
+
     if (isMobile) {
-      return 'absolute right-0 bottom-0 w-[375px] h-[667px] mb-48 mr-[-20px] ';
+      style += ' right-0 bottom-0 mb-48 mr-[-20px]';
     } else if (isTabletOrMobile) {
-      return 'absolute left-0 bottom-0 w-[768px] h-[800px] mb-64';
+      style += ' bottom-0 mb-64';
     } else {
-      return 'absolute left-0 bottom-0 w-[1280px] h-[1024px] mb-[-70px]';
+      style += ' bottom-0 mb-[-70px]';
     }
+    return style;
   };
 
   return (
     <div>
-      <div className="relative flex flex-col items-start min-h-screen-56">
+      <div className='relative flex flex-col items-start min-h-screen-56 pb-14'>
         <Rainbow className={getRainbowStyle()} color={getColor(fill)} />
         <MainActionComponent
-          type="earth"
+          type='earth'
           fill={fill}
           profileImageUrl={profileImageUrl}
           onToggleChange={undefined}
@@ -163,15 +178,15 @@ export const EarthMain: React.FC<EarthMainProps> = ({ fill, profileImageUrl }) =
           description={''}
         />
       </div>
-      <div className="fixed z-50 left-10 bottom-20">
+      <div className='fixed z-50 left-10 bottom-20'>
         <LetterCard
-          type="receive"
-          color="white"
-          state="received"
-          name="알림"
+          type='receive'
+          color='white'
+          state='received'
+          name='알림'
           message={letterMessage}
-          dateTime=""
-          className="h-3"
+          dateTime=''
+          className='h-3'
           centered={true}
           visible={letterCardVisible}
           onClick={handleLetterCardClick}
@@ -181,11 +196,11 @@ export const EarthMain: React.FC<EarthMainProps> = ({ fill, profileImageUrl }) =
         <Modal
           isOpen={modalState}
           onClose={Modalclose}
-          text="깜짝 선물"
-          className="flex flex-col items-center justify-center"
+          text='깜짝 선물'
+          className='flex flex-col items-center justify-center'
         >
-          <img src={giftAddress} alt="Description" />
-          <div className="mt-10 text-2xl">
+          <img src={giftAddress} alt='Description' />
+          <div className='mt-10 text-2xl'>
             한번밖에 볼 수 없어요! <br />
             추후 메모리얼북이 완성 시 <br />
             확인 가능해요!

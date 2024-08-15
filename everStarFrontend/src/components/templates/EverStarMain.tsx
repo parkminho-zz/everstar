@@ -80,11 +80,13 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   }
 
   return (
-    <div className="relative flex flex-col items-start min-h-screen-56">
-      {isModalOpen && <DepressionSurvey onSubmitSuccess={handleSurveySubmitSuccess} />}
+    <div className='flex items-center justify-center flex-grow pb-14'>
+      {isModalOpen && (
+        <DepressionSurvey onSubmitSuccess={handleSurveySubmitSuccess} />
+      )}
 
       <MainActionComponent
-        type="everstar"
+        type='everstar'
         profileImageUrl={petProfile.avatarUrl}
         fill={petProfile.questIndex}
         name={petProfile.name}

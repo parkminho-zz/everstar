@@ -3,7 +3,10 @@ import { Routes, Route } from 'react-router-dom';
 import { EarthMain } from 'components/templates/EarthMain';
 import { LetterBoxTemplate } from 'components/templates/LetterBoxTemplate';
 import { Footer } from 'components/molecules/Footer/Footer';
-import { LetterColor, LetterState } from 'components/molecules/cards/LetterCard/LetterCard';
+import {
+  LetterColor,
+  LetterState,
+} from 'components/molecules/cards/LetterCard/LetterCard';
 import { LetterDetailTemplate } from 'components/templates/LetterDetailTemplate';
 import { LetterWriteTemplate } from 'components/templates/LetterWriteTemplate';
 import { QuestRouter } from 'components/templates/QuestRouter';
@@ -52,10 +55,10 @@ export const EarthPage: React.FC = () => {
 
   if (isPetDetailsLoading) {
     return (
-      <div className="relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]">
+      <div className='relative flex flex-col items-center justify-center min-h-screen bg-center bg-cover z-[-1]'>
         <img
           src={bgImage}
-          alt="Background"
+          alt='Background'
           style={{
             position: 'absolute',
             width: '100%',
@@ -63,7 +66,7 @@ export const EarthPage: React.FC = () => {
             objectFit: 'cover',
           }}
         />
-        <SplashTemplate type="earthPage" className="z-10 w-full h-full " />
+        <SplashTemplate type='earthPage' className='z-10 w-full h-full ' />
       </div>
     );
   }
@@ -97,10 +100,10 @@ export const EarthPage: React.FC = () => {
   const totalPages = Math.ceil(generateLargeLetterData(50).length / 9);
 
   return (
-    <div className="relative flex flex-col w-full overflow-hidden min-h-screen-56">
+    <div className='relative flex flex-col w-full overflow-hidden min-h-screen'>
       {/* Background Image */}
       <div
-        className="absolute top-0 left-0 w-full h-full bg-center bg-cover z-[-1]"
+        className='absolute top-0 left-0 w-full h-full bg-center bg-cover z-[-1]'
         style={{
           backgroundImage: `url(${bgImage})`,
           backgroundSize: 'cover',
@@ -108,10 +111,10 @@ export const EarthPage: React.FC = () => {
           backgroundRepeat: 'no-repeat',
         }}
       ></div>
-      <div className="z-10 flex-grow">
+      <div className='z-10 flex-grow'>
         <Routes>
           <Route
-            path="/"
+            path='/'
             element={
               <PrivateRoute>
                 <PetDetailsRoute>
@@ -119,10 +122,10 @@ export const EarthPage: React.FC = () => {
                     title={petDetails.name}
                     fill={petProfile.questIndex}
                     profileImageUrl={petProfile.avatarUrl}
-                    buttonSize="large"
+                    buttonSize='large'
                     buttonDisabled={false}
-                    buttonText="영원별로 이동"
-                    buttonIcon="SmallStarImg"
+                    buttonText='영원별로 이동'
+                    buttonIcon='SmallStarImg'
                     onButtonClick={() => console.log('영원별 이동')}
                   />
                 </PetDetailsRoute>
@@ -131,7 +134,7 @@ export const EarthPage: React.FC = () => {
           />
 
           <Route
-            path="letterbox"
+            path='letterbox'
             element={
               <PrivateRoute>
                 <PetDetailsRoute>
@@ -140,7 +143,7 @@ export const EarthPage: React.FC = () => {
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={handlePageChange}
-                    headerText="편지함"
+                    headerText='편지함'
                   />
                 </PetDetailsRoute>
               </PrivateRoute>
@@ -148,7 +151,7 @@ export const EarthPage: React.FC = () => {
           />
 
           <Route
-            path="letter"
+            path='letter'
             element={
               <PrivateRoute>
                 <PetDetailsRoute>
@@ -159,7 +162,7 @@ export const EarthPage: React.FC = () => {
           />
 
           <Route
-            path="letter/:id"
+            path='letter/:id'
             element={
               <PrivateRoute>
                 <PetDetailsRoute>
@@ -170,7 +173,7 @@ export const EarthPage: React.FC = () => {
           />
 
           <Route
-            path="quest/:questid"
+            path='quest/:questid'
             element={
               <PrivateRoute>
                 <PetDetailsRoute>
@@ -181,11 +184,11 @@ export const EarthPage: React.FC = () => {
           />
 
           {/* 보호되지 않은 경로들 */}
-          <Route path="openvidu/:questid" element={<QuestOpenviduTemplate />} />
-          <Route path="puzzle" element={<QuestPuzzle />} />
+          <Route path='openvidu/:questid' element={<QuestOpenviduTemplate />} />
+          <Route path='puzzle' element={<QuestPuzzle />} />
         </Routes>
       </div>
-      <Footer className="fixed bottom-0 left-0 z-10 w-full" />
+      <Footer className='fixed bottom-0 left-0 z-10 w-full' />
     </div>
   );
 };
