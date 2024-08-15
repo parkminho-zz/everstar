@@ -26,26 +26,14 @@ interface PetProfile {
 export const EverstarPage: React.FC = () => {
   const params = useParams<{ pet?: string }>();
   const navigate = useNavigate();
-<<<<<<< HEAD
   const currentPetId = useSelector((state: RootState) => state.pet.petDetails?.id);
-=======
-  const currentPetId = useSelector(
-    (state: RootState) => state.pet.petDetails?.id
-  );
->>>>>>> 2e887359346161d360692084234e871cbe70d183
 
   const petId = useMemo(
     () =>
       params.pet
         ? parseInt(params.pet, 10)
-<<<<<<< HEAD
         : currentPetId || parseInt(sessionStorage.getItem('defaultPetId') || '0', 10),
     [params.pet, currentPetId],
-=======
-        : currentPetId ||
-          parseInt(sessionStorage.getItem('defaultPetId') || '0', 10),
-    [params.pet, currentPetId]
->>>>>>> 2e887359346161d360692084234e871cbe70d183
   );
 
   const { data: petDetails, isLoading: isPetDetailsLoading } = useFetchOtherPetDetails(petId);
@@ -71,11 +59,7 @@ export const EverstarPage: React.FC = () => {
 
   if (isPetDetailsLoading || isMemorialBooksLoading || isCheerLoading) {
     return (
-<<<<<<< HEAD
       <div className="relative flex flex-col items-start justify-center bg-center bg-cover min-h-screen-56">
-=======
-      <div className='relative flex flex-col items-start justify-center bg-center bg-cover min-h-screen-56'>
->>>>>>> 2e887359346161d360692084234e871cbe70d183
         <img
           src={bgImage}
           alt="Background"
@@ -114,7 +98,7 @@ export const EverstarPage: React.FC = () => {
         color: item.color.toLowerCase() || '',
         cheeringMessageId: item.cheeringMessageId,
         petId: item.petId,
-      })
+      }),
     ) || [];
 
   const totalPages = Math.ceil(postItCards.length / 10);
