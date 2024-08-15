@@ -105,7 +105,7 @@ public class RequestAiAnswerEventListener {
 		QuestAnswer questAnswer = event.getQuestAnswer();
 		String imageUrl = event.getImageUrl();
 
-		String encodedAiAnswerResponse = openAiClient.writePetTextImageToImageAnswer(questAnswer, imageUrl);
+		String encodedAiAnswerResponse = openAiClient.writePetTextImageToImageAnswer(quest, questAnswer, imageUrl);
 		String uploadedImageUrl = s3UploadUtil.uploadS3ByEncodedFile(encodedAiAnswerResponse);
 		AiAnswer aiAnswer = AiAnswer.createAiAnswer(pet, quest,
 			CreateAiAnswerRequestDto.createImageAiAnswerRequestDto(uploadedImageUrl,
