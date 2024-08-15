@@ -64,7 +64,7 @@ public class MemorialBook {
 	}
 
 	public void changeActiveStatus() {
-		isActive = !isActive;
+		isActive = true;
 	}
 
 	public void changeTestStatus() {
