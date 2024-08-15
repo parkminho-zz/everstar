@@ -13,20 +13,29 @@ export const LetterDetailTemplate: React.FC = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
   const letterid = useParams();
-  const { data: letterData, isLoading, isError } = useFetchLetterPetDetail(Number(letterid.id));
+  const {
+    data: letterData,
+    isLoading,
+    isError,
+  } = useFetchLetterPetDetail(Number(letterid.id));
 
-  const [letterCardType, setLetterCardType] = useState<'receive' | 'default' | 'send'>('receive');
-  const [primaryButtonDisabled, setPrimaryButtonDisabled] = useState<boolean>(true);
+  const [letterCardType, setLetterCardType] = useState<
+    'receive' | 'default' | 'send'
+  >('receive');
+  const [primaryButtonDisabled, setPrimaryButtonDisabled] =
+    useState<boolean>(true);
 
   const navigate = useNavigate();
   const petName = useSelector((state: RootState) => state.pet.petDetails?.name);
 
-  const { mutate: letterPost } = useFetchLetterRePost(token, Number(petId), Number(letterid.id));
+  const { mutate: letterPost } = useFetchLetterRePost(
+    token,
+    Number(petId),
+    Number(letterid.id)
+  );
 
   useEffect(() => {
     if (letterData && letterData.data) {
-      console.log('letterData:', letterData);
-
       if (letterData.data.userLetter.petName === '') {
         setLetterCardType('send');
         setPrimaryButtonDisabled(false);
@@ -35,18 +44,15 @@ export const LetterDetailTemplate: React.FC = () => {
         setLetterCardType('receive');
         setPrimaryButtonDisabled(true);
       }
-
-      console.log('letterCardType:', letterCardType);
-      console.log('primaryButtonDisabled:', primaryButtonDisabled);
     }
   }, [letterData, petName]); // letterData 또는 petName이 변경될 때만 useEffect 실행
 
   if (isLoading) {
     return (
-      <div className="relative flex flex-col items-start min-h-screen bg-center bg-cover z-[-1]">
+      <div className='relative flex flex-col items-start min-h-screen bg-center bg-cover z-[-1]'>
         <img
           src={bgImage}
-          alt="Background"
+          alt='Background'
           style={{
             position: 'absolute',
             width: '100%',
@@ -54,7 +60,10 @@ export const LetterDetailTemplate: React.FC = () => {
             objectFit: 'cover',
           }}
         />
-        <SplashTemplate type="LetterBoxRocket" className="z-10 w-full h-full " />
+        <SplashTemplate
+          type='LetterBoxRocket'
+          className='z-10 w-full h-full '
+        />
       </div>
     );
   }
@@ -93,8 +102,6 @@ export const LetterDetailTemplate: React.FC = () => {
         const emptyFile = new File([new Blob()], '', { type: 'image/jpeg' });
         formData.append('image', emptyFile);
       }
-      console.log('requestDto: ', formData.get('requestDto'));
-      console.log('image: : ', formData.get('image'));
       // formData를 사용하여 letterPost 호출
       letterPost(formData, {
         onSuccess: (data) => {
@@ -119,26 +126,26 @@ export const LetterDetailTemplate: React.FC = () => {
     setImage(file);
   };
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="w-full h-full">
+    <div className='flex flex-col min-h-screen'>
+      <div className='w-full h-full'>
         <InteractiveForm
           currentPage={1}
           totalPages={1}
           onPageChange={(newPage) => console.log(`Page changed to ${newPage}`)}
-          headerText="편지 자세히 보기"
+          headerText='편지 자세히 보기'
           letterCardType={letterCardType}
-          letterCardColor="bgorange"
-          letterCardState="received"
+          letterCardColor='bgorange'
+          letterCardState='received'
           letterCardMessage={letterData.data.petLetter.content}
-          letterCardClassName=""
+          letterCardClassName=''
           centered={true}
-          textboxLabel="내용"
-          largeButtonText="이미지 추가"
-          smallButtonText="답장하기"
+          textboxLabel='내용'
+          largeButtonText='이미지 추가'
+          smallButtonText='답장하기'
           showPrimaryButton={true}
-          customText=""
+          customText=''
           petName={letterData.data.userLetter.petName}
-          myName="나"
+          myName='나'
           myMessage={letterData.data.userLetter.content}
           dateTime={letterData.data.userLetter.createAt}
           onLeftIconClick={handleBackButtonClick}
@@ -150,9 +157,9 @@ export const LetterDetailTemplate: React.FC = () => {
           value={text}
         />
         <input
-          type="file"
-          id="photoInput"
-          accept="image/*"
+          type='file'
+          id='photoInput'
+          accept='image/*'
           onChange={handleImageChange}
           style={{ display: 'none' }}
         />

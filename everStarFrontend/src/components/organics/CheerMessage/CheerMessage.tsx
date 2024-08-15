@@ -89,7 +89,6 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
     petId: number;
     cheeringMessageId: number;
   }) => {
-    console.log(formData);
     createCheeringPet(formData, {
       onSuccess: (data) => {
         const newPostItCard = {

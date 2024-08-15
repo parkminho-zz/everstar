@@ -22,13 +22,11 @@ export const fetchLetterRePost = async (
     }
   );
 
-  console.log('Response status:', response.status);
   if (!response.ok) {
     throw new Error('편지 보내기에 실패했습니다');
   }
 
   const result = await response.json();
-  console.log('post letter response:', result);
   return result;
 };
 
@@ -48,13 +46,11 @@ export const fetchLetterPost = async (
     }
   );
 
-  console.log('Response status:', response.status);
   if (!response.ok) {
     throw new Error('편지 보내기에 실패했습니다');
   }
 
   const result = await response.json();
-  console.log('post letter response:', result);
   return result;
 };
 
@@ -69,13 +65,11 @@ export const fetchLetterPet = async (petId: number, token: string) => {
     }
   );
 
-  console.log('Response status:', response.status);
   if (!response.ok) {
     throw new Error('편지 정보를 가져오는 데 실패했습니다');
   }
 
   const result = await response.json();
-  console.log('Fetched pet letters:', result);
 
   return result;
 };
@@ -95,13 +89,11 @@ export const fetchLetterPetDetail = async (
     }
   );
 
-  console.log('Response status:', response.status);
   if (!response.ok) {
     throw new Error('편지 정보를 가져오는 데 실패했습니다');
   }
 
   const result = await response.json();
-  console.log('Fetched pet letters:', result);
 
   return result;
 };

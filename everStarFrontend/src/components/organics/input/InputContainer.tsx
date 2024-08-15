@@ -126,7 +126,7 @@ export const InputContainer: React.FC<InputContainerProps> = ({
               </div>
             )}
           </div>
-          <div className='flex flex-col items-start w-full'>
+          <div className='flex flex-col items-center w-full'>
             {isRtc && (
               <PrimaryButton
                 theme='white'

@@ -112,12 +112,6 @@ export const EarthMain: React.FC<EarthMainProps> = ({
       default:
         return;
     }
-
-    console.log(
-      'Message received (foreground). : ',
-      // payload.notification?.title
-      payload
-    );
   });
 
   // const petId = useSelector((state: RootState) => state.pet.petDetails?.id);

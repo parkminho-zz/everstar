@@ -164,7 +164,6 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
   useEffect(() => {
     const EventSource = EventSourcePolyfill || NativeEventSource;
 
-    console.log(petId);
     const eventSource = new EventSource(
       `https://i11b101.p.ssafy.io/api/earth/connect/${petId}`,
       {
@@ -175,9 +174,7 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
     );
 
     eventSource.onmessage = (event) => {
-      console.log(event.data);
       if (event.data.length !== 0 && event.data !== 'dummy') {
-        console.log(event.data);
         if (quest !== event.data) {
           setQuest(event.data);
         }

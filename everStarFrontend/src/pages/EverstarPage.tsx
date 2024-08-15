@@ -88,7 +88,6 @@ export const EverstarPage: React.FC = () => {
     avatarUrl: petDetails.profileImageUrl,
     questIndex: petDetails.questIndex,
   };
-
   const postItCards =
     cheerData?.data?.content?.map(
       (item: {
