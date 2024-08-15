@@ -37,6 +37,8 @@ public class QPet extends EntityPathBase<Pet> {
 
     public final BooleanPath isDeleted = createBoolean("isDeleted");
 
+    public final BooleanPath isQuestCompleted = createBoolean("isQuestCompleted");
+
     public final DateTimePath<java.time.LocalDateTime> lastAccessTime = createDateTime("lastAccessTime", java.time.LocalDateTime.class);
 
     //inherited

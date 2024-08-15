@@ -98,7 +98,7 @@ public class Pet extends BaseTimeEntity {
 		isQuestCompleted = false;
 		isDeleted = false;
 		lastAccessTime = LocalDateTime.now();
-		sendLetterTime = generateRandomTime();
+		sendLetterTime = initGenerateRandomTime();
 		lastSendLetterTime = LocalDateTime.now();
 	}
 
@@ -153,6 +153,11 @@ public class Pet extends BaseTimeEntity {
 	public void updatePetSendTime() {
 		this.lastSendLetterTime = LocalDateTime.now();
 		this.sendLetterTime = generateRandomTime();
+	}
+
+	private LocalDateTime initGenerateRandomTime() {
+		Random random = new Random();
+		return LocalDateTime.now().plusMinutes(1);
 	}
 
 	private LocalDateTime generateRandomTime() {

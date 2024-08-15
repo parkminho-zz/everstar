@@ -40,7 +40,7 @@ public class PetController {
 
 	@PostMapping
 	public ResponseEntity<Map<String, Object>> addPet(Authentication authentication,
-		@RequestPart @Valid CreatePetRequestDto requestDto, @RequestPart MultipartFile profileImage) {
+		@RequestPart(name = "requestDto") @Valid CreatePetRequestDto requestDto, @RequestPart(name = "profileImage") MultipartFile profileImage) {
 		User user = ((PrincipalDetails)authentication.getPrincipal()).getUser();
 		petService.createPet(user, requestDto, profileImage);
 		ResponseEntity<Map<String, Object>> response = responseUtil.createResponse(
