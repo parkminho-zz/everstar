@@ -54,7 +54,7 @@
 // export default MainPage;
 
 const MainPage = () => {
-  return <div className="text-greyscaleblack-20">MainPage</div>;
+  return <div className="text-greyscaleblack-20">MainPage2</div>;
 };
 
 export default MainPage;

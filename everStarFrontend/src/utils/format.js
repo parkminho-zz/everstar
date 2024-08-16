@@ -2,11 +2,11 @@
 
 // 날짜 포맷팅 함수
 export function formatDate(date) {
-  const options = { year: "numeric", month: "long", day: "numeric" };
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(date).toLocaleDateString(undefined, options);
 }
 
 // 숫자 포맷팅 함수 (예: 천 단위 콤마)
 export function formatNumber(number) {
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
