@@ -22,8 +22,12 @@ export const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
   isOwner = false,
 }) => {
   const [buttonText, setButtonText] = useState<string>('');
-  const [buttonTheme, setButtonTheme] = useState<'focus' | 'hover' | 'white'>('focus');
-  const [bookVariant, setBookVariant] = useState<'book-close' | 'book-open'>('book-close');
+  const [buttonTheme, setButtonTheme] = useState<'focus' | 'hover' | 'white'>(
+    'focus',
+  );
+  const [bookVariant, setBookVariant] = useState<'book-close' | 'book-open'>(
+    'book-close',
+  );
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   const determineButtonText = () => {
@@ -49,6 +53,7 @@ export const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
   };
 
   useEffect(() => {
+    // 버튼 텍스트 및 상태 업데이트
     setButtonText(determineButtonText());
 
     if (!isActive) {
@@ -58,7 +63,7 @@ export const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
     } else if (isOwner) {
       setIsDisabled(false);
       setButtonTheme('focus');
-      setBookVariant(isOpen ? 'book-open' : 'book-close');
+      setBookVariant(toggleStatus === 'on' ? 'book-open' : 'book-close');
     } else if (!isOpen) {
       setIsDisabled(true);
       setButtonTheme('white');
@@ -71,25 +76,25 @@ export const ViewMemorialBook: React.FC<ViewMemorialBookProps> = ({
   }, [toggleStatus, isActive, isOwner, isOpen]);
 
   return (
-    <div className="flex flex-col items-center w-full">
-      <div className="mb-6">
+    <div className='flex flex-col items-center w-full'>
+      <div className='mb-6'>
         <BookIcons variant={bookVariant} />
       </div>
       <PrimaryButton
         theme={buttonTheme}
-        size="full" // 'full'로 설정하여 버튼을 길게 늘입니다
+        size='full'
         disabled={isDisabled}
         onClick={onClick}
-        fullWidth // 이 옵션을 추가하여 버튼 컨테이너를 전체 너비로 설정
+        fullWidth
       >
         {buttonText}
       </PrimaryButton>
 
       {/* 조건에 따라 토글 버튼을 숨김 */}
       {isActive && isOwner && (
-        <div className="relative z-10 flex flex-col items-center justify-center my-6">
-          <Lable prop="메모리얼북 공개 상태" show={false} font="default" />
-          <div className="mt-2">
+        <div className='relative z-10 flex flex-col items-center justify-center my-6'>
+          <Lable prop='메모리얼북 공개 상태' show={false} font='default' />
+          <div className='mt-2'>
             <Toggle status={toggleStatus || 'off'} onChange={onToggleChange} />
           </div>
         </div>
