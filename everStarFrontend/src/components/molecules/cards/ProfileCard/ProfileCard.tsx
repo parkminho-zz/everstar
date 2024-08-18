@@ -36,7 +36,7 @@ export const ProfileCard = ({
         {description}
       </p>
       <div className='flex flex-row items-center justify-between w-full'>
-        <div className='flex flex-wrap gap-2 p-4 mt-10'>
+        <div className='flex flex-wrap gap-2 p-4 mt-8'>
           {visibleTags.map((tag, index) => (
             <Tag key={index}>#{tag}</Tag>
           ))}

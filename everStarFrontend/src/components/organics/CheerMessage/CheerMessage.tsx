@@ -226,7 +226,7 @@ export const CheerMessage: React.FC<CheerMessageProps> = ({
   ); // +1 for PostItPlusCard
 
   return (
-    <div className='relative flex flex-col items-center '>
+    <div className='relative flex flex-col items-center mb-20 '>
       <div className='absolute inset-0 z-9999'>
         <Glass
           currentPage={currentPage}

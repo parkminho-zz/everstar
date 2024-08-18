@@ -320,9 +320,7 @@ export const MainActionComponent: React.FC<MainActionComponentProps> = ({
           <div className='flex flex-col items-center justify-center w-full h-full'>
             {quest && (
               <div className='relative flex flex-col items-center w-full'>
-                <span className='absolute top-[-20px] bg-mainprimary text-white text-lg font-bold rounded-full w-[24px] h-[24px] flex items-center justify-center pointer-events-none'>
-                  Q
-                </span>
+                <span className='absolute top-[-20px] bg-mainprimary text-white text-lg font-bold rounded-full w-[24px] h-[24px] flex items-center justify-center pointer-events-none'></span>
                 <PrimaryButton
                   theme={getButtonTheme()}
                   size='full'

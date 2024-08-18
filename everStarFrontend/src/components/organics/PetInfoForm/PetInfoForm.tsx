@@ -65,7 +65,7 @@ export const PetInfoForm: React.FC<PetInfoFormProps> = ({
         species !== '' &&
         gender !== '' &&
         relationship !== '' &&
-        profileImage !== null,
+        profileImage !== null
     );
   }, [formData]);
 
@@ -83,7 +83,7 @@ export const PetInfoForm: React.FC<PetInfoFormProps> = ({
     };
     formattedFormData.append(
       'requestDto',
-      new Blob([JSON.stringify(requestDto)], { type: 'application/json' }),
+      new Blob([JSON.stringify(requestDto)], { type: 'application/json' })
     );
     if (formData.profileImage) {
       formattedFormData.append('profileImage', formData.profileImage);
@@ -95,7 +95,7 @@ export const PetInfoForm: React.FC<PetInfoFormProps> = ({
 
   const handleInputChange = (
     field: keyof PetFormData,
-    value: string | number | Date | null | File | string[],
+    value: string | number | Date | null | File | string[]
   ) => {
     setFormData({
       ...formData,
@@ -207,7 +207,7 @@ export const PetInfoForm: React.FC<PetInfoFormProps> = ({
           />
 
           <InputField
-            label='종류'
+            label='어떻게 생긴 아이인가요?'
             showLabel={true}
             showValidationText={false}
             starshow={true}
@@ -216,6 +216,7 @@ export const PetInfoForm: React.FC<PetInfoFormProps> = ({
             showCheckIcon={false}
             className=''
             onChange={(e) => handleInputChange('species', e.target.value)}
+            placeholder='갈색 푸들'
           />
 
           <Select

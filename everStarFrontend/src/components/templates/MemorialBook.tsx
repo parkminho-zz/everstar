@@ -159,6 +159,7 @@ export const MemorialBook: React.FC<{
         icon: 'success',
         title: '저장',
         text: '저장이 완료되었어요.',
+        confirmButtonColor: '#FF9078',
       });
 
       setIsDiaryUpdated(false);

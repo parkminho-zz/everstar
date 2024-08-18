@@ -48,9 +48,14 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({
     }
   }, [selectedPet, petInfo]);
 
-  const { mutate: updateProfileImage } = usePutProfileImage(localPetDetails?.id || 0, token);
+  const { mutate: updateProfileImage } = usePutProfileImage(
+    localPetDetails?.id || 0,
+    token
+  );
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
       const formData = new FormData();
@@ -67,27 +72,31 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({
   return (
     <>
       <Select
-        className="custom-class"
+        className='custom-class'
         options={petOptions}
-        title="반려동물을 선택해주세요"
+        title='반려동물을 선택해주세요'
         starshow={false}
         onOptionSelect={handlePetSelect}
-        infoText="반려동물을 선택해주세요"
+        infoText='반려동물을 선택해주세요'
         showLabel={false}
       />
       {localPetDetails && (
         <>
-          <Avatar size="medium" src={localPetDetails.profileImageUrl} name={localPetDetails.name} />
+          <Avatar
+            size='medium'
+            src={localPetDetails.profileImageUrl}
+            name={localPetDetails.name}
+          />
           <input
-            type="file"
-            accept="image/*"
+            type='file'
+            accept='image/*'
             onChange={handleFileChange}
             style={{ display: 'none' }}
-            id="fileInput"
+            id='fileInput'
           />
           <PrimaryButton
-            theme="white"
-            size="medium"
+            theme='white'
+            size='medium'
             onClick={() => {
               document.getElementById('fileInput')?.click(); // 파일 입력 클릭
             }}
@@ -97,68 +106,68 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({
             프로필 사진 변경
           </PrimaryButton>
           <InputField
-            label="이름"
+            label='이름'
             showLabel={true}
             showValidationText={false}
             starshow={false}
-            state="disable"
+            state='disable'
             text={localPetDetails.name}
             showCheckIcon={false}
-            className=""
+            className=''
           />
           <InputField
-            label="나이"
+            label='나이'
             showLabel={true}
             showValidationText={false}
             starshow={false}
-            state="disable"
+            state='disable'
             text={localPetDetails.age.toString()}
             showCheckIcon={false}
-            className=""
+            className=''
           />
           <InputField
-            label="성별"
+            label='성별'
             showLabel={true}
             showValidationText={false}
             starshow={false}
-            state="disable"
+            state='disable'
             text={localPetDetails.gender}
             showCheckIcon={false}
-            className=""
+            className=''
           />
           <InputField
-            label="종류"
+            label='생김새'
             showLabel={true}
             showValidationText={false}
             starshow={false}
-            state="disable"
+            state='disable'
             text={localPetDetails.species}
             showCheckIcon={false}
-            className=""
+            className=''
           />
           <InputField
-            label="관계"
+            label='관계'
             showLabel={true}
             showValidationText={false}
             starshow={false}
-            state="disable"
+            state='disable'
             text={localPetDetails.relationship}
             showCheckIcon={false}
-            className=""
+            className=''
           />
           <InputField
-            label="기일"
+            label='기일'
             showLabel={true}
             showValidationText={false}
             starshow={false}
-            state="disable"
+            state='disable'
             text={new Date(localPetDetails.memorialDate).toLocaleDateString()}
             showCheckIcon={false}
-            className=""
+            className=''
           />
-          <div className="flex justify-center space-x-5">
+          <div className='flex justify-center space-x-5'>
             {localPetDetails.personalities.map((trait, index) => (
-              <Tag key={index} className="greyscalewhite">
+              <Tag key={index} className='greyscalewhite'>
                 #{trait}
               </Tag>
             ))}
