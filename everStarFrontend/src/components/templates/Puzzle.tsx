@@ -1,11 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/Store';
 import html2canvas from 'html2canvas';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
-import { White } from 'components/atoms/buttons/CircleButton.stories';
 export interface QuestPuzzleProps {
   id: string;
   width: number;
@@ -21,7 +20,10 @@ export const Puzzle: React.FC<QuestPuzzleProps> = (props) => {
   const petId = useSelector((state: RootState) => state.pet.petDetails?.id);
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
   const { questid } = useParams<{ questid: string }>();
-  const petImg = useSelector((state: RootState) => state.pet.petDetails?.profileImageUrl);
+  const petImg = useSelector(
+    (state: RootState) => state.pet.petDetails?.profileImageUrl
+  );
+  const [isSalacted, setIsSalacted] = useState(true);
 
   useEffect(() => {
     const puzzle = puzzleRef.current;
@@ -57,6 +59,15 @@ export const Puzzle: React.FC<QuestPuzzleProps> = (props) => {
         });
         background.shuffle(0.7);
         background.draw();
+        background.attachSolvedValidator();
+        background.onDisconnect(() => {
+          console.log('풀림');
+          setIsSalacted(true);
+        });
+        background.onValid(() => {
+          console.log('완료');
+          setIsSalacted(false);
+        });
       };
     }
   }, [props.height, props.pieceSize, props.width, petImg]);
@@ -70,14 +81,17 @@ export const Puzzle: React.FC<QuestPuzzleProps> = (props) => {
 
       // 캡처된 이미지를 Blob 형태로 변환
       const imageBlob = await new Promise<Blob | null>((resolve) =>
-        canvas.toBlob(resolve, 'image/png'),
+        canvas.toBlob(resolve, 'image/png')
       );
 
       // FormData 객체 생성
       const formData = new FormData();
 
       // JSON 데이터 준비
-      const requestDto = JSON.stringify({ content: '퍼즐을 완성했어요', type: 'TEXT_IMAGE' });
+      const requestDto = JSON.stringify({
+        content: '퍼즐을 완성했어요',
+        type: 'TEXT_IMAGE',
+      });
       const requestDtoBlob = new Blob([requestDto], {
         type: 'application/json',
       });
@@ -104,7 +118,7 @@ export const Puzzle: React.FC<QuestPuzzleProps> = (props) => {
               'Content-Type': 'multipart/form-data',
               Authorization: `Bearer ${accessToken}`,
             },
-          },
+          }
         );
 
         console.log('Response:', response.data);
@@ -169,7 +183,12 @@ export const Puzzle: React.FC<QuestPuzzleProps> = (props) => {
             alignItems: 'center',
           }}
         >
-          <PrimaryButton theme={'white'} size={'large'} disabled={false} onClick={handleCapture}>
+          <PrimaryButton
+            theme={'white'}
+            size={'large'}
+            disabled={isSalacted}
+            onClick={handleCapture}
+          >
             퍼즐을 완료 했으면 캡처해주세요
           </PrimaryButton>
         </div>

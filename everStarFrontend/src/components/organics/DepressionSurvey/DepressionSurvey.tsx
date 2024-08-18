@@ -66,7 +66,7 @@ export const DepressionSurvey: React.FC<DepressionSurveyProps> = ({
 
   const allQuestionsAnswered = useMemo(() => {
     return questions.every((question) =>
-      Object.prototype.hasOwnProperty.call(answers, question.id),
+      Object.prototype.hasOwnProperty.call(answers, question.id)
     );
   }, [answers]);
 
@@ -85,7 +85,7 @@ export const DepressionSurvey: React.FC<DepressionSurveyProps> = ({
 
     const totalScore = Object.values(answers).reduce(
       (acc, curr) => acc + curr,
-      0,
+      0
     );
 
     if (petId && memorialBookId) {
@@ -103,7 +103,7 @@ export const DepressionSurvey: React.FC<DepressionSurveyProps> = ({
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
       <div className='w-full max-w-md p-4 bg-white border border-gray-300 rounded-lg shadow-lg'>
         <h2 className='mb-4 text-lg font-semibold text-center text-gray-800'>
-          우울증 증상 설문지
+          국립정신건강센터 정서 검사
         </h2>
         <div className='h-64 overflow-auto'>
           <table className='w-full text-sm border-collapse'>
