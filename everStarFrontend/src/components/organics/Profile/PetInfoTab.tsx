@@ -1,56 +1,55 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Select } from 'components/molecules/input/Select';
 import { Avatar } from 'components/atoms/symbols/Avatar/Avatar';
 import { PrimaryButton } from 'components/atoms/buttons/PrimaryButton';
 import { InputField } from 'components/organics/input/InputFields';
 import { Tag } from 'components/atoms/buttons/Tag';
 import { fetchPetDetails, PetInfo } from 'api/petApi';
-import { usePutProfileImage } from 'hooks/usePets';
+import { usePutProfileImage, useFetchPets } from 'hooks/usePets';
 
 export interface PetInfoTabProps {
-  petOptions: string[];
-  petInfo: { [key: string]: PetInfo };
-  onPetSelect: (name: string) => void;
   token: string;
 }
 
-export const PetInfoTab: React.FC<PetInfoTabProps> = ({
-  petOptions,
-  petInfo,
-  onPetSelect,
-  token,
-}) => {
-  const [selectedPet, setSelectedPet] = useState<string | null>(null);
+export const PetInfoTab: React.FC<PetInfoTabProps> = ({ token }) => {
+  const [selectedPetId, setSelectedPetId] = useState<number | null>(null);
   const [localPetDetails, setLocalPetDetails] = useState<PetInfo | null>(null);
+  const [imageKey, setImageKey] = useState(Date.now()); // 이미지 갱신용 키
 
-  const handlePetSelect = async (option: string | number) => {
-    const petName = option as string;
-    setSelectedPet(petName);
+  const {
+    data: pets,
+    isLoading: isPetsLoading,
+    error: petsError,
+  } = useFetchPets(token);
 
-    const petDetails = petInfo[petName];
-    if (petDetails) {
+  const fetchDetails = useCallback(async () => {
+    if (selectedPetId) {
       try {
-        const fetchedDetails = await fetchPetDetails(petDetails.id, token); // API 호출
-        setLocalPetDetails(fetchedDetails); // 로컬 상태로 관리
+        const fetchedDetails = await fetchPetDetails(selectedPetId, token);
+        setLocalPetDetails(fetchedDetails);
       } catch (error) {
         console.error('Failed to fetch pet details:', error);
       }
     }
-    onPetSelect(petName);
-  };
+  }, [selectedPetId, token]);
 
   useEffect(() => {
-    if (selectedPet) {
-      const petDetails = petInfo[selectedPet];
-      if (petDetails) {
-        setLocalPetDetails(petDetails);
-      }
-    }
-  }, [selectedPet, petInfo]);
+    fetchDetails();
+  }, [fetchDetails]);
 
   const { mutate: updateProfileImage } = usePutProfileImage(
-    localPetDetails?.id || 0,
-    token
+    selectedPetId || 0,
+    token,
+    {
+      onSuccess: async () => {
+        // 프로필 이미지가 성공적으로 업데이트된 후 새로고침 없이 상태를 갱신하여 이미지가 즉시 반영되도록 함
+        if (selectedPetId) {
+          const updatedDetails = await fetchPetDetails(selectedPetId, token);
+          setLocalPetDetails(updatedDetails);
+          setImageKey(Date.now()); // 이미지 캐시 방지용 키 업데이트
+        }
+      },
+    }
   );
 
   const handleFileChange = async (
@@ -59,15 +58,27 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
       const formData = new FormData();
-      formData.append('profileImage', file); // profileImage 키로 파일 추가
+      formData.append('profileImage', file);
 
       try {
-        await updateProfileImage(formData); // 파일 업로드
+        await updateProfileImage(formData); // 파일 업로드 후 이미지 즉시 반영
       } catch (error) {
         console.error('Failed to update profile image:', error);
       }
     }
   };
+
+  const onPetSelect = (name: string) => {
+    const selectedPet = pets?.find((pet) => pet.name === name);
+    if (selectedPet) {
+      setSelectedPetId(selectedPet.id);
+    }
+  };
+
+  if (isPetsLoading) return <div>Loading...</div>;
+  if (petsError) return <div className='text-red-500'>{petsError.message}</div>;
+
+  const petOptions = pets ? pets.map((pet) => pet.name) : [];
 
   return (
     <>
@@ -76,7 +87,7 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({
         options={petOptions}
         title='반려동물을 선택해주세요'
         starshow={false}
-        onOptionSelect={handlePetSelect}
+        onOptionSelect={(option) => onPetSelect(option as string)}
         infoText='반려동물을 선택해주세요'
         showLabel={false}
       />
@@ -84,7 +95,7 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({
         <>
           <Avatar
             size='medium'
-            src={localPetDetails.profileImageUrl}
+            src={`${localPetDetails.profileImageUrl}?${imageKey}`} // 이미지 캐시 방지 및 강제 갱신
             name={localPetDetails.name}
           />
           <input
@@ -98,7 +109,7 @@ export const PetInfoTab: React.FC<PetInfoTabProps> = ({
             theme='white'
             size='medium'
             onClick={() => {
-              document.getElementById('fileInput')?.click(); // 파일 입력 클릭
+              document.getElementById('fileInput')?.click();
             }}
             disabled={false}
             icon={null}

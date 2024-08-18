@@ -78,7 +78,15 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   const [Introduce] = useSound(introduce);
   const { data, refetch } = useFetchMemorialBooks(petId); // Fetch memorial book profile
   const [toggleStatus, setToggleStatus] = useState<'on' | 'off' | undefined>(
-    memorialBookProfile?.isOpen ? 'on' : 'off'
+    () => {
+      // 오늘 날짜: 2024-08-18
+      const savedStatus = localStorage.getItem(`toggleStatus-${petId}`);
+      return savedStatus
+        ? (savedStatus as 'on' | 'off')
+        : memorialBookProfile?.isOpen
+          ? 'on'
+          : 'off';
+    }
   );
   const [isModalOpen, setIsModalOpen] = useState(
     petProfile?.questIndex === 50 && !memorialBookProfile?.isActive && isOwner
@@ -91,7 +99,15 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
 
   const { mutate: updateMemorialBookStatus } = useUpdateMemorialBookOpenStatus({
     onSuccess: () => {
-      // refetch(); // Refetch the memorial book profile after updating the open status
+      // 상태 업데이트 성공 시 로컬 저장소를 업데이트하고 refetch를 제거합니다.
+      // localStorage.setItem(`toggleStatus-${petId}`, toggleStatus); // 오늘 날짜: 2024-08-18
+    },
+    onError: () => {
+      // 상태 업데이트 실패 시 원래 토글 상태로 복원
+      setToggleStatus((prevStatus) => {
+        localStorage.setItem(`toggleStatus-${petId}`, prevStatus || 'off');
+        return prevStatus;
+      });
     },
   });
   // const [description, setDescription] = useState(petProfile?.description || '');
@@ -106,7 +122,6 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
 
     // memorialBookProfile 다시 가져오기
     await refetch();
-
     // 최신 데이터 가져오기
     const updatedMemorialBookProfile = data?.data || memorialBookProfile;
 
@@ -136,9 +151,11 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
   };
 
   useEffect(() => {
+    // refetch();
     // 컴포넌트 마운트 시 memorialBookProfile 가져오기
-    refetch();
-  }, [refetch]);
+    // refetch(); // 오늘 날짜: 2024-08-18
+    // Fetch memorial book profile data (commented out)
+  }, [data]);
 
   useEffect(() => {
     // isActive가 true일 때 설문 모달이 다시 뜨지 않도록 설정
@@ -188,6 +205,7 @@ export const EverStarMain: React.FC<EverStarMainProps> = ({
         toggleStatus={toggleStatus}
         onToggleChange={(status) => {
           setToggleStatus(status);
+          localStorage.setItem(`toggleStatus-${petId}`, status); // 오늘 날짜: 2024-08-18
           if (updatedMemorialBookProfile) {
             updateMemorialBookStatus({
               petId,
